@@ -34,7 +34,11 @@ Vier controles. De standaardstrategie geeft 7,25 procent totaal, 2,65 procent di
 
 Eerst de artifact bijwerken, dan de repo committen en pushen. De cachenaam in sw.js wordt omhoog gezet, zodat bestaande gebruikers de nieuwe versie krijgen.
 
-## Beslispunten voor jou
+## Besluiten (vastgelegd)
+
+De standaardstrategie is gebalanceerd, en die wordt gebruikt voor de voorspellingen op de site. De extra indexen (Europa, opkomende markten, S&P 500) zijn selecteerbaar als onderdeel van een strategie, en de strategieën zijn later aan te passen. "Mijn huidige mix" is publiek zichtbaar en kan als voorbeeld in de eigen mix worden ingeladen. Alle synthetische cijfers heten "synthetische aannames": gebaseerd op historische kenmerken van indexen, maar niet gekoppeld aan echte fondsen met naam en ISIN.
+
+## Eerder open beslispunten (ter referentie)
 
 Eén: moet de synthese standaard opstarten, of blijft de eigen mix standaard? Mijn voorstel is de synthese. Twee: wil je de drie varianten als vaste voorbeelden houden, of ook de extra indexen (Europa, opkomende markten, S&P 500) in de standaardkaarten zetten? Drie: wordt "Mijn huidige mix" zichtbaar voor bezoekers van de publieke site, of alleen lokaal? Mijn voorstel is alleen lokaal, want het is jouw persoonlijke mix.
 
