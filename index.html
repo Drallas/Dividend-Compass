@@ -675,6 +675,7 @@
     <div class="fview" role="group" aria-label="Weergave">
       <button type="button" class="rbtn" data-fview="basis" aria-pressed="true"></button>
       <button type="button" class="rbtn" data-fview="own" aria-pressed="false" data-i18n="fviewOwn"></button>
+      <button type="button" class="rbtn" data-fview="synth" aria-pressed="false" data-i18n="fviewSynth"></button>
       <span class="hint" id="activeMixNote"></span>
     </div>
     <section class="panel beta-panel" id="betaPanel" aria-labelledby="betaTitle" hidden>
@@ -700,6 +701,19 @@
           <button type="submit" class="rbtn" data-i18n="catSave"></button>
         </form>
       </details>
+    </section>
+    <section class="panel synth-panel" id="synthPanel" aria-labelledby="synthTitle" hidden>
+      <h2 id="synthTitle" data-i18n="synthTitle"></h2>
+      <p class="sub" data-i18n="synthSub"></p>
+      <div class="synth-row">
+        <label><span data-i18n="synthStrat"></span> <select id="synthSel"></select></label>
+        <label><span data-i18n="synthAmt"></span> <input id="synthAmt" type="number" value="10000" min="0" step="500"></label>
+        <label><span data-i18n="synthYrs"></span> <input id="synthYrs" type="number" value="25" min="1" max="50"></label>
+      </div>
+      <div class="synth-grid" id="synthGrid"></div>
+      <p class="sub" id="synthSum"></p>
+      <div class="kpis" id="synthKpi"></div>
+      <p class="sub" id="synthNote"></p>
     </section>
     <section class="panel" id="basisPanel" aria-labelledby="fundsTitle">
       <h2 id="fundsTitle" data-i18n="fundsTitle"></h2>
@@ -739,21 +753,7 @@
       <p class="sub assumedNote" data-i18n="assumedLegend"></p>
     </section>
 
-    <section class="panel notes" aria-labelledby="notesTitle">
-      <h2 id="notesTitle" data-i18n="notesTitle"></h2>
-      <ul>
-        <li data-i18n-html="n1"></li>
-        <li data-i18n-html="n2"></li>
-        <li data-i18n-html="n3"></li>
-        <li data-i18n-html="n4"></li>
-        <li data-i18n-html="n5"></li>
-        <li data-i18n-html="n6"></li>
-        <li data-i18n-html="n7"></li>
-        <li data-i18n-html="n8"></li>
-        <li data-i18n-html="n9"></li>
-      </ul>
-    </section>
-</main>
+    </main>
 
 <main class="fundswrap" id="tabWealth" hidden>
   <section class="panel">
@@ -1198,7 +1198,7 @@ const T = {
     tRisk: 'Mijn kwalitatieve inschatting. Geen gemeten volatiliteit.',
     group_div: 'Dividend', group_acc: 'Acc',
     yieldAssumption: 'aanname', assumedLegend: 'Gestreepte rand = mijn aanname, geen gepubliceerd cijfer. Alleen de yield van JEPG (5%) is zo’n aanname: ik vond geen betrouwbare actuele cijfers. Die kan dus afwijken. Pas het getal aan en de hele pagina rekent mee.',
-    notesTitle: 'Om te weten',
+    fviewSynth: 'Synthese', synthTitle: 'Synthetische voorbeeldscenario\'s', synthSub: 'Hier speel je met de voorbeeldstrategieën. De cijfers zijn aannames, geen historie. Pas de gewichten aan en zie hoe de uitkomst verandert. Eigen fondsen kun je later naast deze voorbeelden zetten.', synthStrat: 'Strategie', synthAmt: 'Inleg (€)', synthYrs: 'Jaren',
     n1: 'Yield is niet hetzelfde als rendement. Een hoge uitkering kan deels uit kapitaal komen, waardoor de koers daalt. Het totaalrendement is de juiste maatstaf.',
     n2: 'Covered-call fondsen (JEPG, JEPQ) verkopen opties. In sterke markten loop je achter, en bij een forse daling beschermen ze je maar gedeeltelijk.',
     n3: '<a class="term" href="#gl-sequentie">Sequentierisico</a>: als je uitkeringen opneemt terwijl de koers daalt, verkoop je in een slechte markt sneller stukken. Een buffer van 1 tot 2 jaar kosten helpt.',
@@ -2639,10 +2639,60 @@ function persistFunds(){
   if (fundsStore.on) fundsStore.custom = funds.map(cloneF); else fundsStore.base = funds.map(cloneF);
   saveFunds();
 }
+const SYNTH_IX = {
+  'wereld': {n:'Wereld (MSCI World-achtig)', t:7.5, d:1.8, ter:0.20},
+  'wereld-middel-dividend': {n:'Wereld, middel dividend', t:7.3, d:2.5, ter:0.20},
+  'wereld-hoog-dividend': {n:'Wereld, hoog dividend', t:7.0, d:3.5, ter:0.29},
+  'wereld-quality': {n:'Wereld, kwaliteit', t:8.0, d:1.5, ter:0.25},
+  'europa': {n:'Europa', t:6.5, d:3.2, ter:0.12},
+  'europa-hoog-dividend': {n:'Europa, hoog dividend', t:6.2, d:4.3, ter:0.30},
+  'opkomende-markten': {n:'Opkomende markten', t:7.0, d:2.8, ter:0.18},
+  'sp500': {n:'VS, S&P 500', t:7.5, d:1.4, ter:0.07},
+  'sp500-dividend': {n:'VS, dividend', t:7.0, d:2.2, ter:0.30}
+};
+const SYNTH_STRAT = [
+  {id:'defensief', n:'Defensief', g:{'wereld-hoog-dividend':50, 'wereld':50}},
+  {id:'gebalanceerd', n:'Gebalanceerd', g:{'wereld':80, 'wereld-hoog-dividend':20}},
+  {id:'agressief', n:'Agressief', g:{'wereld':90, 'wereld-quality':10}},
+  {id:'gebalanceerd-europa', n:'Gebalanceerd met Europa (variant)', g:{'wereld':60, 'europa':20, 'wereld-hoog-dividend':20}},
+  {id:'agressief-em', n:'Agressief met opkomende markten (variant)', g:{'wereld':80, 'opkomende-markten':10, 'wereld-quality':10}},
+  {id:'gebalanceerd-sp500', n:'Gebalanceerd met S&P 500 (variant)', g:{'wereld':60, 'sp500':20, 'wereld-hoog-dividend':20}}
+];
+function synthCalc(){
+  const inputs = [...document.querySelectorAll('#synthGrid input')];
+  const w = {}; inputs.forEach(i => { w[i.dataset.ix] = Math.max(0, Number(i.value) || 0); });
+  const sum = Object.values(w).reduce((a, b) => a + b, 0);
+  document.getElementById('synthSum').textContent = sum === 100 ? '' : `Gewichten tellen op tot ${sum}%; de uitkomst is genormaliseerd naar 100%.`;
+  let tot = 0, div = 0, ter = 0;
+  if (sum > 0) Object.entries(w).forEach(([id, p]) => { const f = p / sum; tot += f * SYNTH_IX[id].t; div += f * SYNTH_IX[id].d; ter += f * SYNTH_IX[id].ter; });
+  const A = Number(document.getElementById('synthAmt').value) || 0;
+  const n = Math.max(1, Number(document.getElementById('synthYrs').value) || 1);
+  const accVal = A * Math.pow(1 + (tot - ter) / 100, n);
+  const distFondsVal = A * Math.pow(1 + (tot - div - ter) / 100, n);
+  const distCash = A * (div / 100) * n;
+  const pct = x => x.toFixed(2).replace('.', ',') + '%';
+  const kpi = (l, b) => `<div class="kpi"><div class="lbl">${l}</div><div class="big">${b}</div></div>`;
+  document.getElementById('synthKpi').innerHTML =
+    kpi('Totaalrendement (voor kosten)', pct(tot)) + kpi('Dividendrendement', pct(div)) + kpi('Kosten (TER gewogen)', pct(ter)) +
+    kpi(`Accumulerend na ${n} jaar`, EUR(accVal)) + kpi(`Uitkerend: vermogen in fonds`, EUR(distFondsVal)) + kpi('Uitkerend: uitkeringen (ruw, niet herbelegd)', EUR(distCash));
+  document.getElementById('synthNote').textContent = 'Synthetische aannames, geen historische meting. Uitkerend is zonder herbelegging en zonder belasting gerekend; het verschil zit in wat je met de uitkering doet.';
+}
+function initSynth(){
+  const sel = document.getElementById('synthSel');
+  sel.innerHTML = SYNTH_STRAT.map(s => `<option value="${s.id}">${s.n}</option>`).join('');
+  document.getElementById('synthGrid').innerHTML = Object.keys(SYNTH_IX).map(id => `<label class="synth-w"><span>${SYNTH_IX[id].n}</span><input type="number" min="0" max="100" step="5" data-ix="${id}"></label>`).join('');
+  const apply = () => { const s = SYNTH_STRAT.find(x => x.id === sel.value); document.querySelectorAll('#synthGrid input').forEach(i => { i.value = s.g[i.dataset.ix] || 0; }); synthCalc(); };
+  sel.addEventListener('change', apply);
+  document.getElementById('synthGrid').addEventListener('input', synthCalc);
+  ['synthAmt', 'synthYrs'].forEach(id => document.getElementById(id).addEventListener('input', synthCalc));
+  apply();
+}
+initSynth();
 function setFview(v){
+  document.getElementById('betaPanel').hidden = v !== 'own';
+  document.getElementById('synthPanel').hidden = v !== 'synth';
   const own = v === 'own';
-  document.getElementById('betaPanel').hidden = !own;
-  document.getElementById('basisPanel').hidden = own;
+  document.getElementById('basisPanel').hidden = v !== 'basis';
   document.querySelectorAll('[data-fview]').forEach(b => b.setAttribute('aria-pressed', b.dataset.fview === v ? 'true' : 'false'));
 }
 function syncFundsUi(){
