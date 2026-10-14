@@ -2665,8 +2665,7 @@ function buildChips(){
   const box = document.getElementById('ovChips');
   const chip = c => `<label class="ovchip" style="--c:${c.color}"><input type="checkbox" data-k="${c.k}"><i class="dot"></i><span data-nm="${c.k}"></span>${c.k === 'n28' ? '<a class="info" href="#gl-tax2028">?</a>' : ''}</label>`;
   const main = ALL.filter(c => !EXTRA.some(e => e.k === c.k)), more = ALL.filter(c => EXTRA.some(e => e.k === c.k));
-  box.innerHTML = `<div class="pickhead"><span data-grp="main"></span><span id="pickCount"></span></div><div class="pickgrid">${main.map(chip).join('')}</div>
-    <div class="pickhead"><span data-grp="other"></span></div><div class="pickgrid">${more.map(chip).join('')}</div>`;
+  box.innerHTML = `<div class="pickhead"><span></span><span id="pickCount"></span></div><div class="pickgrid">${ALL.map(chip).join('')}</div>`;
   box.addEventListener('change', e => {
     const k = e.target.dataset.k;
     if (!k) return;
@@ -2683,8 +2682,6 @@ function updateChips(){
     i.parentNode.classList.toggle('on', i.checked); i.parentNode.classList.toggle('dis', i.disabled);
   });
   document.querySelectorAll('#ovChips [data-nm]').forEach(sp => { sp.textContent = shortName(ALL.find(c => c.k === sp.dataset.nm)); });
-  document.querySelector('#ovChips [data-grp="main"]').textContent = tr('grpMain');
-  document.querySelector('#ovChips [data-grp="other"]').textContent = tr('grpOther');
   document.getElementById('pickCount').textContent = tr('pickOf')(activeCount());
   document.getElementById('pickMax').hidden = !full;
 }
