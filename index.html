@@ -350,6 +350,8 @@
   .wslider{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
   #wealthYrs{width:100%;margin:0 0 4px}
   body.nogoal .tabs .tab[data-tab="tabPay"]{display:none !important}
+  .controls .grp{border:1px solid var(--line);border-radius:12px;padding:12px 14px 4px;margin:0 0 12px}
+  .controls .grp > h3{margin:0 0 10px;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
   html:not([lang="nl"]) .nlonly{display:none !important}
   .wchart{width:100%;height:auto;display:block;margin:6px 0 4px}
   .wchart text{font-variant-numeric:tabular-nums}
@@ -503,80 +505,89 @@
 
   <aside class="panel controls" aria-label="Settings">
     <h2 data-i18n="settings"></h2>
-
-    <div class="field compact">
-      <div class="field-head">
-        <span><span data-i18n="scenario"></span> <a class="tt info" href="#gl-scenario" data-tip-i18n="scenTip">?</a></span>
+    <section class="grp">
+      <h3 data-i18n="grpStrat"></h3>
+  <div class="field compact">
+        <div class="field-head">
+          <span><span data-i18n="scenario"></span> <a class="tt info" href="#gl-scenario" data-tip-i18n="scenTip">?</a></span>
+        </div>
+        <div class="seg" role="radiogroup" aria-label="Scenario">
+          <label><input type="radio" name="scen" value="laag"><span data-i18n="scLaag"></span></label>
+          <label><input type="radio" name="scen" value="basis" checked><span data-i18n="scBasis"></span></label>
+          <label><input type="radio" name="scen" value="hoog"><span data-i18n="scHoog"></span></label>
+        </div>
       </div>
-      <div class="seg" role="radiogroup" aria-label="Scenario">
-        <label><input type="radio" name="scen" value="laag"><span data-i18n="scLaag"></span></label>
-        <label><input type="radio" name="scen" value="basis" checked><span data-i18n="scBasis"></span></label>
-        <label><input type="radio" name="scen" value="hoog"><span data-i18n="scHoog"></span></label>
+  <div class="field compact">
+        <div class="field-head"><span><span data-i18n="presetLbl"></span> <a class="tt info" href="#gl-strat" data-tip-i18n="presetTip">?</a></span></div>
+        <div class="presets presets-side">
+          <button type="button" class="rbtn" data-preset="def" data-i18n="presetCons"></button>
+          <button type="button" class="rbtn" data-preset="bal" data-i18n="presetBal"></button>
+          <button type="button" class="rbtn" data-preset="agg" data-i18n="presetAgg"></button>
+        </div>
       </div>
-    </div>
-
-    <div class="field compact">
-      <div class="field-head"><span><span data-i18n="presetLbl"></span> <a class="tt info" href="#gl-strat" data-tip-i18n="presetTip">?</a></span></div>
-      <div class="presets presets-side">
-        <button type="button" class="rbtn" data-preset="def" data-i18n="presetCons"></button>
-        <button type="button" class="rbtn" data-preset="bal" data-i18n="presetBal"></button>
-        <button type="button" class="rbtn" data-preset="agg" data-i18n="presetAgg"></button>
+    </section>
+    <section class="grp">
+      <h3 data-i18n="grpAmt"></h3>
+  <div class="field">
+        <div class="field-head"><label for="bedrag" data-i18n="invested"></label> <a class="info" href="#gl-belegd">?</a></div>
+        <div class="euro"><span>€</span><input type="text" id="bedrag" value="250000" inputmode="numeric" autocomplete="off"></div>
+        <input type="range" id="bedragRange" min="1000" max="1000000" step="1000" value="250000" aria-labelledby="bedrag">
+        <div class="range-ends"><span id="bedMin"></span><span id="bedMax"></span></div>
       </div>
-    </div>
-
+  <div class="field">
+        <div class="field-head">
+          <label for="jaren" data-i18n="duration"></label>
+          <span class="field-value" id="jarenLabel"></span>
+        </div>
+        <input type="range" id="jaren" min="1" max="15" value="5" step="1" aria-label="Duration">
+        <div class="range-ends"><span id="dur1"></span><span id="dur10"></span></div>
+      </div>
+    </section>
+    <section class="grp">
+      <h3 data-i18n="grpMix"></h3>
+  <div class="field">
+        <div class="field-head">
+          <span><span data-i18n="mix"></span> <a class="tt info" href="#gl-mix" data-tip-i18n="mixTip">?</a></span>
+        </div>
+        <div class="mix-legend">
+          <span class="chip"><i class="sw div"></i><span data-i18n="dividendShort"></span> <strong id="mixDivPct">50%</strong></span>
+          <span class="chip"><i class="sw acc"></i><span data-i18n="accShort"></span> <strong id="mixAccPct">50%</strong></span>
+        </div>
+        <input type="range" id="mix" min="0" max="100" value="50" step="1" aria-label="Mix">
+        <div class="range-ends"><span data-i18n="mixEndAcc"></span><span data-i18n="mixEndDiv"></span></div>
+        <div class="mixbar" aria-hidden="true"><div class="d" id="mixBarDiv" style="width:50%"></div><div class="a" id="mixBarAcc" style="width:50%"></div></div>
+      </div>
+    </section>
+    <section class="grp">
+      <h3 data-i18n="grpDiv"></h3>
+  <div class="field">
+        <div class="field-head">
+          <label for="target"><span data-i18n="targetLabel"></span></label> <a class="tt info" href="#gl-maandbedrag" data-tip-i18n="targetTip">?</a>
+        </div>
+        <label class="toggle" style="font-size:12.5px;margin-bottom:8px"><input type="checkbox" id="goalOn"><span data-i18n="goalOn"></span></label>
+        <div class="euro"><span>€</span><input type="text" id="target" value="500" inputmode="numeric" autocomplete="off"></div>
+        <input type="range" id="targetRange" min="0" max="10000" step="50" value="500" aria-label="Dividend per month">
+        <div class="range-ends"><span id="tgMin"></span><span id="tgMax"></span></div>
+        <p class="hint" id="targetHint"></p>
+      </div>
+  <div id="reinvestWrap">
     <div class="field">
-      <label class="toggle">
-        <input type="checkbox" id="reinvest" checked>
-        <span data-i18n="reinvest"></span> <a class="info" href="#gl-reinvest">?</a>
-      </label>
-      <p class="hint" id="reinvestHint"></p>
-    </div>
-
-    <div class="field compact">
-      <div class="field-head"><label for="resid" data-i18n="residLbl"></label> <a class="tt info" href="#gl-taxnl" data-tip-i18n="residTip">?</a></div>
-      <select id="resid"></select>
-    </div>
-
-    <div class="field">
-      <div class="field-head"><label for="bedrag" data-i18n="invested"></label> <a class="info" href="#gl-belegd">?</a></div>
-      <div class="euro"><span>€</span><input type="text" id="bedrag" value="250000" inputmode="numeric" autocomplete="off"></div>
-      <input type="range" id="bedragRange" min="1000" max="1000000" step="1000" value="250000" aria-labelledby="bedrag">
-      <div class="range-ends"><span id="bedMin"></span><span id="bedMax"></span></div>
-    </div>
-
-    <div class="field">
-      <div class="field-head">
-        <label for="jaren" data-i18n="duration"></label>
-        <span class="field-value" id="jarenLabel"></span>
+          <label class="toggle">
+            <input type="checkbox" id="reinvest" checked>
+            <span data-i18n="reinvest"></span> <a class="info" href="#gl-reinvest">?</a>
+          </label>
+          <p class="hint" id="reinvestHint"></p>
+        </div>
       </div>
-      <input type="range" id="jaren" min="1" max="15" value="5" step="1" aria-label="Duration">
-      <div class="range-ends"><span id="dur1"></span><span id="dur10"></span></div>
-    </div>
-    <div class="field">
-      <div class="field-head">
-        <span><span data-i18n="mix"></span> <a class="tt info" href="#gl-mix" data-tip-i18n="mixTip">?</a></span>
+    </section>
+    <section class="grp">
+      <h3 data-i18n="grpTax"></h3>
+  <div class="field compact">
+        <div class="field-head"><label for="resid" data-i18n="residLbl"></label> <a class="tt info" href="#gl-taxnl" data-tip-i18n="residTip">?</a></div>
+        <select id="resid"></select>
       </div>
-      <div class="mix-legend">
-        <span class="chip"><i class="sw div"></i><span data-i18n="dividendShort"></span> <strong id="mixDivPct">50%</strong></span>
-        <span class="chip"><i class="sw acc"></i><span data-i18n="accShort"></span> <strong id="mixAccPct">50%</strong></span>
-      </div>
-      <input type="range" id="mix" min="0" max="100" value="50" step="1" aria-label="Mix">
-      <div class="range-ends"><span data-i18n="mixEndAcc"></span><span data-i18n="mixEndDiv"></span></div>
-      <div class="mixbar" aria-hidden="true"><div class="d" id="mixBarDiv" style="width:50%"></div><div class="a" id="mixBarAcc" style="width:50%"></div></div>
-    </div>
-
-    <div class="field">
-      <div class="field-head">
-        <label for="target"><span data-i18n="targetLabel"></span></label> <a class="tt info" href="#gl-maandbedrag" data-tip-i18n="targetTip">?</a>
-      </div>
-      <label class="toggle" style="font-size:12.5px;margin-bottom:8px"><input type="checkbox" id="goalOn"><span data-i18n="goalOn"></span></label>
-      <div class="euro"><span>€</span><input type="text" id="target" value="500" inputmode="numeric" autocomplete="off"></div>
-      <input type="range" id="targetRange" min="0" max="10000" step="50" value="500" aria-label="Dividend per month">
-      <div class="range-ends"><span id="tgMin"></span><span id="tgMax"></span></div>
-      <p class="hint" id="targetHint"></p>
-    </div>
-
-  </aside>
+    </section>
+    </aside>
 
   <div class="stack">
 
@@ -1048,7 +1059,7 @@ const T = {
     g6d: 'Op het tabblad Belasting zet je landen aan of uit (maximaal vier tegelijk) en zie je de belasting over hetzelfde rendement. Elk land heeft een toelichting met bron en betrouwbaarheid.',
     g7t: 'Bewaar en exporteer',
     g7d: 'Bewaar benoemde scenario\'s in de browser via het menu. Exporteer een CSV of druk af naar PDF vanuit hetzelfde menu.',
-    residPick: 'Kies een land', residLbl: 'Land van domicilie', residTip: 'Het land waar je woont bepaalt welke belasting de netto waardeprognose schat. Kies "Geen schatting" om geen belasting mee te rekenen.', wtLbl: 'Belastingschatting', wtNL: 'Nederland (Box 3)', wtNone: 'Geen schatting',
+    grpStrat: 'Strategie', grpAmt: 'Inleg en looptijd', grpMix: 'Verdeling', grpDiv: 'Dividend', grpTax: 'Belasting', residPick: 'Kies een land', residLbl: 'Land van domicilie', residTip: 'Het land waar je woont bepaalt welke belasting de netto waardeprognose schat. Kies "Geen schatting" om geen belasting mee te rekenen.', wtLbl: 'Belastingschatting', wtNL: 'Nederland (Box 3)', wtNone: 'Geen schatting',
     scenTip: 'Drie rekenvarianten. Laag: 3 procentpunt minder koersgroei en 1 procentpunt minder yield. Basis: de gegevens uit de fondsentabel. Hoog: 3 procentpunt meer koersgroei en 0,5 procentpunt meer yield. Yield verandert alleen bij de dividendfondsen.',
     scLaag: 'Laag', scBasis: 'Basis', scHoog: 'Hoog',
     reinvest: 'Uitkeringen herinvesteren',
@@ -1283,7 +1294,7 @@ const T = {
     g6d: 'On the Tax tab you can switch countries on or off (up to four at a time) and see the tax on the same return. Each country has a note with its source and reliability.',
     g7t: 'Save and export',
     g7d: 'Save named scenarios in the browser from the menu. Export a CSV or print to PDF from the same menu.',
-    residPick: 'Choose a country', residLbl: 'Country of residence', residTip: 'The country where you live determines which tax the net worth forecast estimates. Choose "No estimate" to leave tax out.', wtLbl: 'Tax estimate', wtNL: 'Netherlands', wtNone: 'No estimate',
+    grpStrat: 'Strategy', grpAmt: 'Investment and duration', grpMix: 'Split', grpDiv: 'Dividend', grpTax: 'Tax', residPick: 'Choose a country', residLbl: 'Country of residence', residTip: 'The country where you live determines which tax the net worth forecast estimates. Choose "No estimate" to leave tax out.', wtLbl: 'Tax estimate', wtNL: 'Netherlands', wtNone: 'No estimate',
     scenTip: 'Three calculation variants. Low: 3 percentage points less price growth and 1 point less yield. Base: the data from the funds table. High: 3 points more price growth and 0.5 points more yield. Yield only changes for the dividend funds.',
     scLaag: 'Low', scBasis: 'Base', scHoog: 'High',
     reinvest: 'Reinvest distributions',
@@ -1518,7 +1529,7 @@ const T = {
     g6d: 'En la pestaña Impuestos puedes activar o desactivar países (hasta cuatro a la vez) y ver el impuesto sobre el mismo rendimiento. Cada país tiene una nota con su fuente y su fiabilidad.',
     g7t: 'Guarda y exporta',
     g7d: 'Guarda escenarios con nombre en el navegador desde el menú. Exporta un CSV o imprime a PDF desde el mismo menú.',
-    residPick: 'Elige un país', residLbl: 'País de residencia', residTip: 'El país donde vives determina qué impuesto estima la previsión de patrimonio neto. Elige "Sin estimación" para no incluir impuestos.', wtLbl: 'Estimación de impuestos', wtNL: 'Países Bajos', wtNone: 'Sin estimación',
+    grpStrat: 'Estrategia', grpAmt: 'Inversión y plazo', grpMix: 'Reparto', grpDiv: 'Dividendo', grpTax: 'Impuestos', residPick: 'Elige un país', residLbl: 'País de residencia', residTip: 'El país donde vives determina qué impuesto estima la previsión de patrimonio neto. Elige "Sin estimación" para no incluir impuestos.', wtLbl: 'Estimación de impuestos', wtNL: 'Países Bajos', wtNone: 'Sin estimación',
     scenTip: 'Tres variantes de cálculo. Bajo: 3 puntos porcentuales menos de crecimiento del precio y 1 punto menos de rendimiento. Base: los datos de la tabla de fondos. Alto: 3 puntos más de crecimiento y 0,5 puntos más de rendimiento. El rendimiento solo cambia en los fondos de dividendos.',
     scLaag: 'Bajo', scBasis: 'Base', scHoog: 'Alto',
     reinvest: 'Reinvertir distribuciones',
@@ -2255,6 +2266,8 @@ function renderCalendar(){
 }
 
 function syncGoal(){
+  const hasDiv = funds.some(f => f.group === 'div' && f.w > 0) && parseFloat(document.getElementById('mix').value) > 0;
+  document.getElementById('reinvestWrap').style.display = hasDiv ? '' : 'none';
   const on = document.getElementById('goalOn').checked;
   document.body.classList.toggle('nogoal', !on);
   const pay = document.querySelector('.tabs .tab[data-tab="tabPay"]');
