@@ -487,6 +487,9 @@
   .cat-form label.wide{grid-column:1/-1}
   .cat-form input,.cat-form select{padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font:inherit}
   .cat-form .rbtn{justify-self:start}
+  .fview{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
+  .fview .rbtn[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .fview #activeMixNote{margin-left:auto;font-size:12.5px}
   .controls .grp > h3{margin:0 0 14px}
   .controls .field{gap:10px}
   .controls .field.compact + .field.compact{margin-top:14px}
@@ -664,10 +667,15 @@
 
 <main class="fundswrap" id="tabFunds" hidden>
   <div class="warnbar terWarn" hidden></div>
-    <section class="panel beta-panel" aria-labelledby="betaTitle">
+    <div class="fview" role="group" aria-label="Weergave">
+      <button type="button" class="rbtn" data-fview="basis" aria-pressed="true"></button>
+      <button type="button" class="rbtn" data-fview="own" aria-pressed="false" data-i18n="fviewOwn"></button>
+      <span class="hint" id="activeMixNote"></span>
+    </div>
+    <section class="panel beta-panel" id="betaPanel" aria-labelledby="betaTitle" hidden>
       <h2 id="betaTitle"><span data-i18n="betaTitle"></span> <span class="beta-badge" data-i18n="betaBadge"></span></h2>
       <p class="sub" data-i18n="betaSub"></p>
-      <label class="toggle"><input type="checkbox" id="customOn"><span data-i18n="betaOn"></span></label>
+      <input type="checkbox" id="customOn" hidden>
       <div class="cat-search">
         <input type="search" id="catQ" data-i18n-ph="catSearch" placeholder="" aria-label="Zoeken">
         <a id="jetfLink" class="cat-jetf" href="https://www.justetf.com/nl/search.html" target="_blank" rel="noopener noreferrer" data-i18n="catJetf"></a>
@@ -688,7 +696,7 @@
         </form>
       </details>
     </section>
-    <section class="panel" aria-labelledby="fundsTitle">
+    <section class="panel" id="basisPanel" aria-labelledby="fundsTitle">
       <h2 id="fundsTitle" data-i18n="fundsTitle"></h2>
       <p class="sub" data-i18n="fundsSub"></p>
       </div>
@@ -1119,7 +1127,7 @@ const T = {
     g6d: 'Op het tabblad Belasting zet je landen aan of uit (maximaal vier tegelijk) en zie je de belasting over hetzelfde rendement. Elk land heeft een toelichting met bron en betrouwbaarheid.',
     g7t: 'Bewaar en exporteer',
     g7d: 'Bewaar benoemde scenario\'s in de browser via het menu. Exporteer een CSV of druk af naar PDF vanuit hetzelfde menu.',
-    grpStrat: 'Strategie', grpAmt: 'Inleg en looptijd', grpMix: 'Verdeling', grpDiv: 'Dividend', grpTax: 'Belasting', betaTitle: 'Bèta: eigen fondsmix', betaSub: 'Zet de basismix uit om zelf fondsen te kiezen. Zoek in je catalogus, markeer wat je kunt kopen en stel je eigen mix samen. Zoeken op justETF gaat in een nieuw tabblad.', betaOn: 'Eigen mix gebruiken (basismix uit)', catSearch: 'Zoek op naam of ISIN', catJetf: 'Zoek op justETF ↗', catAll: 'Toon ook fondsen die ik niet kan kopen', catBuy: 'Kan ik kopen', catInMix: 'Aan mix toevoegen', catOutMix: 'Uit mix halen', catDel: 'Verwijder', catNew: 'Fonds toevoegen aan catalogus', catName: 'Naam', catIsin: 'ISIN', catGroup: 'Groep', catYield: 'Rendement %', catGrowth: 'Koersgroei %', catTer: 'TER %', catUrl: 'Link (optioneel)', catSave: 'Opslaan', catNone: 'Geen fondsen gevonden.', catOff: 'Zet eerst de eigen mix aan om fondsen toe te voegen.', betaBadge: 'bèta', residPick: 'Kies een land', residLbl: 'Land van domicilie', residTip: 'Het land waar je woont bepaalt welke belasting de netto waardeprognose schat. Kies "Geen schatting" om geen belasting mee te rekenen.', wtLbl: 'Belastingschatting', wtNL: 'Nederland (Box 3)', wtNone: 'Geen schatting',
+    grpStrat: 'Strategie', grpAmt: 'Inleg en looptijd', grpMix: 'Verdeling', grpDiv: 'Dividend', grpTax: 'Belasting', fviewOwn: 'Eigen mix (bèta)', activeBasis: 'Actieve mix: basismix', activeOwn: 'Actieve mix: eigen mix', betaTitle: 'Bèta: eigen fondsmix', betaSub: 'Zet de basismix uit om zelf fondsen te kiezen. Zoek in je catalogus, markeer wat je kunt kopen en stel je eigen mix samen. Zoeken op justETF gaat in een nieuw tabblad.', betaOn: 'Eigen mix gebruiken (basismix uit)', catSearch: 'Zoek op naam of ISIN', catJetf: 'Zoek op justETF ↗', catAll: 'Toon ook fondsen die ik niet kan kopen', catBuy: 'Kan ik kopen', catInMix: 'Aan mix toevoegen', catOutMix: 'Uit mix halen', catDel: 'Verwijder', catNew: 'Fonds toevoegen aan catalogus', catName: 'Naam', catIsin: 'ISIN', catGroup: 'Groep', catYield: 'Rendement %', catGrowth: 'Koersgroei %', catTer: 'TER %', catUrl: 'Link (optioneel)', catSave: 'Opslaan', catNone: 'Geen fondsen gevonden.', catOff: 'Zet eerst de eigen mix aan om fondsen toe te voegen.', betaBadge: 'bèta', residPick: 'Kies een land', residLbl: 'Land van domicilie', residTip: 'Het land waar je woont bepaalt welke belasting de netto waardeprognose schat. Kies "Geen schatting" om geen belasting mee te rekenen.', wtLbl: 'Belastingschatting', wtNL: 'Nederland (Box 3)', wtNone: 'Geen schatting',
     scenTip: 'Drie rekenvarianten. Laag: 3 procentpunt minder koersgroei en 1 procentpunt minder yield. Basis: de gegevens uit de fondsentabel. Hoog: 3 procentpunt meer koersgroei en 0,5 procentpunt meer yield. Yield verandert alleen bij de dividendfondsen.',
     scLaag: 'Laag', scBasis: 'Basis', scHoog: 'Hoog',
     reinvest: 'Uitkeringen herinvesteren',
@@ -1354,7 +1362,7 @@ const T = {
     g6d: 'On the Tax tab you can switch countries on or off (up to four at a time) and see the tax on the same return. Each country has a note with its source and reliability.',
     g7t: 'Save and export',
     g7d: 'Save named scenarios in the browser from the menu. Export a CSV or print to PDF from the same menu.',
-    grpStrat: 'Strategy', grpAmt: 'Investment and duration', grpMix: 'Split', grpDiv: 'Dividend', grpTax: 'Tax', betaTitle: 'Beta: own fund mix', betaSub: 'Turn off the base mix to choose funds yourself. Search your catalogue, mark what you can buy and build your own mix. Searching on justETF opens in a new tab.', betaOn: 'Use own mix (base mix off)', catSearch: 'Search by name or ISIN', catJetf: 'Search on justETF ↗', catAll: 'Also show funds I cannot buy', catBuy: 'I can buy it', catInMix: 'Add to mix', catOutMix: 'Remove from mix', catDel: 'Delete', catNew: 'Add fund to catalogue', catName: 'Name', catIsin: 'ISIN', catGroup: 'Group', catYield: 'Yield %', catGrowth: 'Price growth %', catTer: 'TER %', catUrl: 'Link (optional)', catSave: 'Save', catNone: 'No funds found.', catOff: 'Turn on the own mix first to add funds.', betaBadge: 'beta', residPick: 'Choose a country', residLbl: 'Country of residence', residTip: 'The country where you live determines which tax the net worth forecast estimates. Choose "No estimate" to leave tax out.', wtLbl: 'Tax estimate', wtNL: 'Netherlands', wtNone: 'No estimate',
+    grpStrat: 'Strategy', grpAmt: 'Investment and duration', grpMix: 'Split', grpDiv: 'Dividend', grpTax: 'Tax', fviewOwn: 'Own mix (beta)', activeBasis: 'Active mix: base mix', activeOwn: 'Active mix: own mix', betaTitle: 'Beta: own fund mix', betaSub: 'Turn off the base mix to choose funds yourself. Search your catalogue, mark what you can buy and build your own mix. Searching on justETF opens in a new tab.', betaOn: 'Use own mix (base mix off)', catSearch: 'Search by name or ISIN', catJetf: 'Search on justETF ↗', catAll: 'Also show funds I cannot buy', catBuy: 'I can buy it', catInMix: 'Add to mix', catOutMix: 'Remove from mix', catDel: 'Delete', catNew: 'Add fund to catalogue', catName: 'Name', catIsin: 'ISIN', catGroup: 'Group', catYield: 'Yield %', catGrowth: 'Price growth %', catTer: 'TER %', catUrl: 'Link (optional)', catSave: 'Save', catNone: 'No funds found.', catOff: 'Turn on the own mix first to add funds.', betaBadge: 'beta', residPick: 'Choose a country', residLbl: 'Country of residence', residTip: 'The country where you live determines which tax the net worth forecast estimates. Choose "No estimate" to leave tax out.', wtLbl: 'Tax estimate', wtNL: 'Netherlands', wtNone: 'No estimate',
     scenTip: 'Three calculation variants. Low: 3 percentage points less price growth and 1 point less yield. Base: the data from the funds table. High: 3 points more price growth and 0.5 points more yield. Yield only changes for the dividend funds.',
     scLaag: 'Low', scBasis: 'Base', scHoog: 'High',
     reinvest: 'Reinvest distributions',
@@ -1589,7 +1597,7 @@ const T = {
     g6d: 'En la pestaña Impuestos puedes activar o desactivar países (hasta cuatro a la vez) y ver el impuesto sobre el mismo rendimiento. Cada país tiene una nota con su fuente y su fiabilidad.',
     g7t: 'Guarda y exporta',
     g7d: 'Guarda escenarios con nombre en el navegador desde el menú. Exporta un CSV o imprime a PDF desde el mismo menú.',
-    grpStrat: 'Estrategia', grpAmt: 'Inversión y plazo', grpMix: 'Reparto', grpDiv: 'Dividendo', grpTax: 'Impuestos', betaTitle: 'Beta: mezcla propia de fondos', betaSub: 'Desactiva la mezcla base para elegir tú los fondos. Busca en tu catálogo, marca los que puedes comprar y arma tu mezcla. La búsqueda en justETF se abre en una pestaña nueva.', betaOn: 'Usar mezcla propia (mezcla base desactivada)', catSearch: 'Buscar por nombre o ISIN', catJetf: 'Buscar en justETF ↗', catAll: 'Mostrar también los fondos que no puedo comprar', catBuy: 'Lo puedo comprar', catInMix: 'Añadir a la mezcla', catOutMix: 'Quitar de la mezcla', catDel: 'Eliminar', catNew: 'Añadir fondo al catálogo', catName: 'Nombre', catIsin: 'ISIN', catGroup: 'Grupo', catYield: 'Rentabilidad %', catGrowth: 'Crecimiento %', catTer: 'TER %', catUrl: 'Enlace (opcional)', catSave: 'Guardar', catNone: 'No se encontraron fondos.', catOff: 'Activa primero la mezcla propia para añadir fondos.', betaBadge: 'beta', residPick: 'Elige un país', residLbl: 'País de residencia', residTip: 'El país donde vives determina qué impuesto estima la previsión de patrimonio neto. Elige "Sin estimación" para no incluir impuestos.', wtLbl: 'Estimación de impuestos', wtNL: 'Países Bajos', wtNone: 'Sin estimación',
+    grpStrat: 'Estrategia', grpAmt: 'Inversión y plazo', grpMix: 'Reparto', grpDiv: 'Dividendo', grpTax: 'Impuestos', fviewOwn: 'Mezcla propia (beta)', activeBasis: 'Mezcla activa: base', activeOwn: 'Mezcla activa: propia', betaTitle: 'Beta: mezcla propia de fondos', betaSub: 'Desactiva la mezcla base para elegir tú los fondos. Busca en tu catálogo, marca los que puedes comprar y arma tu mezcla. La búsqueda en justETF se abre en una pestaña nueva.', betaOn: 'Usar mezcla propia (mezcla base desactivada)', catSearch: 'Buscar por nombre o ISIN', catJetf: 'Buscar en justETF ↗', catAll: 'Mostrar también los fondos que no puedo comprar', catBuy: 'Lo puedo comprar', catInMix: 'Añadir a la mezcla', catOutMix: 'Quitar de la mezcla', catDel: 'Eliminar', catNew: 'Añadir fondo al catálogo', catName: 'Nombre', catIsin: 'ISIN', catGroup: 'Grupo', catYield: 'Rentabilidad %', catGrowth: 'Crecimiento %', catTer: 'TER %', catUrl: 'Enlace (opcional)', catSave: 'Guardar', catNone: 'No se encontraron fondos.', catOff: 'Activa primero la mezcla propia para añadir fondos.', betaBadge: 'beta', residPick: 'Elige un país', residLbl: 'País de residencia', residTip: 'El país donde vives determina qué impuesto estima la previsión de patrimonio neto. Elige "Sin estimación" para no incluir impuestos.', wtLbl: 'Estimación de impuestos', wtNL: 'Países Bajos', wtNone: 'Sin estimación',
     scenTip: 'Tres variantes de cálculo. Bajo: 3 puntos porcentuales menos de crecimiento del precio y 1 punto menos de rendimiento. Base: los datos de la tabla de fondos. Alto: 3 puntos más de crecimiento y 0,5 puntos más de rendimiento. El rendimiento solo cambia en los fondos de dividendos.',
     scLaag: 'Bajo', scBasis: 'Base', scHoog: 'Alto',
     reinvest: 'Reinvertir distribuciones',
@@ -2622,8 +2630,20 @@ function persistFunds(){
   if (fundsStore.on) fundsStore.custom = funds.map(cloneF); else fundsStore.base = funds.map(cloneF);
   saveFunds();
 }
+function setFview(v){
+  const own = v === 'own';
+  document.getElementById('betaPanel').hidden = !own;
+  document.getElementById('basisPanel').hidden = own;
+  document.querySelectorAll('[data-fview]').forEach(b => b.setAttribute('aria-pressed', b.dataset.fview === v ? 'true' : 'false'));
+}
 function syncFundsUi(){
   document.getElementById('customOn').checked = fundsStore.on;
+  const note = document.getElementById('activeMixNote');
+  if (note) note.textContent = tr(fundsStore.on ? 'activeOwn' : 'activeBasis');
+  const basisBtn = document.querySelector('[data-fview="basis"]');
+  if (basisBtn) basisBtn.textContent = tr('tabFunds');
+  const ownBtn = document.querySelector('[data-fview="own"]');
+  if (ownBtn) ownBtn.textContent = tr('fviewOwn');
   document.getElementById('catOffHint').hidden = fundsStore.on;
   document.querySelectorAll('#tabFunds [data-preset]').forEach(b => { b.disabled = fundsStore.on; });
 }
@@ -2690,10 +2710,16 @@ function restoreFundsMode(){
   if (fundsStore.on && fundsStore.custom && fundsStore.custom.length) replaceFunds(fundsStore.custom);
   else if (!fundsStore.on && fundsStore.base && fundsStore.base.length) replaceFunds(fundsStore.base);
   fundsReady = true;
+  setFview('basis');
   buildFundTable();
   renderCatalog();
 }
 document.getElementById('customOn').addEventListener('change', e => setCustomMode(e.target.checked));
+document.querySelectorAll('[data-fview]').forEach(b => b.addEventListener('click', () => {
+  setFview(b.dataset.fview);
+  if (b.dataset.fview === 'own' && !fundsStore.on) setCustomMode(true);
+  else if (b.dataset.fview === 'basis' && fundsStore.on) setCustomMode(false);
+}));
 document.getElementById('catQ').addEventListener('input', renderCatalog);
 document.getElementById('catAll').addEventListener('change', renderCatalog);
 document.getElementById('catForm').addEventListener('submit', e => {
