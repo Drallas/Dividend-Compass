@@ -583,6 +583,13 @@
           <label><input type="radio" name="scen" value="hoog"><span data-i18n="scHoog"></span></label>
         </div>
       </div>
+      <div class="field compact">
+        <div class="field-head"><span><span data-i18n="sourceLbl"></span> <a class="info" href="#gl-syn-strat">?</a></span></div>
+        <div class="seg" role="radiogroup" aria-label="Bron">
+          <label><input type="radio" name="src" value="synth" checked><span data-i18n="srcSynth"></span></label>
+          <label><input type="radio" name="src" value="own"><span data-i18n="srcOwn"></span></label>
+        </div>
+      </div>
       </section>
     <section class="grp">
       <h3 data-i18n="grpAmt"></h3>
@@ -1221,7 +1228,7 @@ const T = {
     tRisk: 'Mijn kwalitatieve inschatting. Geen gemeten volatiliteit.',
     group_div: 'Dividend', group_acc: 'Acc',
     yieldAssumption: 'aanname', assumedLegend: 'Gestreepte rand = mijn aanname, geen gepubliceerd cijfer. Alleen de yield van JEPG (5%) is zo’n aanname: ik vond geen betrouwbare actuele cijfers. Die kan dus afwijken. Pas het getal aan en de hele pagina rekent mee.',
-    fviewSynth: 'Synthese', synthLink: 'Inleg en looptijd komen uit de invoer bovenaan.', mixExport: 'Exporteer mijn mix', mixImport: 'Importeer mix', mixIoHint: 'Je mix wordt als JSON-bestand opgeslagen. Importeren vervangt je huidige eigen mix.', 'gl.sstrat.t': 'Strategie', 'gl.sstrat.d': 'Een voorbeeldverdeling over indexen, met een vast aandeel uitkerend en accumulerend. Pas de gewichten aan of kies een andere strategie; je keuze blijft in de browser bewaard.', 'gl.stot.t': 'Totaalrendement voor kosten', 'gl.stot.d': 'Het verwachte jaarlijkse rendement van de gekozen verdeling, inclusief dividend, vóór kosten. Dit is een synthetische aanname, geen voorspelling.', 'gl.sdiv.t': 'Dividendrendement', 'gl.sdiv.d': 'Het deel van het rendement dat als dividend wordt uitgekeerd, gewogen naar je verdeling.', 'gl.ster.t': 'Kosten (TER, gewogen)', 'gl.ster.d': 'De jaarlijkse kosten van de gekozen producten, gewogen naar hun aandeel. Die gaan af van het rendement.', 'gl.seind.t': 'Vermogen na de looptijd', 'gl.seind.d': 'Wat de inleg wordt als alles herbelegd wordt, na kosten en zonder belasting.', 'gl.suit.t': 'Uitkeringen (ruw)', 'gl.suit.d': 'De som van de dividenden over de looptijd, zonder herbelegging en zonder belasting.', synthTitle: 'Synthetische voorbeeldscenario\'s', synthSub: 'Hier speel je met de voorbeeldstrategieën. De cijfers zijn aannames, geen historie. Pas de gewichten aan en zie hoe de uitkomst verandert. Eigen fondsen kun je later naast deze voorbeelden zetten.', synthStrat: 'Strategie', synthAmt: 'Inleg (€)', synthYrs: 'Jaren',
+    fviewSynth: 'Synthese', synthLink: 'Inleg en looptijd komen uit de invoer bovenaan.', sourceLbl: 'Bron van de mix', srcSynth: 'Synthetisch', srcOwn: 'Eigen mix', mixExport: 'Exporteer mijn mix', mixImport: 'Importeer mix', mixIoHint: 'Je mix wordt als JSON-bestand opgeslagen. Importeren vervangt je huidige eigen mix.', 'gl.sstrat.t': 'Strategie', 'gl.sstrat.d': 'Een voorbeeldverdeling over indexen, met een vast aandeel uitkerend en accumulerend. Pas de gewichten aan of kies een andere strategie; je keuze blijft in de browser bewaard.', 'gl.stot.t': 'Totaalrendement voor kosten', 'gl.stot.d': 'Het verwachte jaarlijkse rendement van de gekozen verdeling, inclusief dividend, vóór kosten. Dit is een synthetische aanname, geen voorspelling.', 'gl.sdiv.t': 'Dividendrendement', 'gl.sdiv.d': 'Het deel van het rendement dat als dividend wordt uitgekeerd, gewogen naar je verdeling.', 'gl.ster.t': 'Kosten (TER, gewogen)', 'gl.ster.d': 'De jaarlijkse kosten van de gekozen producten, gewogen naar hun aandeel. Die gaan af van het rendement.', 'gl.seind.t': 'Vermogen na de looptijd', 'gl.seind.d': 'Wat de inleg wordt als alles herbelegd wordt, na kosten en zonder belasting.', 'gl.suit.t': 'Uitkeringen (ruw)', 'gl.suit.d': 'De som van de dividenden over de looptijd, zonder herbelegging en zonder belasting.', synthTitle: 'Synthetische voorbeeldscenario\'s', synthSub: 'Hier speel je met de voorbeeldstrategieën. De cijfers zijn aannames, geen historie. Pas de gewichten aan en zie hoe de uitkomst verandert. Eigen fondsen kun je later naast deze voorbeelden zetten.', synthStrat: 'Strategie', synthAmt: 'Inleg (€)', synthYrs: 'Jaren',
     n1: 'Yield is niet hetzelfde als rendement. Een hoge uitkering kan deels uit kapitaal komen, waardoor de koers daalt. Het totaalrendement is de juiste maatstaf.',
     n2: 'Covered-call fondsen (JEPG, JEPQ) verkopen opties. In sterke markten loop je achter, en bij een forse daling beschermen ze je maar gedeeltelijk.',
     n3: '<a class="term" href="#gl-sequentie">Sequentierisico</a>: als je uitkeringen opneemt terwijl de koers daalt, verkoop je in een slechte markt sneller stukken. Een buffer van 1 tot 2 jaar kosten helpt.',
@@ -2833,7 +2840,12 @@ function renderCatalog(){
     saveFunds(); afterFundsChange();
   }));
 }
+function syncSrcRadios(){
+  const r = document.querySelector(`input[name="src"][value="${fundsStore.on ? 'own' : 'synth'}"]`);
+  if (r) r.checked = true;
+}
 function afterFundsChange(){
+  syncSrcRadios();
   persistFunds();
   buildFundTable();
   renderCatalog();
@@ -2874,6 +2886,7 @@ function restoreFundsMode(){
   recalc();
 }
 document.getElementById('customOn').addEventListener('change', e => setCustomMode(e.target.checked));
+document.querySelectorAll('input[name="src"]').forEach(r => r.addEventListener('change', () => { if (r.checked) setCustomMode(r.value === 'own'); }));
 document.querySelectorAll('[data-fview]').forEach(b => b.addEventListener('click', () => setFview(b.dataset.fview)));
 document.getElementById('catQ').addEventListener('input', renderCatalog);
 document.getElementById('catAll').addEventListener('change', renderCatalog);
