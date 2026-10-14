@@ -2656,12 +2656,12 @@ const SYNTH_IX = {
   'sp500-dividend': {n:'VS, dividend', t:7.0, d:2.2, ter:0.30}
 };
 const SYNTH_STRAT = [
-  {id:'defensief', n:'Defensief', g:{'wereld-hoog-dividend':50, 'wereld':50}},
-  {id:'gebalanceerd', n:'Gebalanceerd', g:{'wereld':80, 'wereld-hoog-dividend':20}},
-  {id:'agressief', n:'Agressief', g:{'wereld':90, 'wereld-quality':10}},
-  {id:'gebalanceerd-europa', n:'Gebalanceerd met Europa (variant)', g:{'wereld':60, 'europa':20, 'wereld-hoog-dividend':20}},
-  {id:'agressief-em', n:'Agressief met opkomende markten (variant)', g:{'wereld':80, 'opkomende-markten':10, 'wereld-quality':10}},
-  {id:'gebalanceerd-sp500', n:'Gebalanceerd met S&P 500 (variant)', g:{'wereld':60, 'sp500':20, 'wereld-hoog-dividend':20}}
+  {id:'defensief', mix:70, n:'Defensief', g:{'wereld-hoog-dividend':50, 'wereld':50}},
+  {id:'gebalanceerd', mix:50, n:'Gebalanceerd', g:{'wereld':80, 'wereld-hoog-dividend':20}},
+  {id:'agressief', mix:20, n:'Agressief', g:{'wereld':90, 'wereld-quality':10}},
+  {id:'gebalanceerd-europa', mix:50, n:'Gebalanceerd met Europa (variant)', g:{'wereld':60, 'europa':20, 'wereld-hoog-dividend':20}},
+  {id:'agressief-em', mix:20, n:'Agressief met opkomende markten (variant)', g:{'wereld':80, 'opkomende-markten':10, 'wereld-quality':10}},
+  {id:'gebalanceerd-sp500', mix:50, n:'Gebalanceerd met S&P 500 (variant)', g:{'wereld':60, 'sp500':20, 'wereld-hoog-dividend':20}}
 ];
 function synthFunds(){
   const rows = [...document.querySelectorAll('#synthGrid input')].map(i => ({id: i.dataset.ix, w: Math.max(0, Number(i.value) || 0)})).filter(r => r.w > 0);
@@ -2677,7 +2677,8 @@ function synthFunds(){
 }
 function synthCalc(){
   const sum = [...document.querySelectorAll('#synthGrid input')].reduce((a, i) => a + Math.max(0, Number(i.value) || 0), 0);
-  document.getElementById('synthSum').textContent = (sum === 100 || fundsStore.on) ? '' : `Gewichten tellen op tot ${sum}%; de uitkomst wordt genormaliseerd naar 100%.`;
+  const stMix = SYNTH_STRAT.find(x => x.id === document.getElementById('synthSel').value).mix;
+  document.getElementById('synthSum').textContent = fundsStore.on ? '' : (sum !== 100 ? `Gewichten tellen op tot ${sum}%; de uitkomst wordt genormaliseerd naar 100%.` : `Dividend/acc-verdeling volgt de strategie: ${stMix}% uitkerend.`);
   let tot = 0, div = 0, ter = 0;
   funds.forEach(f => { const p = pctOf(f) / 100; tot += p * (f.g + f.y); div += p * f.y; ter += p * f.ter; });
   const A = manualAmount;
@@ -2693,8 +2694,19 @@ function synthCalc(){
     ? 'Je eigen mix is actief; de berekening gebruikt die mix, niet de synthese.'
     : 'Synthetische aannames: gebaseerd op historische kenmerken van indexen, niet gekoppeld aan echte fondsen. Geen belasting berekend.';
 }
+function syncMixLock(){
+  // Synthese-modus: de strategie bepaalt het dividend/acc-aandeel; de schuif is dan vergrendeld.
+  const mix = document.getElementById('mix');
+  if (!mix) return;
+  mix.disabled = !fundsStore.on ? true : false;
+  if (!fundsStore.on){
+    const st = SYNTH_STRAT.find(x => x.id === document.getElementById('synthSel').value);
+    if (st && mix.value !== String(st.mix)){ mix.value = st.mix; mix.dispatchEvent(new Event('input')); }
+  }
+}
 function syncSynth(){
   if (!fundsStore.on){ replaceFunds(synthFunds()); buildFundTable(); }
+  syncMixLock();
   recalc();
 }
 function initSynth(){
@@ -2782,6 +2794,7 @@ function setCustomMode(on){
   }
   fundsStore.on = on;
   saveFunds();
+  syncMixLock();
   afterFundsChange();
 }
 function restoreFundsMode(){
@@ -2791,6 +2804,7 @@ function restoreFundsMode(){
   setFview('synth');
   buildFundTable();
   renderCatalog();
+  syncMixLock();
   recalc();
 }
 document.getElementById('customOn').addEventListener('change', e => setCustomMode(e.target.checked));
