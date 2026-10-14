@@ -2673,6 +2673,7 @@ function buildChips(){
     if (!k) return;
     if (e.target.checked && activeCount() >= 4){ e.target.checked = false; document.getElementById('pickMax').hidden = false; return; }
     taxOn[k] = e.target.checked;
+    saveLast();
     if (!taxOn[k] && subTab === k) subTab = 'ov';
     renderOverview();
   });
@@ -2915,6 +2916,7 @@ function captureState(){
     scen: document.querySelector('input[name=scen]:checked').value,
     reinvest: document.getElementById('reinvest').checked,
     resid: document.getElementById('resid').value,
+    tax: Object.keys(taxOn).filter(k => taxOn[k]),
     goalOn: document.getElementById('goalOn').checked,
     target: digits(document.getElementById('target').value),
     preset: activePreset,
@@ -2929,6 +2931,8 @@ function applyState(s){
   if (r) r.checked = true;
   document.getElementById('reinvest').checked = s.reinvest;
   if (s.resid && document.querySelector('#resid option[value="' + s.resid + '"]')) document.getElementById('resid').value = s.resid;
+  if (Array.isArray(s.tax)) { Object.keys(taxOn).forEach(k => { taxOn[k] = s.tax.includes(k) && taxAllowed(k); }); updateChips(); }
+  else setTaxDefaults();
   document.getElementById('goalOn').checked = s.goalOn;
   document.getElementById('target').value = fmtNum(s.target);
   s.funds.forEach(x => { const f = funds.find(q => q.id === x.id); if (f){ f.w = x.w; f.g = x.g; f.y = x.y; f.ter = x.ter; } });
@@ -3051,8 +3055,7 @@ function loadLast(){ try { const v = JSON.parse(localStorage.getItem(LAST_KEY));
 function saveLast(){ if (window.__dkBoot) return; try { localStorage.setItem(LAST_KEY, JSON.stringify(captureState())); } catch (e) {} }
 fillResid();
 const SAVED_LAST = loadLast();
-if (SAVED_LAST) applyState(SAVED_LAST); else applyPreset('bal');
-setTaxDefaults(); // standaardstrategie: gebalanceerd
+if (SAVED_LAST) applyState(SAVED_LAST); else { applyPreset('bal'); setTaxDefaults(); } // standaardstrategie: gebalanceerd
 window.__dkBoot = false;
 saveLast();
 </script>
