@@ -1769,6 +1769,11 @@ const FX = {usd:0.86, pen:1/4.6, thb:1/38};   // aannames voor omrekening naar e
 const bandTax = (x, bands) => { let tax = 0, lo = 0; for (const [hi, r] of bands){ tax += Math.max(0, Math.min(x, hi) - lo) * r; lo = hi; } return tax; };
 const flat = r => (div, cg) => { const x = div + cg; return [x * r, x]; };
 const EXTRA = [
+  {k:'ve', color:'#84cc16', src:'https://taxsummaries.pwc.com/venezuela/individual/income-determination', names:{nl:'Venezuela', en:'Venezuela', es:'Venezuela'},
+   f:(div, cg, t) => [0.34 * div, div + cg],
+   note:{nl:'Volgens de PwC-samenvatting wordt dividend uit buitenlandse fondsen belast met een vlak tarief van 34%. Vermogenswinst is niet meegerekend: de bron geeft geen duidelijk tarief voor particulieren. Niet geverifieerd voor particulieren; controleer bij een adviseur.',
+         en:'According to the PwC summary, dividends from foreign funds are taxed at a flat 34%. Capital gains are not included: the source gives no clear rate for individuals. Not verified for individuals; check with an adviser.',
+         es:'Según el resumen de PwC, los dividendos de fondos extranjeros tributan a un tipo fijo del 34%. Las plusvalías no están incluidas: la fuente no da un tipo claro para particulares. No verificado para particulares; consúltalo con un asesor.'}},
   {k:'be', color:'#facc15', src:'https://curvo.eu/nl/artikel/belastingen-belgische-beleggers', names:{nl:'België', en:'Belgium', es:'Bélgica'},
    f:(div, cg) => { const g = Math.max(0, cg - 10000); return [0.30 * div + 0.10 * g, div + g]; },
    note:{nl:'Roerende voorheffing 30% op uitkeringen; meerwaardebelasting 10% op winst boven € 10.000 per jaar (vanaf 2026). Per jaar benaderd.',
