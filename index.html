@@ -2601,9 +2601,9 @@ renderBedrag();
 applyStatic();
 /* ============ vermogensprognose ============ */
 const WL = {
-  nl:{yrs:'Periode', title:'Netto waardeprognose', sub:'Hoe je vermogen zich ontwikkelt bij de invoerwaarden, strategie en scenario die je hebt gekozen. Netto is na een schatting van de Box 3-belasting.', kGross:'Bruto in fondsen', kNet:'Netto vermogen', kPaid:'Uitgekeerd', kTax:'Box 3, geschat', kDouble:'Verdubbeling netto', dNo:'Niet binnen de periode', legG:'Bruto in fondsen', legN:'Netto vermogen', legI:'Ingelegd', year:'Jaar', colFund:'In fondsen', colCash:'Uitgekeerd', colTax:'Box 3 cumulatief', colNet:'Netto', note:'De Box 3-schatting gebruikt het heffingsvrij vermogen en het forfaitaire rendement uit het tabblad Belasting. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.'},
-  en:{yrs:'Period', title:'Net worth forecast', sub:'How your wealth develops with the inputs, strategy and scenario you chose. Net is after an estimate of Box 3 tax (Netherlands).', kGross:'Gross in funds', kNet:'Net wealth', kPaid:'Paid out', kTax:'Box 3, estimated', kDouble:'Net doubling time', dNo:'Not within the period', legG:'Gross in funds', legN:'Net wealth', legI:'Invested', year:'Year', colFund:'In funds', colCash:'Paid out', colTax:'Box 3 cumulative', colNet:'Net', note:'The Box 3 estimate uses the tax-free allowance and the flat return from the Tax tab. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.'},
-  es:{yrs:'Periodo', title:'Previsión de patrimonio neto', sub:'Cómo evoluciona tu patrimonio con las entradas, la estrategia y el escenario que elegiste. El neto es después de una estimación del impuesto Box 3 (Países Bajos).', kGross:'Bruto en fondos', kNet:'Patrimonio neto', kPaid:'Pagado', kTax:'Box 3, estimado', kDouble:'Doblar el neto', dNo:'No dentro del periodo', legG:'Bruto en fondos', legN:'Patrimonio neto', legI:'Invertido', year:'Año', colFund:'En fondos', colCash:'Pagado', colTax:'Box 3 acumulado', colNet:'Neto', note:'La estimación de Box 3 usa el mínimo exento y el rendimiento forfait de la pestaña Impuestos. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.'}
+  nl:{yrs:'Periode', title:'Netto waardeprognose', sub:'Hoe je vermogen zich ontwikkelt bij de invoerwaarden, strategie en scenario die je hebt gekozen. Netto is na een schatting van de Box 3-belasting.', kGross:'Bruto in fondsen', kNet:'Netto vermogen', kPaid:'Uitgekeerd', kTax:'Box 3, geschat', kDouble:'Verdubbeling netto', dNo:'Niet binnen de periode', legG:'Bruto in fondsen', legN:'Netto vermogen', legI:'Ingelegd', year:'Jaar', colFund:'In fondsen', colCash:'Uitgekeerd', colTax:'Box 3 cumulatief', colNet:'Netto', colCost:'Kosten (TER)', kCost:'Betaald aan kosten (TER)', costNote:'Kosten zitten al in de waarde in fondsen en worden dus niet nog eens afgetrokken. Ze staan hier alleen om te laten zien wat je ze kosten.', note:'De Box 3-schatting gebruikt het heffingsvrij vermogen en het forfaitaire rendement uit het tabblad Belasting. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.'},
+  en:{yrs:'Period', title:'Net worth forecast', sub:'How your wealth develops with the inputs, strategy and scenario you chose. Net is after an estimate of Box 3 tax (Netherlands).', kGross:'Gross in funds', kNet:'Net wealth', kPaid:'Paid out', kTax:'Box 3, estimated', kDouble:'Net doubling time', dNo:'Not within the period', legG:'Gross in funds', legN:'Net wealth', legI:'Invested', year:'Year', colFund:'In funds', colCash:'Paid out', colTax:'Box 3 cumulative', colNet:'Net', colCost:'Fund costs (TER)', kCost:'Paid in fund costs (TER)', costNote:'Costs are already included in the fund value and are not deducted again. They are shown to show what they cost you.', note:'The Box 3 estimate uses the tax-free allowance and the flat return from the Tax tab. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.'},
+  es:{yrs:'Periodo', title:'Previsión de patrimonio neto', sub:'Cómo evoluciona tu patrimonio con las entradas, la estrategia y el escenario que elegiste. El neto es después de una estimación del impuesto Box 3 (Países Bajos).', kGross:'Bruto en fondos', kNet:'Patrimonio neto', kPaid:'Pagado', kTax:'Box 3, estimado', kDouble:'Doblar el neto', dNo:'No dentro del periodo', legG:'Bruto en fondos', legN:'Patrimonio neto', legI:'Invertido', year:'Año', colFund:'En fondos', colCash:'Pagado', colTax:'Box 3 acumulado', colNet:'Neto', colCost:'Costes (TER)', kCost:'Pagado en costes (TER)', costNote:'Los costes ya están incluidos en el valor de los fondos y no se restan otra vez. Se muestran para que veas lo que te cuestan.', note:'La estimación de Box 3 usa el mínimo exento y el rendimiento forfait de la pestaña Impuestos. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.'}
 };
 function renderWealth(){
   const el = document.getElementById('wealthBody');
@@ -2624,6 +2624,20 @@ function renderWealth(){
   for (let t = 1; t <= H; t++){ cumTax += box3Year(fund[t], cash[t], sp); tax[t] = cumTax; }
   for (let t = 0; t <= H; t++) net[t] = fund[t] + cash[t] - tax[t];
   const inleg = amountNow;
+  const costYr = new Array(H + 1).fill(0);
+  funds.forEach(f => {
+    const share = (f.group === 'div' ? amountNow * mix : amountNow * (1 - mix)) * f.w / groupSum(f.group);
+    const g = f.g + sc.dg;
+    const y = f.y > 0 ? Math.max(0, f.y + sc.dy) : 0;
+    let v = share;
+    for (let t = 1; t <= H; t++){
+      costYr[t] += v * f.ter / 100;
+      v = v * (1 + (g - f.ter) / 100) + (reinvest ? v * y / 100 : 0);
+    }
+  });
+  const costCum = [];
+  let cc = 0;
+  for (let t = 0; t <= H; t++){ cc += costYr[t]; costCum[t] = cc; }
   let dbl = null;
   for (let t = 1; t <= H; t++){ if (net[t] >= 2 * inleg){ dbl = t; break; } }
 
@@ -2631,6 +2645,7 @@ function renderWealth(){
     `<div class="calk"><span>${W.kGross}</span><b>${EUR(fund[H])}</b></div>`,
     `<div class="calk"><span>${W.kNet}</span><b>${EUR(net[H])}</b></div>`,
     `<div class="calk"><span>${W.kPaid}</span><b>${EUR(cash[H])}</b></div>`,
+    `<div class="calk"><span>${W.kCost}</span><b>${EUR(costCum[H])}</b></div>`,
     `<div class="calk"><span>${W.kTax}</span><b>${EUR(tax[H])}</b></div>`,
     `<div class="calk"><span>${W.kDouble}</span><b>${dbl ? tr('years')(dbl) : W.dNo}</b></div>`
   ];
@@ -2660,7 +2675,7 @@ function renderWealth(){
   let rows = '';
   for (let t = 1; t <= H; t++){
     if (t % step && t !== H) continue;
-    rows += `<tr><th scope="row">${W.year} ${t}</th><td>${EUR(fund[t])}</td><td>${EUR(cash[t])}</td><td>${EUR(tax[t])}</td><td class="tot">${EUR(net[t])}</td></tr>`;
+    rows += `<tr><th scope="row">${W.year} ${t}</th><td>${EUR(fund[t])}</td><td>${EUR(cash[t])}</td><td>${EUR(tax[t])}</td><td>${EUR(costCum[t])}</td><td class="tot">${EUR(net[t])}</td></tr>`;
   }
 
   el.innerHTML = `
@@ -2669,7 +2684,8 @@ function renderWealth(){
     <div class="calkpis">${cards.join('')}</div>
     <div class="wlegend"><span><i style="background:var(--div)"></i>${W.legN}</span><span><i style="background:var(--acc)"></i>${W.legG}</span><span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span></div>
     ${svg}
-    <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th><th>${W.colTax}</th><th>${W.colNet}</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th><th>${W.colTax}</th><th>${W.colCost}</th><th>${W.colNet}</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <p class="sub calnote">${W.costNote}</p>
     <p class="sub calnote">${W.note}</p>`;
 }
 
