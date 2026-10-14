@@ -345,6 +345,7 @@
   /* ---------- vermogensprognose ---------- */
   .wslider{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
   #wealthYrs{width:100%;margin:0 0 4px}
+  body.nogoal .tabs .tab[data-tab="tabPay"]{display:none !important}
   html:not([lang="nl"]) .nlonly{display:none !important}
   .wchart{width:100%;height:auto;display:block;margin:6px 0 4px}
   .wchart text{font-variant-numeric:tabular-nums}
@@ -2244,7 +2245,14 @@ function renderCalendar(){
     <p class="sub calnote">${L.note}</p>`;
 }
 
+function syncGoal(){
+  const on = document.getElementById('goalOn').checked;
+  document.body.classList.toggle('nogoal', !on);
+  const pay = document.querySelector('.tabs .tab[data-tab="tabPay"]');
+  if (!on && pay && pay.getAttribute('aria-selected') === 'true') document.querySelector('.tabs .tab[data-tab="tabProg"]').click();
+}
 function recalc(){
+  syncGoal();
   const amount = amountNow;
   const years = parseInt(document.getElementById('jaren').value, 10);
   const mix = parseFloat(document.getElementById('mix').value) / 100;
