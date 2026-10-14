@@ -37,4 +37,4 @@ Open `index.html` in a browser. Nothing needs to be installed.
 
 ## License
 
-See [LICENSE](LICENSE).
+This project is licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE). You may read, use and modify the code for noncommercial purposes. Commercial use, including selling it, requires permission from the author.
