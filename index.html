@@ -487,9 +487,11 @@
   .cat-form label.wide{grid-column:1/-1}
   .cat-form input,.cat-form select{padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font:inherit}
   .cat-form .rbtn{justify-self:start}
-  .fview{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
-  .fview .rbtn[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
-  .fview #activeMixNote{margin-left:auto;font-size:12.5px}
+  .fview{display:flex;gap:4px;align-items:flex-end;margin:0 0 -1px;position:relative;z-index:1}
+  .fview .rbtn{border-radius:12px 12px 0 0;border-bottom:0;padding:10px 18px;background:var(--bg);color:var(--muted);border-color:var(--line)}
+  .fview .rbtn[aria-pressed="true"]{background:var(--panel);color:var(--text);border-color:var(--line)}
+  .fview #activeMixNote{margin:0 0 10px auto;font-size:12.5px}
+  #basisPanel,#betaPanel{border-top-left-radius:0}
   .controls .grp > h3{margin:0 0 14px}
   .controls .field{gap:10px}
   .controls .field.compact + .field.compact{margin-top:14px}
