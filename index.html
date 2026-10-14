@@ -370,6 +370,9 @@
   .skpi{border-radius:14px;padding:14px;background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--c)}
   .skpi .lbl{font-size:12.5px;color:var(--muted)}
   .skpi .big{font-size:24px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+  .io-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0}
+  .io-file{cursor:pointer}
+  .io-row .hint{margin:0}
   .welcome-actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
   .disclaimer{font-size:12px;color:var(--muted);max-width:64ch;margin:10px auto 0;line-height:1.5}
   .controls .grp{border:1px solid var(--line);border-radius:12px;padding:12px 14px 4px;margin:0 0 12px}
@@ -694,10 +697,45 @@
       <button type="button" class="rbtn" data-fview="own" aria-pressed="false" data-i18n="fviewOwn"></button>
       <span class="hint" id="activeMixNote"></span>
     </div>
+    <section class="panel" id="basisPanel" aria-labelledby="fundsTitle">
+      <h2 id="fundsTitle" data-i18n="fundsTitle"></h2>
+      <p class="sub" data-i18n="fundsSub"></p>
+      <div class="mixgroup">
+        <div class="field-head"><span data-i18n="mixGroup"></span></div>
+        <div class="mix-legend">
+          <span class="chip"><i class="sw div"></i><span data-i18n="dividendShort"></span> <strong id="mixFDiv">50%</strong></span>
+          <span class="chip"><i class="sw acc"></i><span data-i18n="accShort"></span> <strong id="mixFAcc">50%</strong></span>
+        </div>
+        <input type="range" id="mixF" min="0" max="100" value="50" step="1" aria-label="Verdeling dividend en acc">
+        <div class="range-ends"><span data-i18n="mixEndAcc"></span><span data-i18n="mixEndDiv"></span></div>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th data-i18n="colFund"></th>
+              <th><a class="term tt below" href="#gl-groep" data-tip-i18n="tGroep" data-i18n="colGroup"></a></th>
+              <th><a class="term tt below" href="#gl-mix" data-tip-i18n="tMix" data-i18n="colMix"></a></th>
+              <th><a class="term tt below" href="#gl-koersgroei" data-tip-i18n="tKoers" data-i18n="colGrowth"></a></th>
+              <th><a class="term tt below" href="#gl-yield" data-tip-i18n="tYield" data-i18n="colYield"></a></th>
+              <th><a class="term tt below" href="#gl-ter" data-tip-i18n="tTer" data-i18n="colTer"></a></th>
+              <th><a class="term tt below" href="#gl-risico" data-tip-i18n="tRisk" data-i18n="colRisk"></a></th>
+            </tr>
+          </thead>
+          <tbody id="fundTable"></tbody>
+        </table>
+      </div>
+      <p class="sub assumedNote" data-i18n="assumedLegend"></p>
+    </section>
     <section class="panel beta-panel" id="betaPanel" aria-labelledby="betaTitle" hidden>
       <h2 id="betaTitle"><span data-i18n="betaTitle"></span> <span class="beta-badge" data-i18n="betaBadge"></span></h2>
       <p class="sub" data-i18n="betaSub"></p>
       <input type="checkbox" id="customOn" hidden>
+      <div class="io-row">
+        <button type="button" class="rbtn" id="mixExport" data-i18n="mixExport"></button>
+        <label class="rbtn io-file"><span data-i18n="mixImport"></span><input type="file" id="mixImport" accept="application/json,.json" hidden></label>
+        <span class="hint" id="ioMsg" data-i18n="mixIoHint"></span>
+      </div>
       <div class="cat-search">
         <input type="search" id="catQ" data-i18n-ph="catSearch" placeholder="" aria-label="Zoeken">
         <a id="jetfLink" class="cat-jetf" href="https://www.justetf.com/nl/search.html" target="_blank" rel="noopener noreferrer" data-i18n="catJetf"></a>
@@ -728,37 +766,6 @@
       <p class="sub" id="synthSum"></p>
       <div class="synth-kpis" id="synthKpi"></div>
       <p class="sub" id="synthNote"></p>
-    </section>
-    <section class="panel" id="basisPanel" aria-labelledby="fundsTitle">
-      <h2 id="fundsTitle" data-i18n="fundsTitle"></h2>
-      <p class="sub" data-i18n="fundsSub"></p>
-      </div>
-      <div class="mixgroup">
-        <div class="field-head"><span data-i18n="mixGroup"></span></div>
-        <div class="mix-legend">
-          <span class="chip"><i class="sw div"></i><span data-i18n="dividendShort"></span> <strong id="mixFDiv">50%</strong></span>
-          <span class="chip"><i class="sw acc"></i><span data-i18n="accShort"></span> <strong id="mixFAcc">50%</strong></span>
-        </div>
-        <input type="range" id="mixF" min="0" max="100" value="50" step="1" aria-label="Verdeling dividend en acc">
-        <div class="range-ends"><span data-i18n="mixEndAcc"></span><span data-i18n="mixEndDiv"></span></div>
-      </div>
-      <div class="tbl-wrap">
-        <table class="tbl">
-          <thead>
-            <tr>
-              <th data-i18n="colFund"></th>
-              <th><a class="term tt below" href="#gl-groep" data-tip-i18n="tGroep" data-i18n="colGroup"></a></th>
-              <th><a class="term tt below" href="#gl-mix" data-tip-i18n="tMix" data-i18n="colMix"></a></th>
-              <th><a class="term tt below" href="#gl-koersgroei" data-tip-i18n="tKoers" data-i18n="colGrowth"></a></th>
-              <th><a class="term tt below" href="#gl-yield" data-tip-i18n="tYield" data-i18n="colYield"></a></th>
-              <th><a class="term tt below" href="#gl-ter" data-tip-i18n="tTer" data-i18n="colTer"></a></th>
-              <th><a class="term tt below" href="#gl-risico" data-tip-i18n="tRisk" data-i18n="colRisk"></a></th>
-            </tr>
-          </thead>
-          <tbody id="fundTable"></tbody>
-        </table>
-      </div>
-      <p class="sub assumedNote" data-i18n="assumedLegend"></p>
     </section>
 
     </main>
@@ -1212,7 +1219,7 @@ const T = {
     tRisk: 'Mijn kwalitatieve inschatting. Geen gemeten volatiliteit.',
     group_div: 'Dividend', group_acc: 'Acc',
     yieldAssumption: 'aanname', assumedLegend: 'Gestreepte rand = mijn aanname, geen gepubliceerd cijfer. Alleen de yield van JEPG (5%) is zo’n aanname: ik vond geen betrouwbare actuele cijfers. Die kan dus afwijken. Pas het getal aan en de hele pagina rekent mee.',
-    fviewSynth: 'Synthese', synthLink: 'Inleg en looptijd komen uit de invoer bovenaan.', 'gl.sstrat.t': 'Strategie', 'gl.sstrat.d': 'Een voorbeeldverdeling over indexen, met een vast aandeel uitkerend en accumulerend. Pas de gewichten aan of kies een andere strategie; je keuze blijft in de browser bewaard.', 'gl.stot.t': 'Totaalrendement voor kosten', 'gl.stot.d': 'Het verwachte jaarlijkse rendement van de gekozen verdeling, inclusief dividend, vóór kosten. Dit is een synthetische aanname, geen voorspelling.', 'gl.sdiv.t': 'Dividendrendement', 'gl.sdiv.d': 'Het deel van het rendement dat als dividend wordt uitgekeerd, gewogen naar je verdeling.', 'gl.ster.t': 'Kosten (TER, gewogen)', 'gl.ster.d': 'De jaarlijkse kosten van de gekozen producten, gewogen naar hun aandeel. Die gaan af van het rendement.', 'gl.seind.t': 'Vermogen na de looptijd', 'gl.seind.d': 'Wat de inleg wordt als alles herbelegd wordt, na kosten en zonder belasting.', 'gl.suit.t': 'Uitkeringen (ruw)', 'gl.suit.d': 'De som van de dividenden over de looptijd, zonder herbelegging en zonder belasting.', synthTitle: 'Synthetische voorbeeldscenario\'s', synthSub: 'Hier speel je met de voorbeeldstrategieën. De cijfers zijn aannames, geen historie. Pas de gewichten aan en zie hoe de uitkomst verandert. Eigen fondsen kun je later naast deze voorbeelden zetten.', synthStrat: 'Strategie', synthAmt: 'Inleg (€)', synthYrs: 'Jaren',
+    fviewSynth: 'Synthese', synthLink: 'Inleg en looptijd komen uit de invoer bovenaan.', mixExport: 'Exporteer mijn mix', mixImport: 'Importeer mix', mixIoHint: 'Je mix wordt als JSON-bestand opgeslagen. Importeren vervangt je huidige eigen mix.', 'gl.sstrat.t': 'Strategie', 'gl.sstrat.d': 'Een voorbeeldverdeling over indexen, met een vast aandeel uitkerend en accumulerend. Pas de gewichten aan of kies een andere strategie; je keuze blijft in de browser bewaard.', 'gl.stot.t': 'Totaalrendement voor kosten', 'gl.stot.d': 'Het verwachte jaarlijkse rendement van de gekozen verdeling, inclusief dividend, vóór kosten. Dit is een synthetische aanname, geen voorspelling.', 'gl.sdiv.t': 'Dividendrendement', 'gl.sdiv.d': 'Het deel van het rendement dat als dividend wordt uitgekeerd, gewogen naar je verdeling.', 'gl.ster.t': 'Kosten (TER, gewogen)', 'gl.ster.d': 'De jaarlijkse kosten van de gekozen producten, gewogen naar hun aandeel. Die gaan af van het rendement.', 'gl.seind.t': 'Vermogen na de looptijd', 'gl.seind.d': 'Wat de inleg wordt als alles herbelegd wordt, na kosten en zonder belasting.', 'gl.suit.t': 'Uitkeringen (ruw)', 'gl.suit.d': 'De som van de dividenden over de looptijd, zonder herbelegging en zonder belasting.', synthTitle: 'Synthetische voorbeeldscenario\'s', synthSub: 'Hier speel je met de voorbeeldstrategieën. De cijfers zijn aannames, geen historie. Pas de gewichten aan en zie hoe de uitkomst verandert. Eigen fondsen kun je later naast deze voorbeelden zetten.', synthStrat: 'Strategie', synthAmt: 'Inleg (€)', synthYrs: 'Jaren',
     n1: 'Yield is niet hetzelfde als rendement. Een hoge uitkering kan deels uit kapitaal komen, waardoor de koers daalt. Het totaalrendement is de juiste maatstaf.',
     n2: 'Covered-call fondsen (JEPG, JEPQ) verkopen opties. In sterke markten loop je achter, en bij een forse daling beschermen ze je maar gedeeltelijk.',
     n3: '<a class="term" href="#gl-sequentie">Sequentierisico</a>: als je uitkeringen opneemt terwijl de koers daalt, verkoop je in een slechte markt sneller stukken. Een buffer van 1 tot 2 jaar kosten helpt.',
@@ -2880,6 +2887,55 @@ document.getElementById('catForm').addEventListener('submit', e => {
   e.target.closest('details').open = false;
   renderCatalog();
 });
+
+/* ============ eigen mix: exporteren en importeren ============ */
+const MIX_FORMAT = 'dividend-compass-mix';
+const cleanText = (v, max) => String(v == null ? '' : v).replace(/[<>]/g, '').slice(0, max);
+const cleanUrl = u => (typeof u === 'string' && (u.startsWith('https://') || u === '#')) ? u : '#';
+function mixMsg(t){ const el = document.getElementById('ioMsg'); if (el) el.textContent = t; }
+function exportMix(){
+  try {
+    const payload = {
+      format: MIX_FORMAT, version: 1, exportedAt: new Date().toISOString(),
+      funds: (fundsStore.on ? funds : (fundsStore.custom || BASE_FUNDS)).map(cloneF),
+      user: fundsStore.user, avail: fundsStore.avail
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type: 'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'dividend-compass-mix.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    mixMsg(`Mix geëxporteerd (${payload.funds.length} fondsen).`);
+  } catch (e) { mixMsg('Exporteren lukte niet.'); }
+}
+function cleanFund(f){
+  if (!f || typeof f !== 'object') return null;
+  const group = f.group === 'acc' ? 'acc' : 'div';
+  const nums = ['w', 'g', 'y', 'ter'].map(k => Number(f[k]));
+  if (nums.some(x => !Number.isFinite(x))) return null;
+  return { id: cleanText(f.id, 60), name: cleanText(f.name, 120), group, w: nums[0], g: nums[1], y: nums[2], ter: nums[3],
+    risk: cleanText(f.risk, 20) || 'Middel', url: cleanUrl(f.url), yieldSrc: cleanText(f.yieldSrc, 20) || 'aanname', ...(f.isin ? {isin: cleanText(f.isin, 16)} : {}) };
+}
+function importMix(file){
+  const reader = new FileReader();
+  reader.onload = () => {
+    let data;
+    try { data = JSON.parse(reader.result); } catch (e) { mixMsg('Ongeldig bestand.'); return; }
+    if (!data || data.format !== MIX_FORMAT || !Array.isArray(data.funds)) { mixMsg('Dit is geen Dividend Compass-mix.'); return; }
+    const list = data.funds.map(cleanFund).filter(Boolean);
+    if (!list.length) { mixMsg('Geen geldige fondsen gevonden.'); return; }
+    if (Array.isArray(data.user)) fundsStore.user = data.user.map(cleanFund).filter(Boolean).map(f => ({...f, risk: f.risk}));
+    if (data.avail && typeof data.avail === 'object') fundsStore.avail = Object.fromEntries(Object.entries(data.avail).filter(([k, v]) => typeof v === 'boolean'));
+    fundsStore.custom = list;
+    saveFunds();
+    if (fundsStore.on) { replaceFunds(list); afterFundsChange(); }
+    else setCustomMode(true);
+    mixMsg(`Mix geïmporteerd (${list.length} fondsen).`);
+  };
+  reader.readAsText(file);
+}
+document.getElementById('mixExport').addEventListener('click', exportMix);
+document.getElementById('mixImport').addEventListener('change', e => { const f = e.target.files[0]; if (f) importMix(f); e.target.value = ''; });
 
 /* ============ init ============ */
 buildFundTable();

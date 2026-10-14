@@ -1,5 +1,5 @@
 // Versie bij elke wijziging ophogen, zodat oude caches worden opgeruimd.
-const CACHE = 'dividend-compass-v4';
+const CACHE = 'dividend-compass-v5';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
