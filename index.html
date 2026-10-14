@@ -538,7 +538,7 @@
       <div class="field-head">
         <label for="target"><span data-i18n="targetLabel"></span></label> <a class="tt info" href="#gl-maandbedrag" data-tip-i18n="targetTip">?</a>
       </div>
-      <label class="toggle" style="font-size:12.5px;margin-bottom:8px"><input type="checkbox" id="goalOn" checked><span data-i18n="goalOn"></span></label>
+      <label class="toggle" style="font-size:12.5px;margin-bottom:8px"><input type="checkbox" id="goalOn"><span data-i18n="goalOn"></span></label>
       <div class="euro"><span>€</span><input type="text" id="target" value="500" inputmode="numeric" autocomplete="off"></div>
       <input type="range" id="targetRange" min="0" max="10000" step="50" value="500" aria-label="Dividend per month">
       <div class="range-ends"><span id="tgMin"></span><span id="tgMax"></span></div>
@@ -2857,7 +2857,7 @@ document.querySelector('[data-open="langDlg"]').addEventListener('click', () => 
   document.querySelectorAll('#langDlg [data-lang]').forEach(x => x.setAttribute('aria-current', x.dataset.lang === lang ? 'true' : 'false'));
 });
 /* ---- laatste invoer onthouden tussen bezoeken ---- */
-const LAST_KEY = 'dk-last';
+const LAST_KEY = 'dk-last-v2';
 function loadLast(){ try { const v = JSON.parse(localStorage.getItem(LAST_KEY)); return v && v.v === 1 ? v : null; } catch (e) { return null; } }
 function saveLast(){ if (window.__dkBoot) return; try { localStorage.setItem(LAST_KEY, JSON.stringify(captureState())); } catch (e) {} }
 const SAVED_LAST = loadLast();
