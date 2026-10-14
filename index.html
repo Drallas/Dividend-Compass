@@ -367,8 +367,12 @@
   .achip{margin:4px 6px 4px 0;border-radius:999px;border:1px dashed var(--line);padding:6px 12px;background:transparent;color:var(--muted);cursor:pointer;font:inherit;font-size:13px}
   .synth-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:16px}
   .synth-kpis:empty{display:none}
+  .skpi-base{grid-column:1/-1;font-size:13.5px;color:var(--muted);padding:0 2px}
+  .skpi-base strong{color:var(--text)}
+  #synthNote{margin-top:14px;line-height:1.5}
   .skpi{border-radius:14px;padding:14px;background:var(--panel);border:1px solid var(--line)}
   .skpi .lbl{font-size:12.5px;color:var(--muted)}
+  .skpi .lbl .info{white-space:nowrap}
   .skpi .big{font-size:24px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
   .io-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0}
   .io-file{cursor:pointer}
@@ -1847,7 +1851,6 @@ function pctOf(f){ return Math.round(groupMixOf(f.group) * f.w / groupSum(f.grou
 // De rest van de groep krijgt het restant, naar verhouding van wat ze al hadden.
 function setWeight(id, p){
   const f = funds.find(x => x.id === id);
-  markPreset(null);
   const m = groupMixOf(f.group);
   if (m <= 0) return;
   const S = groupSum(f.group);
@@ -1874,24 +1877,8 @@ function syncWeights(){
     i.nextElementSibling.textContent = v + '%';
   });
 }
-const PRESETS = {
-  def:  {split:70, w:{lgqd:35, jepg:30, jepq:5, sdiv:0, uetw:10, lyp6:20}},
-  bal:  {split:50, w:{lgqd:15, jepg:15, jepq:15, sdiv:5, uetw:30, lyp6:20}},
-  agg:  {split:60, w:{jepq:35, sdiv:25, jepg:0, lgqd:0, uetw:40, lyp6:0}}
-};
-let activePreset = null;
-function markPreset(k){
-  activePreset = k;
-  document.querySelectorAll('.presets [data-preset]').forEach(b => b.setAttribute('aria-pressed', b.dataset.preset === k ? 'true' : 'false'));
-}
-function applyPreset(k){
-  const P = PRESETS[k];
-  markPreset(k);
-  funds.forEach(f => { if (P.w[f.id] !== undefined) f.w = P.w[f.id]; });
-  document.getElementById('mix').value = P.split;
-  recalc();
-}
-document.querySelectorAll('.presets [data-preset]').forEach(b => b.addEventListener('click', () => applyPreset(b.dataset.preset)));
+// Gewichten van 'Mijn huidige mix' (de oorspronkelijke verdeling in het bèta-tabblad).
+const BAL_W = {lgqd:15, jepg:15, jepq:15, sdiv:5, uetw:30, lyp6:20};
 function buildFundTable(){
   const tb = document.getElementById('fundTable');
   tb.innerHTML = funds.map(f => `
@@ -2556,7 +2543,6 @@ function setLang(l){
 }
 
 document.getElementById('mixF').addEventListener('input', e => {
-  markPreset(null);
   document.getElementById('mix').value = e.target.value;
   recalc();
 });
@@ -2614,7 +2600,7 @@ document.querySelectorAll('.tabs .tab').forEach(btn => btn.addEventListener('cli
   document.querySelectorAll('.tabs .tab').forEach(b => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
   ['tabProg','tabWealth','tabPay','tabFunds','tabTax'].forEach(id => { document.getElementById(id).hidden = btn.dataset.tab !== id; });
   setHero(btn.dataset.tab === 'tabTax');
-  document.getElementById('footNote').hidden = btn.dataset.tab === 'tabTax';
+  syncFoot(btn.dataset.tab);
   window.scrollTo({top:0});
   recalc();
 }));
@@ -2656,7 +2642,7 @@ helpDlg.addEventListener('click', e => { if (e.target === helpDlg) helpDlg.close
 
 /* ============ bèta: eigen fondsmix en catalogus ============ */
 // Mijn huidige mix: de verdeling die je nu als basis zag (preset 'bal').
-const BASE_FUNDS = funds.map(f => ({...f, w: PRESETS.bal.w[f.id] !== undefined ? PRESETS.bal.w[f.id] : f.w}));
+const BASE_FUNDS = funds.map(f => ({...f, w: BAL_W[f.id] !== undefined ? BAL_W[f.id] : f.w}));
 const FUNDS_KEY = 'dk-funds-v1';
 let fundsStore = { on: false, base: null, custom: null, user: [], avail: {} };
 try { const v = JSON.parse(localStorage.getItem(FUNDS_KEY)); if (v && typeof v === 'object') fundsStore = {...fundsStore, ...v}; } catch (e) {}
@@ -2764,7 +2750,8 @@ function synthCalc(){
     [`Vermogen na ${n} jaar (herbelegd)`, EUR(eind), 'gl-syn-eind', '#10b981', eind],
     ['Uitkeringen (ruw)', EUR(uitk), 'gl-syn-uit', '#8b5cf6', uitk]
   ].filter(c => c[4] > 0);
-  document.getElementById('synthKpi').innerHTML = cards.map(c =>
+  const base = `<div class="skpi-base">Op basis van een inleg van <strong>${EUR(A)}</strong> over <strong>${n} jaar</strong></div>`;
+  document.getElementById('synthKpi').innerHTML = (fundsStore.on ? '' : base) + cards.map(c =>
     `<div class="skpi"><div class="lbl">${c[0]} <a class="info" href="#${c[2]}">?</a></div><div class="big">${c[1]}</div></div>`).join('');
   const stLine = document.getElementById('stratLine');
   if (stLine) stLine.textContent = fundsStore.on
@@ -2793,11 +2780,18 @@ function initSynth(){
   synthCalc();
 }
 initSynth();
+function syncFoot(tab){
+  // justETF-tekst: niet op de belasting-tab en niet op de synthese (geen fondslinks daar)
+  const cur = tab || ((document.querySelector('.tabs .tab[aria-selected="true"]') || {}).dataset || {}).tab;
+  const synthView = !document.getElementById('synthPanel').hidden;
+  document.getElementById('footNote').hidden = cur === 'tabTax' || (cur === 'tabFunds' && synthView);
+}
 function setFview(v){
   document.getElementById('synthPanel').hidden = v !== 'synth';
   document.getElementById('betaPanel').hidden = v !== 'own';
   document.getElementById('basisPanel').hidden = v !== 'own';
   document.querySelectorAll('[data-fview]').forEach(b => b.setAttribute('aria-pressed', b.dataset.fview === v ? 'true' : 'false'));
+  syncFoot();
 }
 function syncFundsUi(){
   document.getElementById('customOn').checked = fundsStore.on;
@@ -2808,7 +2802,6 @@ function syncFundsUi(){
   const ownBtn = document.querySelector('[data-fview="own"]');
   if (ownBtn) ownBtn.textContent = tr('fviewOwn');
   document.getElementById('catOffHint').hidden = fundsStore.on;
-  document.querySelectorAll('#tabFunds [data-preset]').forEach(b => { b.disabled = true; });
 }
 function renderCatalog(){
   const box = document.getElementById('catList');
@@ -3023,7 +3016,7 @@ document.getElementById('bedragRange').addEventListener('input', e => {
 document.getElementById('jaren').addEventListener('input', recalc);
 document.getElementById('reinvest').addEventListener('change', recalc);
 document.querySelectorAll('input[name=scen]').forEach(r => r.addEventListener('change', () => { syncAmountFromTarget(); recalc(); }));
-document.getElementById('mix').addEventListener('input', () => { markPreset(null); syncAmountFromTarget(); recalc(); });
+document.getElementById('mix').addEventListener('input', () => { syncAmountFromTarget(); recalc(); });
 document.getElementById('mix').addEventListener('dblclick', () => {
   const m = document.getElementById('mix'); m.value = 50; m.dispatchEvent(new Event('input'));
 });
@@ -3306,7 +3299,6 @@ const SKEY = 'dk-scenarios';
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pad2 = n => String(n).padStart(2, '0');
 const SCEN_KEY = {laag:'scLaag', basis:'scBasis', hoog:'scHoog'};
-const PRESET_KEY = {def:'presetCons', bal:'presetBal', agg:'presetAgg'};
 document.getElementById('appVer').textContent = tr('verLbl') + ' ' + APP_VERSION;
 
 function openDlg(id){ const d = document.getElementById(id); if (!d.open) d.showModal(); }
@@ -3357,7 +3349,6 @@ function captureState(){
     tax: Object.keys(taxOn).filter(k => taxOn[k]),
     goalOn: document.getElementById('goalOn').checked,
     target: digits(document.getElementById('target').value),
-    preset: activePreset,
     funds: funds.map(f => ({id: f.id, w: f.w, g: f.g, y: f.y, ter: f.ter}))
   };
 }
@@ -3374,7 +3365,6 @@ function applyState(s){
   document.getElementById('goalOn').checked = s.goalOn;
   document.getElementById('target').value = fmtNum(s.target);
   s.funds.forEach(x => { const f = funds.find(q => q.id === x.id); if (f){ f.w = x.w; f.g = x.g; f.y = x.y; f.ter = x.ter; } });
-  markPreset(s.preset || null);
   buildFundTable();
   syncAmountFromTarget();
   renderBedrag();
@@ -3439,7 +3429,6 @@ function exportCsv(){
     `"${tr('years')}";"${tr('years')(s.years)}"`,
     `"${tr('mix')}";"${Math.round(s.mix)}% / ${Math.round(100 - s.mix)}%"`,
     `"${tr('scenario')}";"${tr(SCEN_KEY[s.scen])}"`,
-    `"${tr('presetLbl')}";"${s.preset ? tr(PRESET_KEY[s.preset]) : ''}"`,
     `"Dividend Compass";"${APP_VERSION}"`,
     ''
   ];
@@ -3493,7 +3482,7 @@ function loadLast(){ try { const v = JSON.parse(localStorage.getItem(LAST_KEY));
 function saveLast(){ if (window.__dkBoot) return; try { localStorage.setItem(LAST_KEY, JSON.stringify(captureState())); } catch (e) {} }
 fillResid();
 const SAVED_LAST = loadLast();
-if (SAVED_LAST) applyState(SAVED_LAST); else { applyPreset('bal'); setTaxDefaults(); }
+if (SAVED_LAST) applyState(SAVED_LAST); else setTaxDefaults();
 restoreFundsMode(); // standaardstrategie: gebalanceerd
 window.__dkBoot = false;
 saveLast();
