@@ -2415,7 +2415,9 @@ function fillResid(){
   const sel = document.getElementById('resid');
   if (!sel) return;
   const v = sel.value || '';
-  const opts = [['', tr('residPick')], ['nl', tr('ovNL')], ['n28', tr('ovN28')], ...EXTRA.map(e => [e.k, e.names[lang]]), ['none', tr('wtNone')]];
+  const countries = [['nl', tr('ovNL')], ['n28', tr('ovN28')], ...EXTRA.map(e => [e.k, e.names[lang]])]
+    .sort((a, b) => a[1].localeCompare(b[1], lang));
+  const opts = [['', tr('residPick')], ...countries, ['none', tr('wtNone')]];
   sel.innerHTML = opts.map(([k, n]) => `<option value="${k}">${n}</option>`).join('');
   sel.value = opts.some(o => o[0] === v) ? v : '';
 }
