@@ -1,0 +1,26 @@
+{
+  "_toelichting": "Synthetische voorbeeldindexen. Alle getallen zijn AANNAMES voor een langetermijnplanning (nominaal, per jaar, na kosten van de index-ETF), geen historische meting. Elke waarde moet onderbouwd worden voordat hij als feit gepresenteerd wordt. Gebruikers kunnen hun eigen fonds naast deze voorbeelden zetten.",
+  "status": "aanname, nog te onderbouwen",
+  "peildatum": "15-10-2026",
+  "indexen": [
+    { "id": "wereld", "naam": "Wereld (MSCI World-achtig)", "regio": "wereld", "totaalrendement": 7.5, "dividendrendement": 1.8, "volatiliteit": 15, "ter": 0.20, "bron": "aanname; ondersteund door recente 10-jaars cijfers (~13%) die bewust naar beneden zijn bijgesteld" },
+    { "id": "wereld-middel-dividend", "naam": "Wereld, middel dividend (synthetisch tussenpunt)", "regio": "wereld", "totaalrendement": 7.3, "dividendrendement": 2.5, "volatiliteit": 15, "ter": 0.20, "bron": "aanname; tussen wereld en hoog dividend in" },
+    { "id": "wereld-hoog-dividend", "naam": "Wereld, hoog dividend (FTSE All-World HDY-achtig)", "regio": "wereld", "totaalrendement": 7.0, "dividendrendement": 3.5, "volatiliteit": 15, "ter": 0.29, "bron": "aanname; hoger dividend, iets lager groeiaandeel" },
+    { "id": "wereld-quality", "naam": "Wereld, kwaliteit (MSCI World Quality-achtig)", "regio": "wereld", "totaalrendement": 8.0, "dividendrendement": 1.5, "volatiliteit": 15, "ter": 0.25, "bron": "aanname; laag dividend, factor-tilt" },
+    { "id": "europa", "naam": "Europa (MSCI Europe-achtig)", "regio": "Europa", "totaalrendement": 6.5, "dividendrendement": 3.2, "volatiliteit": 17, "ter": 0.12, "bron": "aanname; hoger dividend, lagere groei, hogere volatiliteit" },
+    { "id": "europa-hoog-dividend", "naam": "Europa, hoog dividend", "regio": "Europa", "totaalrendement": 6.2, "dividendrendement": 4.3, "volatiliteit": 17, "ter": 0.30, "bron": "aanname" },
+    { "id": "opkomende-markten", "naam": "Opkomende markten (MSCI EM-achtig)", "regio": "opkomende markten", "totaalrendement": 7.0, "dividendrendement": 2.8, "volatiliteit": 22, "ter": 0.18, "bron": "aanname; hogere volatiliteit en valutarisico" },
+    { "id": "sp500", "naam": "VS, S&P 500-achtig", "regio": "VS", "totaalrendement": 7.5, "dividendrendement": 1.4, "volatiliteit": 16, "ter": 0.07, "bron": "aanname; lage kosten, lager dividend" },
+    { "id": "sp500-dividend", "naam": "VS, dividendvariant van S&P 500", "regio": "VS", "totaalrendement": 7.0, "dividendrendement": 2.2, "volatiliteit": 15, "ter": 0.30, "bron": "aanname" }
+  ],
+  "strategieen": [
+    { "id": "defensief", "naam": "Defensief", "gewichten": { "wereld-hoog-dividend": 50, "wereld": 50 } },
+    { "id": "gebalanceerd", "naam": "Gebalanceerd", "gewichten": { "wereld": 80, "wereld-hoog-dividend": 20 } },
+    { "id": "agressief", "naam": "Agressief", "gewichten": { "wereld": 90, "wereld-quality": 10 } }
+  ],
+  "voorbeeldvarianten": [
+    { "id": "gebalanceerd-europa", "naam": "Gebalanceerd met Europa", "gewichten": { "wereld": 60, "europa": 20, "wereld-hoog-dividend": 20 } },
+    { "id": "agressief-em", "naam": "Agressief met opkomende markten", "gewichten": { "wereld": 80, "opkomende-markten": 10, "wereld-quality": 10 } },
+    { "id": "gebalanceerd-sp500", "naam": "Gebalanceerd met S&P 500", "gewichten": { "wereld": 60, "sp500": 20, "wereld-hoog-dividend": 20 } }
+  ]
+}
