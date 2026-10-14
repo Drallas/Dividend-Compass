@@ -466,6 +466,16 @@
   details.collapse > summary h2{margin:0}
   details.collapse .collapse-body{margin-top:12px}
   .stack{align-content:start}
+/* Input panel: even spacing inside and between the blocks, roomier buttons. */
+  .controls{gap:14px}
+  .controls .grp{padding:16px;margin:0}
+  .controls .grp > h3{margin:0 0 14px}
+  .controls .field{gap:10px}
+  .controls .field.compact + .field.compact{margin-top:14px}
+  .controls .seg{gap:8px}
+  .controls .presets-side{gap:8px;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr) minmax(0,1fr)}
+  .controls .presets-side .rbtn{font-size:12px;padding:9px 4px;min-width:0;min-height:40px;line-height:1.2;overflow-wrap:anywhere}
+  .controls .range-ends{margin-top:-4px}
 </style>
 </head>
 <body>
