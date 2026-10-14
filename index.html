@@ -367,6 +367,7 @@
   .achip{margin:4px 6px 4px 0;border-radius:999px;border:1px dashed var(--line);padding:6px 12px;background:transparent;color:var(--muted);cursor:pointer;font:inherit;font-size:13px}
   .synth-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:16px}
   .synth-kpis:empty{display:none}
+  .scard .srisk{display:block;margin-top:2px;opacity:.85}
   .skpi-base{grid-column:1/-1;font-size:13.5px;color:var(--muted);padding:0 2px}
   .skpi-base strong{color:var(--text)}
   #synthNote{margin-top:14px;line-height:1.5}
@@ -961,6 +962,7 @@
   <div class="hcats" role="tablist">
     <button type="button" class="rbtn hcat" data-cat="fund" aria-pressed="true" data-i18n="hc.fund"></button>
     <button type="button" class="rbtn hcat" data-cat="prog" aria-pressed="false" data-i18n="hc.prog"></button>
+    <button type="button" class="rbtn hcat" data-cat="syn" aria-pressed="false" data-i18n="hc.syn"></button>
     <button type="button" class="rbtn hcat" data-cat="risk" aria-pressed="false" data-i18n="hc.risk"></button>
     <button type="button" class="rbtn hcat" data-cat="tax" aria-pressed="false" data-i18n="hc.tax"></button>
   </div>
@@ -984,12 +986,16 @@
     <div id="gl-belegd"><dt data-i18n="gl.belegd.t"></dt><dd data-i18n="gl.belegd.d"></dd></div>
     <div id="gl-maandbedrag"><dt data-i18n="gl.maand.t"></dt><dd data-i18n="gl.maand.d"></dd></div>
     <div id="gl-benodigd"><dt data-i18n="gl.benodigd.t"></dt><dd data-i18n="gl.benodigd.d"></dd></div>
+  </dl>
+  <dl class="glossary" data-cat="syn" hidden>
     <div id="gl-syn-strat"><dt data-i18n="gl.sstrat.t"></dt><dd data-i18n="gl.sstrat.d"></dd></div>
     <div id="gl-syn-tot"><dt data-i18n="gl.stot.t"></dt><dd data-i18n="gl.stot.d"></dd></div>
     <div id="gl-syn-div"><dt data-i18n="gl.sdiv.t"></dt><dd data-i18n="gl.sdiv.d"></dd></div>
     <div id="gl-syn-ter"><dt data-i18n="gl.ster.t"></dt><dd data-i18n="gl.ster.d"></dd></div>
     <div id="gl-syn-eind"><dt data-i18n="gl.seind.t"></dt><dd data-i18n="gl.seind.d"></dd></div>
     <div id="gl-syn-uit"><dt data-i18n="gl.suit.t"></dt><dd data-i18n="gl.suit.d"></dd></div>
+    <div id="gl-syn-risk"><dt data-i18n="gl.srisk.t"></dt><dd data-i18n="gl.srisk.d"></dd></div>
+    <div id="gl-syn-stress"><dt data-i18n="gl.sstress.t"></dt><dd data-i18n="gl.sstress.d"></dd></div>
   </dl>
   <dl class="glossary" data-cat="risk" hidden>
     <div id="gl-risico"><dt data-i18n="gl.risico.t"></dt><dd data-i18n="gl.risico.d"></dd></div>
@@ -1094,7 +1100,6 @@
   </ol>
 </div></dialog>
 
-<p class="foot-note" id="footNote" data-i18n="footer"></p>
 <footer class="vibe"><p class="disclaimer" data-i18n="disclaimer"></p><ahref="https://github.com/Drallas/Dividend-Compass#readme" target="_blank" rel="noopener noreferrer" data-i18n-title="vibeTitle"><span data-i18n="vibePre"></span> <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg> <span data-i18n="vibePost"></span></a></footer>
 
 <script>
@@ -1266,8 +1271,7 @@ const T = {
     'gl.strat.t': 'Strategie', 'gl.strat.d': 'Een kant-en-klaar voorstel voor de verdeling van je geld. Defensief: 70% dividend, meer nadruk op regelmatige uitkering. Gebalanceerd: 50% dividend en 50% acc, een mix van uitkering en groei. Agressief: 60% dividend en 40% acc, meer nadruk op groei; het dividend blijft de grootste groep. Daarna kun je de verdeling per fonds nog zelf aanpassen.',
     'gl.reinv.t': 'Uitkeringen herinvesteren', 'gl.reinv.d': 'Aan: de uitkering gaat terug in het fonds en groeit mee. Uit: de uitkering wordt aan jou uitbetaald en apart getoond als "Uitbetaald".',
     'gl.uit.t': 'Uitbetaald', 'gl.uit.d': 'Het geld dat je per uitkering ontvangt als je niet herinvesteert. Het verlaat het fonds en telt niet meer mee in het vermogen, maar het is niet verloren.',
-    vibePre: 'Vibe coded met', vibePost: 'door Drallas', vibeTitle: 'Bekijk de README op GitHub', aboutRepo: 'Broncode op GitHub', footer: 'Links naar fondsen gaan naar het profiel op justETF. Controleer de actuele cijfers daar voordat je beslist. Yields die ik zelf heb aangenomen, staan gemarkeerd in de tabel.',
-    na: 'n.v.t.', none: '–', helpLink: 'Help', mSuffix: ' mln',
+    vibePre: 'Vibe coded met', vibePost: 'door Drallas', vibeTitle: 'Bekijk de README op GitHub', aboutRepo: 'Broncode op GitHub', na: 'n.v.t.', none: '–', helpLink: 'Help', mSuffix: ' mln',
     sortLbl: 'Sorteren:', sortFixed: 'Vaste volgorde', sortDesc: 'Hoogste bedrag eerst', sortAlpha: 'Alfabetisch',
     baseTitle: 'Berekend over', baseInv: 'Belegd bedrag', baseYears: 'Looptijd', baseYrs: 'jaar', baseChange: 'Aanpassen op Prognose',
     pickTitle: 'Landen vergelijken', grpMain: 'Basisvergelijking', grpOther: 'Meer landen', pickOf: n => `${n} van 4`, pickMax: 'Maximaal 4 landen tegelijk. Zet er eerst een uit.',
@@ -1501,8 +1505,7 @@ const T = {
     'gl.strat.t': 'Strategy', 'gl.strat.d': 'A ready-made proposal for how to split your money. Defensive: 70% dividend, more emphasis on regular payouts. Balanced: 50% dividend and 50% acc, a mix of income and growth. Aggressive: 60% dividend and 40% acc, more emphasis on growth; dividend is still the largest group. You can still adjust the split per fund afterwards.',
     'gl.reinv.t': 'Reinvest distributions', 'gl.reinv.d': 'On: the distribution goes back into the fund and grows. Off: the distribution is paid out to you and shown as "Paid out".',
     'gl.uit.t': 'Paid out', 'gl.uit.d': 'The money you receive per distribution when you do not reinvest. It leaves the fund and no longer counts toward the value, but it is not lost.',
-    vibePre: 'Vibe coded with', vibePost: 'by Drallas', vibeTitle: 'View the README on GitHub', aboutRepo: 'Source code on GitHub', footer: 'Links to funds go to the justETF profile. Check the current figures there before deciding. Yields I assumed myself are marked in the table.',
-    na: 'n/a', none: '–', helpLink: 'Help', mSuffix: 'm',
+    vibePre: 'Vibe coded with', vibePost: 'by Drallas', vibeTitle: 'View the README on GitHub', aboutRepo: 'Source code on GitHub', na: 'n/a', none: '–', helpLink: 'Help', mSuffix: 'm',
     sortLbl: 'Sort:', sortFixed: 'Fixed order', sortDesc: 'Highest amount first', sortAlpha: 'Alphabetical',
     baseTitle: 'Calculated on', baseInv: 'Invested amount', baseYears: 'Period', baseYrs: 'years', baseChange: 'Change on Forecast',
     pickTitle: 'Compare countries', grpMain: 'Core comparison', grpOther: 'More countries', pickOf: n => `${n} of 4`, pickMax: 'Maximum 4 countries at once. Turn one off first.',
@@ -1736,8 +1739,7 @@ const T = {
     'gl.strat.t': 'Estrategia', 'gl.strat.d': 'Una propuesta lista para repartir tu dinero. Defensiva: 70% dividendo, más peso en pagos regulares. Equilibrada: 50% dividendo y 50% acumulación, una mezcla de ingresos y crecimiento. Agresiva: 60% dividendo y 40% acumulación, más peso en el crecimiento; el dividendo sigue siendo el grupo mayor. Después puedes ajustar el reparto por fondo.',
     'gl.reinv.t': 'Reinvertir distribuciones', 'gl.reinv.d': 'Sí: la distribución vuelve al fondo y crece. No: la distribución se te paga y aparece como "Pagado".',
     'gl.uit.t': 'Pagado', 'gl.uit.d': 'El dinero que recibes por cada distribución si no reinviertes. Sale del fondo y ya no cuenta en el valor, pero no se pierde.',
-    vibePre: 'Vibe coded con', vibePost: 'por Drallas', vibeTitle: 'Ver el README en GitHub', aboutRepo: 'Código en GitHub', footer: 'Los enlaces a los fondos llevan a la ficha en justETF. Revisa allí las cifras actuales antes de decidir. Los rendimientos que supuse yo están marcados en la tabla.',
-    na: 'n/d', none: '–', helpLink: 'Ayuda', mSuffix: ' mill.',
+    vibePre: 'Vibe coded con', vibePost: 'por Drallas', vibeTitle: 'Ver el README en GitHub', aboutRepo: 'Código en GitHub', na: 'n/d', none: '–', helpLink: 'Ayuda', mSuffix: ' mill.',
     sortLbl: 'Ordenar:', sortFixed: 'Orden fijo', sortDesc: 'Mayor importe primero', sortAlpha: 'Alfabético',
     baseTitle: 'Calculado sobre', baseInv: 'Importe invertido', baseYears: 'Plazo', baseYrs: 'años', baseChange: 'Cambiar en Previsión',
     pickTitle: 'Comparar países', grpMain: 'Comparación base', grpOther: 'Más países', pickOf: n => `${n} de 4`, pickMax: 'Máximo 4 países a la vez. Desactiva uno primero.',
@@ -1809,7 +1811,187 @@ const T = {
 };
 
 let lang = (() => { try { return localStorage.getItem('dk-lang') || 'en'; } catch (e) { return 'en'; } })();
-const tr = k => (T[lang][k] !== undefined ? T[lang][k] : T.nl[k]);
+const SYN_T = {
+ "nl": {
+  "synthTitle": "Synthetische voorbeeldscenario's",
+  "synthSub": "Hier speel je met de voorbeeldstrategieën. De cijfers zijn aannames, geen historie. Pas de gewichten aan en zie hoe de uitkomst verandert. Eigen fondsen kun je later naast deze voorbeelden zetten.",
+  "synthStrat": "Strategie",
+  "synthLink": "Inleg en looptijd komen uit de invoer bovenaan.",
+  "synthSum": "Gewichten tellen op tot {s}%; de uitkomst wordt genormaliseerd naar 100%.",
+  "synPayout": "uitkerend",
+  "synRisk": "risico",
+  "synWorst": "ergste jaar",
+  "synMinus": "minder",
+  "synPlus": "meer",
+  "synRemove": "verwijder",
+  "skTot": "Totaalrendement (voor kosten)",
+  "skDiv": "Dividendrendement",
+  "skTer": "Kosten (TER, gewogen)",
+  "skEind": "Vermogen na {n} jaar (herbelegd)",
+  "skUit": "Uitkeringen (ruw)",
+  "skRisk": "Risico (volatiliteit)",
+  "skWorst": "Ergste jaar (aanname)",
+  "skBase": "Op basis van een inleg van <strong>{a}</strong> over <strong>{y}</strong>",
+  "skNoteSyn": "Synthetische aannames, niet gekoppeld aan echte fondsen. Dividend/acc-verdeling volgt de strategie: {m}% uitkerend. Geen belasting berekend.",
+  "skNoteOwn": "Je eigen mix is actief; de berekening gebruikt die mix, niet de synthese.",
+  "stratLineSyn": "Strategie: {s} · {m}% uitkerend · synthetische aannames · {a} over {n} jaar",
+  "stratLineOwn": "Eigen mix actief · {a} over {n} jaar",
+  "stratNone": "eigen verdeling",
+  "hc.syn": "Synthese",
+  "ix.wereld": "Wereld (MSCI World-achtig)",
+  "ix.wereld-middel-dividend": "Wereld, middel dividend",
+  "ix.wereld-hoog-dividend": "Wereld, hoog dividend",
+  "ix.wereld-quality": "Wereld, kwaliteit",
+  "ix.europa": "Europa",
+  "ix.europa-hoog-dividend": "Europa, hoog dividend",
+  "ix.opkomende-markten": "Opkomende markten",
+  "ix.sp500": "VS, S&P 500",
+  "ix.sp500-dividend": "VS, dividend",
+  "st.defensief": "Defensief",
+  "st.gebalanceerd": "Gebalanceerd",
+  "st.agressief": "Agressief",
+  "st.gebalanceerd-europa": "Gebalanceerd met Europa (variant)",
+  "st.agressief-em": "Agressief met opkomende markten (variant)",
+  "st.gebalanceerd-sp500": "Gebalanceerd met S&P 500 (variant)",
+  "gl.sstrat.t": "Strategie",
+  "gl.sstrat.d": "Een voorbeeldverdeling over indexen, met een vast aandeel dat uitkeert en een deel dat accumuleert. Defensief heeft het hoogste uitkerende aandeel, agressief het laagste. De strategie bepaalt dat aandeel, daarom is de schuif in de invoer vergrendeld. Pas de gewichten aan of kies een andere strategie; je keuze blijft in deze browser bewaard.",
+  "gl.stot.t": "Totaalrendement voor kosten",
+  "gl.stot.d": "Het verwachte jaarlijkse totaalrendement van de gekozen verdeling, inclusief dividend en vóór kosten (TER). Dit is een synthetische aanname per index: geen voorspelling en geen gemeten historie. Verschillen tussen strategieën komen vooral uit de gekozen indexen.",
+  "gl.sdiv.t": "Dividendrendement",
+  "gl.sdiv.d": "Het deel van het totaalrendement dat als dividend wordt uitgekeerd, gewogen naar je verdeling. Meer dividend betekent meer kasstroom, maar in deze aannames minder groei. Dat is de kern van de keuze tussen uitkeren en accumuleren. Belasting wordt hier niet berekend.",
+  "gl.ster.t": "Kosten (TER, gewogen)",
+  "gl.ster.d": "De jaarlijkse kosten (total expense ratio) van de producten, gewogen naar hun aandeel. Ze gaan af van het rendement in de prognose. 0,20% per jaar lijkt klein, maar over 25 jaar loopt het door rente-op-rente flink op.",
+  "gl.seind.t": "Vermogen na de looptijd",
+  "gl.seind.d": "Wat de inleg wordt als alles herbelegd wordt: het totaalrendement min de kosten, over de hele looptijd. Geen belasting, geen inflatie en geen extra inleg. Het is een rekenvoorbeeld op basis van de aannames, geen belofte.",
+  "gl.suit.t": "Uitkeringen (ruw)",
+  "gl.suit.d": "De som van alle dividenden over de looptijd, zonder herbelegging en zonder belasting. Dit is de ruwe kasstroom, niet je netto inkomen. Accumulerende delen keren niets uit; hun waarde groeit mee in het vermogen.",
+  "gl.srisk.t": "Risico (volatiliteit)",
+  "gl.srisk.d": "De aangenomen jaarlijkse schommeling van het rendement (standaardafwijking), gewogen naar je verdeling. Een index met 15% volatiliteit beweegt in een gewoon jaar ongeveer 15% rond zijn gemiddelde; in ruwweg twee van de drie jaren blijft het rendement binnen die marge. Het is een aanname per index, geen gemeten cijfer. De wereld-indexen hebben dezelfde aanname, daarom verschilt dit getal tussen de drie basisstrategieën weinig. Het ergste-jaar-getal laat dat verschil wel zien.",
+  "gl.sstress.t": "Ergste jaar (aanname)",
+  "gl.sstress.d": "Een grove inschatting van een slecht kalenderjaar: hoe ver de waarde in één zwaar jaar kan dalen, gewogen naar je verdeling. Het is een stress-aanname op basis van bekende crises zoals 2008 en 2020, geen voorspelling. Het laat zien wat je op papier kunt zien dalen in een zware periode, ook als het gemiddelde rendement goed is."
+ },
+ "en": {
+  "synthTitle": "Synthetic example scenarios",
+  "synthSub": "Play with the example strategies here. The figures are assumptions, not history. Adjust the weights and see how the outcome changes. You can place your own funds next to these examples later.",
+  "synthStrat": "Strategy",
+  "synthLink": "Investment and term come from the input at the top.",
+  "synthSum": "Weights add up to {s}%; the outcome is normalised to 100%.",
+  "synPayout": "distributing",
+  "synRisk": "risk",
+  "synWorst": "worst year",
+  "synMinus": "less",
+  "synPlus": "more",
+  "synRemove": "remove",
+  "skTot": "Total return (before costs)",
+  "skDiv": "Dividend yield",
+  "skTer": "Costs (TER, weighted)",
+  "skEind": "Wealth after {n} years (reinvested)",
+  "skUit": "Distributions (gross)",
+  "skRisk": "Risk (volatility)",
+  "skWorst": "Worst year (assumption)",
+  "skBase": "Based on an investment of <strong>{a}</strong> over <strong>{y}</strong>",
+  "skNoteSyn": "Synthetic assumptions, not linked to real funds. The distributing/accumulating split follows the strategy: {m}% distributing. No tax calculated.",
+  "skNoteOwn": "Your own mix is active; the calculation uses that mix, not the synthesis.",
+  "stratLineSyn": "Strategy: {s} · {m}% distributing · synthetic assumptions · {a} over {n} years",
+  "stratLineOwn": "Own mix active · {a} over {n} years",
+  "stratNone": "own split",
+  "hc.syn": "Synthesis",
+  "ix.wereld": "World (MSCI World-like)",
+  "ix.wereld-middel-dividend": "World, medium dividend",
+  "ix.wereld-hoog-dividend": "World, high dividend",
+  "ix.wereld-quality": "World, quality",
+  "ix.europa": "Europe",
+  "ix.europa-hoog-dividend": "Europe, high dividend",
+  "ix.opkomende-markten": "Emerging markets",
+  "ix.sp500": "US, S&P 500",
+  "ix.sp500-dividend": "US, dividend",
+  "st.defensief": "Defensive",
+  "st.gebalanceerd": "Balanced",
+  "st.agressief": "Aggressive",
+  "st.gebalanceerd-europa": "Balanced with Europe (variant)",
+  "st.agressief-em": "Aggressive with emerging markets (variant)",
+  "st.gebalanceerd-sp500": "Balanced with S&P 500 (variant)",
+  "gl.sstrat.t": "Strategy",
+  "gl.sstrat.d": "An example split across indices, with a fixed share that pays out dividends and a share that accumulates. Defensive has the highest payout share, aggressive the lowest. The strategy sets that share, so the slider in the input is locked. Adjust the weights or pick another strategy; your choice is kept in this browser.",
+  "gl.stot.t": "Total return before costs",
+  "gl.stot.d": "The expected yearly total return of the chosen split, including dividends and before costs (TER). It is a synthetic assumption per index: not a forecast and not measured history. Differences between strategies come mainly from the indices chosen.",
+  "gl.sdiv.t": "Dividend yield",
+  "gl.sdiv.d": "The part of the total return paid out as dividend, weighted by your split. More dividend means more cash flow, but in these assumptions less growth. This is the core of the choice between paying out and accumulating. Tax is not calculated here.",
+  "gl.ster.t": "Costs (TER, weighted)",
+  "gl.ster.d": "The yearly costs (total expense ratio) of the products, weighted by their share. They are deducted from the return in the forecast. 0.20% a year looks small, but over 25 years compounding makes the difference grow.",
+  "gl.seind.t": "Wealth after the term",
+  "gl.seind.d": "What the investment becomes if everything is reinvested: total return minus costs, over the whole term. No tax, no inflation and no extra contributions. It is an illustration based on the assumptions, not a promise.",
+  "gl.suit.t": "Distributions (gross)",
+  "gl.suit.d": "The sum of all dividends over the term, without reinvestment and without tax. This is the raw cash flow, not your net income. Accumulating parts pay out nothing; their value grows within the wealth figure.",
+  "gl.srisk.t": "Risk (volatility)",
+  "gl.srisk.d": "The assumed yearly fluctuation of the return (standard deviation), weighted by your split. An index with 15% volatility typically moves about 15% around its average; in roughly two out of three years the return stays within that band. It is an assumption per index, not a measured figure. The world indices share the same assumption, so this number differs little between the three basic strategies. The worst-year figure shows more difference.",
+  "gl.sstress.t": "Worst year (assumption)",
+  "gl.sstress.d": "A rough estimate of a bad calendar year: how far the value could fall in one difficult year, weighted by your split. It is a stress assumption based on known crises such as 2008 and 2020, not a prediction. It shows what you could see drop on paper in a heavy period, even when the average return is good."
+ },
+ "es": {
+  "synthTitle": "Escenarios de ejemplo sintéticos",
+  "synthSub": "Aquí juegas con las estrategias de ejemplo. Las cifras son supuestos, no historia. Ajusta los pesos y mira cómo cambia el resultado. Más adelante podrás poner tus propios fondos junto a estos ejemplos.",
+  "synthStrat": "Estrategia",
+  "synthLink": "La inversión y el plazo vienen de los datos de entrada de arriba.",
+  "synthSum": "Los pesos suman {s}%; el resultado se normaliza a 100%.",
+  "synPayout": "distribuyendo",
+  "synRisk": "riesgo",
+  "synWorst": "peor año",
+  "synMinus": "menos",
+  "synPlus": "más",
+  "synRemove": "quitar",
+  "skTot": "Rentabilidad total (antes de costes)",
+  "skDiv": "Rentabilidad por dividendo",
+  "skTer": "Costes (TER, ponderado)",
+  "skEind": "Patrimonio tras {n} años (reinvertido)",
+  "skUit": "Distribuciones (brutas)",
+  "skRisk": "Riesgo (volatilidad)",
+  "skWorst": "Peor año (supuesto)",
+  "skBase": "Basado en una inversión de <strong>{a}</strong> durante <strong>{y}</strong>",
+  "skNoteSyn": "Supuestos sintéticos, no vinculados a fondos reales. La división distribuyendo/acumulando sigue a la estrategia: {m}% distribuyendo. No se calcula impuesto.",
+  "skNoteOwn": "Tu cartera propia está activa; el cálculo usa esa cartera, no la síntesis.",
+  "stratLineSyn": "Estrategia: {s} · {m}% distribuyendo · supuestos sintéticos · {a} en {n} años",
+  "stratLineOwn": "Cartera propia activa · {a} en {n} años",
+  "stratNone": "reparto propio",
+  "hc.syn": "Síntesis",
+  "ix.wereld": "Mundo (tipo MSCI World)",
+  "ix.wereld-middel-dividend": "Mundo, dividendo medio",
+  "ix.wereld-hoog-dividend": "Mundo, dividendo alto",
+  "ix.wereld-quality": "Mundo, calidad",
+  "ix.europa": "Europa",
+  "ix.europa-hoog-dividend": "Europa, dividendo alto",
+  "ix.opkomende-markten": "Mercados emergentes",
+  "ix.sp500": "EE. UU., S&P 500",
+  "ix.sp500-dividend": "EE. UU., dividendo",
+  "st.defensief": "Defensiva",
+  "st.gebalanceerd": "Equilibrada",
+  "st.agressief": "Agresiva",
+  "st.gebalanceerd-europa": "Equilibrada con Europa (variante)",
+  "st.agressief-em": "Agresiva con mercados emergentes (variante)",
+  "st.gebalanceerd-sp500": "Equilibrada con S&P 500 (variante)",
+  "gl.sstrat.t": "Estrategia",
+  "gl.sstrat.d": "Una distribución de ejemplo entre índices, con una parte fija que reparte dividendos y una parte que acumula. Defensiva tiene la mayor parte distribuyendo, agresiva la menor. La estrategia fija esa parte, por eso el control de la entrada está bloqueado. Ajusta los pesos o elige otra estrategia; tu elección se guarda en este navegador.",
+  "gl.stot.t": "Rentabilidad total antes de costes",
+  "gl.stot.d": "La rentabilidad total anual esperada de la distribución elegida, con dividendos y antes de costes (TER). Es un supuesto sintético por índice: no es una previsión ni historia medida. Las diferencias entre estrategias vienen sobre todo de los índices elegidos.",
+  "gl.sdiv.t": "Rentabilidad por dividendo",
+  "gl.sdiv.d": "La parte de la rentabilidad total que se reparte como dividendo, ponderada según tu distribución. Más dividendo significa más flujo de caja, pero en estos supuestos menos crecimiento. Es el núcleo de la elección entre distribuir y acumular. Aquí no se calcula impuesto.",
+  "gl.ster.t": "Costes (TER, ponderado)",
+  "gl.ster.d": "Los costes anuales (total expense ratio) de los productos, ponderados por su peso. Se restan de la rentabilidad en la previsión. 0,20% al año parece poco, pero en 25 años el interés compuesto hace que la diferencia crezca.",
+  "gl.seind.t": "Patrimonio tras el plazo",
+  "gl.seind.d": "Lo que llega a ser la inversión si todo se reinvierte: rentabilidad total menos costes, durante todo el plazo. Sin impuestos, sin inflación y sin aportaciones extra. Es un ejemplo basado en los supuestos, no una promesa.",
+  "gl.suit.t": "Distribuciones (brutas)",
+  "gl.suit.d": "La suma de todos los dividendos durante el plazo, sin reinversión y sin impuestos. Es el flujo de caja bruto, no tu ingreso neto. Las partes acumulativas no pagan nada; su valor crece dentro del patrimonio.",
+  "gl.srisk.t": "Riesgo (volatilidad)",
+  "gl.srisk.d": "La fluctuación anual supuesta de la rentabilidad (desviación típica), ponderada según tu distribución. Un índice con 15% de volatilidad suele moverse unos 15% alrededor de su media; en aproximadamente dos de cada tres años la rentabilidad se mantiene dentro de esa banda. Es un supuesto por índice, no una cifra medida. Los índices mundiales comparten el mismo supuesto, así que este número apenas cambia entre las tres estrategias básicas. La cifra del peor año muestra más diferencia.",
+  "gl.sstress.t": "Peor año (supuesto)",
+  "gl.sstress.d": "Una estimación aproximada de un mal año natural: cuánto podría caer el valor en un año difícil, ponderado según tu distribución. Es un supuesto de estrés basado en crisis conocidas como 2008 y 2020, no una predicción. Muestra lo que podrías ver caer sobre el papel en un periodo duro, aunque la rentabilidad media sea buena."
+ }
+};
+const tr = k => ((SYN_T[lang] && SYN_T[lang][k] !== undefined) ? SYN_T[lang][k] : (T[lang][k] !== undefined ? T[lang][k] : T.nl[k]));
+const fillT = (k, m) => Object.entries(m).reduce((t, [a, b]) => t.split('{' + a + '}').join(b), tr(k));
+const numStr = (x, d) => x.toLocaleString(loc(), {minimumFractionDigits: d, maximumFractionDigits: d});
+const ixName = id => tr('ix.' + id);
+const stName = st => (SYN_T[lang] && SYN_T[lang]['st.' + st.id]) ? tr('st.' + st.id) : st.n;
 const loc = () => lang === 'en' ? 'en-US' : lang === 'es' ? 'es-AR' : 'nl-NL';
 const EUR  = n => n.toLocaleString(loc(), {style:'currency', currency:'EUR', maximumFractionDigits:0});
 const PCT  = n => n.toLocaleString(loc(), {minimumFractionDigits:1, maximumFractionDigits:1}) + '%';
@@ -2600,7 +2782,6 @@ document.querySelectorAll('.tabs .tab').forEach(btn => btn.addEventListener('cli
   document.querySelectorAll('.tabs .tab').forEach(b => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
   ['tabProg','tabWealth','tabPay','tabFunds','tabTax'].forEach(id => { document.getElementById(id).hidden = btn.dataset.tab !== id; });
   setHero(btn.dataset.tab === 'tabTax');
-  syncFoot(btn.dataset.tab);
   window.scrollTo({top:0});
   recalc();
 }));
@@ -2624,7 +2805,9 @@ function openHelp(id){
     if (el){
       const dl = el.closest('dl.glossary');
       if (dl) showCat(dl.dataset.cat);
-      el.classList.add('hl'); el.scrollIntoView({block:'center'});
+      el.classList.add('hl');
+      const body = helpDlg.querySelector('.helpbody');
+      body.scrollTop += el.getBoundingClientRect().top - body.getBoundingClientRect().top - body.clientHeight / 3;
     }
   } else {
     helpDlg.querySelector('.helpbody').scrollTop = 0;
@@ -2658,15 +2841,15 @@ function persistFunds(){
   saveFunds();
 }
 const SYNTH_IX = {
-  'wereld': {n:'Wereld (MSCI World-achtig)', t:7.5, d:1.8, ter:0.20},
-  'wereld-middel-dividend': {n:'Wereld, middel dividend', t:7.3, d:2.5, ter:0.20},
-  'wereld-hoog-dividend': {n:'Wereld, hoog dividend', t:7.0, d:3.5, ter:0.29},
-  'wereld-quality': {n:'Wereld, kwaliteit', t:8.0, d:1.5, ter:0.25},
-  'europa': {n:'Europa', t:6.5, d:3.2, ter:0.12},
-  'europa-hoog-dividend': {n:'Europa, hoog dividend', t:6.2, d:4.3, ter:0.30},
-  'opkomende-markten': {n:'Opkomende markten', t:7.0, d:2.8, ter:0.18},
-  'sp500': {n:'VS, S&P 500', t:7.5, d:1.4, ter:0.07},
-  'sp500-dividend': {n:'VS, dividend', t:7.0, d:2.2, ter:0.30}
+  'wereld': {n:'Wereld (MSCI World-achtig)', t:7.5, d:1.8, ter:0.20, v:15, s:-40},
+  'wereld-middel-dividend': {n:'Wereld, middel dividend', t:7.3, d:2.5, ter:0.20, v:15, s:-40},
+  'wereld-hoog-dividend': {n:'Wereld, hoog dividend', t:7.0, d:3.5, ter:0.29, v:15, s:-38},
+  'wereld-quality': {n:'Wereld, kwaliteit', t:8.0, d:1.5, ter:0.25, v:15, s:-42},
+  'europa': {n:'Europa', t:6.5, d:3.2, ter:0.12, v:17, s:-45},
+  'europa-hoog-dividend': {n:'Europa, hoog dividend', t:6.2, d:4.3, ter:0.30, v:17, s:-46},
+  'opkomende-markten': {n:'Opkomende markten', t:7.0, d:2.8, ter:0.18, v:22, s:-52},
+  'sp500': {n:'VS, S&P 500', t:7.5, d:1.4, ter:0.07, v:16, s:-40},
+  'sp500-dividend': {n:'VS, dividend', t:7.0, d:2.2, ter:0.30, v:15, s:-38}
 };
 const SYNTH_STRAT = [
   {id:'defensief', mix:70, n:'Defensief', g:{'wereld-hoog-dividend':50, 'wereld':50}},
@@ -2681,6 +2864,12 @@ const PAL = {'wereld':'#2563eb','wereld-middel-dividend':'#6366f1','wereld-hoog-
   'defensief':'#0ea5e9','gebalanceerd':'#2563eb','agressief':'#f97316','gebalanceerd-europa':'#6366f1','agressief-em':'#dc2626','gebalanceerd-sp500':'#14b8a6'};
 const SYNTH_STATE = {strat:'gebalanceerd', mix:50, w:{}};
 const stratOf = () => SYNTH_STRAT.find(x => x.id === SYNTH_STATE.strat);
+// Gewogen gemiddelden over de gewichten (aannames): volatiliteit (v) en ergste jaar (s).
+function weighted(w, key){
+  let sum = 0, tot = 0;
+  Object.entries(w).forEach(([id, x]) => { if (SYNTH_IX[id] && x > 0){ sum += x * SYNTH_IX[id][key]; tot += x; } });
+  return tot > 0 ? sum / tot : 0;
+}
 function loadSynthState(){
   try {
     const v = JSON.parse(localStorage.getItem(SYNTH_KEY));
@@ -2719,13 +2908,13 @@ function syncSynth(){
 }
 function renderSynth(){
   document.getElementById('stratCards').innerHTML = SYNTH_STRAT.map(s =>
-    `<button type="button" class="scard" data-strat="${s.id}" aria-pressed="${s.id === SYNTH_STATE.strat}" style="--c:${PAL[s.id]}"><b>${s.n}</b><small>${s.mix}% uitkerend</small></button>`).join('');
+    `<button type="button" class="scard" data-strat="${s.id}" aria-pressed="${s.id === SYNTH_STATE.strat}" style="--c:${PAL[s.id]}"><b>${stName(s)}</b><small>${s.mix}% ${tr('synPayout')}</small><small class="srisk">${tr('synRisk')} ${numStr(weighted(s.g, 'v'), 1)}% · ${tr('synWorst')} ${numStr(weighted(s.g, 's'), 1)}%</small></button>`).join('');
   document.getElementById('synthTiles').innerHTML = Object.keys(SYNTH_IX).filter(id => SYNTH_STATE.w[id] > 0).map(id =>
-    `<div class="stile" style="--c:${PAL[id]}"><div class="sname">${SYNTH_IX[id].n}</div><div class="sctl"><button type="button" data-dec="${id}" aria-label="minder">−</button><span class="sval">${SYNTH_STATE.w[id]}%</span><button type="button" data-inc="${id}" aria-label="meer">+</button><button type="button" class="srm" data-rm="${id}" aria-label="verwijder">×</button></div></div>`).join('');
+    `<div class="stile" style="--c:${PAL[id]}"><div class="sname">${ixName(id)}</div><div class="sctl"><button type="button" data-dec="${id}" aria-label="${tr('synMinus')}">−</button><span class="sval">${SYNTH_STATE.w[id]}%</span><button type="button" data-inc="${id}" aria-label="${tr('synPlus')}">+</button><button type="button" class="srm" data-rm="${id}" aria-label="${tr('synRemove')}">×</button></div></div>`).join('');
   const add = Object.keys(SYNTH_IX).filter(id => !(SYNTH_STATE.w[id] > 0));
-  document.getElementById('synthAdd').innerHTML = add.map(id => `<button type="button" class="achip" data-add="${id}">+ ${SYNTH_IX[id].n}</button>`).join('');
+  document.getElementById('synthAdd').innerHTML = add.map(id => `<button type="button" class="achip" data-add="${id}">+ ${ixName(id)}</button>`).join('');
   const sum = Object.values(SYNTH_STATE.w).reduce((a, b) => a + b, 0);
-  document.getElementById('synthSum').textContent = sum === 100 ? '' : `Gewichten tellen op tot ${sum}%; de uitkomst wordt genormaliseerd naar 100%.`;
+  document.getElementById('synthSum').textContent = sum === 100 ? '' : fillT('synthSum', {s: sum});
 }
 function setW(id, v){
   v = Math.max(0, Math.min(100, Math.round(v)));
@@ -2742,24 +2931,30 @@ function synthCalc(){
   const n = Math.max(1, Number(document.getElementById('jaren').value) || 1);
   const eind = A * Math.pow(1 + (tot - ter) / 100, n);
   const uitk = A * (div / 100) * n;
-  const pct = x => x.toFixed(2).replace('.', ',') + '%';
+  const pct = x => numStr(x, 2) + '%';
+  const syn = !fundsStore.on;
+  // Risico-kaartjes alleen bij de synthese: ze gaan over de voorbeeldindexen, niet over je eigen fondsen.
+  const vol = syn ? weighted(SYNTH_STATE.w, 'v') : 0;
+  const worst = syn ? weighted(SYNTH_STATE.w, 's') : 0;
   const cards = [
-    ['Totaalrendement (voor kosten)', pct(tot), 'gl-syn-tot', '#2563eb', tot],
-    ['Dividendrendement', pct(div), 'gl-syn-div', '#f59e0b', div],
-    ['Kosten (TER, gewogen)', pct(ter), 'gl-syn-ter', '#ef4444', ter],
-    [`Vermogen na ${n} jaar (herbelegd)`, EUR(eind), 'gl-syn-eind', '#10b981', eind],
-    ['Uitkeringen (ruw)', EUR(uitk), 'gl-syn-uit', '#8b5cf6', uitk]
-  ].filter(c => c[4] > 0);
-  const base = `<div class="skpi-base">Op basis van een inleg van <strong>${EUR(A)}</strong> over <strong>${n} jaar</strong></div>`;
-  document.getElementById('synthKpi').innerHTML = (fundsStore.on ? '' : base) + cards.map(c =>
+    [tr('skTot'), pct(tot), 'gl-syn-tot', tot > 0],
+    [tr('skDiv'), pct(div), 'gl-syn-div', div > 0],
+    [tr('skTer'), pct(ter), 'gl-syn-ter', ter > 0],
+    [fillT('skEind', {n}), EUR(eind), 'gl-syn-eind', eind > 0],
+    [tr('skUit'), EUR(uitk), 'gl-syn-uit', uitk > 0],
+    [tr('skRisk'), syn ? numStr(vol, 1) + '%' : '', 'gl-syn-risk', syn && vol > 0],
+    [tr('skWorst'), syn ? numStr(worst, 1) + '%' : '', 'gl-syn-stress', syn && worst < 0]
+  ].filter(c => c[3]);
+  const base = syn ? `<div class="skpi-base">${fillT('skBase', {a: EUR(A), y: tr('years')(n)})}</div>` : '';
+  document.getElementById('synthKpi').innerHTML = base + cards.map(c =>
     `<div class="skpi"><div class="lbl">${c[0]} <a class="info" href="#${c[2]}">?</a></div><div class="big">${c[1]}</div></div>`).join('');
   const stLine = document.getElementById('stratLine');
   if (stLine) stLine.textContent = fundsStore.on
-    ? `Eigen mix actief · ${EUR(A)} over ${n} jaar`
-    : `Strategie: ${stratOf() ? stratOf().n : 'eigen verdeling'} · ${SYNTH_STATE.mix}% uitkerend · synthetische aannames · ${EUR(A)} over ${n} jaar`;
+    ? fillT('stratLineOwn', {a: EUR(A), n})
+    : fillT('stratLineSyn', {s: stratOf() ? stName(stratOf()) : tr('stratNone'), m: SYNTH_STATE.mix, a: EUR(A), n});
   document.getElementById('synthNote').textContent = fundsStore.on
-    ? 'Je eigen mix is actief; de berekening gebruikt die mix, niet de synthese.'
-    : `Synthetische aannames, niet gekoppeld aan echte fondsen. Dividend/acc-verdeling volgt de strategie: ${SYNTH_STATE.mix}% uitkerend. Geen belasting berekend.`;
+    ? tr('skNoteOwn')
+    : fillT('skNoteSyn', {m: SYNTH_STATE.mix});
 }
 function initSynth(){
   loadSynthState();
@@ -2780,18 +2975,11 @@ function initSynth(){
   synthCalc();
 }
 initSynth();
-function syncFoot(tab){
-  // justETF-tekst: niet op de belasting-tab en niet op de synthese (geen fondslinks daar)
-  const cur = tab || ((document.querySelector('.tabs .tab[aria-selected="true"]') || {}).dataset || {}).tab;
-  const synthView = !document.getElementById('synthPanel').hidden;
-  document.getElementById('footNote').hidden = cur === 'tabTax' || (cur === 'tabFunds' && synthView);
-}
 function setFview(v){
   document.getElementById('synthPanel').hidden = v !== 'synth';
   document.getElementById('betaPanel').hidden = v !== 'own';
   document.getElementById('basisPanel').hidden = v !== 'own';
   document.querySelectorAll('[data-fview]').forEach(b => b.setAttribute('aria-pressed', b.dataset.fview === v ? 'true' : 'false'));
-  syncFoot();
 }
 function syncFundsUi(){
   document.getElementById('customOn').checked = fundsStore.on;
