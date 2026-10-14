@@ -350,6 +350,26 @@
   .wslider{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
   #wealthYrs{width:100%;margin:0 0 4px}
   body.nogoal .tabs .tab[data-tab="tabPay"]{display:none !important}
+  .strat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:10px 0 16px}
+  .scard{border:1px solid var(--line);border-top:4px solid var(--c);border-radius:14px;padding:12px 14px;background:var(--panel);color:var(--text);text-align:left;cursor:pointer;font:inherit}
+  .scard b{display:block;font-size:15px}
+  .scard small{color:var(--muted)}
+  .scard[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 18%,var(--panel));box-shadow:0 0 0 2px var(--c) inset}
+  .tile-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+  .tile-row:empty{display:none}
+  .stile{border-radius:14px;padding:12px 14px;background:color-mix(in srgb,var(--c) 14%,var(--panel));border:1px solid color-mix(in srgb,var(--c) 45%,var(--line))}
+  .stile .sname{font-weight:600;font-size:14px}
+  .sctl{display:flex;align-items:center;gap:6px;margin-top:8px}
+  .sctl button{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--text);cursor:pointer;font:inherit}
+  .sctl .srm{margin-left:auto;border-color:transparent;background:transparent;color:var(--muted)}
+  .sval{font-size:22px;font-weight:700;min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
+  .tile-add{margin-top:8px}
+  .achip{margin:4px 6px 4px 0;border-radius:999px;border:1px dashed var(--line);padding:6px 12px;background:transparent;color:var(--muted);cursor:pointer;font:inherit;font-size:13px}
+  .synth-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:16px}
+  .synth-kpis:empty{display:none}
+  .skpi{border-radius:14px;padding:14px;background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--c)}
+  .skpi .lbl{font-size:12.5px;color:var(--muted)}
+  .skpi .big{font-size:24px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
   .welcome-actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
   .disclaimer{font-size:12px;color:var(--muted);max-width:64ch;margin:10px auto 0;line-height:1.5}
   .controls .grp{border:1px solid var(--line);border-radius:12px;padding:12px 14px 4px;margin:0 0 12px}
@@ -559,15 +579,7 @@
           <label><input type="radio" name="scen" value="hoog"><span data-i18n="scHoog"></span></label>
         </div>
       </div>
-  <div class="field compact">
-        <div class="field-head"><span><span data-i18n="presetLbl"></span> <a class="tt info" href="#gl-strat" data-tip-i18n="presetTip">?</a></span></div>
-        <div class="presets presets-side">
-          <button type="button" class="rbtn" data-preset="def" data-i18n="presetCons"></button>
-          <button type="button" class="rbtn" data-preset="bal" data-i18n="presetBal"></button>
-          <button type="button" class="rbtn" data-preset="agg" data-i18n="presetAgg"></button>
-        </div>
-      </div>
-    </section>
+      </section>
     <section class="grp">
       <h3 data-i18n="grpAmt"></h3>
   <div class="field">
@@ -709,13 +721,12 @@
     <section class="panel synth-panel" id="synthPanel" aria-labelledby="synthTitle" hidden>
       <h2 id="synthTitle" data-i18n="synthTitle"></h2>
       <p class="sub" data-i18n="synthSub"></p>
-      <div class="synth-row">
-        <label><span data-i18n="synthStrat"></span> <select id="synthSel"></select></label>
-        <p class="hint" data-i18n="synthLink"></p>
-      </div>
-      <div class="synth-grid" id="synthGrid"></div>
+      <div class="field-head"><span data-i18n="synthStrat"></span> <a class="info" href="#gl-syn-strat">?</a></div>
+      <div class="strat-cards" id="stratCards"></div>
+      <div class="tile-row" id="synthTiles"></div>
+      <div class="tile-add" id="synthAdd"></div>
       <p class="sub" id="synthSum"></p>
-      <div class="kpis" id="synthKpi"></div>
+      <div class="synth-kpis" id="synthKpi"></div>
       <p class="sub" id="synthNote"></p>
     </section>
     <section class="panel" id="basisPanel" aria-labelledby="fundsTitle">
@@ -730,12 +741,6 @@
         </div>
         <input type="range" id="mixF" min="0" max="100" value="50" step="1" aria-label="Verdeling dividend en acc">
         <div class="range-ends"><span data-i18n="mixEndAcc"></span><span data-i18n="mixEndDiv"></span></div>
-        <div class="presets"><span data-i18n="presetLbl"></span> <a class="info" href="#gl-strat">?</a>
-          <button type="button" class="rbtn" data-preset="def" data-i18n="presetCons"></button>
-          <button type="button" class="rbtn" data-preset="bal" data-i18n="presetBal"></button>
-          <button type="button" class="rbtn" data-preset="agg" data-i18n="presetAgg"></button>
-        </div>
-        <p class="hint" data-i18n="presetHint"></p>
       </div>
       <div class="tbl-wrap">
         <table class="tbl">
@@ -959,6 +964,12 @@
     <div id="gl-belegd"><dt data-i18n="gl.belegd.t"></dt><dd data-i18n="gl.belegd.d"></dd></div>
     <div id="gl-maandbedrag"><dt data-i18n="gl.maand.t"></dt><dd data-i18n="gl.maand.d"></dd></div>
     <div id="gl-benodigd"><dt data-i18n="gl.benodigd.t"></dt><dd data-i18n="gl.benodigd.d"></dd></div>
+    <div id="gl-syn-strat"><dt data-i18n="gl.sstrat.t"></dt><dd data-i18n="gl.sstrat.d"></dd></div>
+    <div id="gl-syn-tot"><dt data-i18n="gl.stot.t"></dt><dd data-i18n="gl.stot.d"></dd></div>
+    <div id="gl-syn-div"><dt data-i18n="gl.sdiv.t"></dt><dd data-i18n="gl.sdiv.d"></dd></div>
+    <div id="gl-syn-ter"><dt data-i18n="gl.ster.t"></dt><dd data-i18n="gl.ster.d"></dd></div>
+    <div id="gl-syn-eind"><dt data-i18n="gl.seind.t"></dt><dd data-i18n="gl.seind.d"></dd></div>
+    <div id="gl-syn-uit"><dt data-i18n="gl.suit.t"></dt><dd data-i18n="gl.suit.d"></dd></div>
   </dl>
   <dl class="glossary" data-cat="risk" hidden>
     <div id="gl-risico"><dt data-i18n="gl.risico.t"></dt><dd data-i18n="gl.risico.d"></dd></div>
@@ -1201,7 +1212,7 @@ const T = {
     tRisk: 'Mijn kwalitatieve inschatting. Geen gemeten volatiliteit.',
     group_div: 'Dividend', group_acc: 'Acc',
     yieldAssumption: 'aanname', assumedLegend: 'Gestreepte rand = mijn aanname, geen gepubliceerd cijfer. Alleen de yield van JEPG (5%) is zo’n aanname: ik vond geen betrouwbare actuele cijfers. Die kan dus afwijken. Pas het getal aan en de hele pagina rekent mee.',
-    fviewSynth: 'Synthese', synthLink: 'Inleg en looptijd komen uit de invoer bovenaan.', synthTitle: 'Synthetische voorbeeldscenario\'s', synthSub: 'Hier speel je met de voorbeeldstrategieën. De cijfers zijn aannames, geen historie. Pas de gewichten aan en zie hoe de uitkomst verandert. Eigen fondsen kun je later naast deze voorbeelden zetten.', synthStrat: 'Strategie', synthAmt: 'Inleg (€)', synthYrs: 'Jaren',
+    fviewSynth: 'Synthese', synthLink: 'Inleg en looptijd komen uit de invoer bovenaan.', 'gl.sstrat.t': 'Strategie', 'gl.sstrat.d': 'Een voorbeeldverdeling over indexen, met een vast aandeel uitkerend en accumulerend. Pas de gewichten aan of kies een andere strategie; je keuze blijft in de browser bewaard.', 'gl.stot.t': 'Totaalrendement voor kosten', 'gl.stot.d': 'Het verwachte jaarlijkse rendement van de gekozen verdeling, inclusief dividend, vóór kosten. Dit is een synthetische aanname, geen voorspelling.', 'gl.sdiv.t': 'Dividendrendement', 'gl.sdiv.d': 'Het deel van het rendement dat als dividend wordt uitgekeerd, gewogen naar je verdeling.', 'gl.ster.t': 'Kosten (TER, gewogen)', 'gl.ster.d': 'De jaarlijkse kosten van de gekozen producten, gewogen naar hun aandeel. Die gaan af van het rendement.', 'gl.seind.t': 'Vermogen na de looptijd', 'gl.seind.d': 'Wat de inleg wordt als alles herbelegd wordt, na kosten en zonder belasting.', 'gl.suit.t': 'Uitkeringen (ruw)', 'gl.suit.d': 'De som van de dividenden over de looptijd, zonder herbelegging en zonder belasting.', synthTitle: 'Synthetische voorbeeldscenario\'s', synthSub: 'Hier speel je met de voorbeeldstrategieën. De cijfers zijn aannames, geen historie. Pas de gewichten aan en zie hoe de uitkomst verandert. Eigen fondsen kun je later naast deze voorbeelden zetten.', synthStrat: 'Strategie', synthAmt: 'Inleg (€)', synthYrs: 'Jaren',
     n1: 'Yield is niet hetzelfde als rendement. Een hoge uitkering kan deels uit kapitaal komen, waardoor de koers daalt. Het totaalrendement is de juiste maatstaf.',
     n2: 'Covered-call fondsen (JEPG, JEPQ) verkopen opties. In sterke markten loop je achter, en bij een forse daling beschermen ze je maar gedeeltelijk.',
     n3: '<a class="term" href="#gl-sequentie">Sequentierisico</a>: als je uitkeringen opneemt terwijl de koers daalt, verkoop je in een slechte markt sneller stukken. Een buffer van 1 tot 2 jaar kosten helpt.',
@@ -2663,22 +2674,66 @@ const SYNTH_STRAT = [
   {id:'agressief-em', mix:20, n:'Agressief met opkomende markten (variant)', g:{'wereld':80, 'opkomende-markten':10, 'wereld-quality':10}},
   {id:'gebalanceerd-sp500', mix:50, n:'Gebalanceerd met S&P 500 (variant)', g:{'wereld':60, 'sp500':20, 'wereld-hoog-dividend':20}}
 ];
+const SYNTH_KEY = 'dk-synth';
+const PAL = {'wereld':'#2563eb','wereld-middel-dividend':'#6366f1','wereld-hoog-dividend':'#f59e0b','wereld-quality':'#10b981','europa':'#8b5cf6','europa-hoog-dividend':'#ec4899','opkomende-markten':'#ef4444','sp500':'#14b8a6','sp500-dividend':'#84cc16',
+  'defensief':'#0ea5e9','gebalanceerd':'#2563eb','agressief':'#f97316','gebalanceerd-europa':'#6366f1','agressief-em':'#dc2626','gebalanceerd-sp500':'#14b8a6'};
+const SYNTH_STATE = {strat:'gebalanceerd', mix:50, w:{}};
+const stratOf = () => SYNTH_STRAT.find(x => x.id === SYNTH_STATE.strat);
+function loadSynthState(){
+  try {
+    const v = JSON.parse(localStorage.getItem(SYNTH_KEY));
+    if (v && typeof v.w === 'object' && (v.strat === null || SYNTH_STRAT.some(x => x.id === v.strat))){
+      SYNTH_STATE.strat = v.strat; SYNTH_STATE.mix = Number(v.mix) || 50; SYNTH_STATE.w = {};
+      Object.entries(v.w).forEach(([k, x]) => { if (SYNTH_IX[k] && Number(x) > 0) SYNTH_STATE.w[k] = Number(x); });
+      return;
+    }
+  } catch (e) {}
+  SYNTH_STATE.strat = 'gebalanceerd'; SYNTH_STATE.mix = stratOf().mix; SYNTH_STATE.w = {...stratOf().g};
+}
+function saveSynthState(){ try { localStorage.setItem(SYNTH_KEY, JSON.stringify(SYNTH_STATE)); } catch (e) {} }
 function synthFunds(){
-  const rows = [...document.querySelectorAll('#synthGrid input')].map(i => ({id: i.dataset.ix, w: Math.max(0, Number(i.value) || 0)})).filter(r => r.w > 0);
   const out = [];
-  rows.forEach(r => {
-    const ix = SYNTH_IX[r.id];
-    const risk = r.id === 'opkomende-markten' ? 'Hoog' : 'Middel';
-    // Elke index bestaat als accumulerende en als uitkerende variant; de mix-schuif kiest de verdeling.
-    out.push({id:'syn-acc-'+r.id, name: ix.n + ' (acc, synthetisch)', group:'acc', w:r.w, g:ix.t, y:0, ter:ix.ter, risk, url:'#', yieldSrc:'aanname'});
-    out.push({id:'syn-div-'+r.id, name: ix.n + ' (dist, synthetisch)', group:'div', w:r.w, g:Math.round((ix.t - ix.d) * 100) / 100, y:ix.d, ter:ix.ter, risk, url:'#', yieldSrc:'aanname'});
+  Object.entries(SYNTH_STATE.w).forEach(([id, w]) => {
+    if (!(w > 0)) return;
+    const ix = SYNTH_IX[id];
+    const risk = id === 'opkomende-markten' ? 'Hoog' : 'Middel';
+    // Elke index bestaat als accumulerende en als uitkerende variant; de mix (van de strategie) kiest de verdeling.
+    out.push({id:'syn-acc-'+id, name: ix.n + ' (acc, synthetisch)', group:'acc', w, g:ix.t, y:0, ter:ix.ter, risk, url:'#', yieldSrc:'aanname'});
+    out.push({id:'syn-div-'+id, name: ix.n + ' (dist, synthetisch)', group:'div', w, g:Math.round((ix.t - ix.d) * 100) / 100, y:ix.d, ter:ix.ter, risk, url:'#', yieldSrc:'aanname'});
   });
   return out;
 }
+function syncMixLock(){
+  // Synthese-modus: de strategie bepaalt het dividend/acc-aandeel; de schuif is dan vergrendeld.
+  const mix = document.getElementById('mix');
+  if (!mix) return;
+  mix.disabled = !fundsStore.on;
+  if (!fundsStore.on && mix.value !== String(SYNTH_STATE.mix)){ mix.value = SYNTH_STATE.mix; mix.dispatchEvent(new Event('input')); }
+}
+function syncSynth(){
+  if (!fundsStore.on){ replaceFunds(synthFunds()); buildFundTable(); }
+  syncMixLock();
+  recalc();
+}
+function renderSynth(){
+  document.getElementById('stratCards').innerHTML = SYNTH_STRAT.map(s =>
+    `<button type="button" class="scard" data-strat="${s.id}" aria-pressed="${s.id === SYNTH_STATE.strat}" style="--c:${PAL[s.id]}"><b>${s.n}</b><small>${s.mix}% uitkerend</small></button>`).join('');
+  document.getElementById('synthTiles').innerHTML = Object.keys(SYNTH_IX).filter(id => SYNTH_STATE.w[id] > 0).map(id =>
+    `<div class="stile" style="--c:${PAL[id]}"><div class="sname">${SYNTH_IX[id].n}</div><div class="sctl"><button type="button" data-dec="${id}" aria-label="minder">−</button><span class="sval">${SYNTH_STATE.w[id]}%</span><button type="button" data-inc="${id}" aria-label="meer">+</button><button type="button" class="srm" data-rm="${id}" aria-label="verwijder">×</button></div></div>`).join('');
+  const add = Object.keys(SYNTH_IX).filter(id => !(SYNTH_STATE.w[id] > 0));
+  document.getElementById('synthAdd').innerHTML = add.map(id => `<button type="button" class="achip" data-add="${id}">+ ${SYNTH_IX[id].n}</button>`).join('');
+  const sum = Object.values(SYNTH_STATE.w).reduce((a, b) => a + b, 0);
+  document.getElementById('synthSum').textContent = sum === 100 ? '' : `Gewichten tellen op tot ${sum}%; de uitkomst wordt genormaliseerd naar 100%.`;
+}
+function setW(id, v){
+  v = Math.max(0, Math.min(100, Math.round(v)));
+  if (v > 0) SYNTH_STATE.w[id] = v; else delete SYNTH_STATE.w[id];
+  const st = stratOf();
+  if (st && !(Object.keys({...st.g, ...SYNTH_STATE.w}).every(k => (st.g[k] || 0) === (SYNTH_STATE.w[k] || 0)))) SYNTH_STATE.strat = null;
+  afterSynthChange();
+}
+function afterSynthChange(){ renderSynth(); saveSynthState(); synthCalc(); syncSynth(); }
 function synthCalc(){
-  const sum = [...document.querySelectorAll('#synthGrid input')].reduce((a, i) => a + Math.max(0, Number(i.value) || 0), 0);
-  const stMix = SYNTH_STRAT.find(x => x.id === document.getElementById('synthSel').value).mix;
-  document.getElementById('synthSum').textContent = fundsStore.on ? '' : (sum !== 100 ? `Gewichten tellen op tot ${sum}%; de uitkomst wordt genormaliseerd naar 100%.` : `Dividend/acc-verdeling volgt de strategie: ${stMix}% uitkerend.`);
   let tot = 0, div = 0, ter = 0;
   funds.forEach(f => { const p = pctOf(f) / 100; tot += p * (f.g + f.y); div += p * f.y; ter += p * f.ter; });
   const A = manualAmount;
@@ -2686,38 +2741,36 @@ function synthCalc(){
   const eind = A * Math.pow(1 + (tot - ter) / 100, n);
   const uitk = A * (div / 100) * n;
   const pct = x => x.toFixed(2).replace('.', ',') + '%';
-  const kpi = (l, b) => `<div class="kpi"><div class="lbl">${l}</div><div class="big">${b}</div></div>`;
-  document.getElementById('synthKpi').innerHTML =
-    kpi('Totaalrendement (voor kosten)', pct(tot)) + kpi('Dividendrendement', pct(div)) + kpi('Kosten (TER gewogen)', pct(ter)) +
-    kpi(`Vermogen na ${n} jaar (herbelegd)`, EUR(eind)) + kpi('Uitkeringen over de periode (ruw)', EUR(uitk));
+  const cards = [
+    ['Totaalrendement (voor kosten)', pct(tot), 'gl-syn-tot', '#2563eb', tot],
+    ['Dividendrendement', pct(div), 'gl-syn-div', '#f59e0b', div],
+    ['Kosten (TER, gewogen)', pct(ter), 'gl-syn-ter', '#ef4444', ter],
+    [`Vermogen na ${n} jaar (herbelegd)`, EUR(eind), 'gl-syn-eind', '#10b981', eind],
+    ['Uitkeringen (ruw)', EUR(uitk), 'gl-syn-uit', '#8b5cf6', uitk]
+  ].filter(c => c[4] > 0);
+  document.getElementById('synthKpi').innerHTML = cards.map(c =>
+    `<div class="skpi" style="--c:${c[3]}"><div class="lbl">${c[0]} <a class="info" href="#${c[2]}">?</a></div><div class="big">${c[1]}</div></div>`).join('');
   document.getElementById('synthNote').textContent = fundsStore.on
     ? 'Je eigen mix is actief; de berekening gebruikt die mix, niet de synthese.'
-    : 'Synthetische aannames: gebaseerd op historische kenmerken van indexen, niet gekoppeld aan echte fondsen. Geen belasting berekend.';
-}
-function syncMixLock(){
-  // Synthese-modus: de strategie bepaalt het dividend/acc-aandeel; de schuif is dan vergrendeld.
-  const mix = document.getElementById('mix');
-  if (!mix) return;
-  mix.disabled = !fundsStore.on ? true : false;
-  if (!fundsStore.on){
-    const st = SYNTH_STRAT.find(x => x.id === document.getElementById('synthSel').value);
-    if (st && mix.value !== String(st.mix)){ mix.value = st.mix; mix.dispatchEvent(new Event('input')); }
-  }
-}
-function syncSynth(){
-  if (!fundsStore.on){ replaceFunds(synthFunds()); buildFundTable(); }
-  syncMixLock();
-  recalc();
+    : `Synthetische aannames, niet gekoppeld aan echte fondsen. Dividend/acc-verdeling volgt de strategie: ${SYNTH_STATE.mix}% uitkerend. Geen belasting berekend.`;
 }
 function initSynth(){
-  const sel = document.getElementById('synthSel');
-  sel.innerHTML = SYNTH_STRAT.map(s => `<option value="${s.id}">${s.n}</option>`).join('');
-  document.getElementById('synthGrid').innerHTML = Object.keys(SYNTH_IX).map(id => `<label class="synth-w"><span>${SYNTH_IX[id].n}</span><input type="number" min="0" max="100" step="5" data-ix="${id}"></label>`).join('');
-  sel.value = 'gebalanceerd';
-  const fill = () => { const st = SYNTH_STRAT.find(x => x.id === sel.value); document.querySelectorAll('#synthGrid input').forEach(i => { i.value = st.g[i.dataset.ix] || 0; }); };
-  sel.addEventListener('change', () => { fill(); syncSynth(); });
-  document.getElementById('synthGrid').addEventListener('input', syncSynth);
-  fill();
+  loadSynthState();
+  document.getElementById('stratCards').addEventListener('click', e => {
+    const b = e.target.closest('[data-strat]'); if (!b) return;
+    const st = SYNTH_STRAT.find(x => x.id === b.dataset.strat);
+    SYNTH_STATE.strat = st.id; SYNTH_STATE.mix = st.mix; SYNTH_STATE.w = {...st.g};
+    afterSynthChange();
+  });
+  document.getElementById('synthTiles').addEventListener('click', e => {
+    const t = e.target.closest('button'); if (!t) return; const d = t.dataset;
+    if (d.inc) setW(d.inc, SYNTH_STATE.w[d.inc] + 5);
+    else if (d.dec) setW(d.dec, SYNTH_STATE.w[d.dec] - 5);
+    else if (d.rm) setW(d.rm, 0);
+  });
+  document.getElementById('synthAdd').addEventListener('click', e => { const b = e.target.closest('[data-add]'); if (b) setW(b.dataset.add, 10); });
+  renderSynth();
+  synthCalc();
 }
 initSynth();
 function setFview(v){
