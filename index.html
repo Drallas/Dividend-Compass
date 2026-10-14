@@ -809,8 +809,9 @@
   <div class="stack">
   <div class="sortbar">
     <span data-i18n="sortLbl"></span>
-    <button type="button" class="rbtn" data-sort="fixed" aria-pressed="true" data-i18n="sortFixed"></button>
-    <button type="button" class="rbtn" data-sort="desc" aria-pressed="false" data-i18n="sortDesc"></button>
+    <button type="button" class="rbtn" data-sort="desc" aria-pressed="true" data-i18n="sortDesc"></button>
+    <button type="button" class="rbtn" data-sort="alpha" aria-pressed="false" data-i18n="sortAlpha"></button>
+    <button type="button" class="rbtn" data-sort="fixed" aria-pressed="false" data-i18n="sortFixed"></button>
   </div>
   <section class="kpis" id="taxKpis" aria-live="polite"></section>
   <section class="panel taxblock">
@@ -1231,7 +1232,7 @@ const T = {
     'gl.uit.t': 'Uitbetaald', 'gl.uit.d': 'Het geld dat je per uitkering ontvangt als je niet herinvesteert. Het verlaat het fonds en telt niet meer mee in het vermogen, maar het is niet verloren.',
     vibePre: 'Vibe coded met', vibePost: 'door Drallas', vibeTitle: 'Bekijk de README op GitHub', aboutRepo: 'Broncode op GitHub', footer: 'Links naar fondsen gaan naar het profiel op justETF. Controleer de actuele cijfers daar voordat je beslist. Yields die ik zelf heb aangenomen, staan gemarkeerd in de tabel.',
     na: 'n.v.t.', none: '–', helpLink: 'Help', mSuffix: ' mln',
-    sortLbl: 'Sorteren:', sortFixed: 'Vaste volgorde', sortDesc: 'Hoogste bedrag eerst',
+    sortLbl: 'Sorteren:', sortFixed: 'Vaste volgorde', sortDesc: 'Hoogste bedrag eerst', sortAlpha: 'Alfabetisch',
     baseTitle: 'Berekend over', baseInv: 'Belegd bedrag', baseYears: 'Looptijd', baseYrs: 'jaar', baseChange: 'Aanpassen op Prognose',
     pickTitle: 'Landen vergelijken', grpMain: 'Basisvergelijking', grpOther: 'Meer landen', pickOf: n => `${n} van 4`, pickMax: 'Maximaal 4 landen tegelijk. Zet er eerst een uit.',
     hTotals: 'Totaal per land', hYears: 'Belasting per jaar', hNotes: 'Uitgangspunten per land', colBase: 'Belast over (gem. per jaar)',
@@ -1466,7 +1467,7 @@ const T = {
     'gl.uit.t': 'Paid out', 'gl.uit.d': 'The money you receive per distribution when you do not reinvest. It leaves the fund and no longer counts toward the value, but it is not lost.',
     vibePre: 'Vibe coded with', vibePost: 'by Drallas', vibeTitle: 'View the README on GitHub', aboutRepo: 'Source code on GitHub', footer: 'Links to funds go to the justETF profile. Check the current figures there before deciding. Yields I assumed myself are marked in the table.',
     na: 'n/a', none: '–', helpLink: 'Help', mSuffix: 'm',
-    sortLbl: 'Sort:', sortFixed: 'Fixed order', sortDesc: 'Highest amount first',
+    sortLbl: 'Sort:', sortFixed: 'Fixed order', sortDesc: 'Highest amount first', sortAlpha: 'Alphabetical',
     baseTitle: 'Calculated on', baseInv: 'Invested amount', baseYears: 'Period', baseYrs: 'years', baseChange: 'Change on Forecast',
     pickTitle: 'Compare countries', grpMain: 'Core comparison', grpOther: 'More countries', pickOf: n => `${n} of 4`, pickMax: 'Maximum 4 countries at once. Turn one off first.',
     hTotals: 'Total per country', hYears: 'Tax per year', hNotes: 'Assumptions per country', colBase: 'Taxed on (avg per year)',
@@ -1701,7 +1702,7 @@ const T = {
     'gl.uit.t': 'Pagado', 'gl.uit.d': 'El dinero que recibes por cada distribución si no reinviertes. Sale del fondo y ya no cuenta en el valor, pero no se pierde.',
     vibePre: 'Vibe coded con', vibePost: 'por Drallas', vibeTitle: 'Ver el README en GitHub', aboutRepo: 'Código en GitHub', footer: 'Los enlaces a los fondos llevan a la ficha en justETF. Revisa allí las cifras actuales antes de decidir. Los rendimientos que supuse yo están marcados en la tabla.',
     na: 'n/d', none: '–', helpLink: 'Ayuda', mSuffix: ' mill.',
-    sortLbl: 'Ordenar:', sortFixed: 'Orden fijo', sortDesc: 'Mayor importe primero',
+    sortLbl: 'Ordenar:', sortFixed: 'Orden fijo', sortDesc: 'Mayor importe primero', sortAlpha: 'Alfabético',
     baseTitle: 'Calculado sobre', baseInv: 'Importe invertido', baseYears: 'Plazo', baseYrs: 'años', baseChange: 'Cambiar en Previsión',
     pickTitle: 'Comparar países', grpMain: 'Comparación base', grpOther: 'Más países', pickOf: n => `${n} de 4`, pickMax: 'Máximo 4 países a la vez. Desactiva uno primero.',
     hTotals: 'Total por país', hYears: 'Impuesto por año', hNotes: 'Supuestos por país', colBase: 'Gravado sobre (media/año)',
@@ -2054,7 +2055,8 @@ function renderTax(d, a, years, dStart, sc, amount){
   renderOverview();
 }
 
-let taxSort = 'fixed';
+const TAXSORT_KEY = 'dk-taxsort';
+let taxSort = (() => { try { const v = localStorage.getItem(TAXSORT_KEY); return ['desc','alpha','fixed'].includes(v) ? v : 'desc'; } catch (e) { return 'desc'; } })();
 function renderTaxCards(list, totals, amount, years){
   document.getElementById('taxKpis').innerHTML = list.map(m => {
     const tot = totals[m.k];
@@ -2084,6 +2086,7 @@ function renderOverview(){
   const allMeta = ALL.map(c => ({k:c.k, name:c.name(), color:c.color}));
   const sv = m => totals[m.k] === null ? -1 : totals[m.k];
   if (taxSort === 'desc') allMeta.sort((a, b) => sv(b) - sv(a));
+  else if (taxSort === 'alpha') allMeta.sort((a, b) => a.name.localeCompare(b.name, lang));
   const meta = allMeta.filter(m => taxIsOn(m.k));
   renderTaxCards(meta, totals, amount, years);
   updateChips();
@@ -2881,8 +2884,10 @@ document.getElementById('baseGo').addEventListener('click', e => {
   e.preventDefault();
   document.querySelector('.tabs .tab').click();
 });
+document.querySelectorAll('.sortbar .rbtn').forEach(x => x.setAttribute('aria-pressed', x.dataset.sort === taxSort ? 'true' : 'false'));
 document.querySelectorAll('.sortbar .rbtn').forEach(b => b.addEventListener('click', () => {
   taxSort = b.dataset.sort;
+  try { localStorage.setItem(TAXSORT_KEY, taxSort); } catch (e) {}
   document.querySelectorAll('.sortbar .rbtn').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
   renderOverview();
 }));
