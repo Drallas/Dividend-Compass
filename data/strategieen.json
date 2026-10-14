@@ -1,0 +1,26 @@
+{
+  "_toelichting": "Een strategie is een verdeling over indexen (slots). Gewichten zijn voorbeelden om mee te rekenen, geen advies. Een leeg slot valt terug op het basisdeel.",
+  "basis_index": "msci-world",
+  "strategieen": [
+    {
+      "id": "defensief",
+      "naam": "Defensief",
+      "gewichten": { "msci-world": 50, "ftse-all-world-high-dividend-yield": 50 }
+    },
+    {
+      "id": "gebalanceerd",
+      "naam": "Gebalanceerd",
+      "gewichten": { "msci-world": 80, "ftse-all-world-high-dividend-yield": 20 }
+    },
+    {
+      "id": "agressief",
+      "naam": "Agressief",
+      "gewichten": { "msci-world": 90, "msci-world-quality": 10 }
+    }
+  ],
+  "accenten": [
+    { "slot": "hoog dividend", "index_id": "ftse-all-world-high-dividend-yield", "alternatief": "dj-global-select-dividend" },
+    { "slot": "middel dividend", "index_id": null, "toelichting": "nog te vullen; kandidaat-index nog niet gekozen" },
+    { "slot": "laag dividend", "index_id": "msci-world-quality", "toelichting": "proxy via kwaliteit" }
+  ]
+}

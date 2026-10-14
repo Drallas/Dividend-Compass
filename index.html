@@ -351,6 +351,7 @@
   #wealthYrs{width:100%;margin:0 0 4px}
   body.nogoal .tabs .tab[data-tab="tabPay"]{display:none !important}
   .welcome-actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+  .disclaimer{font-size:12px;color:var(--muted);max-width:64ch;margin:10px auto 0;line-height:1.5}
   .controls .grp{border:1px solid var(--line);border-radius:12px;padding:12px 14px 4px;margin:0 0 12px}
   .controls .grp > h3{margin:0 0 10px;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
   html:not([lang="nl"]) .nlonly{display:none !important}
@@ -1041,6 +1042,7 @@
   <button type="button" class="helpx" data-close="welcomeDlg" aria-label="×">×</button>
   <h2 id="welcomeTitle" data-i18n="welcomeTitle"></h2>
   <p class="sub" data-i18n="welcomeBody"></p>
+  <p class="sub disclaimer" data-i18n="disclaimer"></p>
   <p class="welcome-actions"><button type="button" class="rbtn" data-open="guideDlg" data-i18n="welcomeGuide"></button> <button type="button" class="rbtn" data-close="welcomeDlg" data-i18n="welcomeStart"></button></p>
 </div></dialog>
 <dialog id="guideDlg" class="helpdlg smalldlg" aria-labelledby="guideTitle"><div class="helpbody">
@@ -1059,7 +1061,7 @@
 </div></dialog>
 
 <p class="foot-note" id="footNote" data-i18n="footer"></p>
-<footer class="vibe"><a href="https://github.com/Drallas/Dividend-Compass#readme" target="_blank" rel="noopener noreferrer" data-i18n-title="vibeTitle"><span data-i18n="vibePre"></span> <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg> <span data-i18n="vibePost"></span></a></footer>
+<footer class="vibe"><p class="disclaimer" data-i18n="disclaimer"></p><ahref="https://github.com/Drallas/Dividend-Compass#readme" target="_blank" rel="noopener noreferrer" data-i18n-title="vibeTitle"><span data-i18n="vibePre"></span> <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg> <span data-i18n="vibePost"></span></a></footer>
 
 <script>
 window.__dkBoot = true;
@@ -1115,7 +1117,7 @@ const T = {
     terWarn: 'Gewogen kosten (TER) van je mix: {p}%, boven de grens van {g}%. Dat kost je ca. {e} per jaar. Overweeg goedkopere fondsen of een kleiner aandeel van de duurste.',
     csvUnavailable: 'CSV-export is hier niet beschikbaar.', csvSaved: 'CSV opgeslagen.',
     licLbl: 'Licentie:',
-    guideBtn: 'Gebruiksgids', welcomeBtn: 'Welkom', welcomeTitle: 'Welkom bij Dividend Compass', welcomeBody: 'Dit is een scenario-hulpmiddel, geen voorspelling. Kies je inleg, looptijd en verdeling tussen een dividendfonds en een accumulerend fonds, en zie wat dat oplevert. Je keuzes blijven in je browser bewaard.', welcomeGuide: 'Bekijk de gebruiksgids', welcomeStart: 'Begin maar',
+    guideBtn: 'Gebruiksgids', welcomeBtn: 'Welkom', welcomeTitle: 'Welkom bij Dividend Compass', welcomeBody: 'Dit is een scenario-hulpmiddel, geen voorspelling. Kies je inleg, looptijd en verdeling tussen een dividendfonds en een accumulerend fonds, en zie wat dat oplevert. Je keuzes blijven in je browser bewaard.', disclaimer: 'Dit is een rekenhulp, geen beleggingsadvies. De uitkomsten zijn scenario\'s op basis van aannames over rendement, kosten en belasting, geen voorspelling en geen garantie. Belastingregels zijn vereenvoudigd. Productgegevens worden met de hand bijgehouden en kunnen verouderd zijn; controleer ze bij de aanbieder. Voor persoonlijk advies kun je terecht bij een erkende adviseur.', welcomeGuide: 'Bekijk de gebruiksgids', welcomeStart: 'Begin maar',
     guideTitle: 'Zo gebruik je Dividend Compass',
     guideIntro: 'Dividend Compass laat zien wat een dividendfonds en een accumulerend fonds over de jaren met je geld kunnen doen. Het is een scenario-hulpmiddel, geen voorspelling.',
     g1t: 'Stel je bedrag en doel in',
@@ -1350,7 +1352,7 @@ const T = {
     terWarn: 'Weighted costs (TER) of your mix: {p}%, above the {g}% limit. That costs you about {e} per year. Consider cheaper funds or a smaller share of the most expensive ones.',
     csvUnavailable: 'CSV export is not available here.', csvSaved: 'CSV saved.',
     licLbl: 'License:',
-    guideBtn: 'How to use it', welcomeBtn: 'Welcome', welcomeTitle: 'Welcome to Dividend Compass', welcomeBody: 'This is a scenario tool, not a forecast. Choose your investment, duration and split between a dividend fund and an accumulating fund, and see what that yields. Your choices stay saved in your browser.', welcomeGuide: 'Read the usage guide', welcomeStart: 'Get started',
+    guideBtn: 'How to use it', welcomeBtn: 'Welcome', welcomeTitle: 'Welcome to Dividend Compass', welcomeBody: 'This is a scenario tool, not a forecast. Choose your investment, duration and split between a dividend fund and an accumulating fund, and see what that yields. Your choices stay saved in your browser.', disclaimer: 'This is a calculator, not investment advice. Outcomes are scenarios based on assumptions about return, costs and tax, not a forecast and not a guarantee. Tax rules are simplified. Product data is maintained by hand and may be out of date; check it with the provider. For personal advice, consult a licensed adviser.', welcomeGuide: 'Read the usage guide', welcomeStart: 'Get started',
     guideTitle: 'How to use Dividend Compass',
     guideIntro: 'Dividend Compass shows what a dividend fund and an accumulating fund can do with your money over time. It is a scenario tool, not a forecast.',
     g1t: 'Set your amount and goal',
@@ -1585,7 +1587,7 @@ const T = {
     terWarn: 'Coste ponderado (TER) de tu mezcla: {p}%, por encima del límite de {g}%. Te cuesta unos {e} al año. Considera fondos más baratos o una parte menor de los más caros.',
     csvUnavailable: 'La exportación CSV no está disponible aquí.', csvSaved: 'CSV guardado.',
     licLbl: 'Licencia:',
-    guideBtn: 'Guía de uso', welcomeBtn: 'Bienvenida', welcomeTitle: 'Bienvenido a Dividend Compass', welcomeBody: 'Es una herramienta de escenarios, no una previsión. Elige tu inversión, tu plazo y el reparto entre un fondo de dividendos y uno de acumulación, y mira lo que da. Tus elecciones se guardan en tu navegador.', welcomeGuide: 'Ver la guía de uso', welcomeStart: 'Empezar',
+    guideBtn: 'Guía de uso', welcomeBtn: 'Bienvenida', welcomeTitle: 'Bienvenido a Dividend Compass', welcomeBody: 'Es una herramienta de escenarios, no una previsión. Elige tu inversión, tu plazo y el reparto entre un fondo de dividendos y uno de acumulación, y mira lo que da. Tus elecciones se guardan en tu navegador.', disclaimer: 'Esta es una herramienta de cálculo, no asesoramiento de inversión. Los resultados son escenarios basados en supuestos sobre rendimiento, costes e impuestos, no una previsión ni una garantía. Las normas fiscales están simplificadas. Los datos de los productos se mantienen a mano y pueden estar desactualizados; compruébalos con el proveedor. Para asesoramiento personal, consulta a un asesor autorizado.', welcomeGuide: 'Ver la guía de uso', welcomeStart: 'Empezar',
     guideTitle: 'Cómo usar Dividend Compass',
     guideIntro: 'Dividend Compass muestra lo que un fondo de dividendos y un fondo de acumulación pueden hacer con tu dinero con los años. Es una herramienta de escenarios, no una predicción.',
     g1t: 'Define tu importe y tu objetivo',

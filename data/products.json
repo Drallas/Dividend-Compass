@@ -1,0 +1,53 @@
+{
+  "_toelichting": "Producten zijn de variabele laag: een ETF die een index volgt. Per product: domicilie, uitkering en bron. 'ter' is null zolang die niet gecontroleerd is.",
+  "producten": [
+    {
+      "isin": "IE00B4L5Y983",
+      "naam": "iShares Core MSCI World UCITS ETF USD (Acc)",
+      "index_id": "msci-world",
+      "domicilie": "IE",
+      "uitkering": "acc",
+      "valuta": "USD",
+      "ter": null,
+      "laatst_geverifieerd": "14-10-2026",
+      "bron": "https://extraetf.com/en/etf-profile/IE00B4L5Y983",
+      "status": "ISIN en naam gevonden; TER nog te controleren"
+    },
+    {
+      "isin": "IE00B8GKDB10",
+      "naam": "Vanguard FTSE All-World High Dividend Yield UCITS ETF (Distributing)",
+      "index_id": "ftse-all-world-high-dividend-yield",
+      "domicilie": "IE",
+      "uitkering": "dist",
+      "valuta": "USD",
+      "ter": null,
+      "laatst_geverifieerd": "14-10-2026",
+      "bron": "https://www.finanzfluss.de/informer/etf/IE00B8GKDB10/",
+      "status": "ISIN en naam gevonden; TER nog te controleren"
+    },
+    {
+      "isin": "IE00B0M62S72",
+      "naam": "iShares Dow Jones Global Select Dividend UCITS ETF (Dist)",
+      "index_id": "dj-global-select-dividend",
+      "domicilie": "IE",
+      "uitkering": "dist",
+      "valuta": "USD",
+      "ter": null,
+      "laatst_geverifieerd": "14-10-2026",
+      "bron": "https://etf.at/suche/ie00b0m62s72/",
+      "status": "ISIN gevonden via zoekresultaat; naam en TER nog te controleren"
+    },
+    {
+      "isin": "IE00BL25JL35",
+      "naam": "Xtrackers MSCI World Quality UCITS ETF 1C",
+      "index_id": "msci-world-quality",
+      "domicilie": "IE",
+      "uitkering": "acc",
+      "valuta": "USD",
+      "ter": null,
+      "laatst_geverifieerd": "14-10-2026",
+      "bron": "https://app.getquin.com/en/etf/IE00BL25JL35/xtrackers-msci-world-quality-etf",
+      "status": "ISIN gevonden; TER en valuta nog te controleren"
+    }
+  ]
+}

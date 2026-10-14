@@ -1,0 +1,33 @@
+{
+  "_toelichting": "Indices zijn de stabiele laag: de strategie waar je op uitkomt. Namen en bronnen zijn nog niet allemaal gecontroleerd; zie 'status'.",
+  "indices": [
+    {
+      "id": "msci-world",
+      "naam": "MSCI World",
+      "type": "wereld",
+      "provider": "MSCI",
+      "status": "naam bekend; historische reeks nog te koppelen"
+    },
+    {
+      "id": "ftse-all-world-high-dividend-yield",
+      "naam": "FTSE All-World High Dividend Yield",
+      "type": "dividendstrategie (hoog)",
+      "provider": "FTSE Russell",
+      "status": "naam bekend; historische reeks nog te koppelen"
+    },
+    {
+      "id": "dj-global-select-dividend",
+      "naam": "Dow Jones Global Select Dividend",
+      "type": "dividendstrategie (hoog)",
+      "provider": "S&P Dow Jones Indices",
+      "status": "naam bekend; exacte indexnaam nog te bevestigen bij het product"
+    },
+    {
+      "id": "msci-world-quality",
+      "naam": "MSCI World Quality",
+      "type": "factor (kwaliteit), gebruikt als laag-dividend-proxy",
+      "provider": "MSCI",
+      "status": "proxy; geen officiële laag-dividendindex gekozen"
+    }
+  ]
+}
