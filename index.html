@@ -663,6 +663,7 @@
 
 <main class="fundswrap" id="tabWealth" hidden>
   <section class="panel">
+    <div class="regbar"><label for="wTax" data-i18n="wtLbl"></label> <select id="wTax"><option value="nl" data-i18n="wtNL"></option><option value="none" data-i18n="wtNone"></option></select></div>
     <label class="wslider" for="wealthYrs"><span id="wealthYrsLbl"></span></label>
     <input type="range" id="wealthYrs" min="1" max="40" step="1" value="15">
     <div id="wealthBody"></div>
@@ -1023,13 +1024,14 @@ const T = {
     g3t: 'Lees de investeringsprognose',
     g3d: 'De grafiek toont de waarde van het dividend- en het accdeel over het gekozen aantal jaren. Beweeg de muis over de grafiek voor de exacte bedragen.',
     g4t: 'Bekijk de netto waarde',
-    g4d: 'De netto waardeprognose toont wat er overblijft na de geschatte Box 3-belasting. Je ziet ook waar het geld heen ging: uitkeringen, belasting en fondskosten (TER).',
+    g4d: 'De netto waardeprognose toont wat er overblijft na de belastingschatting die je kiest (standaard Box 3 voor Nederland). Je ziet ook waar het geld heen ging: uitkeringen, belasting en fondskosten (TER).',
     g5t: 'Kijk naar de uitkeringen',
     g5d: 'De uitkeringsprognose toont het verwachte inkomen per maand uit de dividendfondsen, en hoe dat over de jaren oplopt.',
     g6t: 'Vergelijk de belasting per land',
     g6d: 'Op het tabblad Belasting zet je landen aan of uit (maximaal vier tegelijk) en zie je de belasting over hetzelfde rendement. Elk land heeft een toelichting met bron en betrouwbaarheid.',
     g7t: 'Bewaar en exporteer',
     g7d: 'Bewaar benoemde scenario\'s in de browser via het menu. Exporteer een CSV of druk af naar PDF vanuit hetzelfde menu.',
+    wtLbl: 'Belastingschatting', wtNL: 'Nederland (Box 3)', wtNone: 'Geen schatting',
     scenTip: 'Drie rekenvarianten. Laag: 3 procentpunt minder koersgroei en 1 procentpunt minder yield. Basis: de gegevens uit de fondsentabel. Hoog: 3 procentpunt meer koersgroei en 0,5 procentpunt meer yield. Yield verandert alleen bij de dividendfondsen.',
     scLaag: 'Laag', scBasis: 'Basis', scHoog: 'Hoog',
     reinvest: 'Uitkeringen herinvesteren',
@@ -1257,13 +1259,14 @@ const T = {
     g3t: 'Read the investment forecast',
     g3d: 'The chart shows the value of the dividend and accumulating parts over the chosen number of years. Hover over the chart for the exact values.',
     g4t: 'Check net worth',
-    g4d: 'The net worth forecast shows what remains after estimated Box 3 tax. It also shows where the money went: payouts, tax and fund costs (TER).',
+    g4d: 'The net worth forecast shows what remains after the tax estimate you choose (Box 3 for the Netherlands by default). It also shows where the money went: payouts, tax and fund costs (TER).',
     g5t: 'Look at the payouts',
     g5d: 'The payout forecast shows the expected income per month from the dividend funds, and how it adds up over the years.',
     g6t: 'Compare tax per country',
     g6d: 'On the Tax tab you can switch countries on or off (up to four at a time) and see the tax on the same return. Each country has a note with its source and reliability.',
     g7t: 'Save and export',
     g7d: 'Save named scenarios in the browser from the menu. Export a CSV or print to PDF from the same menu.',
+    wtLbl: 'Tax estimate', wtNL: 'Netherlands (Box 3)', wtNone: 'No estimate',
     scenTip: 'Three calculation variants. Low: 3 percentage points less price growth and 1 point less yield. Base: the data from the funds table. High: 3 points more price growth and 0.5 points more yield. Yield only changes for the dividend funds.',
     scLaag: 'Low', scBasis: 'Base', scHoog: 'High',
     reinvest: 'Reinvest distributions',
@@ -1491,13 +1494,14 @@ const T = {
     g3t: 'Lee la previsión de inversión',
     g3d: 'El gráfico muestra el valor de la parte de dividendos y de la de acumulación durante los años elegidos. Pasa el ratón sobre el gráfico para ver los importes exactos.',
     g4t: 'Mira el patrimonio neto',
-    g4d: 'La previsión de patrimonio neto muestra lo que queda tras el impuesto Box 3 estimado. También muestra adónde fue el dinero: pagos, impuestos y costes de los fondos (TER).',
+    g4d: 'La previsión de patrimonio neto muestra lo que queda tras la estimación de impuestos que elijas (Box 3 para Países Bajos por defecto). También muestra adónde fue el dinero: pagos, impuestos y costes de los fondos (TER).',
     g5t: 'Revisa los pagos',
     g5d: 'La previsión de pagos muestra el ingreso mensual esperado de los fondos de dividendos y cómo se acumula con los años.',
     g6t: 'Compara los impuestos por país',
     g6d: 'En la pestaña Impuestos puedes activar o desactivar países (hasta cuatro a la vez) y ver el impuesto sobre el mismo rendimiento. Cada país tiene una nota con su fuente y su fiabilidad.',
     g7t: 'Guarda y exporta',
     g7d: 'Guarda escenarios con nombre en el navegador desde el menú. Exporta un CSV o imprime a PDF desde el mismo menú.',
+    wtLbl: 'Estimación de impuestos', wtNL: 'Países Bajos (Box 3)', wtNone: 'Sin estimación',
     scenTip: 'Tres variantes de cálculo. Bajo: 3 puntos porcentuales menos de crecimiento del precio y 1 punto menos de rendimiento. Base: los datos de la tabla de fondos. Alto: 3 puntos más de crecimiento y 0,5 puntos más de rendimiento. El rendimiento solo cambia en los fondos de dividendos.',
     scLaag: 'Bajo', scBasis: 'Base', scHoog: 'Alto',
     reinvest: 'Reinvertir distribuciones',
@@ -2679,9 +2683,9 @@ renderBedrag();
 applyStatic();
 /* ============ vermogensprognose ============ */
 const WL = {
-  nl:{yrs:'Periode', title:'Netto waardeprognose', sub:'Hoe je vermogen zich ontwikkelt bij de invoerwaarden, strategie en scenario die je hebt gekozen. Netto is na een schatting van de Box 3-belasting.', kGross:'Bruto in fondsen', kNet:'Netto vermogen', kPaid:'Uitgekeerd', kTax:'Box 3, geschat', kDouble:'Verdubbeling netto', dNo:'Niet binnen de periode', legG:'Bruto in fondsen', legN:'Netto vermogen', legI:'Ingelegd', year:'Jaar', colFund:'In fondsen', colCash:'Uitgekeerd', colTax:'Box 3 cumulatief', colNet:'Netto', colCost:'Kosten (TER)', kCost:'Betaald aan kosten (TER)', costNote:'Kosten zitten al in de waarde in fondsen en worden dus niet nog eens afgetrokken. Ze staan hier alleen om te laten zien wat je ze kosten.', note:'De Box 3-schatting gebruikt het heffingsvrij vermogen en het forfaitaire rendement uit het tabblad Belasting. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.'},
-  en:{yrs:'Period', title:'Net worth forecast', sub:'How your wealth develops with the inputs, strategy and scenario you chose. Net is after an estimate of Box 3 tax (Netherlands).', kGross:'Gross in funds', kNet:'Net wealth', kPaid:'Paid out', kTax:'Box 3, estimated', kDouble:'Net doubling time', dNo:'Not within the period', legG:'Gross in funds', legN:'Net wealth', legI:'Invested', year:'Year', colFund:'In funds', colCash:'Paid out', colTax:'Box 3 cumulative', colNet:'Net', colCost:'Fund costs (TER)', kCost:'Paid in fund costs (TER)', costNote:'Costs are already included in the fund value and are not deducted again. They are shown to show what they cost you.', note:'The Box 3 estimate uses the tax-free allowance and the flat return from the Tax tab. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.'},
-  es:{yrs:'Periodo', title:'Previsión de patrimonio neto', sub:'Cómo evoluciona tu patrimonio con las entradas, la estrategia y el escenario que elegiste. El neto es después de una estimación del impuesto Box 3 (Países Bajos).', kGross:'Bruto en fondos', kNet:'Patrimonio neto', kPaid:'Pagado', kTax:'Box 3, estimado', kDouble:'Doblar el neto', dNo:'No dentro del periodo', legG:'Bruto en fondos', legN:'Patrimonio neto', legI:'Invertido', year:'Año', colFund:'En fondos', colCash:'Pagado', colTax:'Box 3 acumulado', colNet:'Neto', colCost:'Costes (TER)', kCost:'Pagado en costes (TER)', costNote:'Los costes ya están incluidos en el valor de los fondos y no se restan otra vez. Se muestran para que veas lo que te cuestan.', note:'La estimación de Box 3 usa el mínimo exento y el rendimiento forfait de la pestaña Impuestos. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.'}
+  nl:{yrs:'Periode', title:'Netto waardeprognose', sub:'Hoe je vermogen zich ontwikkelt bij de invoerwaarden, strategie en scenario die je hebt gekozen. Netto is na de belastingschatting die je kiest.', kGross:'Bruto in fondsen', kNet:'Netto vermogen', kPaid:'Uitgekeerd', kTax:'Box 3, geschat', kDouble:'Verdubbeling netto', dNo:'Niet binnen de periode', legG:'Bruto in fondsen', legN:'Netto vermogen', legI:'Ingelegd', year:'Jaar', colFund:'In fondsen', colCash:'Uitgekeerd', colTax:'Box 3 cumulatief', colNet:'Netto', colCost:'Kosten (TER)', kCost:'Betaald aan kosten (TER)', costNote:'Kosten zitten al in de waarde in fondsen en worden dus niet nog eens afgetrokken. Ze staan hier alleen om te laten zien wat je ze kosten.', note:'De Box 3-schatting gebruikt het heffingsvrij vermogen en het forfaitaire rendement uit het tabblad Belasting. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.'},
+  en:{yrs:'Period', title:'Net worth forecast', sub:'How your wealth develops with the inputs, strategy and scenario you chose. Net is after the tax estimate you choose.', kGross:'Gross in funds', kNet:'Net wealth', kPaid:'Paid out', kTax:'Box 3, estimated', kDouble:'Net doubling time', dNo:'Not within the period', legG:'Gross in funds', legN:'Net wealth', legI:'Invested', year:'Year', colFund:'In funds', colCash:'Paid out', colTax:'Box 3 cumulative', colNet:'Net', colCost:'Fund costs (TER)', kCost:'Paid in fund costs (TER)', costNote:'Costs are already included in the fund value and are not deducted again. They are shown to show what they cost you.', note:'The Box 3 estimate uses the tax-free allowance and the flat return from the Tax tab. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.'},
+  es:{yrs:'Periodo', title:'Previsión de patrimonio neto', sub:'Cómo evoluciona tu patrimonio con las entradas, la estrategia y el escenario que elegiste. El neto es después de la estimación de impuestos que elijas.', kGross:'Bruto en fondos', kNet:'Patrimonio neto', kPaid:'Pagado', kTax:'Box 3, estimado', kDouble:'Doblar el neto', dNo:'No dentro del periodo', legG:'Bruto en fondos', legN:'Patrimonio neto', legI:'Invertido', year:'Año', colFund:'En fondos', colCash:'Pagado', colTax:'Box 3 acumulado', colNet:'Neto', colCost:'Costes (TER)', kCost:'Pagado en costes (TER)', costNote:'Los costes ya están incluidos en el valor de los fondos y no se restan otra vez. Se muestran para que veas lo que te cuestan.', note:'La estimación de Box 3 usa el mínimo exento y el rendimiento forfait de la pestaña Impuestos. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.'}
 };
 function renderWealth(){
   const el = document.getElementById('wealthBody');
@@ -2693,13 +2697,14 @@ function renderWealth(){
   const reinvest = document.getElementById('reinvest').checked;
   const mix = parseFloat(document.getElementById('mix').value) / 100;
   const sp = savePct / 100;
+  const nlTax = document.getElementById('wTax').value === 'nl';
   const d = basket('div', amountNow * mix, H, reinvest, sc);
   const a = basket('acc', amountNow * (1 - mix), H, reinvest, sc);
   const fund = [], cash = [], tax = [], net = [];
   for (let t = 0; t <= H; t++){ fund[t] = d.vals[t] + a.vals[t]; cash[t] = d.cashArr[t] + a.cashArr[t]; }
   let cumTax = 0;
   tax[0] = 0;
-  for (let t = 1; t <= H; t++){ cumTax += box3Year(fund[t], cash[t], sp); tax[t] = cumTax; }
+  for (let t = 1; t <= H; t++){ if (nlTax) cumTax += box3Year(fund[t], cash[t], sp); tax[t] = cumTax; }
   for (let t = 0; t <= H; t++) net[t] = fund[t] + cash[t] - tax[t];
   const inleg = amountNow;
   const costYr = new Array(H + 1).fill(0);
@@ -2724,7 +2729,7 @@ function renderWealth(){
     `<div class="calk"><span>${W.kNet}</span><b>${EUR(net[H])}</b></div>`,
     `<div class="calk"><span>${W.kPaid}</span><b>${EUR(cash[H])}</b></div>`,
     `<div class="calk"><span>${W.kCost}</span><b>${EUR(costCum[H])}</b></div>`,
-    `<div class="calk"><span>${W.kTax}</span><b>${EUR(tax[H])}</b></div>`,
+    ...(nlTax ? [`<div class="calk"><span>${W.kTax}</span><b>${EUR(tax[H])}</b></div>`] : []),
     `<div class="calk"><span>${W.kDouble}</span><b>${dbl ? tr('years')(dbl) : W.dNo}</b></div>`
   ];
 
@@ -2753,7 +2758,7 @@ function renderWealth(){
   let rows = '';
   for (let t = 1; t <= H; t++){
     if (t % step && t !== H) continue;
-    rows += `<tr><th scope="row">${W.year} ${t}</th><td>${EUR(fund[t])}</td><td>${EUR(cash[t])}</td><td>${EUR(tax[t])}</td><td>${EUR(costCum[t])}</td><td class="tot">${EUR(net[t])}</td></tr>`;
+    rows += `<tr><th scope="row">${W.year} ${t}</th><td>${EUR(fund[t])}</td><td>${EUR(cash[t])}</td>${nlTax ? `<td>${EUR(tax[t])}</td>` : ''}<td>${EUR(costCum[t])}</td><td class="tot">${EUR(net[t])}</td></tr>`;
   }
 
   el.innerHTML = `
@@ -2762,12 +2767,13 @@ function renderWealth(){
     <div class="calkpis">${cards.join('')}</div>
     <div class="wlegend"><span><i style="background:var(--div)"></i>${W.legN}</span><span><i style="background:var(--acc)"></i>${W.legG}</span><span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span></div>
     ${svg}
-    <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th><th>${W.colTax}</th><th>${W.colCost}</th><th>${W.colNet}</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th>${nlTax ? `<th>${W.colTax}</th>` : ''}<th>${W.colCost}</th><th>${W.colNet}</th></tr></thead><tbody>${rows}</tbody></table></div>
     <p class="sub calnote">${W.costNote}</p>
-    <p class="sub calnote">${W.note}</p>`;
+    ${nlTax ? `<p class="sub calnote">${W.note}</p>` : ''}`;
 }
 
 document.getElementById('wealthYrs').addEventListener('input', renderWealth);
+document.getElementById('wTax').addEventListener('change', renderWealth);
 /* ============ merk, menu's, scenario's, export, kosten ============ */
 const APP_VERSION = '0.2';
 const SKEY = 'dk-scenarios';
