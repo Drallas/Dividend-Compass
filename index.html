@@ -395,6 +395,20 @@
   .menulist{display:grid;gap:8px;margin-top:14px}
   .menubtn{width:100%;height:42px;justify-content:flex-start;text-align:left;padding:0 14px;font-size:13.5px}
   .menubtn[aria-current="true"],.menubtn[aria-pressed="true"]{border-color:var(--text);box-shadow:inset 0 0 0 1px var(--text)}
+  /* ---------- flyout menu's dicht bij het icoon ---------- */
+  .flymenu{position:fixed;inset:auto;margin:0;width:232px;padding:10px;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--text);box-shadow:0 18px 44px rgba(0,0,0,.22)}
+  .flymenu:not(:popover-open){display:none}
+  .flymenu:popover-open{animation:flyin .14s ease-out}
+  @keyframes flyin{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+  .flymenu::before{content:'';position:absolute;top:-6px;left:var(--cx,auto);width:11px;height:11px;margin-left:-5.5px;background:var(--panel);border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg)}
+  .flytitle{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:4px 10px 8px}
+  .flymenu .menulist{margin-top:0;gap:2px}
+  .flymenu .menubtn{height:38px;width:100%;padding:0 12px;border:0;background:transparent;box-shadow:none;font-size:13.5px;font-weight:500;color:var(--text);justify-content:space-between;border-radius:9px}
+  .flymenu .menubtn:hover{background:var(--bg);color:var(--text)}
+  .flymenu .menubtn[aria-current="true"],.flymenu .menubtn[aria-pressed="true"]{box-shadow:none;border-color:transparent;font-weight:700}
+  .flymenu .menubtn[aria-current="true"]::after,.flymenu .menubtn[aria-pressed="true"]::after{content:'✓';font-size:13px;color:var(--div)}
+  .lic{margin-top:14px;font-size:12.5px}
+  .lic a{color:var(--div);font-weight:600}
   /* ---------- phone ---------- */
   @media (max-width:640px){
     .top{padding:16px 16px 4px}
@@ -883,16 +897,15 @@
   <div class="scenbtns"><button type="button" class="rbtn" id="expPdf" data-i18n="exportPdf"></button><button type="button" class="rbtn" id="expCsv" data-i18n="exportCsv"></button></div>
 </div></dialog>
 
-<dialog id="setDlg" class="helpdlg smalldlg" aria-labelledby="setTitle"><div class="helpbody">
-  <button type="button" class="helpx" data-close="setDlg" aria-label="×">×</button>
-  <h2 id="setTitle" data-i18n="setTitle"></h2>
+<div id="setDlg" class="flymenu" popover>
+  <div class="flytitle" data-i18n="setTitle"></div>
   <div class="menulist">
     <button type="button" class="rbtn menubtn" data-open="scenDlg" data-i18n="btnScen"></button>
     <button type="button" class="rbtn menubtn" data-open="expDlg" data-i18n="btnExport"></button>
     <button type="button" class="rbtn menubtn" id="menuHelp" data-i18n="helpLink"></button>
     <button type="button" class="rbtn menubtn" data-open="aboutDlg" data-i18n="aboutBtn"></button>
   </div>
-</div></dialog>
+</div>
 
 <dialog id="aboutDlg" class="helpdlg smalldlg" aria-labelledby="aboutTitle"><div class="helpbody">
   <button type="button" class="helpx" data-close="aboutDlg" aria-label="×">×</button>
@@ -901,27 +914,26 @@
   <p class="sub" data-i18n="about1"></p>
   <p class="sub" data-i18n="about2"></p>
   <p class="sub" data-i18n="about3"></p>
+  <p class="sub lic"><span data-i18n="licLbl"></span> <a href="https://github.com/Drallas/Dividend-Compass/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">PolyForm Noncommercial 1.0.0</a> · <a href="https://github.com/Drallas/Dividend-Compass" target="_blank" rel="noopener noreferrer">GitHub</a></p>
 </div></dialog>
 
-<dialog id="langDlg" class="helpdlg smalldlg" aria-labelledby="langTitle"><div class="helpbody">
-  <button type="button" class="helpx" data-close="langDlg" aria-label="×">×</button>
-  <h2 id="langTitle" data-i18n="setLang"></h2>
+<div id="langDlg" class="flymenu" popover>
+  <div class="flytitle" data-i18n="setLang"></div>
   <div class="menulist">
     <button type="button" class="rbtn menubtn" data-lang="nl" aria-current="false">Nederlands</button>
     <button type="button" class="rbtn menubtn" data-lang="en" aria-current="true">English</button>
     <button type="button" class="rbtn menubtn" data-lang="es" aria-current="false">Español</button>
   </div>
-</div></dialog>
+</div>
 
-<dialog id="themeDlg" class="helpdlg smalldlg" aria-labelledby="themeTitle"><div class="helpbody">
-  <button type="button" class="helpx" data-close="themeDlg" aria-label="×">×</button>
-  <h2 id="themeTitle" data-i18n="setTheme"></h2>
+<div id="themeDlg" class="flymenu" popover>
+  <div class="flytitle" data-i18n="setTheme"></div>
   <div class="menulist" id="themeSeg">
     <button type="button" class="rbtn menubtn" data-theme="auto" aria-pressed="true" data-i18n="themeAuto"></button>
     <button type="button" class="rbtn menubtn" data-theme="dark" aria-pressed="false" data-i18n="themeDark"></button>
     <button type="button" class="rbtn menubtn" data-theme="light" aria-pressed="false" data-i18n="themeLight"></button>
   </div>
-</div></dialog>
+</div>
 
 <p class="foot-note" id="footNote" data-i18n="footer"></p>
 
@@ -978,6 +990,7 @@ const T = {
     about3: 'Gemaakt door Allard, als eigen hulpmiddel om beleggingsstrategieën eerlijk met elkaar te vergelijken.',
     terWarn: 'Gewogen kosten (TER) van je mix: {p}%, boven de grens van {g}%. Dat kost je ca. {e} per jaar. Overweeg goedkopere fondsen of een kleiner aandeel van de duurste.',
     csvUnavailable: 'CSV-export is hier niet beschikbaar.', csvSaved: 'CSV opgeslagen.',
+    licLbl: 'Licentie:',
     scenTip: 'Drie rekenvarianten. Laag: 3 procentpunt minder koersgroei en 1 procentpunt minder yield. Basis: de gegevens uit de fondsentabel. Hoog: 3 procentpunt meer koersgroei en 0,5 procentpunt meer yield. Yield verandert alleen bij de dividendfondsen.',
     scLaag: 'Laag', scBasis: 'Basis', scHoog: 'Hoog',
     reinvest: 'Uitkeringen herinvesteren',
@@ -1194,6 +1207,7 @@ const T = {
     about3: 'Made by Allard, as a personal tool to compare investment strategies fairly.',
     terWarn: 'Weighted costs (TER) of your mix: {p}%, above the {g}% limit. That costs you about {e} per year. Consider cheaper funds or a smaller share of the most expensive ones.',
     csvUnavailable: 'CSV export is not available here.', csvSaved: 'CSV saved.',
+    licLbl: 'License:',
     scenTip: 'Three calculation variants. Low: 3 percentage points less price growth and 1 point less yield. Base: the data from the funds table. High: 3 points more price growth and 0.5 points more yield. Yield only changes for the dividend funds.',
     scLaag: 'Low', scBasis: 'Base', scHoog: 'High',
     reinvest: 'Reinvest distributions',
@@ -1410,6 +1424,7 @@ const T = {
     about3: 'Creada por Allard, como herramienta propia para comparar estrategias de inversión con honestidad.',
     terWarn: 'Coste ponderado (TER) de tu mezcla: {p}%, por encima del límite de {g}%. Te cuesta unos {e} al año. Considera fondos más baratos o una parte menor de los más caros.',
     csvUnavailable: 'La exportación CSV no está disponible aquí.', csvSaved: 'CSV guardado.',
+    licLbl: 'Licencia:',
     scenTip: 'Tres variantes de cálculo. Bajo: 3 puntos porcentuales menos de crecimiento del precio y 1 punto menos de rendimiento. Base: los datos de la tabla de fondos. Alto: 3 puntos más de crecimiento y 0,5 puntos más de rendimiento. El rendimiento solo cambia en los fondos de dividendos.',
     scLaag: 'Bajo', scBasis: 'Base', scHoog: 'Alto',
     reinvest: 'Reinvertir distribuciones',
@@ -2669,18 +2684,30 @@ const PRESET_KEY = {def:'presetCons', bal:'presetBal', agg:'presetAgg'};
 document.getElementById('appVer').textContent = tr('verLbl') + ' ' + APP_VERSION;
 
 function openDlg(id){ const d = document.getElementById(id); if (!d.open) d.showModal(); }
+const FLYS = ['langDlg', 'themeDlg', 'setDlg'];
+function flyOpen(id, btn){
+  const el = document.getElementById(id);
+  if (el.matches(':popover-open')){ el.hidePopover(); return; }
+  el.showPopover();
+  const r = btn.getBoundingClientRect();
+  const w = el.offsetWidth;
+  const left = Math.max(8, Math.min(window.innerWidth - w - 8, r.right - w));
+  el.style.top = (r.bottom + 10) + 'px';
+  el.style.left = left + 'px';
+  el.style.setProperty('--cx', (r.left + r.width / 2 - left) + 'px');
+}
 document.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => {
-  const parent = b.closest('dialog');
-  if (parent) parent.close();
+  const parent = b.closest('dialog, [popover]');
+  if (parent){ if (parent.tagName === 'DIALOG') parent.close(); else parent.hidePopover(); }
   if (b.dataset.open === 'scenDlg') renderScenarios();
-  openDlg(b.dataset.open);
+  if (FLYS.includes(b.dataset.open)) flyOpen(b.dataset.open, b); else openDlg(b.dataset.open);
 }));
 document.getElementById('menuHelp').addEventListener('click', () => {
-  document.getElementById('setDlg').close();
+  document.getElementById('setDlg').hidePopover();
   openHelp(null);
 });
 document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => document.getElementById(b.dataset.close).close()));
-['scenDlg','expDlg','setDlg','aboutDlg'].forEach(id => {
+['scenDlg','expDlg','aboutDlg'].forEach(id => {
   const d = document.getElementById(id);
   d.addEventListener('click', e => { if (e.target === d) d.close(); });
 });
@@ -2821,10 +2848,10 @@ updateTerWarn();
 /* ---- taal- en themakeuze in eigen menu ---- */
 document.querySelectorAll('#langDlg [data-lang]').forEach(b => b.addEventListener('click', () => {
   setLang(b.dataset.lang);
-  document.getElementById('langDlg').close();
+  document.getElementById('langDlg').hidePopover();
 }));
 document.querySelectorAll('#themeDlg [data-theme]').forEach(b => b.addEventListener('click', () => {
-  document.getElementById('themeDlg').close();
+  document.getElementById('themeDlg').hidePopover();
 }));
 document.querySelector('[data-open="langDlg"]').addEventListener('click', () => {
   document.querySelectorAll('#langDlg [data-lang]').forEach(x => x.setAttribute('aria-current', x.dataset.lang === lang ? 'true' : 'false'));

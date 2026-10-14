@@ -37,4 +37,4 @@ Open `index.html` in a browser. Nothing needs to be installed.
 
 ## License
 
-This project is licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE). You may read, use and modify the code for noncommercial purposes. Commercial use, including selling it, requires permission from the author.
+This project is licensed under the [GNU Affero General Public License v3.0](LICENSE). You may use, study, share and modify the code. If you modify it and make it available to others, including as a network service, you must share your modified source under the same license.
