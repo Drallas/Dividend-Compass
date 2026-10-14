@@ -2855,6 +2855,7 @@ function setTaxDefaults(){
   Object.keys(taxOn).forEach(k => { taxOn[k] = false; });
   const r = document.getElementById('resid').value;
   if (r && r !== 'none' && r in taxOn) taxOn[r] = true;
+  document.querySelector('.savebox').style.display = r === 'nl' ? '' : 'none';
   updateChips();
 }
 document.getElementById('resid').addEventListener('change', () => { setTaxDefaults(); recalc(); });
