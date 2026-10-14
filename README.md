@@ -25,9 +25,9 @@ The app also has a built-in guide: open the gear menu and choose "How to use it"
 ## Features
 
 - **Investment forecast**: value over time for the dividend and accumulating parts, with the total return per year.
-- **Net worth forecast**: value after a tax estimate you choose (Box 3 for the Netherlands by default, or no estimate), with where the money went: payouts, tax and fund costs. Shows how long it takes to double your net investment.
+- **Net worth forecast**: value after a tax estimate (Dutch Box 3 when the interface is Dutch, otherwise taxes are zero), with where the money went: payouts, tax and fund costs. Shows how long it takes to double your net investment.
 - **Payout forecast**: expected income per month and per year from the dividend funds, with the cumulative total.
-- **Tax**: per-country estimates for the Netherlands (Box 3), the United States (withholding tax), Argentina (foreign assets), Venezuela and a number of other countries, each with a note on its source and reliability.
+- **Tax**: per-country estimates for the Netherlands (Box 3, Dutch interface only), the United States (withholding tax), Argentina (foreign assets), Venezuela and a number of other countries, each with a note on its source and reliability.
 - **Funds and assumptions**: the funds in the model with yield, price growth, TER and risk, plus the weight per fund. All values are editable.
 - **Strategies**: defensive, balanced and aggressive presets for the split and the fund weights.
 - **Scenarios**: low, base and high, which adjust the price growth and yield assumptions.

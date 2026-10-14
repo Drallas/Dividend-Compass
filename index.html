@@ -345,6 +345,7 @@
   /* ---------- vermogensprognose ---------- */
   .wslider{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
   #wealthYrs{width:100%;margin:0 0 4px}
+  html:not([lang="nl"]) .nlonly{display:none !important}
   .wchart{width:100%;height:auto;display:block;margin:6px 0 4px}
   .wchart text{font-variant-numeric:tabular-nums}
   .wlegend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:0 0 4px}
@@ -661,7 +662,7 @@
         <li data-i18n-html="n5"></li>
         <li data-i18n-html="n6"></li>
         <li data-i18n-html="n7"></li>
-        <li data-i18n-html="n8"></li>
+        <li class="nlonly" data-i18n-html="n8"></li>
         <li data-i18n-html="n9"></li>
       </ul>
     </section>
@@ -669,7 +670,7 @@
 
 <main class="fundswrap" id="tabWealth" hidden>
   <section class="panel">
-    <div class="regbar"><label for="wTax" data-i18n="wtLbl"></label> <select id="wTax"><option value="nl" data-i18n="wtNL"></option><option value="none" data-i18n="wtNone"></option></select></div>
+    <div class="regbar nlonly"><label for="wTax" data-i18n="wtLbl"></label> <select id="wTax"><option value="nl" data-i18n="wtNL"></option><option value="none" data-i18n="wtNone"></option></select></div>
     <label class="wslider" for="wealthYrs"><span id="wealthYrsLbl"></span></label>
     <input type="range" id="wealthYrs" min="1" max="40" step="1" value="15">
     <div id="wealthBody"></div>
@@ -710,7 +711,7 @@
       <div class="row"><span data-i18n="baseYears"></span><b id="baseYrs">–</b></div>
       <a href="#" id="baseGo" data-i18n="baseChange"></a>
     </div>
-    <div class="savebox">
+    <div class="savebox nlonly">
       <label for="savePct" data-i18n="saveLbl"></label> <strong id="savePctLbl">0%</strong> <a class="info" href="#gl-taxsave">?</a>
       <input type="range" id="savePct" min="0" max="100" step="5" value="0" aria-labelledby="savePctLbl">
     </div>
@@ -759,7 +760,7 @@
     <dl class="notes" id="ovNotes"></dl>
   </section>
 
-  <section class="taxpane" id="secNL" aria-labelledby="nlTitle">
+  <section class="taxpane nlonly" id="secNL" aria-labelledby="nlTitle">
     <h2 id="nlTitle"><span data-i18n="nlTitle"></span> <a class="info" href="#gl-taxnl">?</a></h2>
     <p data-i18n="nlText" hidden></p>
     <div class="tbl-wrap">
@@ -877,19 +878,19 @@
   </dl>
   <dl class="glossary" data-cat="tax" hidden>
     <div id="gl-bronbelasting"><dt data-i18n="gl.bron.t"></dt><dd data-i18n="gl.bron.d"></dd></div>
-    <div id="gl-box3"><dt data-i18n="gl.box3.t"></dt><dd data-i18n="gl.box3.d"></dd></div>
+    <div id="gl-box3" class="nlonly"><dt data-i18n="gl.box3.t"></dt><dd data-i18n="gl.box3.d"></dd></div>
     <div id="gl-taxintro"><dt data-i18n="taxTitle"></dt><dd data-i18n="taxIntro"></dd></div>
     <div id="gl-taxovr"><dt data-i18n="ovTitle"></dt><dd data-i18n="ovSub"></dd></div>
     <div id="gl-taxovr2"><dt data-i18n="ovTotal"></dt><dd data-i18n="ovNote"></dd></div>
     <div id="gl-taxovr3"><dt data-i18n="colYear"></dt><dd data-i18n="ovYearNote"></dd></div>
-    <div id="gl-taxsave"><dt data-i18n="saveLbl"></dt><dd data-i18n="saveHint"></dd></div>
-    <div id="gl-taxnl"><dt data-i18n="nlTitle"></dt><dd data-i18n="nlText"></dd></div>
+    <div id="gl-taxsave" class="nlonly"><dt data-i18n="saveLbl"></dt><dd data-i18n="saveHint"></dd></div>
+    <div id="gl-taxnl" class="nlonly"><dt data-i18n="nlTitle"></dt><dd data-i18n="nlText"></dd></div>
     <div id="gl-taxus"><dt data-i18n="usTitle"></dt><dd data-i18n="usText"></dd></div>
     <div id="gl-taxus2"><dt data-i18n="usExposure"></dt><dd data-i18n="usNote"></dd></div>
     <div id="gl-taxar"><dt data-i18n="arTitle"></dt><dd data-i18n="arText"></dd></div>
     <div id="gl-taxar2"><dt data-i18n="arExt"></dt><dd data-i18n="arMore"></dd></div>
     <div id="gl-taxrate"><dt data-i18n="arRateLbl"></dt><dd data-i18n="arRateHint"></dd></div>
-    <div id="gl-tax2028"><dt data-i18n="ovN28"></dt><dd data-i18n="tax2028Note"></dd></div>
+    <div id="gl-tax2028" class="nlonly"><dt data-i18n="ovN28"></dt><dd data-i18n="tax2028Note"></dd></div>
   </dl>
 </div></dialog>
 
@@ -1265,7 +1266,7 @@ const T = {
     g3t: 'Read the investment forecast',
     g3d: 'The chart shows the value of the dividend and accumulating parts over the chosen number of years. Hover over the chart for the exact values.',
     g4t: 'Check net worth',
-    g4d: 'The net worth forecast shows what remains after the tax estimate you choose (Box 3 for the Netherlands by default). It also shows where the money went: payouts, tax and fund costs (TER).',
+    g4d: 'The net worth forecast shows what remains after the tax estimate you choose. It also shows where the money went: payouts, tax and fund costs (TER).',
     g5t: 'Look at the payouts',
     g5d: 'The payout forecast shows the expected income per month from the dividend funds, and how it adds up over the years.',
     g6t: 'Compare tax per country',
@@ -1409,7 +1410,7 @@ const T = {
     colYearT: 'Year', colStart: 'Assets 1 Jan.', colTaxYear: 'Box 3 tax',
     box3Sum: 'Total Box 3 over the period',
     usTitle: 'United States: withholding tax',
-    usText: 'An Irish fund withholds 15% on dividends from US companies before it reaches the fund. That lowers the distribution you see, and as a Dutch investor you cannot reclaim it. The effect is therefore already in the yield. There is no Dutch withholding tax on distributions from an Irish fund; they do count in Box 3. As a Dutch resident you are not liable for US tax and do not file anything there; it only concerns the withholding the fund already applies.',
+    usText: 'An Irish fund withholds 15% on dividends from US companies before it reaches the fund. That lowers the distribution you see, and as a Dutch investor you cannot reclaim it. The effect is therefore already in the yield. There is no Dutch withholding tax on distributions from an Irish fund. As a Dutch resident you are not liable for US tax and do not file anything there; it only concerns the withholding the fund already applies.',
     usExposure: 'US exposure (my estimate)',
     usSdiv: 'Many US companies in the dividend index', usJepg: 'Partly US', usJepq: 'Mainly US (Nasdaq-100)', usLgqd: 'Partly US', usUetw: 'Mainly US', usLyp6: 'No US (Europe)',
     usNote: 'I have not checked the exact US weight per fund. See the fund factsheet at the provider.',
@@ -1500,7 +1501,7 @@ const T = {
     g3t: 'Lee la previsión de inversión',
     g3d: 'El gráfico muestra el valor de la parte de dividendos y de la de acumulación durante los años elegidos. Pasa el ratón sobre el gráfico para ver los importes exactos.',
     g4t: 'Mira el patrimonio neto',
-    g4d: 'La previsión de patrimonio neto muestra lo que queda tras la estimación de impuestos que elijas (Box 3 para Países Bajos por defecto). También muestra adónde fue el dinero: pagos, impuestos y costes de los fondos (TER).',
+    g4d: 'La previsión de patrimonio neto muestra lo que queda tras la estimación de impuestos que elijas. También muestra adónde fue el dinero: pagos, impuestos y costes de los fondos (TER).',
     g5t: 'Revisa los pagos',
     g5d: 'La previsión de pagos muestra el ingreso mensual esperado de los fondos de dividendos y cómo se acumula con los años.',
     g6t: 'Compara los impuestos por país',
@@ -1644,7 +1645,7 @@ const T = {
     colYearT: 'Año', colStart: 'Patrimonio 1 ene.', colTaxYear: 'Impuesto Box 3',
     box3Sum: 'Total Box 3 en el periodo',
     usTitle: 'Estados Unidos: retención en origen',
-    usText: 'Un fondo irlandés retiene el 15% de los dividendos de empresas estadounidenses antes de que lleguen al fondo. Eso reduce la distribución que ves, y como inversor neerlandés no puedes recuperarlo. El efecto ya está en el rendimiento. Sobre las distribuciones de un fondo irlandés no hay retención neerlandesa; sí cuentan en Box 3. Como residente neerlandés no tienes obligación fiscal en EE. UU. ni presentas nada allí; solo se trata de la retención que ya aplica el fondo.',
+    usText: 'Un fondo irlandés retiene el 15% de los dividendos de empresas estadounidenses antes de que lleguen al fondo. Eso reduce la distribución que ves, y como inversor neerlandés no puedes recuperarlo. El efecto ya está en el rendimiento. Sobre las distribuciones de un fondo irlandés no hay retención neerlandesa. Como residente neerlandés no tienes obligación fiscal en EE. UU. ni presentas nada allí; solo se trata de la retención que ya aplica el fondo.',
     usExposure: 'Exposición a EE. UU. (mi estimación)',
     usSdiv: 'Muchas empresas de EE. UU. en el índice de dividendos', usJepg: 'En parte EE. UU.', usJepq: 'Sobre todo EE. UU. (Nasdaq-100)', usLgqd: 'En parte EE. UU.', usUetw: 'Sobre todo EE. UU.', usLyp6: 'Sin EE. UU. (Europa)',
     usNote: 'No he comprobado el peso exacto de EE. UU. en cada fondo. Consúltalo en la ficha del proveedor.',
@@ -1915,7 +1916,10 @@ const ALL = [
 ];
 const CSHORT = {us:{nl:'VS',en:'US',es:'EE. UU.'}, ar:{nl:'Argentinië',en:'Argentina',es:'Argentina'}, nl:{nl:'Nederland',en:'Netherlands',es:'P. Bajos'}, n28:{nl:'NL 2028',en:'NL 2028',es:'P. Bajos 2028'}};
 const shortName = c => CSHORT[c.k] ? CSHORT[c.k][lang] : c.name();
-const activeCount = () => Object.values(taxOn).filter(Boolean).length;
+const isNL = () => lang === 'nl';
+const taxAllowed = k => isNL() || (k !== 'nl' && k !== 'n28');
+const taxIsOn = k => !!taxOn[k] && taxAllowed(k);
+const activeCount = () => Object.keys(taxOn).filter(taxIsOn).length;
 let arRateVal = 1780;
 let lastTx = null;
 
@@ -1961,7 +1965,7 @@ let taxSort = 'fixed';
 function renderTaxCards(list, totals, amount, years){
   document.getElementById('taxKpis').innerHTML = list.map(m => {
     const tot = totals[m.k];
-    const on = taxOn[m.k];
+    const on = taxIsOn(m.k);
     const open = `<button type="button" class="kpi taxcard${on ? '' : ' off'}" style="--c:${m.color}" data-k="${m.k}" aria-pressed="${on}">`;
     if (tot === null) return `${open}<div class="lbl">${m.name}</div><div class="big">${tr('ovNeedRate')}</div></button>`;
     const pct = amount > 0 ? tot / amount * 100 : 0;
@@ -1976,6 +1980,7 @@ function renderTaxCards(list, totals, amount, years){
 }
 
 function renderOverview(){
+  if (!taxAllowed(subTab)) subTab = 'ov';
   applySub();
   document.querySelectorAll('[data-ars]').forEach(td => { td.textContent = arRateVal > 0 ? EUR(Number(td.dataset.ars) / arRateVal) : '–'; });
   if (!lastTx) return;
@@ -1986,7 +1991,7 @@ function renderOverview(){
   const allMeta = ALL.map(c => ({k:c.k, name:c.name(), color:c.color}));
   const sv = m => totals[m.k] === null ? -1 : totals[m.k];
   if (taxSort === 'desc') allMeta.sort((a, b) => sv(b) - sv(a));
-  const meta = allMeta.filter(m => taxOn[m.k]);
+  const meta = allMeta.filter(m => taxIsOn(m.k));
   renderTaxCards(meta, totals, amount, years);
   updateChips();
   fillRegSel();
@@ -2088,7 +2093,7 @@ function applySub(){
 }
 function fillRegSel(){
   const sel = document.getElementById('regSel');
-  sel.innerHTML = `<option value="ov">${tr('subOv')}</option>` + ALL.map(c => `<option value="${c.k}">${c.name()}</option>`).join('');
+  sel.innerHTML = `<option value="ov">${tr('subOv')}</option>` + ALL.filter(c => taxAllowed(c.k)).map(c => `<option value="${c.k}">${c.name()}</option>`).join('');
   sel.value = subTab;
 }
 function renderGeneric(k){
@@ -2628,7 +2633,7 @@ document.querySelectorAll('.sortbar .rbtn').forEach(b => b.addEventListener('cli
 }));
 function buildChips(){
   const box = document.getElementById('ovChips');
-  const chip = c => `<label class="ovchip" style="--c:${c.color}"><input type="checkbox" data-k="${c.k}"><i class="dot"></i><span data-nm="${c.k}"></span>${c.k === 'n28' ? '<a class="info" href="#gl-tax2028">?</a>' : ''}</label>`;
+  const chip = c => `<label class="ovchip${c.k === 'nl' || c.k === 'n28' ? ' nlonly' : ''}" style="--c:${c.color}"><input type="checkbox" data-k="${c.k}"><i class="dot"></i><span data-nm="${c.k}"></span>${c.k === 'n28' ? '<a class="info" href="#gl-tax2028">?</a>' : ''}</label>`;
   const main = ALL.filter(c => !EXTRA.some(e => e.k === c.k)), more = ALL.filter(c => EXTRA.some(e => e.k === c.k));
   box.innerHTML = `<div class="pickhead"><span data-grp="main"></span><span id="pickCount"></span></div><div class="pickgrid">${main.map(chip).join('')}</div>
     <div class="pickhead"><span data-grp="other"></span></div><div class="pickgrid">${more.map(chip).join('')}</div>`;
@@ -2644,7 +2649,7 @@ function buildChips(){
 function updateChips(){
   const full = activeCount() >= 4;
   document.querySelectorAll('#ovChips input').forEach(i => {
-    i.checked = !!taxOn[i.dataset.k]; i.disabled = full && !i.checked;
+    i.checked = taxIsOn(i.dataset.k); i.disabled = full && !i.checked;
     i.parentNode.classList.toggle('on', i.checked); i.parentNode.classList.toggle('dis', i.disabled);
   });
   document.querySelectorAll('#ovChips [data-nm]').forEach(sp => { sp.textContent = shortName(ALL.find(c => c.k === sp.dataset.nm)); });
@@ -2689,9 +2694,9 @@ renderBedrag();
 applyStatic();
 /* ============ vermogensprognose ============ */
 const WL = {
-  nl:{yrs:'Periode', title:'Netto waardeprognose', sub:'Hoe je vermogen zich ontwikkelt bij de invoerwaarden, strategie en scenario die je hebt gekozen. Netto is na de belastingschatting die je kiest.', kGross:'Bruto in fondsen', kNet:'Netto vermogen', kPaid:'Uitgekeerd', kTax:'Box 3, geschat', kDouble:'Verdubbeling netto', dNo:'Niet binnen de periode', legG:'Bruto in fondsen', legN:'Netto vermogen', legI:'Ingelegd', year:'Jaar', colFund:'In fondsen', colCash:'Uitgekeerd', colTax:'Box 3 cumulatief', colNet:'Netto', colCost:'Kosten (TER)', kCost:'Betaald aan kosten (TER)', costNote:'Kosten zitten al in de waarde in fondsen en worden dus niet nog eens afgetrokken. Ze staan hier alleen om te laten zien wat je ze kosten.', note:'De Box 3-schatting gebruikt het heffingsvrij vermogen en het forfaitaire rendement uit het tabblad Belasting. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.'},
-  en:{yrs:'Period', title:'Net worth forecast', sub:'How your wealth develops with the inputs, strategy and scenario you chose. Net is after the tax estimate you choose.', kGross:'Gross in funds', kNet:'Net wealth', kPaid:'Paid out', kTax:'Box 3, estimated', kDouble:'Net doubling time', dNo:'Not within the period', legG:'Gross in funds', legN:'Net wealth', legI:'Invested', year:'Year', colFund:'In funds', colCash:'Paid out', colTax:'Box 3 cumulative', colNet:'Net', colCost:'Fund costs (TER)', kCost:'Paid in fund costs (TER)', costNote:'Costs are already included in the fund value and are not deducted again. They are shown to show what they cost you.', note:'The Box 3 estimate uses the tax-free allowance and the flat return from the Tax tab. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.'},
-  es:{yrs:'Periodo', title:'Previsión de patrimonio neto', sub:'Cómo evoluciona tu patrimonio con las entradas, la estrategia y el escenario que elegiste. El neto es después de la estimación de impuestos que elijas.', kGross:'Bruto en fondos', kNet:'Patrimonio neto', kPaid:'Pagado', kTax:'Box 3, estimado', kDouble:'Doblar el neto', dNo:'No dentro del periodo', legG:'Bruto en fondos', legN:'Patrimonio neto', legI:'Invertido', year:'Año', colFund:'En fondos', colCash:'Pagado', colTax:'Box 3 acumulado', colNet:'Neto', colCost:'Costes (TER)', kCost:'Pagado en costes (TER)', costNote:'Los costes ya están incluidos en el valor de los fondos y no se restan otra vez. Se muestran para que veas lo que te cuestan.', note:'La estimación de Box 3 usa el mínimo exento y el rendimiento forfait de la pestaña Impuestos. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.'}
+  nl:{yrs:'Periode', title:'Netto waardeprognose', sub:'Hoe je vermogen zich ontwikkelt bij de invoerwaarden, strategie en scenario die je hebt gekozen. Netto is na de belastingschatting die je kiest.', kGross:'Bruto in fondsen', kNet:'Netto vermogen', kPaid:'Uitgekeerd', kTax:'Belastingen, geschat', kDouble:'Verdubbeling netto', dNo:'Niet binnen de periode', legG:'Bruto in fondsen', legN:'Netto vermogen', legI:'Ingelegd', year:'Jaar', colFund:'In fondsen', colCash:'Uitgekeerd', colTax:'Belastingen cumulatief', colNet:'Netto', colCost:'Kosten (TER)', kCost:'Betaald aan kosten (TER)', costNote:'Kosten zitten al in de waarde in fondsen en worden dus niet nog eens afgetrokken. Ze staan hier alleen om te laten zien wat je ze kosten.', noTax:'Geen belastingschatting gekozen, dus de belastingen zijn 0.', note:'De Box 3-schatting gebruikt het heffingsvrij vermogen en het forfaitaire rendement uit het tabblad Belasting. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.'},
+  en:{yrs:'Period', title:'Net worth forecast', sub:'How your wealth develops with the inputs, strategy and scenario you chose. Net is after the tax estimate you choose.', kGross:'Gross in funds', kNet:'Net wealth', kPaid:'Paid out', kTax:'Taxes, estimated', kDouble:'Net doubling time', dNo:'Not within the period', legG:'Gross in funds', legN:'Net wealth', legI:'Invested', year:'Year', colFund:'In funds', colCash:'Paid out', colTax:'Taxes cumulative', colNet:'Net', colCost:'Fund costs (TER)', kCost:'Paid in fund costs (TER)', costNote:'Costs are already included in the fund value and are not deducted again. They are shown to show what they cost you.', noTax:'No tax estimate selected, so taxes are 0.', note:'The Box 3 estimate uses the tax-free allowance and the flat return from the Tax tab. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.'},
+  es:{yrs:'Periodo', title:'Previsión de patrimonio neto', sub:'Cómo evoluciona tu patrimonio con las entradas, la estrategia y el escenario que elegiste. El neto es después de la estimación de impuestos que elijas.', kGross:'Bruto en fondos', kNet:'Patrimonio neto', kPaid:'Pagado', kTax:'Impuestos, estimados', kDouble:'Doblar el neto', dNo:'No dentro del periodo', legG:'Bruto en fondos', legN:'Patrimonio neto', legI:'Invertido', year:'Año', colFund:'En fondos', colCash:'Pagado', colTax:'Impuestos acumulados', colNet:'Neto', colCost:'Costes (TER)', kCost:'Pagado en costes (TER)', costNote:'Los costes ya están incluidos en el valor de los fondos y no se restan otra vez. Se muestran para que veas lo que te cuestan.', noTax:'No hay estimación de impuestos elegida, así que los impuestos son 0.', note:'La estimación de Box 3 usa el mínimo exento y el rendimiento forfait de la pestaña Impuestos. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.'}
 };
 function renderWealth(){
   const el = document.getElementById('wealthBody');
@@ -2703,7 +2708,8 @@ function renderWealth(){
   const reinvest = document.getElementById('reinvest').checked;
   const mix = parseFloat(document.getElementById('mix').value) / 100;
   const sp = savePct / 100;
-  const nlTax = document.getElementById('wTax').value === 'nl';
+  const nlTax = isNL() && document.getElementById('wTax').value === 'nl';
+  const bx = nlTax ? ' (box 3)' : '';
   const d = basket('div', amountNow * mix, H, reinvest, sc);
   const a = basket('acc', amountNow * (1 - mix), H, reinvest, sc);
   const fund = [], cash = [], tax = [], net = [];
@@ -2735,7 +2741,7 @@ function renderWealth(){
     `<div class="calk"><span>${W.kNet}</span><b>${EUR(net[H])}</b></div>`,
     `<div class="calk"><span>${W.kPaid}</span><b>${EUR(cash[H])}</b></div>`,
     `<div class="calk"><span>${W.kCost}</span><b>${EUR(costCum[H])}</b></div>`,
-    ...(nlTax ? [`<div class="calk"><span>${W.kTax}</span><b>${EUR(tax[H])}</b></div>`] : []),
+    `<div class="calk"><span>${W.kTax}${bx}</span><b>${EUR(tax[H])}</b></div>`,
     `<div class="calk"><span>${W.kDouble}</span><b>${dbl ? tr('years')(dbl) : W.dNo}</b></div>`
   ];
 
@@ -2765,7 +2771,7 @@ function renderWealth(){
   let rows = '';
   for (let t = 1; t <= H; t++){
     if (t % step && t !== H) continue;
-    rows += `<tr><th scope="row">${W.year} ${t}</th><td>${EUR(fund[t])}</td><td>${EUR(cash[t])}</td>${nlTax ? `<td>${EUR(tax[t])}</td>` : ''}<td>${EUR(costCum[t])}</td><td class="tot">${EUR(net[t])}</td></tr>`;
+    rows += `<tr><th scope="row">${W.year} ${t}</th><td>${EUR(fund[t])}</td><td>${EUR(cash[t])}</td><td>${EUR(tax[t])}</td><td>${EUR(costCum[t])}</td><td class="tot">${EUR(net[t])}</td></tr>`;
   }
 
   el.innerHTML = `
@@ -2774,9 +2780,9 @@ function renderWealth(){
     <div class="calkpis">${cards.join('')}</div>
     <div class="wlegend"><span><i style="background:var(--div)"></i>${W.legN}</span><span><i style="background:var(--acc)"></i>${W.legG}</span><span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span></div>
     <div class="wwrap">${svg}<div class="wtip" hidden></div></div>
-    <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th>${nlTax ? `<th>${W.colTax}</th>` : ''}<th>${W.colCost}</th><th>${W.colNet}</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th><th>${W.colTax}${bx}</th><th>${W.colCost}</th><th>${W.colNet}</th></tr></thead><tbody>${rows}</tbody></table></div>
     <p class="sub calnote">${W.costNote}</p>
-    ${nlTax ? `<p class="sub calnote">${W.note}</p>` : ''}`;
+    <p class="sub calnote">${nlTax ? W.note : W.noTax}</p>`;
   const svgEl = el.querySelector('svg.wchart');
   const tip = el.querySelector('.wtip');
   const cur = svgEl.querySelector('.wcur');
@@ -2794,7 +2800,7 @@ function renderWealth(){
       <div><i style="background:var(--acc)"></i>${W.legG}: ${EUR(fund[tt])}</div>
       <div><i class="dash"></i>${W.legI}: ${EUR(inleg)}</div>
       <div>${W.colCash}: ${EUR(cash[tt])}</div>
-      ${nlTax ? `<div>${W.colTax}: ${EUR(tax[tt])}</div>` : ''}
+      <div>${W.colTax}${bx}: ${EUR(tax[tt])}</div>
       <div>${W.colCost}: ${EUR(costCum[tt])}</div>`;
     tip.hidden = false;
     const left = xp / Wd * rect.width;
