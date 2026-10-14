@@ -128,7 +128,7 @@
   .tt:hover::after,.tt:focus-visible::after{opacity:1;transform:translateX(-50%) translateY(0)}
   .tt.below::after{bottom:auto;top:calc(100% + 8px)}
   .tt::after{display:none !important}
-  #floattip{position:fixed;left:0;top:0;pointer-events:none;background:var(--text);color:var(--bg);font-size:12px;font-weight:400;line-height:1.45;padding:8px 10px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.2);max-width:260px;width:max-content;opacity:0;transition:opacity .15s;z-index:1000}
+  #floattip{position:fixed;left:0;top:0;pointer-events:none;background:var(--panel);color:var(--text);border:1px solid var(--line);font-size:12px;font-weight:400;line-height:1.45;padding:8px 10px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.2);max-width:260px;width:max-content;opacity:0;transition:opacity .15s;z-index:1000}
   a.info{text-decoration:none;color:var(--muted);display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;background:var(--line);font-size:10.5px;font-weight:700;margin-left:4px;vertical-align:middle}
   a.info:hover{color:var(--div);text-decoration:none}
   a.tt.info{cursor:help}
@@ -469,6 +469,24 @@
 /* Input panel: even spacing inside and between the blocks, roomier buttons. */
   .controls{gap:14px}
   .controls .grp{padding:16px;margin:0}
+  .beta-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid var(--div);color:var(--div);vertical-align:middle}
+  .cat-search{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+  .cat-search input{flex:1 1 180px;min-width:0}
+  .cat-jetf{font-size:13px;font-weight:600;white-space:nowrap}
+  .cat-list{display:grid;gap:8px;margin-top:8px}
+  .cat-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+  .cat-row.no{opacity:.6}
+  .cat-row .cat-main{grid-column:1/-1;display:flex;flex-direction:column;gap:2px;min-width:0}
+  .cat-meta{font-size:12px;color:var(--muted)}
+  .cat-row .cat-avail{font-size:13px}
+  .cat-row .cat-acts{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+  .cat-new{margin-top:12px}
+  .cat-new summary{cursor:pointer;font-weight:600;font-size:13px}
+  .cat-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:10px}
+  .cat-form label{display:grid;gap:4px;font-size:12px;color:var(--muted)}
+  .cat-form label.wide{grid-column:1/-1}
+  .cat-form input,.cat-form select{padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font:inherit}
+  .cat-form .rbtn{justify-self:start}
   .controls .grp > h3{margin:0 0 14px}
   .controls .field{gap:10px}
   .controls .field.compact + .field.compact{margin-top:14px}
@@ -646,6 +664,30 @@
 
 <main class="fundswrap" id="tabFunds" hidden>
   <div class="warnbar terWarn" hidden></div>
+    <section class="panel beta-panel" aria-labelledby="betaTitle">
+      <h2 id="betaTitle"><span data-i18n="betaTitle"></span> <span class="beta-badge" data-i18n="betaBadge"></span></h2>
+      <p class="sub" data-i18n="betaSub"></p>
+      <label class="toggle"><input type="checkbox" id="customOn"><span data-i18n="betaOn"></span></label>
+      <div class="cat-search">
+        <input type="search" id="catQ" data-i18n-ph="catSearch" placeholder="" aria-label="Zoeken">
+        <a id="jetfLink" class="cat-jetf" href="https://www.justetf.com/nl/search.html" target="_blank" rel="noopener noreferrer" data-i18n="catJetf"></a>
+      </div>
+      <label class="toggle"><input type="checkbox" id="catAll"><span data-i18n="catAll"></span></label>
+      <p class="hint" id="catOffHint" data-i18n="catOff"></p>
+      <div id="catList" class="cat-list"></div>
+      <details class="cat-new"><summary data-i18n="catNew"></summary>
+        <form id="catForm" class="cat-form">
+          <label><span data-i18n="catName"></span><input id="nfName" required></label>
+          <label><span data-i18n="catIsin"></span><input id="nfIsin" maxlength="12"></label>
+          <label><span data-i18n="catGroup"></span><select id="nfGroup"><option value="div" data-i18n="group_div"></option><option value="acc" data-i18n="group_acc"></option></select></label>
+          <label><span data-i18n="catYield"></span><input id="nfYield" type="number" step="0.1" min="0" value="0"></label>
+          <label><span data-i18n="catGrowth"></span><input id="nfGrowth" type="number" step="0.1" value="0"></label>
+          <label><span data-i18n="catTer"></span><input id="nfTer" type="number" step="0.01" min="0" value="0"></label>
+          <label class="wide"><span data-i18n="catUrl"></span><input id="nfUrl" type="url"></label>
+          <button type="submit" class="rbtn" data-i18n="catSave"></button>
+        </form>
+      </details>
+    </section>
     <section class="panel" aria-labelledby="fundsTitle">
       <h2 id="fundsTitle" data-i18n="fundsTitle"></h2>
       <p class="sub" data-i18n="fundsSub"></p>
@@ -1077,7 +1119,7 @@ const T = {
     g6d: 'Op het tabblad Belasting zet je landen aan of uit (maximaal vier tegelijk) en zie je de belasting over hetzelfde rendement. Elk land heeft een toelichting met bron en betrouwbaarheid.',
     g7t: 'Bewaar en exporteer',
     g7d: 'Bewaar benoemde scenario\'s in de browser via het menu. Exporteer een CSV of druk af naar PDF vanuit hetzelfde menu.',
-    grpStrat: 'Strategie', grpAmt: 'Inleg en looptijd', grpMix: 'Verdeling', grpDiv: 'Dividend', grpTax: 'Belasting', residPick: 'Kies een land', residLbl: 'Land van domicilie', residTip: 'Het land waar je woont bepaalt welke belasting de netto waardeprognose schat. Kies "Geen schatting" om geen belasting mee te rekenen.', wtLbl: 'Belastingschatting', wtNL: 'Nederland (Box 3)', wtNone: 'Geen schatting',
+    grpStrat: 'Strategie', grpAmt: 'Inleg en looptijd', grpMix: 'Verdeling', grpDiv: 'Dividend', grpTax: 'Belasting', betaTitle: 'Bèta: eigen fondsmix', betaSub: 'Zet de basismix uit om zelf fondsen te kiezen. Zoek in je catalogus, markeer wat je kunt kopen en stel je eigen mix samen. Zoeken op justETF gaat in een nieuw tabblad.', betaOn: 'Eigen mix gebruiken (basismix uit)', catSearch: 'Zoek op naam of ISIN', catJetf: 'Zoek op justETF ↗', catAll: 'Toon ook fondsen die ik niet kan kopen', catBuy: 'Kan ik kopen', catInMix: 'Aan mix toevoegen', catOutMix: 'Uit mix halen', catDel: 'Verwijder', catNew: 'Fonds toevoegen aan catalogus', catName: 'Naam', catIsin: 'ISIN', catGroup: 'Groep', catYield: 'Rendement %', catGrowth: 'Koersgroei %', catTer: 'TER %', catUrl: 'Link (optioneel)', catSave: 'Opslaan', catNone: 'Geen fondsen gevonden.', catOff: 'Zet eerst de eigen mix aan om fondsen toe te voegen.', betaBadge: 'bèta', residPick: 'Kies een land', residLbl: 'Land van domicilie', residTip: 'Het land waar je woont bepaalt welke belasting de netto waardeprognose schat. Kies "Geen schatting" om geen belasting mee te rekenen.', wtLbl: 'Belastingschatting', wtNL: 'Nederland (Box 3)', wtNone: 'Geen schatting',
     scenTip: 'Drie rekenvarianten. Laag: 3 procentpunt minder koersgroei en 1 procentpunt minder yield. Basis: de gegevens uit de fondsentabel. Hoog: 3 procentpunt meer koersgroei en 0,5 procentpunt meer yield. Yield verandert alleen bij de dividendfondsen.',
     scLaag: 'Laag', scBasis: 'Basis', scHoog: 'Hoog',
     reinvest: 'Uitkeringen herinvesteren',
@@ -1312,7 +1354,7 @@ const T = {
     g6d: 'On the Tax tab you can switch countries on or off (up to four at a time) and see the tax on the same return. Each country has a note with its source and reliability.',
     g7t: 'Save and export',
     g7d: 'Save named scenarios in the browser from the menu. Export a CSV or print to PDF from the same menu.',
-    grpStrat: 'Strategy', grpAmt: 'Investment and duration', grpMix: 'Split', grpDiv: 'Dividend', grpTax: 'Tax', residPick: 'Choose a country', residLbl: 'Country of residence', residTip: 'The country where you live determines which tax the net worth forecast estimates. Choose "No estimate" to leave tax out.', wtLbl: 'Tax estimate', wtNL: 'Netherlands', wtNone: 'No estimate',
+    grpStrat: 'Strategy', grpAmt: 'Investment and duration', grpMix: 'Split', grpDiv: 'Dividend', grpTax: 'Tax', betaTitle: 'Beta: own fund mix', betaSub: 'Turn off the base mix to choose funds yourself. Search your catalogue, mark what you can buy and build your own mix. Searching on justETF opens in a new tab.', betaOn: 'Use own mix (base mix off)', catSearch: 'Search by name or ISIN', catJetf: 'Search on justETF ↗', catAll: 'Also show funds I cannot buy', catBuy: 'I can buy it', catInMix: 'Add to mix', catOutMix: 'Remove from mix', catDel: 'Delete', catNew: 'Add fund to catalogue', catName: 'Name', catIsin: 'ISIN', catGroup: 'Group', catYield: 'Yield %', catGrowth: 'Price growth %', catTer: 'TER %', catUrl: 'Link (optional)', catSave: 'Save', catNone: 'No funds found.', catOff: 'Turn on the own mix first to add funds.', betaBadge: 'beta', residPick: 'Choose a country', residLbl: 'Country of residence', residTip: 'The country where you live determines which tax the net worth forecast estimates. Choose "No estimate" to leave tax out.', wtLbl: 'Tax estimate', wtNL: 'Netherlands', wtNone: 'No estimate',
     scenTip: 'Three calculation variants. Low: 3 percentage points less price growth and 1 point less yield. Base: the data from the funds table. High: 3 points more price growth and 0.5 points more yield. Yield only changes for the dividend funds.',
     scLaag: 'Low', scBasis: 'Base', scHoog: 'High',
     reinvest: 'Reinvest distributions',
@@ -1547,7 +1589,7 @@ const T = {
     g6d: 'En la pestaña Impuestos puedes activar o desactivar países (hasta cuatro a la vez) y ver el impuesto sobre el mismo rendimiento. Cada país tiene una nota con su fuente y su fiabilidad.',
     g7t: 'Guarda y exporta',
     g7d: 'Guarda escenarios con nombre en el navegador desde el menú. Exporta un CSV o imprime a PDF desde el mismo menú.',
-    grpStrat: 'Estrategia', grpAmt: 'Inversión y plazo', grpMix: 'Reparto', grpDiv: 'Dividendo', grpTax: 'Impuestos', residPick: 'Elige un país', residLbl: 'País de residencia', residTip: 'El país donde vives determina qué impuesto estima la previsión de patrimonio neto. Elige "Sin estimación" para no incluir impuestos.', wtLbl: 'Estimación de impuestos', wtNL: 'Países Bajos', wtNone: 'Sin estimación',
+    grpStrat: 'Estrategia', grpAmt: 'Inversión y plazo', grpMix: 'Reparto', grpDiv: 'Dividendo', grpTax: 'Impuestos', betaTitle: 'Beta: mezcla propia de fondos', betaSub: 'Desactiva la mezcla base para elegir tú los fondos. Busca en tu catálogo, marca los que puedes comprar y arma tu mezcla. La búsqueda en justETF se abre en una pestaña nueva.', betaOn: 'Usar mezcla propia (mezcla base desactivada)', catSearch: 'Buscar por nombre o ISIN', catJetf: 'Buscar en justETF ↗', catAll: 'Mostrar también los fondos que no puedo comprar', catBuy: 'Lo puedo comprar', catInMix: 'Añadir a la mezcla', catOutMix: 'Quitar de la mezcla', catDel: 'Eliminar', catNew: 'Añadir fondo al catálogo', catName: 'Nombre', catIsin: 'ISIN', catGroup: 'Grupo', catYield: 'Rentabilidad %', catGrowth: 'Crecimiento %', catTer: 'TER %', catUrl: 'Enlace (opcional)', catSave: 'Guardar', catNone: 'No se encontraron fondos.', catOff: 'Activa primero la mezcla propia para añadir fondos.', betaBadge: 'beta', residPick: 'Elige un país', residLbl: 'País de residencia', residTip: 'El país donde vives determina qué impuesto estima la previsión de patrimonio neto. Elige "Sin estimación" para no incluir impuestos.', wtLbl: 'Estimación de impuestos', wtNL: 'Países Bajos', wtNone: 'Sin estimación',
     scenTip: 'Tres variantes de cálculo. Bajo: 3 puntos porcentuales menos de crecimiento del precio y 1 punto menos de rendimiento. Base: los datos de la tabla de fondos. Alto: 3 puntos más de crecimiento y 0,5 puntos más de rendimiento. El rendimiento solo cambia en los fondos de dividendos.',
     scLaag: 'Bajo', scBasis: 'Base', scHoog: 'Alto',
     reinvest: 'Reinvertir distribuciones',
@@ -1810,8 +1852,8 @@ function buildFundTable(){
   tb.innerHTML = funds.map(f => `
     <tr>
       <td>
-        <div class="fund-name"><a href="${f.url}" target="_blank" rel="noopener noreferrer" class="tt" data-tip="${T[lang].fundTip[f.id]}">${f.name} ↗</a></div>
-        <div class="note">${T[lang].fundNote[f.id]}</div>
+        <div class="fund-name"><a href="${f.url}" target="_blank" rel="noopener noreferrer" class="tt" data-tip="${T[lang].fundTip[f.id] || f.name}">${f.name} ↗</a></div>
+        <div class="note">${T[lang].fundNote[f.id] || (f.isin || '')}</div>
       </td>
       <td data-label="${tr('colGroup')}"><span class="tag ${f.group}">${tr(f.group === 'div' ? 'group_div' : 'group_acc')}</span></td>
       <td class="mixtd" data-label="${tr('colMix')}"><div class="wcell"><input type="range" min="0" max="${Math.round(groupMixOf(f.group) * 100)}" step="1" value="${pctOf(f)}" data-id="${f.id}" data-k="w" aria-label="${f.name}"><output>${pctOf(f)}%</output></div></td>
@@ -2293,6 +2335,7 @@ function syncGoal(){
 }
 function recalc(){
   syncGoal();
+  persistFunds();
   const amount = amountNow;
   const years = parseInt(document.getElementById('jaren').value, 10);
   const mix = parseFloat(document.getElementById('mix').value) / 100;
@@ -2438,6 +2481,7 @@ function applyStatic(){
   document.getElementById('langCur').textContent = lang.toUpperCase();
   document.querySelectorAll('.langlist button').forEach(b =>
     b.setAttribute('aria-current', b.dataset.lang === lang ? 'true' : 'false'));
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { const v = tr(el.dataset.i18nPh); if (typeof v === 'string') el.setAttribute('placeholder', v); });
   document.title = tr('pageTitle');
   if (typeof rateSaved !== 'undefined') renderRateStamp();
 }
@@ -2562,18 +2606,136 @@ document.addEventListener('click', e => {
 document.getElementById('helpClose').addEventListener('click', () => helpDlg.close());
 helpDlg.addEventListener('click', e => { if (e.target === helpDlg) helpDlg.close(); });
 
+/* ============ bèta: eigen fondsmix en catalogus ============ */
+const BASE_FUNDS = funds.map(f => ({...f}));
+const FUNDS_KEY = 'dk-funds-v1';
+let fundsStore = { on: false, base: null, custom: null, user: [], avail: {} };
+try { const v = JSON.parse(localStorage.getItem(FUNDS_KEY)); if (v && typeof v === 'object') fundsStore = {...fundsStore, ...v}; } catch (e) {}
+let fundsReady = false;
+const cloneF = f => ({...f});
+const isinOf = url => ((url || '').match(/isin=([A-Z0-9]+)/) || [])[1] || '';
+const saveFunds = () => { try { localStorage.setItem(FUNDS_KEY, JSON.stringify(fundsStore)); } catch (e) {} };
+const catalogAll = () => [...BASE_FUNDS, ...fundsStore.user].map(f => ({...f, isin: f.isin || isinOf(f.url), avail: fundsStore.avail[f.id] !== false}));
+function replaceFunds(list){ funds.splice(0, funds.length, ...list.map(cloneF)); }
+function persistFunds(){
+  if (!fundsReady) return;
+  if (fundsStore.on) fundsStore.custom = funds.map(cloneF); else fundsStore.base = funds.map(cloneF);
+  saveFunds();
+}
+function syncFundsUi(){
+  document.getElementById('customOn').checked = fundsStore.on;
+  document.getElementById('catOffHint').hidden = fundsStore.on;
+  document.querySelectorAll('#tabFunds [data-preset]').forEach(b => { b.disabled = fundsStore.on; });
+}
+function renderCatalog(){
+  const box = document.getElementById('catList');
+  if (!box) return;
+  syncFundsUi();
+  const q = document.getElementById('catQ').value.trim().toLowerCase();
+  const showAll = document.getElementById('catAll').checked;
+  document.getElementById('jetfLink').href = 'https://www.justetf.com/nl/search.html?search=' + encodeURIComponent(q);
+  const inMix = id => funds.some(f => f.id === id);
+  const rows = catalogAll().filter(f => (showAll || f.avail) && (!q || (f.name + ' ' + f.isin).toLowerCase().includes(q)));
+  box.innerHTML = rows.length ? rows.map(f => `
+    <div class="cat-row${f.avail ? '' : ' no'}">
+      <div class="cat-main"><b>${f.name}</b><span class="cat-meta">${f.isin || f.id} · ${tr(f.group === 'div' ? 'group_div' : 'group_acc')} · TER ${f.ter}% · ${f.y}%</span></div>
+      <label class="cat-avail"><input type="checkbox" data-avail="${f.id}" ${f.avail ? 'checked' : ''}> ${tr('catBuy')}</label>
+      <div class="cat-acts">
+        <button type="button" class="rbtn" data-mix="${f.id}" ${fundsStore.on ? '' : 'disabled'}>${inMix(f.id) ? tr('catOutMix') : tr('catInMix')}</button>
+        ${BASE_FUNDS.some(b => b.id === f.id) ? '' : `<button type="button" class="rbtn" data-del="${f.id}">${tr('catDel')}</button>`}
+      </div>
+    </div>`).join('') : `<p class="muted">${tr('catNone')}</p>`;
+  box.querySelectorAll('[data-avail]').forEach(i => i.addEventListener('change', () => {
+    fundsStore.avail[i.dataset.avail] = i.checked; saveFunds(); renderCatalog();
+  }));
+  box.querySelectorAll('[data-mix]').forEach(b => b.addEventListener('click', () => toggleMix(b.dataset.mix)));
+  box.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => {
+    const id = b.dataset.del;
+    fundsStore.user = fundsStore.user.filter(f => f.id !== id);
+    const idx = funds.findIndex(f => f.id === id);
+    if (idx >= 0 && funds.length > 1) funds.splice(idx, 1);
+    saveFunds(); afterFundsChange();
+  }));
+}
+function afterFundsChange(){
+  persistFunds();
+  buildFundTable();
+  renderCatalog();
+  recalc();
+}
+function toggleMix(id){
+  if (!fundsStore.on) return;
+  const idx = funds.findIndex(f => f.id === id);
+  if (idx >= 0){ if (funds.length > 1) funds.splice(idx, 1); }
+  else {
+    const src = catalogAll().find(f => f.id === id);
+    if (src){ const {avail, isin, ...rest} = src; funds.push({...rest, w: 10}); }
+  }
+  afterFundsChange();
+}
+function setCustomMode(on){
+  if (on === fundsStore.on) return;
+  if (on){
+    fundsStore.base = funds.map(cloneF);
+    replaceFunds(fundsStore.custom && fundsStore.custom.length ? fundsStore.custom : fundsStore.base);
+  } else {
+    fundsStore.custom = funds.map(cloneF);
+    replaceFunds(fundsStore.base || BASE_FUNDS);
+  }
+  fundsStore.on = on;
+  saveFunds();
+  afterFundsChange();
+}
+function restoreFundsMode(){
+  if (fundsStore.on && fundsStore.custom && fundsStore.custom.length) replaceFunds(fundsStore.custom);
+  else if (!fundsStore.on && fundsStore.base && fundsStore.base.length) replaceFunds(fundsStore.base);
+  fundsReady = true;
+  buildFundTable();
+  renderCatalog();
+}
+document.getElementById('customOn').addEventListener('change', e => setCustomMode(e.target.checked));
+document.getElementById('catQ').addEventListener('input', renderCatalog);
+document.getElementById('catAll').addEventListener('change', renderCatalog);
+document.getElementById('catForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const v = id => document.getElementById(id).value.trim();
+  const name = v('nfName');
+  if (!name) return;
+  const isin = v('nfIsin').toUpperCase();
+  const id = 'u_' + (isin || Date.now().toString(36));
+  const url = isin ? 'https://www.justetf.com/en/etf-profile.html?isin=' + isin : (v('nfUrl') || '#');
+  fundsStore.user.push({ id, name, group: v('nfGroup'), g: parseFloat(v('nfGrowth')) || 0, y: parseFloat(v('nfYield')) || 0,
+    ter: parseFloat(v('nfTer')) || 0, risk: 'Middel', url, yieldSrc: 'aanname', isin });
+  fundsStore.avail[id] = true;
+  saveFunds();
+  e.target.reset();
+  e.target.closest('details').open = false;
+  renderCatalog();
+});
+
 /* ============ init ============ */
 buildFundTable();
 attachHover();
 
 /* ============ tooltips (drijvend, dus nooit afgesneden door een kaart) ============ */
 (function initTips(){
+  /* Eén manier voor alle ?-iconen: hover of focus toont de tip, klik opent de uitleg in het woordenboek. */
   const ft = document.createElement('div');
   ft.id = 'floattip';
   ft.setAttribute('role', 'tooltip');
   document.body.appendChild(ft);
+  const SEL = '[data-tip], a.info[href^="#gl-"]';
+  const tipOf = el => {
+    const own = el.getAttribute('data-tip');
+    if (own) return own;
+    const id = (el.getAttribute('href') || '').slice(1);
+    const dt = id && document.getElementById(id) && document.getElementById(id).querySelector('dt');
+    return dt ? dt.textContent.trim() : '';
+  };
   const show = el => {
-    ft.textContent = el.getAttribute('data-tip');
+    const txt = tipOf(el);
+    if (!txt) return;
+    ft.textContent = txt;
     ft.style.opacity = 1;
     const r = el.getBoundingClientRect();
     const w = ft.offsetWidth, h = ft.offsetHeight;
@@ -2586,14 +2748,14 @@ attachHover();
   };
   const hide = () => { ft.style.opacity = 0; };
   document.addEventListener('mouseover', e => {
-    const el = e.target.closest('[data-tip]');
+    const el = e.target.closest && e.target.closest(SEL);
     if (el) show(el); else hide();
   });
   document.addEventListener('mouseout', e => {
-    if (!e.relatedTarget || !e.relatedTarget.closest || !e.relatedTarget.closest('[data-tip]')) hide();
+    if (!e.relatedTarget || !e.relatedTarget.closest || !e.relatedTarget.closest(SEL)) hide();
   });
   document.addEventListener('focusin', e => {
-    const el = e.target.closest && e.target.closest('[data-tip]');
+    const el = e.target.closest && e.target.closest(SEL);
     if (el) show(el);
   });
   document.addEventListener('focusout', hide);
@@ -3086,7 +3248,8 @@ function loadLast(){ try { const v = JSON.parse(localStorage.getItem(LAST_KEY));
 function saveLast(){ if (window.__dkBoot) return; try { localStorage.setItem(LAST_KEY, JSON.stringify(captureState())); } catch (e) {} }
 fillResid();
 const SAVED_LAST = loadLast();
-if (SAVED_LAST) applyState(SAVED_LAST); else { applyPreset('bal'); setTaxDefaults(); } // standaardstrategie: gebalanceerd
+if (SAVED_LAST) applyState(SAVED_LAST); else { applyPreset('bal'); setTaxDefaults(); }
+restoreFundsMode(); // standaardstrategie: gebalanceerd
 window.__dkBoot = false;
 saveLast();
 function welcomeSeen(){ try { return !!localStorage.getItem('dk-welcome'); } catch (e) { return true; } }
