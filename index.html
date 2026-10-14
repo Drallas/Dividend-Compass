@@ -678,9 +678,8 @@
 <main class="fundswrap" id="tabFunds" hidden>
   <div class="warnbar terWarn" hidden></div>
     <div class="fview" role="group" aria-label="Weergave">
-      <button type="button" class="rbtn" data-fview="basis" aria-pressed="true"></button>
+      <button type="button" class="rbtn" data-fview="synth" aria-pressed="true" data-i18n="fviewSynth"></button>
       <button type="button" class="rbtn" data-fview="own" aria-pressed="false" data-i18n="fviewOwn"></button>
-      <button type="button" class="rbtn" data-fview="synth" aria-pressed="false" data-i18n="fviewSynth"></button>
       <span class="hint" id="activeMixNote"></span>
     </div>
     <section class="panel beta-panel" id="betaPanel" aria-labelledby="betaTitle" hidden>
@@ -712,8 +711,7 @@
       <p class="sub" data-i18n="synthSub"></p>
       <div class="synth-row">
         <label><span data-i18n="synthStrat"></span> <select id="synthSel"></select></label>
-        <label><span data-i18n="synthAmt"></span> <input id="synthAmt" type="number" value="10000" min="0" step="500"></label>
-        <label><span data-i18n="synthYrs"></span> <input id="synthYrs" type="number" value="25" min="1" max="50"></label>
+        <p class="hint" data-i18n="synthLink"></p>
       </div>
       <div class="synth-grid" id="synthGrid"></div>
       <p class="sub" id="synthSum"></p>
@@ -1203,7 +1201,7 @@ const T = {
     tRisk: 'Mijn kwalitatieve inschatting. Geen gemeten volatiliteit.',
     group_div: 'Dividend', group_acc: 'Acc',
     yieldAssumption: 'aanname', assumedLegend: 'Gestreepte rand = mijn aanname, geen gepubliceerd cijfer. Alleen de yield van JEPG (5%) is zo’n aanname: ik vond geen betrouwbare actuele cijfers. Die kan dus afwijken. Pas het getal aan en de hele pagina rekent mee.',
-    fviewSynth: 'Synthese', synthTitle: 'Synthetische voorbeeldscenario\'s', synthSub: 'Hier speel je met de voorbeeldstrategieën. De cijfers zijn aannames, geen historie. Pas de gewichten aan en zie hoe de uitkomst verandert. Eigen fondsen kun je later naast deze voorbeelden zetten.', synthStrat: 'Strategie', synthAmt: 'Inleg (€)', synthYrs: 'Jaren',
+    fviewSynth: 'Synthese', synthLink: 'Inleg en looptijd komen uit de invoer bovenaan.', synthTitle: 'Synthetische voorbeeldscenario\'s', synthSub: 'Hier speel je met de voorbeeldstrategieën. De cijfers zijn aannames, geen historie. Pas de gewichten aan en zie hoe de uitkomst verandert. Eigen fondsen kun je later naast deze voorbeelden zetten.', synthStrat: 'Strategie', synthAmt: 'Inleg (€)', synthYrs: 'Jaren',
     n1: 'Yield is niet hetzelfde als rendement. Een hoge uitkering kan deels uit kapitaal komen, waardoor de koers daalt. Het totaalrendement is de juiste maatstaf.',
     n2: 'Covered-call fondsen (JEPG, JEPQ) verkopen opties. In sterke markten loop je achter, en bij een forse daling beschermen ze je maar gedeeltelijk.',
     n3: '<a class="term" href="#gl-sequentie">Sequentierisico</a>: als je uitkeringen opneemt terwijl de koers daalt, verkoop je in een slechte markt sneller stukken. Een buffer van 1 tot 2 jaar kosten helpt.',
@@ -1841,7 +1839,7 @@ function setWeight(id, p){
 function syncWeights(){
   document.querySelectorAll('#fundTable input[data-k="w"]').forEach(i => {
     const f = funds.find(x => x.id === i.dataset.id);
-    const v = pctOf(f), off = groupMixOf(f.group) <= 0;
+    const v = pctOf(f), off = groupMixOf(f.group) <= 0 || !fundsStore.on;
     i.max = Math.round(groupMixOf(f.group) * 100);
     i.value = v;
     i.disabled = off;
@@ -2356,6 +2354,7 @@ function syncGoal(){
   if (!on && pay && pay.getAttribute('aria-selected') === 'true') document.querySelector('.tabs .tab[data-tab="tabProg"]').click();
 }
 function recalc(){
+  if (typeof synthCalc === 'function') synthCalc();
   syncGoal();
   persistFunds();
   const amount = amountNow;
@@ -2629,7 +2628,8 @@ document.getElementById('helpClose').addEventListener('click', () => helpDlg.clo
 helpDlg.addEventListener('click', e => { if (e.target === helpDlg) helpDlg.close(); });
 
 /* ============ bèta: eigen fondsmix en catalogus ============ */
-const BASE_FUNDS = funds.map(f => ({...f}));
+// Mijn huidige mix: de verdeling die je nu als basis zag (preset 'bal').
+const BASE_FUNDS = funds.map(f => ({...f, w: PRESETS.bal.w[f.id] !== undefined ? PRESETS.bal.w[f.id] : f.w}));
 const FUNDS_KEY = 'dk-funds-v1';
 let fundsStore = { on: false, base: null, custom: null, user: [], avail: {} };
 try { const v = JSON.parse(localStorage.getItem(FUNDS_KEY)); if (v && typeof v === 'object') fundsStore = {...fundsStore, ...v}; } catch (e) {}
@@ -2641,7 +2641,7 @@ const catalogAll = () => [...BASE_FUNDS, ...fundsStore.user].map(f => ({...f, is
 function replaceFunds(list){ funds.splice(0, funds.length, ...list.map(cloneF)); }
 function persistFunds(){
   if (!fundsReady) return;
-  if (fundsStore.on) fundsStore.custom = funds.map(cloneF); else fundsStore.base = funds.map(cloneF);
+  if (fundsStore.on) fundsStore.custom = funds.map(cloneF);
   saveFunds();
 }
 const SYNTH_IX = {
@@ -2663,41 +2663,55 @@ const SYNTH_STRAT = [
   {id:'agressief-em', n:'Agressief met opkomende markten (variant)', g:{'wereld':80, 'opkomende-markten':10, 'wereld-quality':10}},
   {id:'gebalanceerd-sp500', n:'Gebalanceerd met S&P 500 (variant)', g:{'wereld':60, 'sp500':20, 'wereld-hoog-dividend':20}}
 ];
+function synthFunds(){
+  const rows = [...document.querySelectorAll('#synthGrid input')].map(i => ({id: i.dataset.ix, w: Math.max(0, Number(i.value) || 0)})).filter(r => r.w > 0);
+  const out = [];
+  rows.forEach(r => {
+    const ix = SYNTH_IX[r.id];
+    const risk = r.id === 'opkomende-markten' ? 'Hoog' : 'Middel';
+    // Elke index bestaat als accumulerende en als uitkerende variant; de mix-schuif kiest de verdeling.
+    out.push({id:'syn-acc-'+r.id, name: ix.n + ' (acc, synthetisch)', group:'acc', w:r.w, g:ix.t, y:0, ter:ix.ter, risk, url:'#', yieldSrc:'aanname'});
+    out.push({id:'syn-div-'+r.id, name: ix.n + ' (dist, synthetisch)', group:'div', w:r.w, g:Math.round((ix.t - ix.d) * 100) / 100, y:ix.d, ter:ix.ter, risk, url:'#', yieldSrc:'aanname'});
+  });
+  return out;
+}
 function synthCalc(){
-  const inputs = [...document.querySelectorAll('#synthGrid input')];
-  const w = {}; inputs.forEach(i => { w[i.dataset.ix] = Math.max(0, Number(i.value) || 0); });
-  const sum = Object.values(w).reduce((a, b) => a + b, 0);
-  document.getElementById('synthSum').textContent = sum === 100 ? '' : `Gewichten tellen op tot ${sum}%; de uitkomst is genormaliseerd naar 100%.`;
+  const sum = [...document.querySelectorAll('#synthGrid input')].reduce((a, i) => a + Math.max(0, Number(i.value) || 0), 0);
+  document.getElementById('synthSum').textContent = (sum === 100 || fundsStore.on) ? '' : `Gewichten tellen op tot ${sum}%; de uitkomst wordt genormaliseerd naar 100%.`;
   let tot = 0, div = 0, ter = 0;
-  if (sum > 0) Object.entries(w).forEach(([id, p]) => { const f = p / sum; tot += f * SYNTH_IX[id].t; div += f * SYNTH_IX[id].d; ter += f * SYNTH_IX[id].ter; });
-  const A = Number(document.getElementById('synthAmt').value) || 0;
-  const n = Math.max(1, Number(document.getElementById('synthYrs').value) || 1);
-  const accVal = A * Math.pow(1 + (tot - ter) / 100, n);
-  const distFondsVal = A * Math.pow(1 + (tot - div - ter) / 100, n);
-  const distCash = A * (div / 100) * n;
+  funds.forEach(f => { const p = pctOf(f) / 100; tot += p * (f.g + f.y); div += p * f.y; ter += p * f.ter; });
+  const A = manualAmount;
+  const n = Math.max(1, Number(document.getElementById('jaren').value) || 1);
+  const eind = A * Math.pow(1 + (tot - ter) / 100, n);
+  const uitk = A * (div / 100) * n;
   const pct = x => x.toFixed(2).replace('.', ',') + '%';
   const kpi = (l, b) => `<div class="kpi"><div class="lbl">${l}</div><div class="big">${b}</div></div>`;
   document.getElementById('synthKpi').innerHTML =
     kpi('Totaalrendement (voor kosten)', pct(tot)) + kpi('Dividendrendement', pct(div)) + kpi('Kosten (TER gewogen)', pct(ter)) +
-    kpi(`Accumulerend na ${n} jaar`, EUR(accVal)) + kpi(`Uitkerend: vermogen in fonds`, EUR(distFondsVal)) + kpi('Uitkerend: uitkeringen (ruw, niet herbelegd)', EUR(distCash));
-  document.getElementById('synthNote').textContent = 'Synthetische aannames, geen historische meting. Uitkerend is zonder herbelegging en zonder belasting gerekend; het verschil zit in wat je met de uitkering doet.';
+    kpi(`Vermogen na ${n} jaar (herbelegd)`, EUR(eind)) + kpi('Uitkeringen over de periode (ruw)', EUR(uitk));
+  document.getElementById('synthNote').textContent = fundsStore.on
+    ? 'Je eigen mix is actief; de berekening gebruikt die mix, niet de synthese.'
+    : 'Synthetische aannames: gebaseerd op historische kenmerken van indexen, niet gekoppeld aan echte fondsen. Geen belasting berekend.';
+}
+function syncSynth(){
+  if (!fundsStore.on){ replaceFunds(synthFunds()); buildFundTable(); }
+  recalc();
 }
 function initSynth(){
   const sel = document.getElementById('synthSel');
   sel.innerHTML = SYNTH_STRAT.map(s => `<option value="${s.id}">${s.n}</option>`).join('');
   document.getElementById('synthGrid').innerHTML = Object.keys(SYNTH_IX).map(id => `<label class="synth-w"><span>${SYNTH_IX[id].n}</span><input type="number" min="0" max="100" step="5" data-ix="${id}"></label>`).join('');
-  const apply = () => { const s = SYNTH_STRAT.find(x => x.id === sel.value); document.querySelectorAll('#synthGrid input').forEach(i => { i.value = s.g[i.dataset.ix] || 0; }); synthCalc(); };
-  sel.addEventListener('change', apply);
-  document.getElementById('synthGrid').addEventListener('input', synthCalc);
-  ['synthAmt', 'synthYrs'].forEach(id => document.getElementById(id).addEventListener('input', synthCalc));
-  apply();
+  sel.value = 'gebalanceerd';
+  const fill = () => { const st = SYNTH_STRAT.find(x => x.id === sel.value); document.querySelectorAll('#synthGrid input').forEach(i => { i.value = st.g[i.dataset.ix] || 0; }); };
+  sel.addEventListener('change', () => { fill(); syncSynth(); });
+  document.getElementById('synthGrid').addEventListener('input', syncSynth);
+  fill();
 }
 initSynth();
 function setFview(v){
-  document.getElementById('betaPanel').hidden = v !== 'own';
   document.getElementById('synthPanel').hidden = v !== 'synth';
-  const own = v === 'own';
-  document.getElementById('basisPanel').hidden = v !== 'basis';
+  document.getElementById('betaPanel').hidden = v !== 'own';
+  document.getElementById('basisPanel').hidden = v !== 'own';
   document.querySelectorAll('[data-fview]').forEach(b => b.setAttribute('aria-pressed', b.dataset.fview === v ? 'true' : 'false'));
 }
 function syncFundsUi(){
@@ -2709,7 +2723,7 @@ function syncFundsUi(){
   const ownBtn = document.querySelector('[data-fview="own"]');
   if (ownBtn) ownBtn.textContent = tr('fviewOwn');
   document.getElementById('catOffHint').hidden = fundsStore.on;
-  document.querySelectorAll('#tabFunds [data-preset]').forEach(b => { b.disabled = fundsStore.on; });
+  document.querySelectorAll('#tabFunds [data-preset]').forEach(b => { b.disabled = true; });
 }
 function renderCatalog(){
   const box = document.getElementById('catList');
@@ -2760,11 +2774,11 @@ function toggleMix(id){
 function setCustomMode(on){
   if (on === fundsStore.on) return;
   if (on){
-    fundsStore.base = funds.map(cloneF);
-    replaceFunds(fundsStore.custom && fundsStore.custom.length ? fundsStore.custom : fundsStore.base);
+    // Eerste keer eigen mix: laad "Mijn huidige mix" als voorbeeld.
+    replaceFunds(fundsStore.custom && fundsStore.custom.length ? fundsStore.custom : BASE_FUNDS);
   } else {
     fundsStore.custom = funds.map(cloneF);
-    replaceFunds(fundsStore.base || BASE_FUNDS);
+    replaceFunds(synthFunds());
   }
   fundsStore.on = on;
   saveFunds();
@@ -2772,18 +2786,15 @@ function setCustomMode(on){
 }
 function restoreFundsMode(){
   if (fundsStore.on && fundsStore.custom && fundsStore.custom.length) replaceFunds(fundsStore.custom);
-  else if (!fundsStore.on && fundsStore.base && fundsStore.base.length) replaceFunds(fundsStore.base);
+  else { fundsStore.on = false; replaceFunds(synthFunds()); }
   fundsReady = true;
-  setFview('basis');
+  setFview('synth');
   buildFundTable();
   renderCatalog();
+  recalc();
 }
 document.getElementById('customOn').addEventListener('change', e => setCustomMode(e.target.checked));
-document.querySelectorAll('[data-fview]').forEach(b => b.addEventListener('click', () => {
-  setFview(b.dataset.fview);
-  if (b.dataset.fview === 'own' && !fundsStore.on) setCustomMode(true);
-  else if (b.dataset.fview === 'basis' && fundsStore.on) setCustomMode(false);
-}));
+document.querySelectorAll('[data-fview]').forEach(b => b.addEventListener('click', () => setFview(b.dataset.fview)));
 document.getElementById('catQ').addEventListener('input', renderCatalog);
 document.getElementById('catAll').addEventListener('change', renderCatalog);
 document.getElementById('catForm').addEventListener('submit', e => {
