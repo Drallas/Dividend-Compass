@@ -528,6 +528,11 @@
       <p class="hint" id="reinvestHint"></p>
     </div>
 
+    <div class="field compact">
+      <div class="field-head"><label for="resid" data-i18n="residLbl"></label> <a class="tt info" href="#gl-taxnl" data-tip-i18n="residTip">?</a></div>
+      <select id="resid"></select>
+    </div>
+
     <div class="field">
       <div class="field-head"><label for="bedrag" data-i18n="invested"></label> <a class="info" href="#gl-belegd">?</a></div>
       <div class="euro"><span>€</span><input type="text" id="bedrag" value="250000" inputmode="numeric" autocomplete="off"></div>
@@ -663,7 +668,7 @@
         <li data-i18n-html="n5"></li>
         <li data-i18n-html="n6"></li>
         <li data-i18n-html="n7"></li>
-        <li class="nlonly" data-i18n-html="n8"></li>
+        <li data-i18n-html="n8"></li>
         <li data-i18n-html="n9"></li>
       </ul>
     </section>
@@ -671,7 +676,6 @@
 
 <main class="fundswrap" id="tabWealth" hidden>
   <section class="panel">
-    <div class="regbar nlonly"><label for="wTax" data-i18n="wtLbl"></label> <select id="wTax"><option value="nl" data-i18n="wtNL"></option><option value="none" data-i18n="wtNone"></option></select></div>
     <label class="wslider" for="wealthYrs"><span id="wealthYrsLbl"></span></label>
     <input type="range" id="wealthYrs" min="1" max="40" step="1" value="15">
     <div id="wealthBody"></div>
@@ -712,7 +716,7 @@
       <div class="row"><span data-i18n="baseYears"></span><b id="baseYrs">–</b></div>
       <a href="#" id="baseGo" data-i18n="baseChange"></a>
     </div>
-    <div class="savebox nlonly">
+    <div class="savebox">
       <label for="savePct" data-i18n="saveLbl"></label> <strong id="savePctLbl">0%</strong> <a class="info" href="#gl-taxsave">?</a>
       <input type="range" id="savePct" min="0" max="100" step="5" value="0" aria-labelledby="savePctLbl">
     </div>
@@ -761,7 +765,7 @@
     <dl class="notes" id="ovNotes"></dl>
   </section>
 
-  <section class="taxpane nlonly" id="secNL" aria-labelledby="nlTitle">
+  <section class="taxpane" id="secNL" aria-labelledby="nlTitle">
     <h2 id="nlTitle"><span data-i18n="nlTitle"></span> <a class="info" href="#gl-taxnl">?</a></h2>
     <p data-i18n="nlText" hidden></p>
     <div class="tbl-wrap">
@@ -879,19 +883,19 @@
   </dl>
   <dl class="glossary" data-cat="tax" hidden>
     <div id="gl-bronbelasting"><dt data-i18n="gl.bron.t"></dt><dd data-i18n="gl.bron.d"></dd></div>
-    <div id="gl-box3" class="nlonly"><dt data-i18n="gl.box3.t"></dt><dd data-i18n="gl.box3.d"></dd></div>
+    <div id="gl-box3"><dt data-i18n="gl.box3.t"></dt><dd data-i18n="gl.box3.d"></dd></div>
     <div id="gl-taxintro"><dt data-i18n="taxTitle"></dt><dd data-i18n="taxIntro"></dd></div>
     <div id="gl-taxovr"><dt data-i18n="ovTitle"></dt><dd data-i18n="ovSub"></dd></div>
     <div id="gl-taxovr2"><dt data-i18n="ovTotal"></dt><dd data-i18n="ovNote"></dd></div>
     <div id="gl-taxovr3"><dt data-i18n="colYear"></dt><dd data-i18n="ovYearNote"></dd></div>
-    <div id="gl-taxsave" class="nlonly"><dt data-i18n="saveLbl"></dt><dd data-i18n="saveHint"></dd></div>
-    <div id="gl-taxnl" class="nlonly"><dt data-i18n="nlTitle"></dt><dd data-i18n="nlText"></dd></div>
+    <div id="gl-taxsave"><dt data-i18n="saveLbl"></dt><dd data-i18n="saveHint"></dd></div>
+    <div id="gl-taxnl"><dt data-i18n="nlTitle"></dt><dd data-i18n="nlText"></dd></div>
     <div id="gl-taxus"><dt data-i18n="usTitle"></dt><dd data-i18n="usText"></dd></div>
     <div id="gl-taxus2"><dt data-i18n="usExposure"></dt><dd data-i18n="usNote"></dd></div>
     <div id="gl-taxar"><dt data-i18n="arTitle"></dt><dd data-i18n="arText"></dd></div>
     <div id="gl-taxar2"><dt data-i18n="arExt"></dt><dd data-i18n="arMore"></dd></div>
     <div id="gl-taxrate"><dt data-i18n="arRateLbl"></dt><dd data-i18n="arRateHint"></dd></div>
-    <div id="gl-tax2028" class="nlonly"><dt data-i18n="ovN28"></dt><dd data-i18n="tax2028Note"></dd></div>
+    <div id="gl-tax2028"><dt data-i18n="ovN28"></dt><dd data-i18n="tax2028Note"></dd></div>
   </dl>
 </div></dialog>
 
@@ -1039,7 +1043,7 @@ const T = {
     g6d: 'Op het tabblad Belasting zet je landen aan of uit (maximaal vier tegelijk) en zie je de belasting over hetzelfde rendement. Elk land heeft een toelichting met bron en betrouwbaarheid.',
     g7t: 'Bewaar en exporteer',
     g7d: 'Bewaar benoemde scenario\'s in de browser via het menu. Exporteer een CSV of druk af naar PDF vanuit hetzelfde menu.',
-    wtLbl: 'Belastingschatting', wtNL: 'Nederland (Box 3)', wtNone: 'Geen schatting',
+    residLbl: 'Land van domicilie', residTip: 'Het land waar je woont bepaalt welke belasting de netto waardeprognose schat. Kies "Geen schatting" om geen belasting mee te rekenen.', wtLbl: 'Belastingschatting', wtNL: 'Nederland (Box 3)', wtNone: 'Geen schatting',
     scenTip: 'Drie rekenvarianten. Laag: 3 procentpunt minder koersgroei en 1 procentpunt minder yield. Basis: de gegevens uit de fondsentabel. Hoog: 3 procentpunt meer koersgroei en 0,5 procentpunt meer yield. Yield verandert alleen bij de dividendfondsen.',
     scLaag: 'Laag', scBasis: 'Basis', scHoog: 'Hoog',
     reinvest: 'Uitkeringen herinvesteren',
@@ -1274,7 +1278,7 @@ const T = {
     g6d: 'On the Tax tab you can switch countries on or off (up to four at a time) and see the tax on the same return. Each country has a note with its source and reliability.',
     g7t: 'Save and export',
     g7d: 'Save named scenarios in the browser from the menu. Export a CSV or print to PDF from the same menu.',
-    wtLbl: 'Tax estimate', wtNL: 'Netherlands (Box 3)', wtNone: 'No estimate',
+    residLbl: 'Country of residence', residTip: 'The country where you live determines which tax the net worth forecast estimates. Choose "No estimate" to leave tax out.', wtLbl: 'Tax estimate', wtNL: 'Netherlands', wtNone: 'No estimate',
     scenTip: 'Three calculation variants. Low: 3 percentage points less price growth and 1 point less yield. Base: the data from the funds table. High: 3 points more price growth and 0.5 points more yield. Yield only changes for the dividend funds.',
     scLaag: 'Low', scBasis: 'Base', scHoog: 'High',
     reinvest: 'Reinvest distributions',
@@ -1346,7 +1350,7 @@ const T = {
     n5: '<a class="term" href="#gl-bronbelasting">Withholding tax</a> on US dividends reduces the net return of funds with many US shares. See the Tax tab.',
     n6: 'Currency: the funds are priced in USD (LYP6 in EUR). A weak dollar reduces the return in euros.',
     n7: 'The model is nominal, without inflation. €100,000 over 5 years buys less than today.',
-    n8: '<a class="term" href="#gl-box3">Box 3</a> is calculated on your assets, not your distributions. See the Tax tab for an estimate per year.',
+    n8: '<a class="term" href="#gl-box3">Dutch wealth tax</a> is calculated on your assets, not your distributions. See the Tax tab for an estimate per year.',
     n9: 'If you want income, accumulating funds give you nothing: you would have to sell. If you want growth, dividend funds cost part of that growth through distributions and the option overlay.',
     glTitle: 'Help: what every term means',
     'gl.ter.t': 'TER', 'gl.ter.d': 'Total Expense Ratio: the annual fund costs, deducted automatically from the assets.',
@@ -1365,7 +1369,7 @@ const T = {
     'gl.maxd.t': 'Maximum drawdown', 'gl.maxd.d': 'The largest peak-to-trough loss in a fund\'s history.',
     'gl.seq.t': 'Sequence risk', 'gl.seq.d': 'The risk that you withdraw distributions while the price falls, so you sell units faster in a bad market.',
     'gl.bron.t': 'Withholding tax', 'gl.bron.d': 'Tax a country withholds on dividends. On US shares 15%, which the fund already deducts and you cannot reclaim.',
-    'gl.box3.t': 'Box 3', 'gl.box3.d': 'The Dutch wealth tax on savings and investments, calculated on your assets, not your return.',
+    'gl.box3.t': 'Dutch wealth tax', 'gl.box3.d': 'The Dutch wealth tax on savings and investments, calculated on your assets, not your return.',
     'gl.belegd.t': 'Invested amount', 'gl.belegd.d': 'The total amount you put in. You enter it yourself, or it is calculated from the desired monthly amount.',
     'gl.maand.t': 'Desired dividend per month', 'gl.maand.d': 'What you want to receive per month from the dividend funds. The invested amount is calculated from this, based on the chosen mix and yield.',
     'gl.scen.t': 'Scenario', 'gl.scen.d': 'An illustration, not a forecast. Low, base or high sets how optimistic the price growth of all funds is estimated to be. The yield only adjusts the dividend funds. Low is more pessimistic, high more optimistic. Compare all three to see the sensitivity.',
@@ -1379,10 +1383,10 @@ const T = {
     pickTitle: 'Compare countries', grpMain: 'Core comparison', grpOther: 'More countries', pickOf: n => `${n} of 4`, pickMax: 'Maximum 4 countries at once. Turn one off first.',
     hTotals: 'Total per country', hYears: 'Tax per year', hNotes: 'Assumptions per country', colBase: 'Taxed on (avg per year)',
     noteGeneric: 'For the extra countries tax is calculated per year on that year\'s distributions and increase in value. These are indications, not tax advice; check the current rules.',
-    ovN28: 'NL new system (2028)', tax2028Note: 'Proposal: from 1-1-2028 box 3 taxes only the actual return, 36% above a tax-free amount of €1,800. Still subject to approval by the Senate. Calculated here as if it applies from year one, with the increase in value as return. Losses are not offset.',
+    ovN28: 'NL new system (2028)', tax2028Note: 'Proposal: from 1-1-2028 Dutch wealth taxes only the actual return, 36% above a tax-free amount of €1,800. Still subject to approval by the Senate. Calculated here as if it applies from year one, with the increase in value as return. Losses are not offset.',
     taxEyebrow: 'Tax · estimate', taxH1: 'Tax per country',
     taxLead: 'How much tax you pay per year in the Netherlands, the US and Argentina, based on your investment, period and mix. Estimates, not tax advice.',
-    saveLbl: 'Share in savings account (box 3)', saveHint: 'Savings count in Box 3 at the savings rate (1.28%) instead of the deemed return (6%). Interest on your savings is not in the forecast.',
+    saveLbl: 'Share in savings account (Dutch wealth tax)', saveHint: 'Savings count in Dutch wealth tax at the savings rate (1.28%) instead of the deemed return (6%). Interest on your savings is not in the forecast.',
     ovYearNote: 'Per year: tax on assets at the start of that year (NL and AR) and the withholding on distributions (US). Amounts in euro, for the chosen period and settings.',
     ovSumCol: 'Total', ovSumRow: 'Total over period',
     colEur: '≈ in €',
@@ -1391,7 +1395,7 @@ const T = {
     subOv: 'Overview (all selected countries)', regLbl: 'Details per country', colBaseY: 'Taxed on', srcLbl: 'Source', colTaxGen: 'Tax', subNL: 'Netherlands', subUS: 'US', subAR: 'Argentina',
     arZero: (inv, ars, minEur) => `Argentina is €0 at ${inv}, which is correct: that is ARS ${ars}, below the minimum (about ${minEur}). <a href="#" class="subjump" data-sub="ar">Explanation</a>`,
     ovTitle: 'Comparison per country', ovSub: 'Untick a country to leave it out of the comparison and the detail table. Amounts cover the chosen period, using the current forecast settings.',
-    ovNL: 'Netherlands (Box 3)', ovUS: 'US (withholding tax)', ovAR: 'Argentina (Bienes Personales)',
+    ovNL: 'Netherlands', ovUS: 'US (withholding tax)', ovAR: 'Argentina (Bienes Personales)',
     ovCountry: 'Country', ovTotal: 'Total over period', ovPerYear: 'Average per year', ovPct: 'As % of invested',
     ovNeedRate: 'Enter the rate', ovNone: 'All countries are off. Turn on at least one.',
     arRateLbl: 'Rate: ARS per €1 (for Argentina)',
@@ -1400,16 +1404,16 @@ const T = {
     tabProg: 'Investment forecast', tabFunds: 'Funds and assumptions', tabWealth: 'Net worth forecast', tabPay: 'Payout forecast', tabTax: 'Tax', themeAuto: 'Auto', themeDark: 'Dark', themeLight: 'Light',
     taxTitle: 'Tax per country',
     taxIntro: 'Estimates based on the forecast settings. This is not tax advice; check current rules with your tax authority or an adviser.',
-    nlTitle: 'Netherlands: Box 3 (wealth tax)',
-    nlText: 'Box 3 taxes your assets, not your distributions. Money you receive counts as savings once it is in your account. Below is an estimate per year, based on the assets on 1 January.',
+    nlTitle: 'Netherlands: Dutch wealth tax',
+    nlText: 'Dutch wealth taxes your assets, not your distributions. Money you receive counts as savings once it is in your account. Below is an estimate per year, based on the assets on 1 January.',
     colItem: 'Item', colValue: 'Value',
     hvLabel: 'Tax-free allowance 2026 (per person)',
-    rateLabel: 'Box 3 rate 2026',
+    rateLabel: 'Dutch wealth tax rate 2026',
     rOvLabel: 'Deemed return other assets (shares, funds)',
     rSpLabel: 'Deemed return savings (provisional)',
-    box3Yearly: 'Box 3 per year (current settings)',
-    colYearT: 'Year', colStart: 'Assets 1 Jan.', colTaxYear: 'Box 3 tax',
-    box3Sum: 'Total Box 3 over the period',
+    box3Yearly: 'Dutch wealth tax per year (current settings)',
+    colYearT: 'Year', colStart: 'Assets 1 Jan.', colTaxYear: 'Dutch wealth tax',
+    box3Sum: 'Total Dutch wealth tax over the period',
     usTitle: 'United States: withholding tax',
     usText: 'An Irish fund withholds 15% on dividends from US companies before it reaches the fund. That lowers the distribution you see, and as a Dutch investor you cannot reclaim it. The effect is therefore already in the yield. There is no Dutch withholding tax on distributions from an Irish fund. As a Dutch resident you are not liable for US tax and do not file anything there; it only concerns the withholding the fund already applies.',
     usExposure: 'US exposure (my estimate)',
@@ -1509,7 +1513,7 @@ const T = {
     g6d: 'En la pestaña Impuestos puedes activar o desactivar países (hasta cuatro a la vez) y ver el impuesto sobre el mismo rendimiento. Cada país tiene una nota con su fuente y su fiabilidad.',
     g7t: 'Guarda y exporta',
     g7d: 'Guarda escenarios con nombre en el navegador desde el menú. Exporta un CSV o imprime a PDF desde el mismo menú.',
-    wtLbl: 'Estimación de impuestos', wtNL: 'Países Bajos (Box 3)', wtNone: 'Sin estimación',
+    residLbl: 'País de residencia', residTip: 'El país donde vives determina qué impuesto estima la previsión de patrimonio neto. Elige "Sin estimación" para no incluir impuestos.', wtLbl: 'Estimación de impuestos', wtNL: 'Países Bajos', wtNone: 'Sin estimación',
     scenTip: 'Tres variantes de cálculo. Bajo: 3 puntos porcentuales menos de crecimiento del precio y 1 punto menos de rendimiento. Base: los datos de la tabla de fondos. Alto: 3 puntos más de crecimiento y 0,5 puntos más de rendimiento. El rendimiento solo cambia en los fondos de dividendos.',
     scLaag: 'Bajo', scBasis: 'Base', scHoog: 'Alto',
     reinvest: 'Reinvertir distribuciones',
@@ -1581,7 +1585,7 @@ const T = {
     n5: '<a class="term" href="#gl-bronbelasting">Retención en origen</a> sobre dividendos de EE. UU. reduce la rentabilidad neta de los fondos con muchas acciones estadounidenses. Mira la pestaña Impuestos.',
     n6: 'Divisa: los fondos cotizan en USD (LYP6 en EUR). Un dólar débil reduce el rendimiento en euros.',
     n7: 'El modelo es nominal, sin inflación. 100.000 € en 5 años compran menos que hoy.',
-    n8: '<a class="term" href="#gl-box3">Box 3</a> se calcula sobre tu patrimonio, no sobre tu distribución. Mira la pestaña Impuestos para una estimación anual.',
+    n8: '<a class="term" href="#gl-box3">impuesto neerlandés sobre el patrimonio</a> se calcula sobre tu patrimonio, no sobre tu distribución. Mira la pestaña Impuestos para una estimación anual.',
     n9: 'Si quieres ingresos, los fondos de acumulación no te dan nada: tendrías que vender. Si quieres crecimiento, los fondos de dividendos cuestan parte de ese crecimiento por las distribuciones y la capa de opciones.',
     glTitle: 'Ayuda: qué significa cada término',
     'gl.ter.t': 'TER', 'gl.ter.d': 'Total Expense Ratio: coste anual del fondo, que se descuenta automáticamente del patrimonio.',
@@ -1600,7 +1604,7 @@ const T = {
     'gl.maxd.t': 'Caída máxima', 'gl.maxd.d': 'La mayor pérdida de pico a valle en la historia del fondo.',
     'gl.seq.t': 'Riesgo de secuencia', 'gl.seq.d': 'El riesgo de retirar distribuciones mientras el precio baja, de modo que vendes participaciones más deprisa en un mal mercado.',
     'gl.bron.t': 'Retención en origen', 'gl.bron.d': 'Impuesto que un país retiene sobre los dividendos. En acciones de EE. UU. suele ser el 15%, que el fondo ya descuenta y que no puedes recuperar.',
-    'gl.box3.t': 'Box 3', 'gl.box3.d': 'El impuesto neerlandés sobre el patrimonio (ahorro e inversiones), calculado sobre tu patrimonio y no sobre tu rentabilidad.',
+    'gl.box3.t': 'impuesto neerlandés sobre el patrimonio', 'gl.box3.d': 'El impuesto neerlandés sobre el patrimonio (ahorro e inversiones), calculado sobre tu patrimonio y no sobre tu rentabilidad.',
     'gl.belegd.t': 'Capital invertido', 'gl.belegd.d': 'El importe total que aportas. Lo introduces tú, o se calcula a partir del importe mensual deseado.',
     'gl.maand.t': 'Dividendo deseado al mes', 'gl.maand.d': 'Lo que quieres recibir al mes de los fondos de dividendos. El capital invertido se calcula a partir de esto, según la mezcla y el rendimiento elegidos.',
     'gl.scen.t': 'Escenario', 'gl.scen.d': 'Un ejemplo, no una predicción. Bajo, base o alto determina lo optimista que se estima el crecimiento del precio de todos los fondos. El rendimiento solo ajusta los fondos de dividendos. Bajo es más pesimista, alto más optimista. Compara los tres para ver la sensibilidad.',
@@ -1617,7 +1621,7 @@ const T = {
     ovN28: 'Países Bajos nuevo sistema (2028)', tax2028Note: 'Propuesta: desde el 1-1-2028 la caja 3 solo grava el rendimiento real, al 36% por encima de un mínimo exento de 1.800 €. Aún pendiente de aprobación por el Senado. Aquí se calcula como si aplicara desde el primer año, con la subida del valor como rendimiento. Las pérdidas no se compensan.',
     taxEyebrow: 'Impuestos · estimación', taxH1: 'Impuestos por país',
     taxLead: 'Cuánto impuesto pagas al año en Países Bajos, EE. UU. y Argentina, según tu inversión, periodo y mezcla. Estimaciones, no asesoramiento fiscal.',
-    saveLbl: 'Parte en cuenta de ahorro (box 3)', saveHint: 'El ahorro cuenta en Box 3 al tipo de ahorro (1,28%) en lugar del rendimiento forfetario (6%). Los intereses de tu ahorro no están en la previsión.',
+    saveLbl: 'Parte en cuenta de ahorro (impuesto neerlandés sobre el patrimonio)', saveHint: 'El ahorro cuenta en impuesto neerlandés sobre el patrimonio al tipo de ahorro (1,28%) en lugar del rendimiento forfetario (6%). Los intereses de tu ahorro no están en la previsión.',
     ovYearNote: 'Por año: impuesto sobre el patrimonio al inicio de ese año (NL y AR) y la retención sobre distribuciones (EE. UU.). Importes en euros, para el periodo y los ajustes elegidos.',
     ovSumCol: 'Total', ovSumRow: 'Total en el periodo',
     colEur: '≈ en €',
@@ -1626,7 +1630,7 @@ const T = {
     subOv: 'Resumen (países elegidos)', regLbl: 'Detalle por país', colBaseY: 'Gravado sobre', srcLbl: 'Fuente', colTaxGen: 'Impuesto', subNL: 'Países Bajos', subUS: 'EE. UU.', subAR: 'Argentina',
     arZero: (inv, ars, minEur) => `Argentina es 0 € con ${inv}, y es correcto: son ARS ${ars}, por debajo del mínimo (unos ${minEur}). <a href="#" class="subjump" data-sub="ar">Explicación</a>`,
     ovTitle: 'Comparación por país', ovSub: 'Desmarca un país para quitarlo de la comparación y de la tabla de detalle. Los importes cubren el periodo elegido, con los ajustes actuales de la previsión.',
-    ovNL: 'Países Bajos (Box 3)', ovUS: 'EE. UU. (retención en origen)', ovAR: 'Argentina (Bienes Personales)',
+    ovNL: 'Países Bajos', ovUS: 'EE. UU. (retención en origen)', ovAR: 'Argentina (Bienes Personales)',
     ovCountry: 'País', ovTotal: 'Total en el periodo', ovPerYear: 'Media al año', ovPct: 'En % de la inversión',
     ovNeedRate: 'Indica el tipo de cambio', ovNone: 'Todos los países están desactivados. Activa al menos uno.',
     arRateLbl: 'Tipo de cambio: ARS por 1 €  (para Argentina)',
@@ -1635,16 +1639,16 @@ const T = {
     tabProg: 'Previsión de inversión', tabFunds: 'Fondos y supuestos', tabWealth: 'Previsión de patrimonio neto', tabPay: 'Previsión de pagos', tabTax: 'Impuestos', themeAuto: 'Auto', themeDark: 'Oscuro', themeLight: 'Claro',
     taxTitle: 'Impuestos por país',
     taxIntro: 'Estimaciones basadas en los ajustes de la previsión. No es asesoramiento fiscal; consulta las normas actuales con tu administración tributaria o con un asesor.',
-    nlTitle: 'Países Bajos: Box 3 (impuesto sobre el patrimonio)',
-    nlText: 'Box 3 grava tu patrimonio, no tu distribución. El dinero que recibes cuenta como ahorro en cuanto está en tu cuenta. Abajo tienes una estimación anual, con el impuesto sobre el patrimonio a 1 de enero.',
+    nlTitle: 'Países Bajos: impuesto neerlandés sobre el patrimonio',
+    nlText: 'impuesto neerlandés sobre el patrimonio grava tu patrimonio, no tu distribución. El dinero que recibes cuenta como ahorro en cuanto está en tu cuenta. Abajo tienes una estimación anual, con el impuesto sobre el patrimonio a 1 de enero.',
     colItem: 'Concepto', colValue: 'Valor',
     hvLabel: 'Mínimo exento 2026 (por persona)',
-    rateLabel: 'Tipo Box 3 2026',
+    rateLabel: 'Tipo impuesto neerlandés sobre el patrimonio 2026',
     rOvLabel: 'Rendimiento forfetario otros activos (acciones, fondos)',
     rSpLabel: 'Rendimiento forfetario ahorro (provisional)',
-    box3Yearly: 'Box 3 por año (ajustes actuales)',
-    colYearT: 'Año', colStart: 'Patrimonio 1 ene.', colTaxYear: 'Impuesto Box 3',
-    box3Sum: 'Total Box 3 en el periodo',
+    box3Yearly: 'impuesto neerlandés sobre el patrimonio por año (ajustes actuales)',
+    colYearT: 'Año', colStart: 'Patrimonio 1 ene.', colTaxYear: 'Impuesto impuesto neerlandés sobre el patrimonio',
+    box3Sum: 'Total impuesto neerlandés sobre el patrimonio en el periodo',
     usTitle: 'Estados Unidos: retención en origen',
     usText: 'Un fondo irlandés retiene el 15% de los dividendos de empresas estadounidenses antes de que lleguen al fondo. Eso reduce la distribución que ves, y como inversor neerlandés no puedes recuperarlo. El efecto ya está en el rendimiento. Sobre las distribuciones de un fondo irlandés no hay retención neerlandesa. Como residente neerlandés no tienes obligación fiscal en EE. UU. ni presentas nada allí; solo se trata de la retención que ya aplica el fondo.',
     usExposure: 'Exposición a EE. UU. (mi estimación)',
@@ -1849,7 +1853,7 @@ const arTax = vArs => {
   for (const [hi, r] of AR_BANDS){ tax += Math.max(0, Math.min(ex, hi) - lo) * r; lo = hi; }
   return tax;
 };
-const taxOn = {nl:true, us:true, ar:true, n28:true, be:false, fr:false, es:false, pt:false, cn:false, pa:false, sv:false, cl:false, pe:false, th:false};
+const taxOn = {nl:false, us:false, ar:false, n28:false, ve:false, be:false, fr:false, es:false, pt:false, cn:false, pa:false, sv:false, cl:false, pe:false, th:false};
 const FX = {usd:0.86, pen:1/4.6, thb:1/38};   // aannames voor omrekening naar euro
 const bandTax = (x, bands) => { let tax = 0, lo = 0; for (const [hi, r] of bands){ tax += Math.max(0, Math.min(x, hi) - lo) * r; lo = hi; } return tax; };
 const flat = r => (div, cg) => { const x = div + cg; return [x * r, x]; };
@@ -1918,7 +1922,7 @@ const ALL = [
 const CSHORT = {us:{nl:'VS',en:'US',es:'EE. UU.'}, ar:{nl:'Argentinië',en:'Argentina',es:'Argentina'}, nl:{nl:'Nederland',en:'Netherlands',es:'P. Bajos'}, n28:{nl:'NL 2028',en:'NL 2028',es:'P. Bajos 2028'}};
 const shortName = c => CSHORT[c.k] ? CSHORT[c.k][lang] : c.name();
 const isNL = () => lang === 'nl';
-const taxAllowed = k => isNL() || (k !== 'nl' && k !== 'n28');
+const taxAllowed = () => true;
 const taxIsOn = k => !!taxOn[k] && taxAllowed(k);
 const activeCount = () => Object.keys(taxOn).filter(taxIsOn).length;
 let arRateVal = 1780;
@@ -2273,7 +2277,7 @@ function recalc(){
 
   document.getElementById('jarenLabel').textContent = tr('years')(years);
   document.getElementById('jaren').style.setProperty('--p', ((years-1)/14*100) + '%');
-  document.getElementById('jaren').style.setProperty('--fill', 'var(--text)');
+  document.getElementById('jaren').style.setProperty('--fill', 'var(--div)');
   document.getElementById('mix').style.setProperty('--p', (mix*100) + '%');
   document.getElementById('mix').style.setProperty('--fill', 'var(--div)');
   document.getElementById('mixDivPct').textContent = Math.round(mix*100) + '%';
@@ -2398,12 +2402,21 @@ function applyStatic(){
   if (typeof rateSaved !== 'undefined') renderRateStamp();
 }
 
+function fillResid(){
+  const sel = document.getElementById('resid');
+  if (!sel) return;
+  const v = sel.value || 'nl';
+  const opts = [['nl', tr('ovNL')], ['n28', tr('ovN28')], ...EXTRA.map(e => [e.k, e.names[lang]]), ['none', tr('wtNone')]];
+  sel.innerHTML = opts.map(([k, n]) => `<option value="${k}">${n}</option>`).join('');
+  sel.value = opts.some(o => o[0] === v) ? v : 'nl';
+}
 function setLang(l){
   lang = l;
   try { localStorage.setItem('dk-lang', l); } catch (e) {}
   renderBedrag();
   setField('target', digits(document.getElementById('target').value));
   applyStatic();
+  fillResid();
   buildFundTable();
   recalc();
 }
@@ -2641,7 +2654,7 @@ document.querySelectorAll('.sortbar .rbtn').forEach(b => b.addEventListener('cli
 }));
 function buildChips(){
   const box = document.getElementById('ovChips');
-  const chip = c => `<label class="ovchip${c.k === 'nl' || c.k === 'n28' ? ' nlonly' : ''}" style="--c:${c.color}"><input type="checkbox" data-k="${c.k}"><i class="dot"></i><span data-nm="${c.k}"></span>${c.k === 'n28' ? '<a class="info" href="#gl-tax2028">?</a>' : ''}</label>`;
+  const chip = c => `<label class="ovchip" style="--c:${c.color}"><input type="checkbox" data-k="${c.k}"><i class="dot"></i><span data-nm="${c.k}"></span>${c.k === 'n28' ? '<a class="info" href="#gl-tax2028">?</a>' : ''}</label>`;
   const main = ALL.filter(c => !EXTRA.some(e => e.k === c.k)), more = ALL.filter(c => EXTRA.some(e => e.k === c.k));
   box.innerHTML = `<div class="pickhead"><span data-grp="main"></span><span id="pickCount"></span></div><div class="pickgrid">${main.map(chip).join('')}</div>
     <div class="pickhead"><span data-grp="other"></span></div><div class="pickgrid">${more.map(chip).join('')}</div>`;
@@ -2702,9 +2715,9 @@ renderBedrag();
 applyStatic();
 /* ============ vermogensprognose ============ */
 const WL = {
-  nl:{yrs:'Periode', title:'Netto waardeprognose', sub:'Hoe je vermogen zich ontwikkelt bij de invoerwaarden, strategie en scenario die je hebt gekozen. Netto is na de belastingschatting die je kiest.', kGross:'Bruto in fondsen', kNet:'Netto vermogen', kPaid:'Uitgekeerd', kTax:'Belastingen, geschat', kDouble:'Verdubbeling netto', dNo:'Niet binnen de periode', legG:'Bruto in fondsen', legN:'Netto vermogen', legI:'Ingelegd', year:'Jaar', colFund:'In fondsen', colCash:'Uitgekeerd', colTax:'Belastingen cumulatief', colNet:'Netto', colCost:'Kosten (TER)', kCost:'Betaald aan kosten (TER)', costNote:'Kosten zitten al in de waarde in fondsen en worden dus niet nog eens afgetrokken. Ze staan hier alleen om te laten zien wat je ze kosten.', noTax:'Geen belastingschatting gekozen, dus de belastingen zijn 0.', note:'De Box 3-schatting gebruikt het heffingsvrij vermogen en het forfaitaire rendement uit het tabblad Belasting. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.'},
-  en:{yrs:'Period', title:'Net worth forecast', sub:'How your wealth develops with the inputs, strategy and scenario you chose. Net is after the tax estimate you choose.', kGross:'Gross in funds', kNet:'Net wealth', kPaid:'Paid out', kTax:'Taxes, estimated', kDouble:'Net doubling time', dNo:'Not within the period', legG:'Gross in funds', legN:'Net wealth', legI:'Invested', year:'Year', colFund:'In funds', colCash:'Paid out', colTax:'Taxes cumulative', colNet:'Net', colCost:'Fund costs (TER)', kCost:'Paid in fund costs (TER)', costNote:'Costs are already included in the fund value and are not deducted again. They are shown to show what they cost you.', noTax:'No tax estimate selected, so taxes are 0.', note:'The Box 3 estimate uses the tax-free allowance and the flat return from the Tax tab. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.'},
-  es:{yrs:'Periodo', title:'Previsión de patrimonio neto', sub:'Cómo evoluciona tu patrimonio con las entradas, la estrategia y el escenario que elegiste. El neto es después de la estimación de impuestos que elijas.', kGross:'Bruto en fondos', kNet:'Patrimonio neto', kPaid:'Pagado', kTax:'Impuestos, estimados', kDouble:'Doblar el neto', dNo:'No dentro del periodo', legG:'Bruto en fondos', legN:'Patrimonio neto', legI:'Invertido', year:'Año', colFund:'En fondos', colCash:'Pagado', colTax:'Impuestos acumulados', colNet:'Neto', colCost:'Costes (TER)', kCost:'Pagado en costes (TER)', costNote:'Los costes ya están incluidos en el valor de los fondos y no se restan otra vez. Se muestran para que veas lo que te cuestan.', noTax:'No hay estimación de impuestos elegida, así que los impuestos son 0.', note:'La estimación de Box 3 usa el mínimo exento y el rendimiento forfait de la pestaña Impuestos. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.'}
+  nl:{yrs:'Periode', title:'Netto waardeprognose', sub:'Hoe je vermogen zich ontwikkelt bij de invoerwaarden, strategie en scenario die je hebt gekozen. Netto is na de belastingschatting die je kiest.', kGross:'Bruto in fondsen', kNet:'Netto vermogen', kPaid:'Uitgekeerd', kTax:'Belastingen, geschat', kDouble:'Verdubbeling netto', dNo:'Niet binnen de periode', legG:'Bruto in fondsen', legN:'Netto vermogen', legI:'Ingelegd', year:'Jaar', colFund:'In fondsen', colCash:'Uitgekeerd', colTax:'Belastingen cumulatief', colNet:'Netto', colCost:'Kosten (TER)', kCost:'Betaald aan kosten (TER)', costNote:'Kosten zitten al in de waarde in fondsen en worden dus niet nog eens afgetrokken. Ze staan hier alleen om te laten zien wat je ze kosten.', resNote:'Schatting voor het gekozen land van domicilie. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.', noTax:'Geen belastingschatting gekozen, dus de belastingen zijn 0.', note:'De Box 3-schatting gebruikt het heffingsvrij vermogen en het forfaitaire rendement uit het tabblad Belasting. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.'},
+  en:{yrs:'Period', title:'Net worth forecast', sub:'How your wealth develops with the inputs, strategy and scenario you chose. Net is after the tax estimate you choose.', kGross:'Gross in funds', kNet:'Net wealth', kPaid:'Paid out', kTax:'Taxes, estimated', kDouble:'Net doubling time', dNo:'Not within the period', legG:'Gross in funds', legN:'Net wealth', legI:'Invested', year:'Year', colFund:'In funds', colCash:'Paid out', colTax:'Taxes cumulative', colNet:'Net', colCost:'Fund costs (TER)', kCost:'Paid in fund costs (TER)', costNote:'Costs are already included in the fund value and are not deducted again. They are shown to show what they cost you.', resNote:'Estimate for the chosen country of residence. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.', noTax:'No tax estimate selected, so taxes are 0.', note:'The Dutch wealth tax estimate uses the tax-free allowance and the flat return from the Tax tab. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.'},
+  es:{yrs:'Periodo', title:'Previsión de patrimonio neto', sub:'Cómo evoluciona tu patrimonio con las entradas, la estrategia y el escenario que elegiste. El neto es después de la estimación de impuestos que elijas.', kGross:'Bruto en fondos', kNet:'Patrimonio neto', kPaid:'Pagado', kTax:'Impuestos, estimados', kDouble:'Doblar el neto', dNo:'No dentro del periodo', legG:'Bruto en fondos', legN:'Patrimonio neto', legI:'Invertido', year:'Año', colFund:'En fondos', colCash:'Pagado', colTax:'Impuestos acumulados', colNet:'Neto', colCost:'Costes (TER)', kCost:'Pagado en costes (TER)', costNote:'Los costes ya están incluidos en el valor de los fondos y no se restan otra vez. Se muestran para que veas lo que te cuestan.', resNote:'Estimación para el país de residencia elegido. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.', noTax:'No hay estimación de impuestos elegida, así que los impuestos son 0.', note:'La estimación de impuesto neerlandés sobre el patrimonio usa el mínimo exento y el rendimiento forfait de la pestaña Impuestos. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.'}
 };
 function renderWealth(){
   const el = document.getElementById('wealthBody');
@@ -2716,15 +2729,27 @@ function renderWealth(){
   const reinvest = document.getElementById('reinvest').checked;
   const mix = parseFloat(document.getElementById('mix').value) / 100;
   const sp = savePct / 100;
-  const nlTax = isNL() && document.getElementById('wTax').value === 'nl';
-  const bx = nlTax ? ' (box 3)' : '';
+  const resid = document.getElementById('resid').value;
+  const bx = (resid === 'nl' && isNL()) ? ' (box 3)' : '';
   const d = basket('div', amountNow * mix, H, reinvest, sc);
   const a = basket('acc', amountNow * (1 - mix), H, reinvest, sc);
   const fund = [], cash = [], tax = [], net = [];
   for (let t = 0; t <= H; t++){ fund[t] = d.vals[t] + a.vals[t]; cash[t] = d.cashArr[t] + a.cashArr[t]; }
   let cumTax = 0;
   tax[0] = 0;
-  for (let t = 1; t <= H; t++){ if (nlTax) cumTax += box3Year(fund[t], cash[t], sp); tax[t] = cumTax; }
+  const dPay = basket('div', amountNow * mix, H, false, sc), aPay = basket('acc', amountNow * (1 - mix), H, false, sc);
+  const paid = [];
+  for (let t = 0; t <= H; t++) paid[t] = dPay.cashArr[t] + aPay.cashArr[t];
+  for (let t = 1; t <= H; t++){
+    const divT = Math.max(0, paid[t] - paid[t-1]);
+    const gain = (fund[t] + cash[t]) - (fund[t-1] + cash[t-1]);
+    const cgT = Math.max(0, gain - divT);
+    let yt = 0;
+    if (resid === 'nl') yt = box3Year(fund[t], cash[t], sp);
+    else if (resid === 'n28') yt = 0.36 * Math.max(0, gain - 1800);
+    else { const e = EXTRA.find(x => x.k === resid); if (e) yt = e.f(divT, cgT, t - 1)[0]; }
+    cumTax += yt; tax[t] = cumTax;
+  }
   for (let t = 0; t <= H; t++) net[t] = fund[t] + cash[t] - tax[t];
   const inleg = amountNow;
   const costYr = new Array(H + 1).fill(0);
@@ -2790,7 +2815,7 @@ function renderWealth(){
     <div class="wwrap">${svg}<div class="wtip" hidden></div></div>
     <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th><th>${W.colTax}${bx}</th><th>${W.colCost}</th><th>${W.colNet}</th></tr></thead><tbody>${rows}</tbody></table></div>
     <p class="sub calnote">${W.costNote}</p>
-    <p class="sub calnote">${nlTax ? W.note : W.noTax}</p>`;
+    <p class="sub calnote">${resid === 'none' ? W.noTax : W.resNote}</p>`;
   const svgEl = el.querySelector('svg.wchart');
   const tip = el.querySelector('.wtip');
   const cur = svgEl.querySelector('.wcur');
@@ -2820,7 +2845,13 @@ function renderWealth(){
 }
 
 document.getElementById('wealthYrs').addEventListener('input', renderWealth);
-document.getElementById('wTax').addEventListener('change', renderWealth);
+function setTaxDefaults(){
+  Object.keys(taxOn).forEach(k => { taxOn[k] = false; });
+  const r = document.getElementById('resid').value;
+  if (r && r !== 'none' && r in taxOn) taxOn[r] = true;
+  updateChips();
+}
+document.getElementById('resid').addEventListener('change', () => { setTaxDefaults(); recalc(); });
 /* ============ merk, menu's, scenario's, export, kosten ============ */
 const APP_VERSION = '0.2';
 const SKEY = 'dk-scenarios';
@@ -2874,6 +2905,7 @@ function captureState(){
     mix: parseFloat(document.getElementById('mix').value),
     scen: document.querySelector('input[name=scen]:checked').value,
     reinvest: document.getElementById('reinvest').checked,
+    resid: document.getElementById('resid').value,
     goalOn: document.getElementById('goalOn').checked,
     target: digits(document.getElementById('target').value),
     preset: activePreset,
@@ -2887,6 +2919,7 @@ function applyState(s){
   const r = document.querySelector(`input[name=scen][value="${s.scen}"]`);
   if (r) r.checked = true;
   document.getElementById('reinvest').checked = s.reinvest;
+  if (s.resid && document.querySelector('#resid option[value="' + s.resid + '"]')) document.getElementById('resid').value = s.resid;
   document.getElementById('goalOn').checked = s.goalOn;
   document.getElementById('target').value = fmtNum(s.target);
   s.funds.forEach(x => { const f = funds.find(q => q.id === x.id); if (f){ f.w = x.w; f.g = x.g; f.y = x.y; f.ter = x.ter; } });
@@ -3007,8 +3040,10 @@ document.querySelector('[data-open="langDlg"]').addEventListener('click', () => 
 const LAST_KEY = 'dk-last-v2';
 function loadLast(){ try { const v = JSON.parse(localStorage.getItem(LAST_KEY)); return v && v.v === 1 ? v : null; } catch (e) { return null; } }
 function saveLast(){ if (window.__dkBoot) return; try { localStorage.setItem(LAST_KEY, JSON.stringify(captureState())); } catch (e) {} }
+fillResid();
 const SAVED_LAST = loadLast();
-if (SAVED_LAST) applyState(SAVED_LAST); else applyPreset('bal'); // standaardstrategie: gebalanceerd
+if (SAVED_LAST) applyState(SAVED_LAST); else applyPreset('bal');
+setTaxDefaults(); // standaardstrategie: gebalanceerd
 window.__dkBoot = false;
 saveLast();
 </script>
