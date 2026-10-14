@@ -415,6 +415,12 @@
   .guide li::before{content:counter(g);position:absolute;left:0;top:13px;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:var(--bg);display:grid;place-items:center;font-size:12px;font-weight:700}
   .guide b{display:block;font-size:14px;margin-bottom:3px}
   .guide span{display:block;font-size:13px;color:var(--muted);line-height:1.5}
+  .wwrap{position:relative}
+  .wtip{position:absolute;top:8px;left:0;pointer-events:none;min-width:200px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);box-shadow:0 10px 30px rgba(0,0,0,.18);font-size:12.5px;line-height:1.7;color:var(--text);font-variant-numeric:tabular-nums;z-index:5}
+  .wtip[hidden]{display:none}
+  .wtip b{display:block;margin-bottom:2px}
+  .wtip i{display:inline-block;width:10px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+  .wtip i.dash{background:none;border-top:2px dashed var(--muted);height:0}
   /* ---------- phone ---------- */
   @media (max-width:640px){
     .top{padding:16px 16px 4px}
@@ -2752,6 +2758,7 @@ function renderWealth(){
     <line x1="${pl}" x2="${Wd - pr}" y1="${y(inleg).toFixed(1)}" y2="${y(inleg).toFixed(1)}" style="stroke:var(--muted);stroke-dasharray:4 4"/>
     <path d="${path(fund)}" fill="none" style="stroke:var(--acc);stroke-width:2"/>
     <path d="${path(net)}" fill="none" style="stroke:var(--div);stroke-width:3"/>
+    <line class="wcur" y1="${pt}" y2="${Ht - pb}" style="stroke:var(--muted);display:none"/>
   </svg>`;
 
   const step = H <= 15 ? 1 : 5;
@@ -2766,10 +2773,36 @@ function renderWealth(){
     <p class="sub">${W.sub}</p>
     <div class="calkpis">${cards.join('')}</div>
     <div class="wlegend"><span><i style="background:var(--div)"></i>${W.legN}</span><span><i style="background:var(--acc)"></i>${W.legG}</span><span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span></div>
-    ${svg}
+    <div class="wwrap">${svg}<div class="wtip" hidden></div></div>
     <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th>${nlTax ? `<th>${W.colTax}</th>` : ''}<th>${W.colCost}</th><th>${W.colNet}</th></tr></thead><tbody>${rows}</tbody></table></div>
     <p class="sub calnote">${W.costNote}</p>
     ${nlTax ? `<p class="sub calnote">${W.note}</p>` : ''}`;
+  const svgEl = el.querySelector('svg.wchart');
+  const tip = el.querySelector('.wtip');
+  const cur = svgEl.querySelector('.wcur');
+  const showTip = ev => {
+    const rect = svgEl.getBoundingClientRect();
+    const sx = (ev.clientX - rect.left) / rect.width * Wd;
+    let tt = Math.round((sx - pl) / (Wd - pl - pr) * H);
+    tt = Math.max(0, Math.min(H, tt));
+    const xp = pl + (Wd - pl - pr) * (H ? tt / H : 0);
+    cur.setAttribute('x1', xp);
+    cur.setAttribute('x2', xp);
+    cur.style.display = '';
+    tip.innerHTML = `<b>${W.year} ${tt}</b>
+      <div><i style="background:var(--div)"></i>${W.legN}: ${EUR(net[tt])}</div>
+      <div><i style="background:var(--acc)"></i>${W.legG}: ${EUR(fund[tt])}</div>
+      <div><i class="dash"></i>${W.legI}: ${EUR(inleg)}</div>
+      <div>${W.colCash}: ${EUR(cash[tt])}</div>
+      ${nlTax ? `<div>${W.colTax}: ${EUR(tax[tt])}</div>` : ''}
+      <div>${W.colCost}: ${EUR(costCum[tt])}</div>`;
+    tip.hidden = false;
+    const left = xp / Wd * rect.width;
+    tip.style.left = Math.max(0, Math.min(rect.width - tip.offsetWidth - 4, left + 12)) + 'px';
+  };
+  svgEl.addEventListener('pointermove', showTip);
+  svgEl.addEventListener('pointerdown', showTip);
+  svgEl.addEventListener('pointerleave', () => { tip.hidden = true; cur.style.display = 'none'; });
 }
 
 document.getElementById('wealthYrs').addEventListener('input', renderWealth);
