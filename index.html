@@ -373,6 +373,7 @@
   .io-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0}
   .io-file{cursor:pointer}
   .io-row .hint{margin:0}
+  .strat-line{margin:4px 0 10px;font-size:13.5px;color:var(--muted)}
   .welcome-actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
   .disclaimer{font-size:12px;color:var(--muted);max-width:64ch;margin:10px auto 0;line-height:1.5}
   .controls .grp{border:1px solid var(--line);border-radius:12px;padding:12px 14px 4px;margin:0 0 12px}
@@ -648,6 +649,7 @@
 
   <div class="stack">
 
+    <p class="strat-line" id="stratLine" aria-live="polite"></p>
     <section class="kpis" id="kpis" aria-live="polite"></section>
 
     <section class="panel" aria-labelledby="chartTitle">
@@ -2757,6 +2759,10 @@ function synthCalc(){
   ].filter(c => c[4] > 0);
   document.getElementById('synthKpi').innerHTML = cards.map(c =>
     `<div class="skpi" style="--c:${c[3]}"><div class="lbl">${c[0]} <a class="info" href="#${c[2]}">?</a></div><div class="big">${c[1]}</div></div>`).join('');
+  const stLine = document.getElementById('stratLine');
+  if (stLine) stLine.textContent = fundsStore.on
+    ? `Eigen mix actief · ${EUR(A)} over ${n} jaar`
+    : `Strategie: ${stratOf() ? stratOf().n : 'eigen verdeling'} · ${SYNTH_STATE.mix}% uitkerend · synthetische aannames · ${EUR(A)} over ${n} jaar`;
   document.getElementById('synthNote').textContent = fundsStore.on
     ? 'Je eigen mix is actief; de berekening gebruikt die mix, niet de synthese.'
     : `Synthetische aannames, niet gekoppeld aan echte fondsen. Dividend/acc-verdeling volgt de strategie: ${SYNTH_STATE.mix}% uitkerend. Geen belasting berekend.`;
