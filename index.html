@@ -510,9 +510,8 @@
     .topbtns{margin-left:auto;flex-wrap:nowrap}
     .brand{flex:1 1 0;min-width:0}
     .brandtag{white-space:normal}
-    .tabs{padding:12px 16px 0;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
-    .tabs::-webkit-scrollbar{display:none}
-    .tab{white-space:nowrap;flex:0 0 auto}
+    .tabs{padding:12px 16px 0;display:flex;flex-wrap:wrap;gap:8px}
+    .tab{flex:1 1 calc(50% - 4px);white-space:normal;text-align:center;line-height:1.25;padding:10px 8px;font-size:13px;min-width:0}
     .layout,.taxwrap,.fundswrap{padding:12px 16px 40px;gap:14px}
     .panel{padding:16px}
     .tbl{font-size:12px}
