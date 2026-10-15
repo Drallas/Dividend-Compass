@@ -915,6 +915,7 @@
     </div>
     <svg id="ovChart" viewBox="0 0 760 160" role="img" aria-label="Vergelijking belasting per land" hidden></svg>
     <h3 class="subhead" data-i18n="hTotals"></h3>
+    <p class="sub" data-i18n="taxTotNote"></p>
     <div class="tbl-wrap mcards">
       <table class="tbl">
         <thead><tr><th data-i18n="ovCountry"></th><th data-i18n="colBase"></th><th data-i18n="ovTotal"></th><th data-i18n="ovPerYear"></th><th data-i18n="ovPct"></th></tr></thead>
@@ -925,6 +926,7 @@
     <p class="muted" id="arZero" hidden></p>
     <p class="muted" data-i18n="ovYearNote" hidden></p>
     <h3 class="subhead" data-i18n="hYears"></h3>
+    <p class="sub" data-i18n="yearStepNote" id="yearStepNote" hidden></p>
     <div class="tbl-wrap mcards" id="ovYearWrap"></div>
     <h3 class="subhead" data-i18n="hNotes" id="notesHead"></h3>
     <p class="muted" data-i18n="noteGeneric"></p>
@@ -1874,6 +1876,8 @@ const SYN_T = {
   "synthLink": "Inleg en looptijd komen uit de invoer bovenaan.",
   "synthSum": "Gewichten tellen op tot {s}%; de uitkomst wordt genormaliseerd naar 100%.",
   "synPayout": "uitkerend",
+  "taxTotNote": "Per land zie je hoeveel belasting je over de hele periode betaalt, en wat dat gemiddeld per jaar is. De jaartabel hieronder laat zien hoe dat per jaar oploopt.",
+  "yearStepNote": "Bij een looptijd van meer dan 10 jaar staat in de jaartabel alleen elk vijfde jaar en het laatste jaar; de totalen tellen alle jaren mee.",
   "goalCapLbl": "Doelbedrag netto vermogen",
   "goalCapPh": "bijv. 500.000",
   "monthlyIn": "Maandelijkse inleg",
@@ -1946,6 +1950,8 @@ const SYN_T = {
   "synthLink": "Investment and term come from the input at the top.",
   "synthSum": "Weights add up to {s}%; the outcome is normalised to 100%.",
   "synPayout": "distributing",
+  "taxTotNote": "Per country you see how much tax you pay over the whole period, and what that is on average per year. The yearly table below shows how it builds up each year.",
+  "yearStepNote": "For periods longer than 10 years the yearly table only shows every fifth year and the last year; the totals count all years.",
   "goalCapLbl": "Target net wealth",
   "goalCapPh": "e.g. 500,000",
   "monthlyIn": "Monthly contribution",
@@ -2025,6 +2031,8 @@ const SYN_T = {
   "synthLink": "La inversión y el plazo vienen de los datos de entrada de arriba.",
   "synthSum": "Los pesos suman {s}%; el resultado se normaliza a 100%.",
   "synPayout": "distribuyendo",
+  "taxTotNote": "Por país ves cuánto impuesto pagas en todo el periodo y cuánto es de media al año. La tabla anual de abajo muestra cómo se acumula cada año.",
+  "yearStepNote": "Con plazos de más de 10 años la tabla anual solo muestra cada quinto año y el último; los totales cuentan todos los años.",
   "goalCapLbl": "Objetivo de patrimonio neto",
   "goalCapPh": "p. ej. 500.000",
   "monthlyIn": "Aportación mensual",
@@ -2473,10 +2481,13 @@ function renderOverview(){
     });
     const s = meta.reduce((acc, m) => acc + (tx[m.k][t] || 0), 0);
     grand += s;
-    yh += `<tr><td class="rowname">${tr('colYear')} ${t + 1}</td>${cells.join('')}<td class="num" data-l="${tr('ovSumCol')}">${EUR(s)}</td></tr>`;
+    // bij lange looptijden alleen elk vijfde jaar tonen (en het laatste); de totalen tellen alle jaren mee
+    const showRow = years <= 10 || (t + 1) % 5 === 0 || t + 1 === years;
+    if (showRow) yh += `<tr><td class="rowname">${tr('colYear')} ${t + 1}</td>${cells.join('')}<td class="num" data-l="${tr('ovSumCol')}">${EUR(s)}</td></tr>`;
   }
   yh += `</tbody><tfoot><tr><td class="rowname">${tr('ovSumRow')}</td>${colSums.map((v, i) => `<td class="num" data-l="${meta[i].name}">${EUR(v)}</td>`).join('')}<td class="num" data-l="${tr('ovSumCol')}">${EUR(grand)}</td></tr></tfoot></table>`;
   document.getElementById('ovYearWrap').innerHTML = yh;
+  document.getElementById('yearStepNote').hidden = years <= 10;
 
   const TW = chartWidth(document.getElementById('taxChart').parentNode), TH = TW < 500 ? 220 : 240, TL = TW < 500 ? 64 : 90, TR = 16, TT = 16, TB = 34;
   document.getElementById('taxChart').setAttribute('viewBox', `0 0 ${TW} ${TH}`);
@@ -3648,7 +3659,7 @@ function renderWealth(){
     <line class="wcur" y1="${pt}" y2="${Ht - pb}" style="stroke:var(--muted);display:none"/>
   </svg>`;
 
-  const step = H <= 15 ? 1 : 5;
+  const step = H <= 10 ? 1 : 5;
   let rows = '';
   for (let t = 1; t <= H; t++){
     if (t % step && t !== H) continue;
