@@ -1449,7 +1449,7 @@ const T = {
     scenIntro: 'Bewaar de huidige invoerwaarden, strategie en fondsaannames onder een naam. Alles blijft in deze browser; wis je browsergegevens, dan verdwijnen ze.',
     scenNamePh: 'Naam',
     scenDefault: 'Scenario',
-    scenSave: 'Bewaar huidige invoer', scenDup: 'Er bestaat al een profiel met deze naam. Kies een andere naam, of werk het bestaande profiel bij.', scenUpd: 'Bijwerken met huidige invoer', scenApplyLbl: 'Huidige instellingen toepassen op een bestaand profiel', scenApply: 'Toepassen', saveRateLbl: 'Rente spaargeld per jaar', saveRateYr: 'Rente per jaar op spaargeld', saveRateNote: 'Voorbeeld, nog niet in de totalen verwerkt.', scenActive: 'Actief', scenChanged: 'gewijzigd', scenProfile: 'Profiel', scenPrompt: n => `Je hebt wijzigingen in "${n}" die nog niet zijn opgeslagen. Wat doen we ermee?`, scenPSaveBtn: n => `Opslaan in "${n}"`, scenPDiscard: 'Niet opslaan', scenPCancel: 'Annuleren', scenRename: 'Hernoem', agoNow: 'zojuist', agoMin: n => `${n} min geleden`, agoHr: n => `${n} uur geleden`,
+    scenSave: 'Bewaar huidige invoer', scenDup: 'Er bestaat al een profiel met deze naam. Kies een andere naam, of werk het bestaande profiel bij.', scenUpd: 'Bijwerken met huidige invoer', scenApplyLbl: 'Huidige instellingen toepassen op een bestaand profiel', scenApply: 'Toepassen', saveRateLbl: 'Rente spaargeld per jaar', saveRateYr: 'Rente per jaar op spaargeld', saveRateNote: 'Telt mee in de netto waardeprognose en de belasting.', scenActive: 'Actief', scenChanged: 'gewijzigd', scenProfile: 'Profiel', scenPrompt: n => `Je hebt wijzigingen in "${n}" die nog niet zijn opgeslagen. Wat doen we ermee?`, scenPSaveBtn: n => `Opslaan in "${n}"`, scenPDiscard: 'Niet opslaan', scenPCancel: 'Annuleren', scenRename: 'Hernoem', agoNow: 'zojuist', agoMin: n => `${n} min geleden`, agoHr: n => `${n} uur geleden`,
     scenLoad: 'Laad',
     scenDel: 'Verwijder',
     scenEmpty: 'Nog geen scenario\'s opgeslagen.',
@@ -1597,7 +1597,7 @@ const T = {
     ovN28: 'NL nieuw stelsel (2028)', ovPctOf: 'Over {n} jaar: {p} van je winst ({s})', n28Add: 'ook NL 2028 tonen', wzHint: 'Liever stap voor stap?', tabInput: 'Startwaarden', stratWhere: 'Strategieën en eigen mix pas je aan op Fondsen en aannames.', stratWhereLink: 'Openen', phProg: 'Hoe je inleg groeit, verdeeld over uitkerend en accumulerend.', phWealth: 'Je vermogen na kosten en belasting, voor het land dat je kiest.', phTax: 'Wat je per land aan belasting betaalt over de looptijd.', phFunds: 'De fondsen en rendementen waarop de prognose rekent.', taxBarTitle: 'Landen vergelijken', inputTitle: 'Startwaarden', inputSub: 'Je uitgangspunten. De prognose rekent direct mee.', invGoTxt: 'Wil je je startwaarden aanpassen?', invGoLink: 'Ga naar Startwaarden', wzOpen: 'Start de startwizard', tax2028Note: 'Voorstel: vanaf 1-1-2028 wordt in box 3 alleen het werkelijke rendement belast, 36% boven een heffingsvrij bedrag van € 1.800. Nog onder voorbehoud van de Eerste Kamer. Hier gerekend alsof het vanaf het eerste jaar geldt, met de waardestijging als rendement. Verliezen worden niet verrekend.',
     taxEyebrow: 'Belasting · schatting', taxH1: 'Belasting per land',
     taxLead: 'Hoeveel belasting je per jaar betaalt in de landen die je kiest (tot 4 tegelijk), op basis van je inleg, periode en mix. Schattingen, geen belastingadvies.',
-    saveLbl: 'Deel op spaarrekening (box 3)', saveAmtLbl: 'of typ het bedrag', saveHint: 'Spaargeld telt in box 3 tegen het spaartarief (1,28%) in plaats van het forfaitair rendement (6%). Rente op je spaargeld zit niet in de prognose.',
+    saveLbl: 'Deel op spaarrekening (box 3)', saveAmtLbl: 'of typ het bedrag', saveHint: 'Spaargeld telt in box 3 tegen het spaartarief (1,28%) in plaats van het forfaitair rendement (6%). Het spaardeel wordt niet belegd en groeit met de rente die je invult.',
     ovYearNote: 'Per jaar: belasting over het vermogen aan het begin van dat jaar (NL en AR) en de inhouding op uitkeringen (VS). Bedragen in euro, voor de gekozen periode en instellingen.',
     ovSumCol: 'Totaal', ovSumRow: 'Totaal over periode',
     colEur: '≈ in €',
@@ -1685,7 +1685,7 @@ const T = {
     scenIntro: 'Save the current inputs, strategy and fund assumptions under a name. Everything stays in this browser; clearing browser data removes them.',
     scenNamePh: 'Name',
     scenDefault: 'Scenario',
-    scenSave: 'Save current inputs', scenDup: 'A profile with this name already exists. Choose another name, or update the existing profile.', scenUpd: 'Update with current inputs', scenApplyLbl: 'Apply current settings to an existing profile', scenApply: 'Apply', saveRateLbl: 'Interest on savings per year', saveRateYr: 'Interest per year on savings', saveRateNote: 'Example only, not yet in the totals.', scenActive: 'Active', scenChanged: 'changed', scenProfile: 'Profile', scenPrompt: n => `You have unsaved changes in "${n}". What should we do with them?`, scenPSaveBtn: n => `Save to "${n}"`, scenPDiscard: 'Discard', scenPCancel: 'Cancel', scenRename: 'Rename', agoNow: 'just now', agoMin: n => `${n} min ago`, agoHr: n => `${n} h ago`,
+    scenSave: 'Save current inputs', scenDup: 'A profile with this name already exists. Choose another name, or update the existing profile.', scenUpd: 'Update with current inputs', scenApplyLbl: 'Apply current settings to an existing profile', scenApply: 'Apply', saveRateLbl: 'Interest on savings per year', saveRateYr: 'Interest per year on savings', saveRateNote: 'Included in the net worth forecast and tax.', scenActive: 'Active', scenChanged: 'changed', scenProfile: 'Profile', scenPrompt: n => `You have unsaved changes in "${n}". What should we do with them?`, scenPSaveBtn: n => `Save to "${n}"`, scenPDiscard: 'Discard', scenPCancel: 'Cancel', scenRename: 'Rename', agoNow: 'just now', agoMin: n => `${n} min ago`, agoHr: n => `${n} h ago`,
     scenLoad: 'Load',
     scenDel: 'Delete',
     scenEmpty: 'No saved scenarios yet.',
@@ -1833,7 +1833,7 @@ const T = {
     ovN28: 'NL new system (2028)', ovPctOf: 'Over {n} years: {p} of your gain ({s})', n28Add: 'also show NL 2028', wzHint: 'Prefer step by step?', tabInput: 'Starting values', stratWhere: 'Strategies and your own mix are changed on Funds and assumptions.', stratWhereLink: 'Open', phProg: 'How your investment grows, split between distributing and accumulating.', phWealth: 'Your wealth after costs and tax, for the country you choose.', phTax: 'What you pay in tax per country over the horizon.', phFunds: 'The funds and returns the forecast is based on.', taxBarTitle: 'Compare countries', inputTitle: 'Starting values', inputSub: 'Your starting points. The forecast updates right away.', invGoTxt: 'Want to change your starting values?', invGoLink: 'Go to Starting values', wzOpen: 'Start the start wizard', tax2028Note: 'Proposal: from 1-1-2028 Dutch wealth taxes only the actual return, 36% above a tax-free amount of €1,800. Still subject to approval by the Senate. Calculated here as if it applies from year one, with the increase in value as return. Losses are not offset.',
     taxEyebrow: 'Tax · estimate', taxH1: 'Tax per country',
     taxLead: 'How much tax you pay per year in the Netherlands, the US and Argentina, based on your investment, period and mix. Estimates, not tax advice.',
-    saveLbl: 'Share in savings account (Dutch wealth tax)', saveAmtLbl: 'or type the amount', saveHint: 'Savings count in Dutch wealth tax at the savings rate (1.28%) instead of the deemed return (6%). Interest on your savings is not in the forecast.',
+    saveLbl: 'Share in savings account (Dutch wealth tax)', saveAmtLbl: 'or type the amount', saveHint: 'Savings count in Dutch wealth tax at the savings rate (1.28%) instead of the deemed return (6%). The savings share is not invested and grows at the interest rate you enter.',
     ovYearNote: 'Per year: tax on assets at the start of that year (NL and AR) and the withholding on distributions (US). Amounts in euro, for the chosen period and settings.',
     ovSumCol: 'Total', ovSumRow: 'Total over period',
     colEur: '≈ in €',
@@ -1921,7 +1921,7 @@ const T = {
     scenIntro: 'Guarda las entradas, la estrategia y los supuestos de fondos con un nombre. Todo se queda en este navegador; si borras los datos del navegador, desaparecen.',
     scenNamePh: 'Nombre',
     scenDefault: 'Escenario',
-    scenSave: 'Guardar entradas actuales', scenDup: 'Ya existe un perfil con ese nombre. Elige otro nombre o actualiza el perfil existente.', scenUpd: 'Actualizar con las entradas actuales', scenApplyLbl: 'Aplicar los ajustes actuales a un perfil existente', scenApply: 'Aplicar', saveRateLbl: 'Interés del ahorro por año', saveRateYr: 'Interés anual del ahorro', saveRateNote: 'Solo ejemplo, aún no incluido en los totales.', scenActive: 'Activo', scenChanged: 'modificado', scenProfile: 'Perfil', scenPrompt: n => `Tienes cambios sin guardar en "${n}". ¿Qué hacemos con ellos?`, scenPSaveBtn: n => `Guardar en "${n}"`, scenPDiscard: 'No guardar', scenPCancel: 'Cancelar', scenRename: 'Renombrar', agoNow: 'justo ahora', agoMin: n => `hace ${n} min`, agoHr: n => `hace ${n} h`,
+    scenSave: 'Guardar entradas actuales', scenDup: 'Ya existe un perfil con ese nombre. Elige otro nombre o actualiza el perfil existente.', scenUpd: 'Actualizar con las entradas actuales', scenApplyLbl: 'Aplicar los ajustes actuales a un perfil existente', scenApply: 'Aplicar', saveRateLbl: 'Interés del ahorro por año', saveRateYr: 'Interés anual del ahorro', saveRateNote: 'Incluido en la previsión de patrimonio neto y en el impuesto.', scenActive: 'Activo', scenChanged: 'modificado', scenProfile: 'Perfil', scenPrompt: n => `Tienes cambios sin guardar en "${n}". ¿Qué hacemos con ellos?`, scenPSaveBtn: n => `Guardar en "${n}"`, scenPDiscard: 'No guardar', scenPCancel: 'Cancelar', scenRename: 'Renombrar', agoNow: 'justo ahora', agoMin: n => `hace ${n} min`, agoHr: n => `hace ${n} h`,
     scenLoad: 'Cargar',
     scenDel: 'Eliminar',
     scenEmpty: 'Aún no hay escenarios guardados.',
@@ -2069,7 +2069,7 @@ const T = {
     ovN28: 'Países Bajos nuevo sistema (2028)', ovPctOf: 'En {n} años: {p} de tu ganancia ({s})', n28Add: 'mostrar también P. Bajos 2028', wzHint: '¿Prefieres paso a paso?', tabInput: 'Valores iniciales', stratWhere: 'Las estrategias y tu propia mezcla se cambian en Fondos y supuestos.', stratWhereLink: 'Abrir', phProg: 'Cómo crece tu inversión, repartida entre distribución y acumulación.', phWealth: 'Tu patrimonio después de costes e impuestos, para el país que elijas.', phTax: 'Lo que pagas de impuestos por país durante el plazo.', phFunds: 'Los fondos y rendimientos en los que se basa la previsión.', taxBarTitle: 'Comparar países', inputTitle: 'Valores iniciales', inputSub: 'Tus puntos de partida. La previsión se actualiza al momento.', invGoTxt: '¿Quieres cambiar tus valores iniciales?', invGoLink: 'Ir a Valores iniciales', wzOpen: 'Abrir el asistente inicial', tax2028Note: 'Propuesta: desde el 1-1-2028 la caja 3 solo grava el rendimiento real, al 36% por encima de un mínimo exento de 1.800 €. Aún pendiente de aprobación por el Senado. Aquí se calcula como si aplicara desde el primer año, con la subida del valor como rendimiento. Las pérdidas no se compensan.',
     taxEyebrow: 'Impuestos · estimación', taxH1: 'Impuestos por país',
     taxLead: 'Cuánto impuesto pagas al año en Países Bajos, EE. UU. y Argentina, según tu inversión, periodo y mezcla. Estimaciones, no asesoramiento fiscal.',
-    saveLbl: 'Parte en cuenta de ahorro (impuesto neerlandés sobre el patrimonio)', saveAmtLbl: 'o escribe el importe', saveHint: 'El ahorro cuenta en impuesto neerlandés sobre el patrimonio al tipo de ahorro (1,28%) en lugar del rendimiento forfetario (6%). Los intereses de tu ahorro no están en la previsión.',
+    saveLbl: 'Parte en cuenta de ahorro (impuesto neerlandés sobre el patrimonio)', saveAmtLbl: 'o escribe el importe', saveHint: 'El ahorro cuenta en impuesto neerlandés sobre el patrimonio al tipo de ahorro (1,28%) en lugar del rendimiento forfetario (6%). La parte de ahorro no se invierte y crece al tipo de interés que indiques.',
     ovYearNote: 'Por año: impuesto sobre el patrimonio al inicio de ese año (NL y AR) y la retención sobre distribuciones (EE. UU.). Importes en euros, para el periodo y los ajustes elegidos.',
     ovSumCol: 'Total', ovSumRow: 'Total en el periodo',
     colEur: '≈ en €',
@@ -2580,6 +2580,9 @@ function neededAmount(targetMonth, mix, sc){
 /* ============ box 3 (NL) ============ */
 const BOX3 = { hv: 59357, tarief: 0.36, rOv: 0.06, rSp: 0.0128 };
 // sp = deel van het vermogen op een spaarrekening (0..1); spaargeld telt tegen het spaartarief
+// Spaardeel: staat op een spaarrekening (niet belegd) en groeit met de ingevoerde rente.
+const spNow = () => savePct / 100;
+const savAt = t => amountNow * spNow() * Math.pow(1 + rateVal() / 100, t);
 function box3Year(fund, cash, sp = 0){
   const V = fund + cash;
   if (V <= BOX3.hv) return 0;
@@ -2689,11 +2692,11 @@ function renderTax(d, a, years, dStart, sc, amount){
   });
   for (let t = 0; t < years; t++){
     const fund = d.vals[t] + a.vals[t];
-    const cash = d.cashArr[t];
-    const tax = box3Year(fund, cash, savePct / 100);
+    const cash = d.cashArr[t] + savAt(t);   // uitgekeerd dividend + spaargeld: beide tegen het spaartarief
+    const tax = box3Year(fund, cash, 0);
     nl.push(tax);
     // voorstel box 3 vanaf 2028: 36% over het werkelijke rendement boven € 1.800 (verliezen niet verrekend)
-    const gain28 = (d.vals[t + 1] + a.vals[t + 1] + d.cashArr[t + 1]) - (fund + cash) - 12 * monthlyAmt;
+    const gain28 = (d.vals[t + 1] + a.vals[t + 1] + d.cashArr[t + 1] + savAt(t + 1)) - (fund + cash) - 12 * monthlyAmt;
     n28.push(0.36 * Math.max(0, gain28 - 1800));
     bs.nl.push(Math.max(0, fund + cash - BOX3.hv));
     bs.n28.push(Math.max(0, gain28 - 1800));
@@ -2710,7 +2713,7 @@ function renderTax(d, a, years, dStart, sc, amount){
   document.getElementById('box3Rows').innerHTML = rows;
   document.getElementById('box3Total').textContent = EUR(nl.reduce((s,v) => s + v, 0));
   // winst = eindvermogen (incl. uitbetaald) min alles wat je hebt ingelegd
-  const gain = d.vals[years] + a.vals[years] + d.cashArr[years] - (amount + 12 * monthlyAmt * years);
+  const gain = d.vals[years] + a.vals[years] + d.cashArr[years] + savAt(years) - savAt(0) - (amount + 12 * monthlyAmt * years);
   lastTx = {tx:{nl, us, ar, n28, ...ex}, txb:{...bs, ...exb}, amount, years, gain};
   renderOverview();
 }
@@ -2972,7 +2975,7 @@ function renderCalendar(){
   const L = CALT[lang] || CALT.nl;
   const years = parseInt(document.getElementById('jaren').value, 10);
   const sc = scen[document.querySelector('input[name=scen]:checked').value];
-  const divAmt = amountNow * groupMixOf('div');
+  const divAmt = amountNow * (1 - spNow()) * groupMixOf('div');
   const divC = 12 * monthlyAmt * groupMixOf('div');
   const divs = funds.filter(f => f.group === 'div');
   const sumW = divs.reduce((s,f) => s + f.w, 0) || 1;
@@ -3044,7 +3047,7 @@ function updateSaveLbl(){
   }
   updateSavInt();
 }
-document.getElementById('savRate').addEventListener('input', () => { updateSavInt(); saveLast(); });
+document.getElementById('savRate').addEventListener('input', () => { updateSavInt(); recalc(); });
 function recalc(){
   updateSaveLbl();
   updateProfBtn();
@@ -3052,7 +3055,7 @@ function recalc(){
   renderMonthly();
   syncGoal();
   persistFunds();
-  const amount = amountNow;
+  const amount = amountNow * (1 - spNow());   // het spaardeel wordt niet belegd
   const years = parseInt(document.getElementById('jaren').value, 10);
   const mix = parseFloat(document.getElementById('mix').value) / 100;
   const goalOn = dividendGoalOn();
@@ -3986,9 +3989,9 @@ renderBedrag();
 applyStatic();
 /* ============ vermogensprognose ============ */
 const WL = {
-  nl:{yrs:'Periode', title:'Netto waardeprognose', sub:'Hoe je vermogen zich ontwikkelt bij de invoerwaarden, strategie en scenario die je hebt gekozen. Netto is na de belastingschatting die je kiest.', kGross:'Bruto vermogen', kNet:'Netto vermogen', kPaid:'Uitgekeerd', kTax:'Belastingen, geschat', kInleg:'Ingelegd', inlNote:'Ingelegd is wat je zelf hebt ingelegd: het startvermogen plus alle maandelijkse inleg. Het verschil met het netto vermogen is je rendement na kosten en belasting.', kGoal:'Doel bereikt', kDouble:'Verdubbeling netto', dNo:'Niet binnen de periode', legG:'Bruto vermogen', legN:'Netto vermogen', legI:'Ingelegd', year:'Jaar', colFund:'In fondsen', colCash:'Uitgekeerd', colTax:'Belastingen cumulatief', colNet:'Netto', colCost:'Kosten (TER)', kCost:'Betaald aan kosten (TER)', costNote:'Kosten zitten al in de waarde in fondsen en worden dus niet nog eens afgetrokken. Ze staan hier alleen om te laten zien wat je ze kosten.', noDom:'Kies hierboven je land van domicilie; tot die tijd zijn de belastingen 0.', resNote:'Schatting voor het gekozen land van domicilie. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.', noTax:'Geen belastingschatting gekozen, dus de belastingen zijn 0.', note:'De Box 3-schatting gebruikt het heffingsvrij vermogen en het forfaitaire rendement uit het tabblad Belasting. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.'},
-  en:{yrs:'Period', title:'Net worth forecast', sub:'How your wealth develops with the inputs, strategy and scenario you chose. Net is after the tax estimate you choose.', kGross:'Gross wealth', kNet:'Net wealth', kPaid:'Paid out', kTax:'Taxes, estimated', kInleg:'Invested', inlNote:'Invested is what you put in yourself: the starting capital plus all monthly contributions. The difference with net wealth is your return after costs and tax.', kGoal:'Target reached', kDouble:'Net doubling time', dNo:'Not within the period', legG:'Gross wealth', legN:'Net wealth', legI:'Invested', year:'Year', colFund:'In funds', colCash:'Paid out', colTax:'Taxes cumulative', colNet:'Net', colCost:'Fund costs (TER)', kCost:'Paid in fund costs (TER)', costNote:'Costs are already included in the fund value and are not deducted again. They are shown to show what they cost you.', noDom:'Choose your country of residence above; until then taxes are 0.', resNote:'Estimate for the chosen country of residence. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.', noTax:'No tax estimate selected, so taxes are 0.', note:'The Dutch wealth tax estimate uses the tax-free allowance and the flat return from the Tax tab. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.'},
-  es:{yrs:'Periodo', title:'Previsión de patrimonio neto', sub:'Cómo evoluciona tu patrimonio con las entradas, la estrategia y el escenario que elegiste. El neto es después de la estimación de impuestos que elijas.', kGross:'Patrimonio bruto', kNet:'Patrimonio neto', kPaid:'Pagado', kTax:'Impuestos, estimados', kInleg:'Aportado', inlNote:'Aportado es lo que has puesto tú: el capital inicial más todas las aportaciones mensuales. La diferencia con el patrimonio neto es tu rentabilidad tras costes e impuestos.', kGoal:'Objetivo alcanzado', kDouble:'Doblar el neto', dNo:'No dentro del periodo', legG:'Patrimonio bruto', legN:'Patrimonio neto', legI:'Invertido', year:'Año', colFund:'En fondos', colCash:'Pagado', colTax:'Impuestos acumulados', colNet:'Neto', colCost:'Costes (TER)', kCost:'Pagado en costes (TER)', costNote:'Los costes ya están incluidos en el valor de los fondos y no se restan otra vez. Se muestran para que veas lo que te cuestan.', noDom:'Elige arriba tu país de residencia; hasta entonces los impuestos son 0.', resNote:'Estimación para el país de residencia elegido. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.', noTax:'No hay estimación de impuestos elegida, así que los impuestos son 0.', note:'La estimación de impuesto neerlandés sobre el patrimonio usa el mínimo exento y el rendimiento forfait de la pestaña Impuestos. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.'}
+  nl:{yrs:'Periode', title:'Netto waardeprognose', sub:'Hoe je vermogen zich ontwikkelt bij de invoerwaarden, strategie en scenario die je hebt gekozen. Netto is na de belastingschatting die je kiest.', kGross:'Bruto vermogen', kNet:'Netto vermogen', kSav:'Spaargeld', colSav:'Spaargeld', kPaid:'Uitgekeerd', kTax:'Belastingen, geschat', kInleg:'Ingelegd', inlNote:'Ingelegd is wat je zelf hebt ingelegd: het startvermogen plus alle maandelijkse inleg. Het verschil met het netto vermogen is je rendement na kosten en belasting.', kGoal:'Doel bereikt', kDouble:'Verdubbeling netto', dNo:'Niet binnen de periode', legG:'Bruto vermogen', legN:'Netto vermogen', legI:'Ingelegd', year:'Jaar', colFund:'In fondsen', colCash:'Uitgekeerd', colTax:'Belastingen cumulatief', colNet:'Netto', colCost:'Kosten (TER)', kCost:'Betaald aan kosten (TER)', costNote:'Kosten zitten al in de waarde in fondsen en worden dus niet nog eens afgetrokken. Ze staan hier alleen om te laten zien wat je ze kosten.', noDom:'Kies hierboven je land van domicilie; tot die tijd zijn de belastingen 0.', resNote:'Schatting voor het gekozen land van domicilie. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.', noTax:'Geen belastingschatting gekozen, dus de belastingen zijn 0.', note:'De Box 3-schatting gebruikt het heffingsvrij vermogen en het forfaitaire rendement uit het tabblad Belasting. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.'},
+  en:{yrs:'Period', title:'Net worth forecast', sub:'How your wealth develops with the inputs, strategy and scenario you chose. Net is after the tax estimate you choose.', kGross:'Gross wealth', kNet:'Net wealth', kSav:'Savings', colSav:'Savings', kPaid:'Paid out', kTax:'Taxes, estimated', kInleg:'Invested', inlNote:'Invested is what you put in yourself: the starting capital plus all monthly contributions. The difference with net wealth is your return after costs and tax.', kGoal:'Target reached', kDouble:'Net doubling time', dNo:'Not within the period', legG:'Gross wealth', legN:'Net wealth', legI:'Invested', year:'Year', colFund:'In funds', colCash:'Paid out', colTax:'Taxes cumulative', colNet:'Net', colCost:'Fund costs (TER)', kCost:'Paid in fund costs (TER)', costNote:'Costs are already included in the fund value and are not deducted again. They are shown to show what they cost you.', noDom:'Choose your country of residence above; until then taxes are 0.', resNote:'Estimate for the chosen country of residence. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.', noTax:'No tax estimate selected, so taxes are 0.', note:'The Dutch wealth tax estimate uses the tax-free allowance and the flat return from the Tax tab. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.'},
+  es:{yrs:'Periodo', title:'Previsión de patrimonio neto', sub:'Cómo evoluciona tu patrimonio con las entradas, la estrategia y el escenario que elegiste. El neto es después de la estimación de impuestos que elijas.', kGross:'Patrimonio bruto', kNet:'Patrimonio neto', kSav:'Ahorro', colSav:'Ahorro', kPaid:'Pagado', kTax:'Impuestos, estimados', kInleg:'Aportado', inlNote:'Aportado es lo que has puesto tú: el capital inicial más todas las aportaciones mensuales. La diferencia con el patrimonio neto es tu rentabilidad tras costes e impuestos.', kGoal:'Objetivo alcanzado', kDouble:'Doblar el neto', dNo:'No dentro del periodo', legG:'Patrimonio bruto', legN:'Patrimonio neto', legI:'Invertido', year:'Año', colFund:'En fondos', colCash:'Pagado', colTax:'Impuestos acumulados', colNet:'Neto', colCost:'Costes (TER)', kCost:'Pagado en costes (TER)', costNote:'Los costes ya están incluidos en el valor de los fondos y no se restan otra vez. Se muestran para que veas lo que te cuestan.', noDom:'Elige arriba tu país de residencia; hasta entonces los impuestos son 0.', resNote:'Estimación para el país de residencia elegido. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.', noTax:'No hay estimación de impuestos elegida, así que los impuestos son 0.', note:'La estimación de impuesto neerlandés sobre el patrimonio usa el mínimo exento y el rendimiento forfait de la pestaña Impuestos. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.'}
 };
 function renderWealth(){
   syncCmp();
@@ -4006,41 +4009,42 @@ function renderWealth(){
   const resid = document.getElementById('resid').value;
   const bx = (resid === 'nl' && isNL()) ? ' (box 3)' : '';
   const yC = 12 * monthlyAmt, dC = yC * mix, aC = yC * (1 - mix);
-  const d = basket('div', amountNow * mix, H, reinvest, sc, dC);
-  const a = basket('acc', amountNow * (1 - mix), H, reinvest, sc, aC);
-  const fund = [], cash = [], tax = [], net = [];
-  for (let t = 0; t <= H; t++){ fund[t] = d.vals[t] + a.vals[t]; cash[t] = d.cashArr[t] + a.cashArr[t]; }
-  const dPay = basket('div', amountNow * mix, H, false, sc, dC), aPay = basket('acc', amountNow * (1 - mix), H, false, sc, aC);
+  const inv = amountNow * (1 - sp);   // belegd deel; het spaardeel groeit met de spaarrente
+  const d = basket('div', inv * mix, H, reinvest, sc, dC);
+  const a = basket('acc', inv * (1 - mix), H, reinvest, sc, aC);
+  const fund = [], cash = [], sav = [], tax = [], net = [];
+  for (let t = 0; t <= H; t++){ fund[t] = d.vals[t] + a.vals[t]; cash[t] = d.cashArr[t] + a.cashArr[t]; sav[t] = savAt(t); }
+  const dPay = basket('div', inv * mix, H, false, sc, dC), aPay = basket('acc', inv * (1 - mix), H, false, sc, aC);
   const paid = [];
   for (let t = 0; t <= H; t++) paid[t] = dPay.cashArr[t] + aPay.cashArr[t];
   const taxSeries = rs => {
     const out = [0]; let cumTax = 0;
     for (let t = 1; t <= H; t++){
       const divT = Math.max(0, paid[t] - paid[t-1]);
-      const gain = (fund[t] + cash[t]) - (fund[t-1] + cash[t-1]) - yC;
+      const gain = (fund[t] + cash[t] + sav[t]) - (fund[t-1] + cash[t-1] + sav[t-1]) - yC;
       const cgT = Math.max(0, gain - divT);
       let yt = 0;
-      if (rs === 'nl') yt = box3Year(fund[t], cash[t], sp);
+      if (rs === 'nl') yt = box3Year(fund[t], cash[t] + sav[t], 0);
       else if (rs === 'n28') yt = 0.36 * Math.max(0, gain - 1800);
-      else if (rs === 'ar') yt = arRateVal > 0 ? arTax((fund[t] + cash[t]) * arRateVal) / arRateVal : 0;
+      else if (rs === 'ar') yt = arRateVal > 0 ? arTax((fund[t] + cash[t] + sav[t]) * arRateVal) / arRateVal : 0;
       else { const e = EXTRA.find(x => x.k === rs); if (e) yt = e.f(divT, cgT, t - 1)[0]; }
       cumTax += yt; out[t] = cumTax;
     }
     return out;
   };
   tax.push(...taxSeries(resid));
-  for (let t = 0; t <= H; t++) net[t] = fund[t] + cash[t] - tax[t];
+  for (let t = 0; t <= H; t++) net[t] = fund[t] + cash[t] + sav[t] - tax[t];
   const second = (cmp2 && cmp2 !== resid && cmp2 !== 'none') ? cmp2 : '';
   const name1 = (resid && resid !== 'none') ? (ALL.find(c => c.k === resid) ? ALL.find(c => c.k === resid).name() : ((EXTRA.find(e => e.k === resid) || {names:{}}).names[lang] || resid)) : W.legN;
   const name2 = second ? (ALL.find(c => c.k === second) ? ALL.find(c => c.k === second).name() : (EXTRA.find(e => e.k === second) || {names:{}}).names[lang] || second) : '';
   const tax2 = second ? taxSeries(second) : null;
-  const net2 = second ? fund.map((v, t) => v + cash[t] - tax2[t]) : null;
+  const net2 = second ? fund.map((v, t) => v + cash[t] + sav[t] - tax2[t]) : null;
   // ingelegd: vast startbedrag, stijgt alleen met de maandelijkse inleg
   const inArr = []; for (let t = 0; t <= H; t++) inArr[t] = amountNow + yC * t;
   const inleg = inArr[H];
   const costYr = new Array(H + 1).fill(0);
   funds.forEach(f => {
-    const share = (f.group === 'div' ? amountNow * mix : amountNow * (1 - mix)) * f.w / groupSum(f.group);
+    const share = (f.group === 'div' ? inv * mix : inv * (1 - mix)) * f.w / groupSum(f.group);
     const g = f.g + sc.dg;
     const y = f.y > 0 ? Math.max(0, f.y + sc.dy) : 0;
     const cf = (f.group === 'div' ? yC * mix : yC * (1 - mix)) * f.w / groupSum(f.group);
@@ -4065,6 +4069,7 @@ function renderWealth(){
     `<div class="calk"><span>${W.kGross}</span><b>${EUR(fund[H])}</b></div>`,
     `<div class="calk"><span>${W.kNet}</span><b>${EUR(net[H])}</b></div>`,
     `<div class="calk"><span>${W.kPaid}</span><b>${EUR(cash[H])}</b></div>`,
+    ...(sp > 0 ? [`<div class="calk"><span>${W.kSav}</span><b>${EUR(sav[H])}</b></div>`] : []),
     `<div class="calk"><span>${W.kCost}</span><b>${EUR(costCum[H])}</b></div>`,
     ...(net2 ? [
       `<div class="calk"><span>${name1}: ${W.kTax}</span><b>${EUR(tax[H])}</b></div>`,
@@ -4103,7 +4108,7 @@ function renderWealth(){
   let rows = '';
   for (let t = 1; t <= H; t++){
     if (t % step && t !== H) continue;
-    rows += `<tr><th scope="row">${W.year} ${t}</th><td data-l="${W.colFund}">${EUR(fund[t])}</td><td data-l="${W.colCash}">${EUR(cash[t])}</td><td data-l="${W.colTax}${bx}">${EUR(tax[t])}</td><td data-l="${W.colCost}">${EUR(costCum[t])}</td><td class="tot" data-l="${W.colNet}">${EUR(net[t])}</td>${net2 ? `<td class="tot2" data-l="${name2}">${EUR(net2[t])}</td>` : ''}</tr>`;
+    rows += `<tr><th scope="row">${W.year} ${t}</th><td data-l="${W.colFund}">${EUR(fund[t])}</td><td data-l="${W.colCash}">${EUR(cash[t])}</td>${sp > 0 ? `<td data-l="${W.colSav}">${EUR(sav[t])}</td>` : ''}<td data-l="${W.colTax}${bx}">${EUR(tax[t])}</td><td data-l="${W.colCost}">${EUR(costCum[t])}</td><td class="tot" data-l="${W.colNet}">${EUR(net[t])}</td>${net2 ? `<td class="tot2" data-l="${name2}">${EUR(net2[t])}</td>` : ''}</tr>`;
   }
 
   el.innerHTML = `
@@ -4112,7 +4117,7 @@ function renderWealth(){
     <section class="panel">
     <div class="wlegend"><span><i></i>${resid && resid !== 'none' ? name1 + ': ' + W.legN : W.legN}</span>${net2 ? `<span><i class="sol2"></i>${name2}: ${W.legN}</span>` : ''}<span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span></div>
     <div class="wwrap">${svg}<div class="wtip" hidden></div></div>
-    <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th><th>${W.colTax}${bx}</th><th>${W.colCost}</th><th>${W.colNet}</th>${net2 ? `<th>${name2}</th>` : ''}</tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th>${sp > 0 ? `<th>${W.colSav}</th>` : ''}<th>${W.colTax}${bx}</th><th>${W.colCost}</th><th>${W.colNet}</th>${net2 ? `<th>${name2}</th>` : ''}</tr></thead><tbody>${rows}</tbody></table></div>
     <div class="calnotes"><div class="calnotes-hd">${tr('calNotesHd')}</div><p class="sub calnote"><b>${W.kInleg}:</b> ${W.inlNote}</p><p class="sub calnote">${W.costNote}</p>
     <p class="sub calnote">${resid === '' ? W.noDom : (resid === 'none' ? W.noTax : W.resNote)}</p></div>
     </section>`;
@@ -4133,6 +4138,7 @@ function renderWealth(){
       ${net2 ? `<div><i style="background:#f59e0b"></i>${name2}: ${EUR(net2[tt])} · ${W.colTax}: ${EUR(tax2[tt])}</div>` : ''}
       <div><i class="dash"></i>${W.legI}: ${EUR(inArr[tt])}</div>
       <div>${W.colCash}: ${EUR(cash[tt])}</div>
+      ${sp > 0 ? `<div>${W.colSav}: ${EUR(sav[tt])}</div>` : ''}
       ${net2 ? '' : `<div>${W.colTax}${bx}: ${EUR(tax[tt])}</div>`}
       <div>${W.colCost}: ${EUR(costCum[tt])}</div>`;
     tip.hidden = false;

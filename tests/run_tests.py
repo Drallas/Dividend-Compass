@@ -71,6 +71,22 @@ with sync_playwright() as p:
     check("1k niet opslaan wijzigt het andere profiel niet", pg.evaluate("loadScen().find(x=>x.name==='Hoog').data.amount") == 500000)
     pg.close()
 
+    # 10. Spaarrente telt mee: spaardeel groeit met de rente en staat in netto waarde en tabel
+    pg, errs = new_page(b)
+    pg.evaluate("() => { manualAmount = 100000; amountNow = 100000; pickResid('nl'); recalc(); }")
+    pg.evaluate("() => { const s=document.getElementById('savePct'); s.value=50; s.dispatchEvent(new Event('input')); const r=document.getElementById('savRate'); r.value='4'; r.dispatchEvent(new Event('input')); }")
+    pg.wait_for_timeout(300)
+    got = pg.evaluate("savAt(10)")
+    check("10a spaarbedrag groeit met samengestelde rente", abs(got - 50000 * 1.04 ** 10) < 0.01, got)
+    pg.evaluate("document.querySelector('.tabs .tab[data-tab=\"tabWealth\"]').click()"); pg.wait_for_timeout(300)
+    txt = pg.inner_text("#wealthBody")
+    import re
+    check("10b netto waarde toont spaargeld na 10 jaar", re.search(r"74[.,]012", txt) is not None)
+    pg.evaluate("() => { const r=document.getElementById('savRate'); r.value='0'; r.dispatchEvent(new Event('input')); }"); pg.wait_for_timeout(300)
+    check("10c bij 0% rente blijft het spaardeel gelijk", abs(pg.evaluate("savAt(10)") - 50000) < 0.01)
+    check("10d geen fouten", not errs, errs)
+    pg.close()
+
     # 1. Roundtrip: alle opgeslagen waarden komen terug
     pg, errs = new_page(b)
     set_domicile(pg, "nl")
