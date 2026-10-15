@@ -3935,6 +3935,9 @@ function renderSpend(){
   if (document.activeElement !== el) el.value = fmtNum(toDisp(spendMonthly));
   el.disabled = reinvNow;
   el.closest('.field').classList.toggle('muted', reinvNow);
+  // gewenst dividend (doel) is niet bruikbaar zolang uitkeringen herbelegd worden
+  const tg = document.getElementById('target'), tgR = document.getElementById('targetRange');
+  tg.disabled = reinvNow; tgR.disabled = reinvNow; tg.closest('.field').classList.toggle('muted', reinvNow);
   const r = document.getElementById('spendRange');
   r.max = Math.max(1, spendCapNow);
   r.disabled = reinvNow || spendCapNow <= 0;
