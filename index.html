@@ -1542,7 +1542,7 @@ const T = {
     tipDiv: 'Dividend', tipAcc: 'Acc',
     kEind: n => `Eindwaarde van het vermogen na ${n} ${n === 1 ? 'jaar' : 'jaar'}`,
     kWaarde: 'Fondsen', kTotGen: 'Totaal', kUitb: 'Uitbetaald', totNote: 'Totaal = in fondsen + uitbetaald', mixGroup: 'Verdeling dividend / acc', presetLbl: 'Strategie', presetAgg: 'Agressief', presetBal: 'Gebalanceerd', presetCons: 'Defensief', presetHint: 'Agressief en defensief gaan over risico én over hoe het rendement komt: meer uitkering of meer groei. De verdeling dividend/acc volgt uit het voorstel. Je kunt daarna alles handmatig aanpassen.',
-    kRend: 'Rendement over de periode', divRet: 'Dividend rendement', accRet: 'Acc rendement',
+    kRend: 'Rendement over de periode (voor belasting)', retNote: 'Voor belasting hebben uitkerend en accumulerend hier hetzelfde rendement; het verschil zit in belasting en uitbetaling (zie Belasting).', divRet: 'Dividend rendement', accRet: 'Acc rendement',
     kPerMaand: 'Dividend per maand bij start',
     kKosten: 'Kosten (TER) over de periode',
     startValue: 'Startwaarde',
@@ -1778,7 +1778,7 @@ const T = {
     tipDiv: 'Dividend', tipAcc: 'Acc',
     kEind: n => `Final value of the holdings after ${n} ${n === 1 ? 'year' : 'years'}`,
     kWaarde: 'In funds', kTotGen: 'Total', kUitb: 'Paid out', totNote: 'Total = in funds + paid out', mixGroup: 'Split dividend / acc', presetLbl: 'Strategy', presetAgg: 'Aggressive', presetBal: 'Balanced', presetCons: 'Defensive', presetHint: 'Aggressive and defensive are about risk and where the return comes from: more payout or more growth. The dividend/acc split follows from the proposal. You can adjust everything by hand afterwards.',
-    kRend: 'Return over the period', divRet: 'Dividend return', accRet: 'Acc return',
+    kRend: 'Return over the period (before tax)', retNote: 'Before tax, distributing and accumulating have the same return here; the difference lies in tax and payout (see Tax).', divRet: 'Dividend return', accRet: 'Acc return',
     kPerMaand: 'Dividend per month at start',
     kKosten: 'Costs (TER) over the period',
     startValue: 'Starting value',
@@ -2014,7 +2014,7 @@ const T = {
     tipDiv: 'Dividendo', tipAcc: 'Acum.',
     kEind: n => `Valor final de la inversión tras ${n} ${n === 1 ? 'año' : 'años'}`,
     kWaarde: 'En fondos', kTotGen: 'Total', kUitb: 'Pagado', totNote: 'Total = en fondos + pagado', mixGroup: 'Reparto dividendo / acc', presetLbl: 'Estrategia', presetAgg: 'Agresiva', presetBal: 'Equilibrada', presetCons: 'Defensiva', presetHint: 'Agresiva y defensiva van sobre el riesgo y de dónde sale el rendimiento: más distribución o más crecimiento. El reparto dividendo/acc sale de la propuesta. Después puedes ajustarlo todo a mano.',
-    kRend: 'Rendimiento del periodo', divRet: 'Rendimiento dividendo', accRet: 'Rendimiento acum.',
+    kRend: 'Rendimiento del periodo (antes de impuestos)', retNote: 'Antes de impuestos, distribuir y acumular tienen aquí la misma rentabilidad; la diferencia está en los impuestos y el pago (ver Impuestos).', divRet: 'Rendimiento dividendo', accRet: 'Rendimiento acum.',
     kPerMaand: 'Dividendo al mes al inicio',
     kKosten: 'Costes (TER) del periodo',
     startValue: 'Valor inicial',
@@ -2223,6 +2223,8 @@ const SYN_T = {
   "ix.europa": "Europa",
   "ix.europa-hoog-dividend": "Europa, hoog dividend",
   "ix.opkomende-markten": "Opkomende markten",
+  "ix.wereld-laagvol": "Wereld, lage volatiliteit",
+  "ix.obligaties": "Obligaties (euro)",
   "ix.sp500": "VS, S&P 500",
   "ix.sp500-dividend": "VS, dividend",
   "st.defensief": "Defensief",
@@ -2308,6 +2310,8 @@ const SYN_T = {
   "ix.europa": "Europe",
   "ix.europa-hoog-dividend": "Europe, high dividend",
   "ix.opkomende-markten": "Emerging markets",
+  "ix.wereld-laagvol": "World, low volatility",
+  "ix.obligaties": "Bonds (euro)",
   "ix.sp500": "US, S&P 500",
   "ix.sp500-dividend": "US, dividend",
   "st.defensief": "Defensive",
@@ -2393,6 +2397,8 @@ const SYN_T = {
   "ix.europa": "Europa",
   "ix.europa-hoog-dividend": "Europa, dividendo alto",
   "ix.opkomende-markten": "Mercados emergentes",
+  "ix.wereld-laagvol": "Mundo, baja volatilidad",
+  "ix.obligaties": "Bonos (euro)",
   "ix.sp500": "EE. UU., S&P 500",
   "ix.sp500-dividend": "EE. UU., dividendo",
   "st.defensief": "Defensiva",
@@ -3162,7 +3168,7 @@ function recalc(){
     kpiCard(tr('kRend'), [
       {k:'div', name:tr('divRet'), v:PCT(dRet)},
       {k:'acc', name:tr('accRet'), v:PCT(aRet)}
-    ], tr('avgPerYear')(PCT(dPa), PCT(aPa)) + '<br>' + fillT('investedSplit', {d: EUR(dIn), a: EUR(aIn)}), undefined, '#10b981'),
+    ], tr('avgPerYear')(PCT(dPa), PCT(aPa)) + '<br>' + fillT('investedSplit', {d: EUR(dIn), a: EUR(aIn)}) + '<br>' + tr('retNote'), undefined, '#10b981'),
     kpiCard(tr('kPerMaand'), [
       {k:'div', name: tr('approxMonth'), v:EUR(incomeMonth)},
       ...(reinvest ? [] : [{k:'div', name: tr('paidTotal'), v:EUR(dCash)}])
@@ -3436,6 +3442,8 @@ const SYNTH_IX = {
   'wereld-middel-dividend': {n:'Wereld, middel dividend', t:7.3, d:2.5, ter:0.20, v:15, s:-40},
   'wereld-hoog-dividend': {n:'Wereld, hoog dividend', t:7.0, d:3.5, ter:0.29, v:15, s:-38},
   'wereld-quality': {n:'Wereld, kwaliteit', t:8.0, d:1.5, ter:0.25, v:15, s:-42},
+  'wereld-laagvol': {n:'Wereld, lage volatiliteit', t:6.8, d:2.4, ter:0.25, v:11.5, s:-32},
+  'obligaties': {n:'Obligaties (euro)', t:3.2, d:3.0, ter:0.15, v:6.5, s:-18},
   'europa': {n:'Europa', t:6.5, d:3.2, ter:0.12, v:17, s:-45},
   'europa-hoog-dividend': {n:'Europa, hoog dividend', t:6.2, d:4.3, ter:0.30, v:17, s:-46},
   'opkomende-markten': {n:'Opkomende markten', t:7.0, d:2.8, ter:0.18, v:22, s:-52},
@@ -3443,15 +3451,15 @@ const SYNTH_IX = {
   'sp500-dividend': {n:'VS, dividend', t:7.0, d:2.2, ter:0.30, v:15, s:-38}
 };
 const SYNTH_STRAT = [
-  {id:'defensief', mix:70, n:'Defensief', g:{'wereld-hoog-dividend':50, 'wereld':50}},
-  {id:'gebalanceerd', mix:50, n:'Gebalanceerd', g:{'wereld':80, 'wereld-hoog-dividend':20}},
+  {id:'defensief', mix:70, n:'Defensief', g:{'obligaties':40, 'wereld-laagvol':30, 'wereld-hoog-dividend':30}},
+  {id:'gebalanceerd', mix:50, n:'Gebalanceerd', g:{'wereld':55, 'wereld-hoog-dividend':20, 'obligaties':25}},
   {id:'agressief', mix:20, n:'Agressief', g:{'wereld':90, 'wereld-quality':10}},
-  {id:'gebalanceerd-europa', mix:50, n:'Gebalanceerd met Europa (variant)', g:{'wereld':60, 'europa':20, 'wereld-hoog-dividend':20}},
+  {id:'gebalanceerd-europa', mix:50, n:'Gebalanceerd met Europa (variant)', g:{'wereld':40, 'europa':20, 'wereld-hoog-dividend':15, 'obligaties':25}},
   {id:'agressief-em', mix:20, n:'Agressief met opkomende markten (variant)', g:{'wereld':80, 'opkomende-markten':10, 'wereld-quality':10}},
-  {id:'gebalanceerd-sp500', mix:50, n:'Gebalanceerd met S&P 500 (variant)', g:{'wereld':60, 'sp500':20, 'wereld-hoog-dividend':20}}
+  {id:'gebalanceerd-sp500', mix:50, n:'Gebalanceerd met S&P 500 (variant)', g:{'wereld':40, 'sp500':20, 'wereld-hoog-dividend':15, 'obligaties':25}}
 ];
 const SYNTH_KEY = 'dk-synth';
-const PAL = {'wereld':'#2563eb','wereld-middel-dividend':'#6366f1','wereld-hoog-dividend':'#f59e0b','wereld-quality':'#10b981','europa':'#8b5cf6','europa-hoog-dividend':'#ec4899','opkomende-markten':'#ef4444','sp500':'#14b8a6','sp500-dividend':'#84cc16',
+const PAL = {'wereld-laagvol':'#0ea5e9','obligaties':'#64748b','wereld':'#2563eb','wereld-middel-dividend':'#6366f1','wereld-hoog-dividend':'#f59e0b','wereld-quality':'#10b981','europa':'#8b5cf6','europa-hoog-dividend':'#ec4899','opkomende-markten':'#ef4444','sp500':'#14b8a6','sp500-dividend':'#84cc16',
   'defensief':'#0ea5e9','gebalanceerd':'#2563eb','agressief':'#f97316','gebalanceerd-europa':'#6366f1','agressief-em':'#dc2626','gebalanceerd-sp500':'#14b8a6'};
 const SYNTH_STATE = {strat:'gebalanceerd', mix:50, w:{}};
 const stratOf = () => SYNTH_STRAT.find(x => x.id === SYNTH_STATE.strat);
@@ -3478,7 +3486,7 @@ function synthFunds(){
   Object.entries(SYNTH_STATE.w).forEach(([id, w]) => {
     if (!(w > 0)) return;
     const ix = SYNTH_IX[id];
-    const risk = id === 'opkomende-markten' ? 'Hoog' : 'Middel';
+    const risk = id === 'opkomende-markten' ? 'Hoog' : (id === 'obligaties' || id === 'wereld-laagvol') ? 'Laag' : 'Middel';
     // Elke index bestaat als accumulerende en als uitkerende variant; de mix (van de strategie) kiest de verdeling.
     out.push({id:'syn-acc-'+id, name: ix.n + ' (acc, synthetisch)', group:'acc', w, g:ix.t, y:0, ter:ix.ter, risk, url:'#', yieldSrc:'aanname'});
     out.push({id:'syn-div-'+id, name: ix.n + ' (dist, synthetisch)', group:'div', w, g:Math.round((ix.t - ix.d) * 100) / 100, y:ix.d, ter:ix.ter, risk, url:'#', yieldSrc:'aanname'});
