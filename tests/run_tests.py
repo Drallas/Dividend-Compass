@@ -87,6 +87,21 @@ with sync_playwright() as p:
     check("10d geen fouten", not errs, errs)
     pg.close()
 
+    # 11. Export: vier keuzes met uitleg, story-kaart en adviesoverzicht
+    pg, errs = new_page(b)
+    pg.evaluate("() => { manualAmount = 330000; amountNow = 330000; monthlyAmt = 250; pickResid('nl'); taxOn.us = true; taxOn.nl = true; updateChips(); recalc(); }")
+    pg.evaluate("() => { renderExpDlg(); document.getElementById('expDlg').showModal(); }"); pg.wait_for_timeout(200)
+    check("11a exportdialoog toont vier keuzes", pg.locator("#expOpts .expopt").count() == 4)
+    pg.hover('[data-exp="story"]'); pg.wait_for_timeout(150)
+    check("11b voorbeeld verschijnt bij hover", "Instagram" in pg.inner_text("#expPreview") or "kaart" in pg.inner_text("#expPreview").lower() or "card" in pg.inner_text("#expPreview").lower())
+    size = pg.evaluate("() => { const c = buildStoryCanvas(); return [c.width, c.height]; }")
+    check("11c story-kaart is 1080x1920", size == [1080, 1920], size)
+    html = pg.evaluate("() => buildReport()")
+    check("11d adviesoverzicht bevat alle onderdelen", all(x in html for x in ["Uitgangspunten", "Fondsen", "Resultaat", "Netto vermogen per jaar", "Belasting per land", "voorbehoud"]) or all(x in html for x in ["Starting points", "Funds", "Result", "Net worth per year", "Tax per country", "disclaimer"]))
+    pg.evaluate("document.getElementById('expDlg').close()")
+    check("11e geen fouten", not errs, errs)
+    pg.close()
+
     # 1. Roundtrip: alle opgeslagen waarden komen terug
     pg, errs = new_page(b)
     set_domicile(pg, "nl")
@@ -110,9 +125,9 @@ with sync_playwright() as p:
     # 2. Domicilie blijft na herladen en na reset
     pg, errs = new_page(b)
     set_domicile(pg, "ve")
-    pg.reload(); pg.wait_for_timeout(400)
+    pg.reload(); pg.wait_for_timeout(900)
     check("2a domicilie na herladen", pg.eval_on_selector("#resid", "e => e.value") == "ve")
-    pg.evaluate("document.getElementById('menuReset').click()"); pg.wait_for_timeout(800)
+    pg.evaluate("document.getElementById('menuReset').click()"); pg.wait_for_timeout(1500)
     check("2b domicilie na reset gewist", pg.eval_on_selector("#resid", "e => e.value") == "")
     pg.close()
 
@@ -120,7 +135,7 @@ with sync_playwright() as p:
     pg, errs = new_page(b)
     set_domicile(pg, "ve")
     pg.evaluate("() => { taxOn.us = true; taxOn.fr = true; saveLast(); }")
-    pg.evaluate("document.getElementById('menuReset').click()"); pg.wait_for_timeout(800)
+    pg.evaluate("document.getElementById('menuReset').click()"); pg.wait_for_timeout(1500)
     picked = pg.evaluate("Object.keys(taxOn).filter(k => taxOn[k]).sort().join(',')")
     check("3 landen na reset gewist", picked == "", picked)
     pg.close()
