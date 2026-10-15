@@ -545,6 +545,10 @@
     .tbl th,.tbl td{padding:8px 6px}
     .tbl th:first-child,.tbl td:first-child{min-width:104px}
     #taxKpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#taxKpis .taxcardwrap{display:flex;flex-direction:column;gap:6px;min-width:0}
+#taxKpis .taxcardwrap .kpi{flex:1}
+#taxKpis .n28opt{display:flex;align-items:center;gap:6px;font-size:.9em;color:var(--muted);padding:0 4px;cursor:pointer}
+#taxKpis .n28opt input{margin:0;accent-color:var(--text)}
     .sortbar{flex-wrap:wrap}
     .sortbar > span:first-child{flex:0 0 100%}
     .sortbar .rbtn{flex:1 1 0;min-width:0;white-space:normal;text-align:center;padding:8px 4px;line-height:1.2}
@@ -1369,7 +1373,7 @@ const T = {
     pickTitle: 'Landen vergelijken', grpMain: 'Basisvergelijking', grpOther: 'Meer landen', pickOf: n => `${n} van 4`, pickMax: 'Maximaal 4 landen tegelijk. Zet er eerst een uit.',
     hTotals: 'Totaal per land', hYears: 'Belasting per jaar', hNotes: 'Uitgangspunten per land', colBase: 'Belast over (gem. per jaar)',
     noteGeneric: 'Voor de extra landen is per jaar gerekend over de uitkeringen en de waardestijging van dat jaar. Het zijn indicaties, geen belastingadvies; controleer de actuele regels.',
-    ovN28: 'NL nieuw stelsel (2028)', tax2028Note: 'Voorstel: vanaf 1-1-2028 wordt in box 3 alleen het werkelijke rendement belast, 36% boven een heffingsvrij bedrag van € 1.800. Nog onder voorbehoud van de Eerste Kamer. Hier gerekend alsof het vanaf het eerste jaar geldt, met de waardestijging als rendement. Verliezen worden niet verrekend.',
+    ovN28: 'NL nieuw stelsel (2028)', n28Add: 'ook NL 2028 tonen', tax2028Note: 'Voorstel: vanaf 1-1-2028 wordt in box 3 alleen het werkelijke rendement belast, 36% boven een heffingsvrij bedrag van € 1.800. Nog onder voorbehoud van de Eerste Kamer. Hier gerekend alsof het vanaf het eerste jaar geldt, met de waardestijging als rendement. Verliezen worden niet verrekend.',
     taxEyebrow: 'Belasting · schatting', taxH1: 'Belasting per land',
     taxLead: 'Hoeveel belasting je per jaar betaalt in de landen die je kiest (tot 4 tegelijk), op basis van je inleg, periode en mix. Schattingen, geen belastingadvies.',
     saveLbl: 'Deel op spaarrekening (box 3)', saveHint: 'Spaargeld telt in box 3 tegen het spaartarief (1,28%) in plaats van het forfaitair rendement (6%). Rente op je spaargeld zit niet in de prognose.',
@@ -1604,7 +1608,7 @@ const T = {
     pickTitle: 'Compare countries', grpMain: 'Core comparison', grpOther: 'More countries', pickOf: n => `${n} of 4`, pickMax: 'Maximum 4 countries at once. Turn one off first.',
     hTotals: 'Total per country', hYears: 'Tax per year', hNotes: 'Assumptions per country', colBase: 'Taxed on (avg per year)',
     noteGeneric: 'For the extra countries tax is calculated per year on that year\'s distributions and increase in value. These are indications, not tax advice; check the current rules.',
-    ovN28: 'NL new system (2028)', tax2028Note: 'Proposal: from 1-1-2028 Dutch wealth taxes only the actual return, 36% above a tax-free amount of €1,800. Still subject to approval by the Senate. Calculated here as if it applies from year one, with the increase in value as return. Losses are not offset.',
+    ovN28: 'NL new system (2028)', n28Add: 'also show NL 2028', tax2028Note: 'Proposal: from 1-1-2028 Dutch wealth taxes only the actual return, 36% above a tax-free amount of €1,800. Still subject to approval by the Senate. Calculated here as if it applies from year one, with the increase in value as return. Losses are not offset.',
     taxEyebrow: 'Tax · estimate', taxH1: 'Tax per country',
     taxLead: 'How much tax you pay per year in the Netherlands, the US and Argentina, based on your investment, period and mix. Estimates, not tax advice.',
     saveLbl: 'Share in savings account (Dutch wealth tax)', saveHint: 'Savings count in Dutch wealth tax at the savings rate (1.28%) instead of the deemed return (6%). Interest on your savings is not in the forecast.',
@@ -1839,7 +1843,7 @@ const T = {
     pickTitle: 'Comparar países', grpMain: 'Comparación base', grpOther: 'Más países', pickOf: n => `${n} de 4`, pickMax: 'Máximo 4 países a la vez. Desactiva uno primero.',
     hTotals: 'Total por país', hYears: 'Impuesto por año', hNotes: 'Supuestos por país', colBase: 'Gravado sobre (media/año)',
     noteGeneric: 'En los países adicionales se calcula cada año sobre las distribuciones y la subida de valor de ese año. Son indicaciones, no asesoramiento fiscal; comprueba las normas vigentes.',
-    ovN28: 'Países Bajos nuevo sistema (2028)', tax2028Note: 'Propuesta: desde el 1-1-2028 la caja 3 solo grava el rendimiento real, al 36% por encima de un mínimo exento de 1.800 €. Aún pendiente de aprobación por el Senado. Aquí se calcula como si aplicara desde el primer año, con la subida del valor como rendimiento. Las pérdidas no se compensan.',
+    ovN28: 'Países Bajos nuevo sistema (2028)', n28Add: 'mostrar también P. Bajos 2028', tax2028Note: 'Propuesta: desde el 1-1-2028 la caja 3 solo grava el rendimiento real, al 36% por encima de un mínimo exento de 1.800 €. Aún pendiente de aprobación por el Senado. Aquí se calcula como si aplicara desde el primer año, con la subida del valor como rendimiento. Las pérdidas no se compensan.',
     taxEyebrow: 'Impuestos · estimación', taxH1: 'Impuestos por país',
     taxLead: 'Cuánto impuesto pagas al año en Países Bajos, EE. UU. y Argentina, según tu inversión, periodo y mezcla. Estimaciones, no asesoramiento fiscal.',
     saveLbl: 'Parte en cuenta de ahorro (impuesto neerlandés sobre el patrimonio)', saveHint: 'El ahorro cuenta en impuesto neerlandés sobre el patrimonio al tipo de ahorro (1,28%) en lugar del rendimiento forfetario (6%). Los intereses de tu ahorro no están en la previsión.',
@@ -2435,7 +2439,9 @@ const shortName = c => CSHORT[c.k] ? CSHORT[c.k][lang] : c.name();
 const isNL = () => lang === 'nl';
 const taxAllowed = () => true;
 const taxIsOn = k => !!taxOn[k] && taxAllowed(k);
-const activeCount = () => Object.keys(taxOn).filter(taxIsOn).length;
+const activeCount = () => Object.keys(taxOn).filter(k => k !== 'n28' && taxIsOn(k)).length;
+// 2028-scenario is een optie op het Nederland-kaartje: alleen zinvol als NL aan staat
+function normN28(){ if (!taxOn.nl) taxOn.n28 = false; }
 let arRateVal = 1780;
 let lastTx = null;
 
@@ -2481,24 +2487,31 @@ function renderTax(d, a, years, dStart, sc, amount){
 const TAXSORT_KEY = 'dk-taxsort';
 let taxSort = (() => { try { const v = localStorage.getItem(TAXSORT_KEY); return ['desc','alpha','fixed'].includes(v) ? v : 'desc'; } catch (e) { return 'desc'; } })();
 function renderTaxCards(list, totals, amount, years){
-  document.getElementById('taxKpis').innerHTML = list.map(m => {
+  document.getElementById('taxKpis').innerHTML = list.filter(m => m.k !== 'n28').map(m => {
     const tot = totals[m.k];
     const on = taxIsOn(m.k);
     const open = `<button type="button" class="kpi taxcard${on ? '' : ' off'}" style="--c:${m.color}" data-k="${m.k}" aria-pressed="${on}">`;
-    if (tot === null) return `${open}<div class="lbl">${m.name}</div><div class="big">${tr('ovNeedRate')}</div></button>`;
-    const pct = amount > 0 ? tot / amount * 100 : 0;
-    return `${open}
+    let card;
+    if (tot === null) card = `${open}<div class="lbl">${m.name}</div><div class="big">${tr('ovNeedRate')}</div></button>`;
+    else {
+      const pct = amount > 0 ? tot / amount * 100 : 0;
+      card = `${open}
       <div class="lbl">${m.name}</div>
       <div class="sub">${tr('ovTotal')}</div>
       <div class="big">${EUR(tot)}</div>
       <div class="row"><span>${tr('ovPerYear')}</span><b>${EUR(tot / years)}</b></div>
       <div class="foot">${PCT(pct)} ${tr('ovPct').toLowerCase()}</div>
     </button>`;
+    }
+    if (m.k !== 'nl') return card;
+    return `<div class="taxcardwrap">${card}<label class="n28opt"><input type="checkbox" data-n28 ${taxOn.n28 ? 'checked' : ''}><span>${tr('n28Add')}</span><a class="info" href="#" data-tip="${tr('tax2028Note')}">?</a></label></div>`;
   }).join('');
 }
 
 function renderOverview(){
+  normN28();
   if (!taxAllowed(subTab)) subTab = 'ov';
+  if (subTab === 'n28' && !taxOn.n28) subTab = 'ov';
   applySub();
   document.querySelectorAll('[data-ars]').forEach(td => { td.textContent = arRateVal > 0 ? EUR(Number(td.dataset.ars) / arRateVal) : '–'; });
   if (!lastTx) return;
@@ -2616,7 +2629,7 @@ function applySub(){
 }
 function fillRegSel(){
   const sel = document.getElementById('regSel');
-  sel.innerHTML = `<option value="ov">${tr('subOv')}</option>` + ALL.filter(c => taxAllowed(c.k)).map(c => `<option value="${c.k}">${c.name()}</option>`).join('');
+  sel.innerHTML = `<option value="ov">${tr('subOv')}</option>` + ALL.filter(c => taxAllowed(c.k) && (c.k !== 'n28' || taxOn.n28)).map(c => `<option value="${c.k}">${c.name()}</option>`).join('');
   sel.value = subTab;
 }
 function renderGeneric(k){
@@ -3595,6 +3608,13 @@ document.getElementById('savePct').addEventListener('input', e => {
   document.getElementById('savePctLbl').textContent = savePct + '%';
   recalc();
 });
+document.getElementById('taxKpis').addEventListener('change', e => {
+  const cb = e.target.closest('input[data-n28]');
+  if (!cb) return;
+  taxOn.n28 = cb.checked;
+  saveLast();
+  renderOverview();
+});
 document.getElementById('taxKpis').addEventListener('click', e => {
   const b = e.target.closest('button.taxcard');
   if (!b) return;
@@ -3616,9 +3636,9 @@ document.querySelectorAll('.sortbar .rbtn').forEach(b => b.addEventListener('cli
 }));
 function buildChips(){
   const box = document.getElementById('ovChips');
-  const chip = c => `<label class="cpick-opt"><input type="checkbox" data-k="${c.k}"><span data-nm="${c.k}"></span>${c.k === 'n28' ? `<a class="info" href="#" data-tip="${tr('tax2028Note')}">?</a>` : ''}</label>`;
+  const chip = c => `<label class="cpick-opt"><input type="checkbox" data-k="${c.k}"><span data-nm="${c.k}"></span></label>`;
   const main = ALL.filter(c => !EXTRA.some(e => e.k === c.k)), more = ALL.filter(c => EXTRA.some(e => e.k === c.k));
-  box.innerHTML = `<details class="cpick cpick-tax" id="taxPick"><summary><span id="taxPickSum"></span></summary><div class="cpick-list"><div class="cpick-hint" id="pickCount"></div>${ALL.map(chip).join('')}</div></details>`;
+  box.innerHTML = `<details class="cpick cpick-tax" id="taxPick"><summary><span id="taxPickSum"></span></summary><div class="cpick-list"><div class="cpick-hint" id="pickCount"></div>${ALL.filter(c => c.k !== 'n28').map(chip).join('')}</div></details>`;
   box.addEventListener('change', e => {
     const k = e.target.dataset.k;
     if (!k) return;
@@ -3637,7 +3657,7 @@ function updateChips(){
   });
   document.querySelectorAll('#ovChips [data-nm]').forEach(sp => { sp.textContent = shortName(ALL.find(c => c.k === sp.dataset.nm)); });
   document.getElementById('pickCount').textContent = tr('pickOf')(activeCount());
-  const nSel = ALL.filter(c => taxIsOn(c.k)).length;
+  const nSel = ALL.filter(c => c.k !== 'n28' && taxIsOn(c.k)).length;
   document.getElementById('taxPickSum').textContent = nSel === 0 ? tr('pickPlaceholder') : nSel === 1 ? tr('pickSel1') : fillT('pickSelN', {n: nSel});
   document.getElementById('pickMax').hidden = !full;
 }
@@ -3836,6 +3856,7 @@ function setTaxDefaults(){
   Object.keys(taxOn).forEach(k => { taxOn[k] = false; });
   const r = document.getElementById('resid').value;
   if (r && r !== 'none' && r in taxOn) taxOn[r] = true;
+  if (r === 'n28') { taxOn.nl = true; taxOn.n28 = true; }
   document.querySelector('.savebox').style.display = r === 'nl' ? '' : 'none';
   updateChips();
 }
@@ -4069,32 +4090,36 @@ document.getElementById('welcomeDlg').addEventListener('close', () => { try { lo
 
 /* ============ startwizard: eenmalig de belangrijkste invoer doorlopen ============ */
 const WZ = {
-  nl: {of:'Stap {n} van 6', back:'Terug', skip:'Overslaan', next:'Volgende', done:'Klaar', inCur:c=>'Bedrag in '+c, reinv:'Herinvesteren', pay:'Uitbetalen',
+  nl: {of:'Stap {n} van {t}', back:'Terug', skip:'Overslaan', next:'Volgende', done:'Klaar', inCur:c=>'Bedrag in '+c, reinv:'Herinvesteren', pay:'Uitbetalen',
     steps:[
       {title:'Waar woon je?', sub:'Je land bepaalt welke belasting we schatten. Dit is een schatting, geen belastingadvies.'},
       {title:'In welke valuta wil je rekenen?', sub:'Intern rekenen we altijd in euro; dollar is alleen de weergave.'},
       {title:'Hoeveel stop je erin?', sub:'Je startvermogen. Een maandelijkse inleg kun je later instellen.'},
+      {title:'Hoeveel stort je er maandelijks bij?', sub:'Een vaste inleg per maand, bovenop je startvermogen. Vul 0 in als je geen inleg wilt.'},
       {title:'Welk netto vermogen wil je halen?', sub:'Het doel in de netto waardeprognose. Vul 0 in als je geen doel wilt.'},
       {title:'Wil je een vast bedrag per maand uit dividend?', sub:'Vul het gewenste bedrag per maand in. Vul 0 in als je dat niet wilt.'},
       {title:'Wat doen we met de uitkeringen?', sub:'Herinvesteren laat ze meegroeien in het fonds. Uitbetalen zet ze apart op.'}]},
-  en: {of:'Step {n} of 6', back:'Back', skip:'Skip', next:'Next', done:'Done', inCur:c=>'Amount in '+c, reinv:'Reinvest', pay:'Pay out',
+  en: {of:'Step {n} of {t}', back:'Back', skip:'Skip', next:'Next', done:'Done', inCur:c=>'Amount in '+c, reinv:'Reinvest', pay:'Pay out',
     steps:[
       {title:'Where do you live?', sub:'Your country determines which tax we estimate. This is an estimate, not tax advice.'},
       {title:'Which currency do you want to use?', sub:'We always calculate in euro internally; dollar is only the display.'},
       {title:'How much do you start with?', sub:'Your starting capital. You can set a monthly contribution later.'},
+      {title:'How much do you add each month?', sub:'A fixed monthly contribution on top of your starting capital. Enter 0 if you do not want one.'},
       {title:'What net wealth do you want to reach?', sub:'The goal in the net worth forecast. Enter 0 if you have no goal.'},
       {title:'Do you want a fixed amount per month from dividends?', sub:'Enter the amount you want per month. Enter 0 if you do not.'},
       {title:'What do we do with the distributions?', sub:'Reinvesting lets them grow inside the fund. Paying out sets them aside.'}]},
-  es: {of:'Paso {n} de 6', back:'Atrás', skip:'Omitir', next:'Siguiente', done:'Listo', inCur:c=>'Importe en '+c, reinv:'Reinvertir', pay:'Pagar',
+  es: {of:'Paso {n} de {t}', back:'Atrás', skip:'Omitir', next:'Siguiente', done:'Listo', inCur:c=>'Importe en '+c, reinv:'Reinvertir', pay:'Pagar',
     steps:[
       {title:'¿Dónde vives?', sub:'Tu país determina qué impuesto estimamos. Es una estimación, no asesoramiento fiscal.'},
       {title:'¿En qué moneda quieres calcular?', sub:'Internamente siempre calculamos en euros; el dólar es solo la visualización.'},
       {title:'¿Con cuánto empiezas?', sub:'Tu capital inicial. Más adelante puedes fijar una aportación mensual.'},
+      {title:'¿Cuánto aportas cada mes?', sub:'Una aportación mensual fija sobre tu capital inicial. Introduce 0 si no quieres aportar.'},
       {title:'¿Qué patrimonio neto quieres alcanzar?', sub:'La meta en la previsión de valor neto. Introduce 0 si no tienes meta.'},
       {title:'¿Quieres una cantidad fija al mes de dividendos?', sub:'Introduce la cantidad mensual deseada. Introduce 0 si no la quieres.'},
       {title:'¿Qué hacemos con las distribuciones?', sub:'Reinvertir hace que crezcan dentro del fondo. Pagar las aparta.'}]}
 };
 let wzStep = 0, wzReinv = true;
+const WZN = WZ.en.steps.length;
 function wzText(){ return WZ[lang] || WZ.en; }
 function openStart(){
   wzStep = 0;
@@ -4113,36 +4138,36 @@ function wzBody(i, t){
     return '<div class="wz-seg"><button type="button" class="rbtn" data-wzc="EUR" aria-pressed="' + (curCode === 'EUR') + '">€ euro</button>' +
            '<button type="button" class="rbtn" data-wzc="USD" aria-pressed="' + (curCode === 'USD') + '"' + (usd ? '' : ' disabled') + '>$ dollar</button></div>';
   }
-  if (i === 5){
+  if (i === 6){
     return '<div class="wz-seg"><button type="button" class="rbtn" data-wzr="1" aria-pressed="' + wzReinv + '">' + t.reinv + '</button>' +
            '<button type="button" class="rbtn" data-wzr="0" aria-pressed="' + (!wzReinv) + '">' + t.pay + '</button></div>';
   }
-  const cur = i === 2 ? manualAmount : i === 3 ? readEur('goalCap') : readEur('target');
+  const cur = i === 2 ? manualAmount : i === 3 ? monthlyAmt : i === 4 ? readEur('goalCap') : readEur('target');
   const v = toDisp(cur);
   return '<label class="wz-lbl">' + t.inCur(curSym()) + '<input type="text" inputmode="numeric" id="wzNum" class="wz-input" value="' + (v > 0 ? fmtNum(v) : '') + '"></label>';
 }
 function wzRender(){
   const t = wzText(), S = t.steps[wzStep];
-  document.getElementById('startStep').textContent = t.of.replace('{n}', wzStep + 1);
+  document.getElementById('startStep').textContent = t.of.replace('{n}', wzStep + 1).replace('{t}', WZN);
   document.getElementById('startTitle').textContent = S.title;
   document.getElementById('startSub').textContent = S.sub;
   document.getElementById('startBody').innerHTML = wzBody(wzStep, t);
   document.getElementById('startBack').hidden = wzStep === 0;
   document.getElementById('startBack').textContent = t.back;
   document.getElementById('startSkip').textContent = t.skip;
-  document.getElementById('startNext').textContent = wzStep === 5 ? t.done : t.next;
+  document.getElementById('startNext').textContent = wzStep === WZN - 1 ? t.done : t.next;
 }
 function wzApply(i){
   if (i === 0){
     const s = document.getElementById('wzRes');
     if (s) pickResid(s.value);
-  } else if (i >= 2 && i <= 4){
+  } else if (i >= 2 && i <= 5){
     const inp = document.getElementById('wzNum');
     const eur = inp ? Math.round(fromDisp(digits(inp.value))) : 0;
-    const id = ['bedrag', 'goalCap', 'target'][i - 2];
+    const id = ['bedrag', 'monthly', 'goalCap', 'target'][i - 2];
     setEurField(id, eur);
     document.getElementById(id).dispatchEvent(new Event('input'));
-  } else if (i === 5){
+  } else if (i === 6){
     const r = document.getElementById('reinvest');
     if (r.checked !== wzReinv){ r.checked = wzReinv; r.dispatchEvent(new Event('change')); }
   }
@@ -4154,11 +4179,11 @@ document.getElementById('startBody').addEventListener('click', e => {
   if (r){ wzReinv = r.dataset.wzr === '1'; wzRender(); }
 });
 document.getElementById('startNext').addEventListener('click', () => {
-  if (wzStep < 5){ wzApply(wzStep); wzStep++; wzRender(); }
-  else { wzApply(5); document.getElementById('startDlg').close(); }
+  if (wzStep < WZN - 1){ wzApply(wzStep); wzStep++; wzRender(); }
+  else { wzApply(WZN - 1); document.getElementById('startDlg').close(); }
 });
 document.getElementById('startSkip').addEventListener('click', () => {
-  if (wzStep < 5){ wzStep++; wzRender(); }
+  if (wzStep < WZN - 1){ wzStep++; wzRender(); }
   else document.getElementById('startDlg').close();
 });
 document.getElementById('startBack').addEventListener('click', () => { if (wzStep > 0){ wzStep--; wzRender(); } });
