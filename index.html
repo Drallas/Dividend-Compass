@@ -929,6 +929,7 @@ svg#chart .line.acc{stroke-width:2}
 </main>
 
 <main class="inputwrap" id="tabInput" hidden>
+  <h2 class="sr" data-i18n="inputTitle"></h2>
   <aside class="panel controls" aria-label="Settings">
 
     <div class="incol">
@@ -1155,6 +1156,7 @@ svg#chart .line.acc{stroke-width:2}
 </main>
 
 <main class="taxwrap" id="tabTax" hidden>
+  <h2 class="sr" data-i18n="tabTax"></h2>
 
   <div class="stack">
   <div class="perland">
@@ -1382,8 +1384,8 @@ svg#chart .line.acc{stroke-width:2}
   <p class="sub scenmsg" id="expMsg" role="status"></p>
 </div></dialog>
 
-<div id="setDlg" class="flymenu" popover>
-  <div class="flytitle" data-i18n="setTitle"></div>
+<div id="setDlg" class="flymenu" popover role="region" aria-labelledby="setTitleLbl">
+  <div class="flytitle" id="setTitleLbl" data-i18n="setTitle"></div>
   <div class="menugrp">
     <div class="menuhd" data-i18n="grpData"></div>
     <div class="menulist">
@@ -1413,8 +1415,8 @@ svg#chart .line.acc{stroke-width:2}
   <p class="sub lic"><span data-i18n="licLbl"></span> <a href="https://github.com/Drallas/Dividend-Compass/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">AGPL-3.0</a> · <a href="https://github.com/Drallas/Dividend-Compass" target="_blank" rel="noopener noreferrer" data-i18n="aboutRepo">GitHub</a></p>
 </div></dialog>
 
-<div id="langDlg" class="flymenu" popover>
-  <div class="flytitle" data-i18n="setLang"></div>
+<div id="langDlg" class="flymenu" popover role="region" aria-labelledby="langTitleLbl">
+  <div class="flytitle" id="langTitleLbl" data-i18n="setLang"></div>
   <div class="menulist">
     <button type="button" class="rbtn menubtn" data-lang="en" aria-current="true">English</button>
     <button type="button" class="rbtn menubtn" data-lang="es" aria-current="false">Español</button>
@@ -1422,8 +1424,8 @@ svg#chart .line.acc{stroke-width:2}
   </div>
 </div>
 
-<div id="themeDlg" class="flymenu" popover>
-  <div class="flytitle" data-i18n="setTheme"></div>
+<div id="themeDlg" class="flymenu" popover role="region" aria-labelledby="themeTitleLbl">
+  <div class="flytitle" id="themeTitleLbl" data-i18n="setTheme"></div>
   <div class="menulist" id="themeSeg">
     <button type="button" class="rbtn menubtn" data-theme="auto" aria-pressed="true" data-i18n="themeAuto"></button>
     <button type="button" class="rbtn menubtn" data-theme="dark" aria-pressed="false" data-i18n="themeDark"></button>
