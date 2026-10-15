@@ -35,6 +35,24 @@ with sync_playwright() as p:
         check(f"0 browsertaal {loc} geeft taal {want}", got == want, got)
         ctx.close()
 
+    # 1d. Actief profiel: markering in de profielenlijst, "gewijzigd" na een wijziging, opnieuw actief na laden
+    pg, errs = new_page(b)
+    pg.evaluate("() => { manualAmount = 330000; amountNow = 330000; recalc(); }")
+    pg.evaluate("() => document.getElementById('scenDlg').showModal()"); pg.wait_for_timeout(200)
+    pg.fill("#scenName", "Basis"); pg.click("#scenSave"); pg.wait_for_timeout(200)
+    pg.fill("#scenName", "Hoog"); pg.evaluate("() => { manualAmount = 500000; amountNow = 500000; recalc(); }")
+    pg.click("#scenSave"); pg.wait_for_timeout(200)
+    check("1d na opslaan is het laatste profiel actief", pg.locator(".scenrow.active", has_text="Hoog").count() == 1)
+    pg.locator(".scenrow", has_text="Basis").locator("[data-load]").click(); pg.wait_for_timeout(300)
+    pg.evaluate("() => { renderScenarios(); document.getElementById('scenDlg').showModal(); }"); pg.wait_for_timeout(200)
+    check("1e na laden is Basis actief", pg.locator(".scenrow.active", has_text="Basis").count() == 1)
+    check("1e' zonder wijziging geen 'gewijzigd'", "gewijzigd" not in pg.inner_text("#scenList") and "changed" not in pg.inner_text("#scenList"))
+    pg.evaluate("() => document.getElementById('scenDlg').close()")
+    pg.evaluate("() => { manualAmount = 400000; amountNow = 400000; recalc(); }")
+    pg.evaluate("() => { renderScenarios(); document.getElementById('scenDlg').showModal(); }"); pg.wait_for_timeout(200)
+    check("1f na wijzigen staat 'gewijzigd' bij het actieve profiel", pg.locator(".scenrow.active", has_text="Basis").count() == 1 and ("gewijzigd" in pg.inner_text("#scenList") or "changed" in pg.inner_text("#scenList")))
+    pg.close()
+
     # 1. Roundtrip: alle opgeslagen waarden komen terug
     pg, errs = new_page(b)
     set_domicile(pg, "nl")
