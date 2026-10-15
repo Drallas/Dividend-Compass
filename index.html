@@ -350,11 +350,15 @@
   .wslider{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
   #wealthYrs{width:100%;margin:0 0 4px}
   body.nogoal .tabs .tab[data-tab="tabPay"]{display:none !important}
-  .strat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:10px 0 16px}
-  .scard{border:1px solid var(--line);border-top:4px solid var(--c);border-radius:14px;padding:12px 14px;background:var(--panel);color:var(--text);text-align:left;cursor:pointer;font:inherit}
-  .scard b{display:block;font-size:15px}
-  .scard small{color:var(--muted)}
-  .scard[aria-pressed="true"]{background:color-mix(in srgb,var(--c) 18%,var(--panel));box-shadow:0 0 0 2px var(--c) inset}
+  .strat-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,158px),1fr));gap:10px;margin:10px 0 16px}
+  .scard{display:flex;flex-direction:column;gap:6px;height:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--panel);color:var(--text);text-align:left;cursor:pointer;font:inherit}
+  .sc-name{display:flex;align-items:flex-start;gap:7px;min-height:2.6em;font-size:14.5px;font-weight:600;line-height:1.3}
+  .sc-dot{flex:0 0 8px;height:8px;margin-top:5px;border-radius:50%;background:var(--c)}
+  .sc-mix{font-size:12.5px;color:var(--muted)}
+  .sc-rows{display:grid;grid-template-columns:1fr auto;gap:3px 10px;margin-top:auto;padding-top:8px;border-top:1px solid var(--line);font-size:12.5px}
+  .sc-rows span{color:var(--muted)}
+  .sc-rows b{color:var(--text);font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+    .scard[aria-pressed="true"]{border-color:var(--c);box-shadow:0 0 0 1px var(--c) inset;background:color-mix(in srgb,var(--c) 7%,var(--panel))}
   .tile-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
   .tile-row:empty{display:none}
   .stile{border-radius:14px;padding:12px 14px;background:color-mix(in srgb,var(--c) 14%,var(--panel));border:1px solid color-mix(in srgb,var(--c) 45%,var(--line))}
@@ -367,7 +371,6 @@
   .achip{margin:4px 6px 4px 0;border-radius:999px;border:1px dashed var(--line);padding:6px 12px;background:transparent;color:var(--muted);cursor:pointer;font:inherit;font-size:13px}
   .synth-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:16px}
   .synth-kpis:empty{display:none}
-  .scard .srisk{display:block;margin-top:2px;opacity:.85}
   .skpi-base{grid-column:1/-1;font-size:13.5px;color:var(--muted);padding:0 2px}
   .skpi-base strong{color:var(--text)}
   #synthNote{margin-top:14px;line-height:1.5}
@@ -1820,13 +1823,15 @@ const SYN_T = {
   "synthLink": "Inleg en looptijd komen uit de invoer bovenaan.",
   "synthSum": "Gewichten tellen op tot {s}%; de uitkomst wordt genormaliseerd naar 100%.",
   "synPayout": "uitkerend",
+  "synNet": "Na kosten (TER)",
+  "synRet": "Rendement per jaar",
   "synRisk": "risico",
   "synWorst": "ergste jaar",
   "synMinus": "minder",
   "synPlus": "meer",
   "synRemove": "verwijder",
-  "skTot": "Totaalrendement (voor kosten)",
-  "skDiv": "Dividendrendement",
+  "skTot": "Totaalrendement voor kosten (incl. dividend)",
+  "skDiv": "Waarvan dividend",
   "skTer": "Kosten (TER, gewogen)",
   "skEind": "Vermogen na {n} jaar (herbelegd)",
   "skUit": "Uitkeringen (ruw)",
@@ -1857,9 +1862,9 @@ const SYN_T = {
   "gl.sstrat.t": "Strategie",
   "gl.sstrat.d": "Een voorbeeldverdeling over indexen, met een vast aandeel dat uitkeert en een deel dat accumuleert. Defensief heeft het hoogste uitkerende aandeel, agressief het laagste. De strategie bepaalt dat aandeel, daarom is de schuif in de invoer vergrendeld. Pas de gewichten aan of kies een andere strategie; je keuze blijft in deze browser bewaard.",
   "gl.stot.t": "Totaalrendement voor kosten",
-  "gl.stot.d": "Het verwachte jaarlijkse totaalrendement van de gekozen verdeling, inclusief dividend en vóór kosten (TER). Dit is een synthetische aanname per index: geen voorspelling en geen gemeten historie. Verschillen tussen strategieën komen vooral uit de gekozen indexen.",
+  "gl.stot.d": "Het verwachte jaarlijkse totaalrendement van de gekozen verdeling: koerswinst plus dividend, vóór kosten (TER). Het dividend zit dus al in dit getal en komt er niet bovenop. Dit is een synthetische aanname per index, geen voorspelling en geen gemeten historie.",
   "gl.sdiv.t": "Dividendrendement",
-  "gl.sdiv.d": "Het deel van het totaalrendement dat als dividend wordt uitgekeerd, gewogen naar je verdeling. Meer dividend betekent meer kasstroom, maar in deze aannames minder groei. Dat is de kern van de keuze tussen uitkeren en accumuleren. Belasting wordt hier niet berekend.",
+  "gl.sdiv.d": "Het deel van het totaalrendement dat als dividend wordt uitgekeerd (waarvan dividend). Het komt niet bovenop het totaal: totaalrendement = koerswinst + dividend. Meer dividend betekent meer kasstroom, maar in deze aannames minder groei. Belasting wordt hier niet berekend.",
   "gl.ster.t": "Kosten (TER, gewogen)",
   "gl.ster.d": "De jaarlijkse kosten (total expense ratio) van de producten, gewogen naar hun aandeel. Ze gaan af van het rendement in de prognose. 0,20% per jaar lijkt klein, maar over 25 jaar loopt het door rente-op-rente flink op.",
   "gl.seind.t": "Vermogen na de looptijd",
@@ -1878,13 +1883,15 @@ const SYN_T = {
   "synthLink": "Investment and term come from the input at the top.",
   "synthSum": "Weights add up to {s}%; the outcome is normalised to 100%.",
   "synPayout": "distributing",
+  "synNet": "After costs (TER)",
+  "synRet": "Return per year",
   "synRisk": "risk",
   "synWorst": "worst year",
   "synMinus": "less",
   "synPlus": "more",
   "synRemove": "remove",
-  "skTot": "Total return (before costs)",
-  "skDiv": "Dividend yield",
+  "skTot": "Total return before costs (incl. dividend)",
+  "skDiv": "Of which dividend",
   "skTer": "Costs (TER, weighted)",
   "skEind": "Wealth after {n} years (reinvested)",
   "skUit": "Distributions (gross)",
@@ -1915,9 +1922,9 @@ const SYN_T = {
   "gl.sstrat.t": "Strategy",
   "gl.sstrat.d": "An example split across indices, with a fixed share that pays out dividends and a share that accumulates. Defensive has the highest payout share, aggressive the lowest. The strategy sets that share, so the slider in the input is locked. Adjust the weights or pick another strategy; your choice is kept in this browser.",
   "gl.stot.t": "Total return before costs",
-  "gl.stot.d": "The expected yearly total return of the chosen split, including dividends and before costs (TER). It is a synthetic assumption per index: not a forecast and not measured history. Differences between strategies come mainly from the indices chosen.",
+  "gl.stot.d": "The expected yearly total return of the chosen split: price growth plus dividend, before costs (TER). The dividend is already part of this number and is not added on top. It is a synthetic assumption per index, not a forecast and not measured history.",
   "gl.sdiv.t": "Dividend yield",
-  "gl.sdiv.d": "The part of the total return paid out as dividend, weighted by your split. More dividend means more cash flow, but in these assumptions less growth. This is the core of the choice between paying out and accumulating. Tax is not calculated here.",
+  "gl.sdiv.d": "The part of the total return paid out as dividend (of which dividend). It is not added on top of the total: total return = price growth + dividend. More dividend means more cash flow, but in these assumptions less growth. Tax is not calculated here.",
   "gl.ster.t": "Costs (TER, weighted)",
   "gl.ster.d": "The yearly costs (total expense ratio) of the products, weighted by their share. They are deducted from the return in the forecast. 0.20% a year looks small, but over 25 years compounding makes the difference grow.",
   "gl.seind.t": "Wealth after the term",
@@ -1936,13 +1943,15 @@ const SYN_T = {
   "synthLink": "La inversión y el plazo vienen de los datos de entrada de arriba.",
   "synthSum": "Los pesos suman {s}%; el resultado se normaliza a 100%.",
   "synPayout": "distribuyendo",
+  "synNet": "Después de costes (TER)",
+  "synRet": "Rendimiento por año",
   "synRisk": "riesgo",
   "synWorst": "peor año",
   "synMinus": "menos",
   "synPlus": "más",
   "synRemove": "quitar",
-  "skTot": "Rentabilidad total (antes de costes)",
-  "skDiv": "Rentabilidad por dividendo",
+  "skTot": "Rentabilidad total antes de costes (incl. dividendo)",
+  "skDiv": "De ello, dividendo",
   "skTer": "Costes (TER, ponderado)",
   "skEind": "Patrimonio tras {n} años (reinvertido)",
   "skUit": "Distribuciones (brutas)",
@@ -1973,9 +1982,9 @@ const SYN_T = {
   "gl.sstrat.t": "Estrategia",
   "gl.sstrat.d": "Una distribución de ejemplo entre índices, con una parte fija que reparte dividendos y una parte que acumula. Defensiva tiene la mayor parte distribuyendo, agresiva la menor. La estrategia fija esa parte, por eso el control de la entrada está bloqueado. Ajusta los pesos o elige otra estrategia; tu elección se guarda en este navegador.",
   "gl.stot.t": "Rentabilidad total antes de costes",
-  "gl.stot.d": "La rentabilidad total anual esperada de la distribución elegida, con dividendos y antes de costes (TER). Es un supuesto sintético por índice: no es una previsión ni historia medida. Las diferencias entre estrategias vienen sobre todo de los índices elegidos.",
+  "gl.stot.d": "La rentabilidad total anual esperada de la distribución elegida: revalorización más dividendo, antes de costes (TER). El dividendo ya está incluido en esta cifra y no se suma encima. Es un supuesto sintético por índice, no una previsión ni historia medida.",
   "gl.sdiv.t": "Rentabilidad por dividendo",
-  "gl.sdiv.d": "La parte de la rentabilidad total que se reparte como dividendo, ponderada según tu distribución. Más dividendo significa más flujo de caja, pero en estos supuestos menos crecimiento. Es el núcleo de la elección entre distribuir y acumular. Aquí no se calcula impuesto.",
+  "gl.sdiv.d": "La parte de la rentabilidad total que se reparte como dividendo (de ello, dividendo). No se suma encima del total: rentabilidad total = revalorización + dividendo. Más dividendo significa más flujo de caja, pero en estos supuestos menos crecimiento. Aquí no se calcula impuesto.",
   "gl.ster.t": "Costes (TER, ponderado)",
   "gl.ster.d": "Los costes anuales (total expense ratio) de los productos, ponderados por su peso. Se restan de la rentabilidad en la previsión. 0,20% al año parece poco, pero en 25 años el interés compuesto hace que la diferencia crezca.",
   "gl.seind.t": "Patrimonio tras el plazo",
@@ -2915,7 +2924,7 @@ function syncSynth(){
 }
 function renderSynth(){
   document.getElementById('stratCards').innerHTML = SYNTH_STRAT.map(s =>
-    `<button type="button" class="scard" data-strat="${s.id}" aria-pressed="${s.id === SYNTH_STATE.strat}" style="--c:${PAL[s.id]}"><b>${stName(s)}</b><small>${s.mix}% ${tr('synPayout')}</small><small class="srisk">${tr('synRisk')} ${numStr(weighted(s.g, 'v'), 1)}% · ${tr('synWorst')} ${numStr(weighted(s.g, 's'), 1)}%</small></button>`).join('');
+    `<button type="button" class="scard" data-strat="${s.id}" aria-pressed="${s.id === SYNTH_STATE.strat}" style="--c:${PAL[s.id]}"><span class="sc-name"><i class="sc-dot"></i>${stName(s)}</span><span class="sc-mix">${s.mix}% ${tr('synPayout')}</span><span class="sc-rows"><span>${tr('synRet')}</span><b>${numStr(weighted(s.g, 't'), 2)}%</b><span>${tr('synNet')}</span><b>${numStr(weighted(s.g, 't') - weighted(s.g, 'ter'), 2)}%</b><span>${tr('synRisk')}</span><b>${numStr(weighted(s.g, 'v'), 1)}%</b><span>${tr('synWorst')}</span><b>${numStr(weighted(s.g, 's'), 1)}%</b></span></button>`).join('');
   document.getElementById('synthTiles').innerHTML = Object.keys(SYNTH_IX).filter(id => SYNTH_STATE.w[id] > 0).map(id =>
     `<div class="stile" style="--c:${PAL[id]}"><div class="sname">${ixName(id)}</div><div class="sctl"><button type="button" data-dec="${id}" aria-label="${tr('synMinus')}">−</button><span class="sval">${SYNTH_STATE.w[id]}%</span><button type="button" data-inc="${id}" aria-label="${tr('synPlus')}">+</button><button type="button" class="srm" data-rm="${id}" aria-label="${tr('synRemove')}">×</button></div></div>`).join('');
   const add = Object.keys(SYNTH_IX).filter(id => !(SYNTH_STATE.w[id] > 0));
