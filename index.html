@@ -498,6 +498,8 @@
   .flymenu::before{content:'';position:absolute;top:-6px;left:var(--cx,auto);width:11px;height:11px;margin-left:-5.5px;background:var(--panel);border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg)}
   .flytitle{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:4px 10px 8px}
   .flymenu .menulist{margin-top:0;gap:2px}
+  .flymenu .menugrp + .menugrp{margin-top:6px;padding-top:6px;border-top:1px solid var(--line)}
+  .menuhd{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 12px 4px}
   .flymenu .menubtn{height:38px;width:100%;padding:0 12px;border:0;background:transparent;box-shadow:none;font-size:13.5px;font-weight:500;color:var(--text);justify-content:space-between;border-radius:9px}
   .flymenu .menubtn:hover{background:var(--bg);color:var(--text)}
   .flymenu .menubtn[aria-current="true"],.flymenu .menubtn[aria-pressed="true"]{box-shadow:none;border-color:transparent;font-weight:700}
@@ -1108,13 +1110,28 @@
 
 <div id="setDlg" class="flymenu" popover>
   <div class="flytitle" data-i18n="setTitle"></div>
-  <div class="menulist">
-    <button type="button" class="rbtn menubtn" data-open="guideDlg" data-i18n="guideBtn"></button>
-    <button type="button" class="rbtn menubtn" data-open="welcomeDlg" data-i18n="welcomeBtn"></button>
-    <button type="button" class="rbtn menubtn" data-open="scenDlg" data-i18n="btnScen"></button>
-    <button type="button" class="rbtn menubtn" data-open="expDlg" data-i18n="btnExport"></button>
-    <button type="button" class="rbtn menubtn" id="menuHelp" data-i18n="helpLink"></button>
-    <button type="button" class="rbtn menubtn" data-open="aboutDlg" data-i18n="aboutBtn"></button>
+  <div class="menugrp">
+    <div class="menuhd" data-i18n="grpData"></div>
+    <div class="menulist">
+      <button type="button" class="rbtn menubtn" data-open="scenDlg" data-i18n="btnScen"></button>
+      <button type="button" class="rbtn menubtn" data-open="expDlg" data-i18n="btnExport"></button>
+    </div>
+  </div>
+  <div class="menugrp">
+    <div class="menuhd" data-i18n="grpSet"></div>
+    <div class="menulist">
+      <button type="button" class="rbtn menubtn" data-open="langDlg" data-i18n="menuLang"></button>
+      <button type="button" class="rbtn menubtn" data-open="themeDlg" data-i18n="menuTheme"></button>
+      <button type="button" class="rbtn menubtn" id="menuCur" data-i18n="menuCur"></button>
+    </div>
+  </div>
+  <div class="menugrp">
+    <div class="menuhd" data-i18n="grpInfo"></div>
+    <div class="menulist">
+      <button type="button" class="rbtn menubtn" data-open="guideDlg" data-i18n="guideBtn"></button>
+      <button type="button" class="rbtn menubtn" id="menuHelp" data-i18n="helpLink"></button>
+      <button type="button" class="rbtn menubtn" data-open="aboutDlg" data-i18n="aboutBtn"></button>
+    </div>
   </div>
 </div>
 
@@ -1212,7 +1229,8 @@ const T = {
     exportIntro: 'PDF opent het afdrukvenster; kies daar "Opslaan als PDF". CSV bevat de jaartabel en het resultaat, te openen in Excel.',
     exportPdf: 'Als PDF (afdrukken)',
     exportCsv: 'Als CSV',
-    setTitle: 'Instellingen',
+    setTitle: 'Menu',
+    grpData: 'Gegevens', grpSet: 'Instellingen', grpInfo: 'Info', menuLang: 'Taal', menuTheme: 'Thema', menuCur: 'Valuta',
     setTheme: 'Thema',
     setLang: 'Taal',
     aboutBtn: 'Over Dividend Compass',
@@ -1446,7 +1464,8 @@ const T = {
     exportIntro: 'PDF opens the print window; choose "Save as PDF". CSV contains the yearly table and the results, to open in Excel.',
     exportPdf: 'As PDF (print)',
     exportCsv: 'As CSV',
-    setTitle: 'Settings',
+    setTitle: 'Menu',
+    grpData: 'Data', grpSet: 'Settings', grpInfo: 'Info', menuLang: 'Language', menuTheme: 'Theme', menuCur: 'Currency',
     setTheme: 'Theme',
     setLang: 'Language',
     aboutBtn: 'About Dividend Compass',
@@ -1680,7 +1699,8 @@ const T = {
     exportIntro: 'PDF abre la ventana de impresión; elige "Guardar como PDF". CSV contiene la tabla anual y los resultados, para abrir en Excel.',
     exportPdf: 'Como PDF (imprimir)',
     exportCsv: 'Como CSV',
-    setTitle: 'Ajustes',
+    setTitle: 'Menú',
+    grpData: 'Datos', grpSet: 'Ajustes', grpInfo: 'Info', menuLang: 'Idioma', menuTheme: 'Tema', menuCur: 'Moneda',
     setTheme: 'Tema',
     setLang: 'Idioma',
     aboutBtn: 'Sobre Dividend Compass',
@@ -2156,6 +2176,7 @@ function updateCurUI(){
   b.disabled = !(fxRate > 0);
   b.title = fxRate > 0 ? (curOn() ? '$ · 1 EUR = ' + fxRate.toFixed(4) + ' USD' + (fxDate ? ' (' + fxDate + ')' : '') : '€ · schakel naar dollar') : '';
   b.setAttribute('aria-pressed', curOn() ? 'true' : 'false');
+  const mc = document.getElementById('menuCur'); if (mc) mc.disabled = b.disabled;
 }
 function setCur(c){
   if (c === 'USD' && !(fxRate > 0)) return;
@@ -3824,6 +3845,10 @@ document.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click'
   if (b.dataset.open === 'scenDlg') renderScenarios();
   if (FLYS.includes(b.dataset.open)) flyOpen(b.dataset.open, b); else openDlg(b.dataset.open);
 }));
+document.getElementById('menuCur').addEventListener('click', () => {
+  document.getElementById('setDlg').hidePopover();
+  document.getElementById('curBtn').click();
+});
 document.getElementById('menuHelp').addEventListener('click', () => {
   document.getElementById('setDlg').hidePopover();
   openHelp(null);
@@ -3981,9 +4006,9 @@ document.querySelectorAll('#langDlg [data-lang]').forEach(b => b.addEventListene
 document.querySelectorAll('#themeDlg [data-theme]').forEach(b => b.addEventListener('click', () => {
   document.getElementById('themeDlg').hidePopover();
 }));
-document.querySelector('[data-open="langDlg"]').addEventListener('click', () => {
+document.querySelectorAll('[data-open="langDlg"]').forEach(b => b.addEventListener('click', () => {
   document.querySelectorAll('#langDlg [data-lang]').forEach(x => x.setAttribute('aria-current', x.dataset.lang === lang ? 'true' : 'false'));
-});
+}));
 /* ---- laatste invoer onthouden tussen bezoeken ---- */
 const LAST_KEY = 'dk-last-v2';
 function loadLast(){ try { const v = JSON.parse(localStorage.getItem(LAST_KEY)); return v && v.v === 1 ? v : null; } catch (e) { return null; } }
