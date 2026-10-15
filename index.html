@@ -829,7 +829,7 @@ details.collapse > summary h2{margin:0}
 .strat-line{font-size:13px}
 .duo .collapse-body .tbl-wrap{max-height:332px;overflow:auto}
 .duo .tbl thead th{position:sticky;top:0;background:var(--panel);z-index:1}
-@media (max-width:640px){ .tabs{display:flex !important;overflow-x:auto;scrollbar-width:none;gap:6px;padding-bottom:2px} .tabs::-webkit-scrollbar{display:none} .tabs .tab{flex:0 0 auto;white-space:nowrap;padding:9px 12px} .taxcard .row{flex-direction:row;align-items:baseline} #kpis{grid-template-columns:minmax(0,1fr)} .duo .collapse-body .tbl-wrap{max-height:420px} }
+@media (max-width:640px){ .taxcard .row{flex-direction:row;align-items:baseline} #kpis{grid-template-columns:minmax(0,1fr)} .duo .collapse-body .tbl-wrap{max-height:420px} }
 /* lijnen die samenvallen: blauw breder eronder, oranje erop */
 svg#chart .line.div{stroke-width:4.5}
 svg#chart .line.acc{stroke-width:2}
@@ -4397,9 +4397,9 @@ function updateProfBtn(){
   const btn = document.getElementById('profBtn'); if (!btn) return;
   const name = getActiveName();
   const x = name ? loadScen().find(p => p.name === name) : null;
-  if (!x){ btn.hidden = true; return; }
-  const changed = !sameAsProfile(x.data);
   btn.hidden = false;
+  if (!x){ document.getElementById('profLet').textContent = '+'; document.getElementById('profDot').hidden = true; btn.title = tr('scenProfile'); btn.setAttribute('aria-label', tr('scenProfile')); return; }
+  const changed = !sameAsProfile(x.data);
   document.getElementById('profLet').textContent = x.name.trim().charAt(0).toUpperCase();
   document.getElementById('profDot').hidden = !changed;
   const label = `${tr('scenProfile')}: ${x.name}` + (changed ? ` · ${tr('scenChanged')}` : '');
