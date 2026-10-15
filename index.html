@@ -4040,13 +4040,15 @@ document.getElementById('baseGo').addEventListener('click', e => {
   e.preventDefault();
   document.querySelector('.tabs .tab[data-tab="tabInput"]').click();
 });
-document.querySelectorAll('.sortbar .rbtn').forEach(x => x.setAttribute('aria-pressed', x.dataset.sort === taxSort ? 'true' : 'false'));
-document.querySelectorAll('.sortbar .rbtn').forEach(b => b.addEventListener('click', () => {
-  taxSort = b.dataset.sort;
+// Sortering is een persoonlijke instelling: hij hoort bij het profiel (captureState/applyState), dk-taxsort onthoudt alleen de laatste keuze
+function setTaxSort(v, render = true){
+  taxSort = v;
   try { localStorage.setItem(TAXSORT_KEY, taxSort); } catch (e) {}
-  document.querySelectorAll('.sortbar .rbtn').forEach(x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
-  renderOverview();
-}));
+  document.querySelectorAll('.sortbar .rbtn').forEach(x => x.setAttribute('aria-pressed', x.dataset.sort === taxSort ? 'true' : 'false'));
+  if (render) { renderOverview(); saveLast(); }
+}
+document.querySelectorAll('.sortbar .rbtn').forEach(x => x.setAttribute('aria-pressed', x.dataset.sort === taxSort ? 'true' : 'false'));
+document.querySelectorAll('.sortbar .rbtn').forEach(b => b.addEventListener('click', () => setTaxSort(b.dataset.sort)));
 function buildChips(){
   const box = document.getElementById('ovChips');
   const chip = c => `<label class="cpick-opt"><input type="checkbox" data-k="${c.k}"><span data-nm="${c.k}"></span></label>`;
@@ -4418,6 +4420,7 @@ function captureState(){
     wgoal: readEur('goalCap'),
     tax: Object.keys(taxOn).filter(k => taxOn[k]),
     savePct: savePct,
+    taxSort: taxSort,
     savRate: rateVal(),
     target: readEur('target'),
     funds: funds.map(f => ({id: f.id, w: f.w, g: f.g, y: f.y, ter: f.ter}))
@@ -4438,6 +4441,7 @@ function applyState(s){
   if (Array.isArray(s.tax)) { Object.keys(taxOn).forEach(k => { taxOn[k] = s.tax.includes(k) && taxAllowed(k); }); updateChips(); }
   else setTaxDefaults();
   setEurField('target', s.target);
+  if (['desc','alpha','fixed'].includes(s.taxSort)) setTaxSort(s.taxSort, false);
   if (typeof s.savRate === 'number') document.getElementById('savRate').value = String(s.savRate).replace('.', ',');
   if (typeof s.savePct === 'number'){
     savePct = Math.min(100, Math.max(0, s.savePct));
