@@ -643,7 +643,7 @@
 
   <aside class="panel controls" aria-label="Settings">
     <h2 data-i18n="settings"></h2>
-    <div class="pfield pfield-top"><span class="pfield-lbl" id="residLblMain"><span data-i18n="residLbl"></span> <a class="tt info" href="#gl-taxnl" data-tip-i18n="residTip">?</a></span>
+    <div class="pfield pfield-top"><span class="pfield-lbl" id="residLblMain"><span data-i18n="residLbl"></span> <a class="tt info" href="#" data-tip-i18n="residTip">?</a></span>
       <details class="cpick" id="mainPick"><summary><span id="mainSum"></span></summary><div class="cpick-list" id="mainList"></div></details>
       <p class="hint residhint" id="residHint"></p></div>
     <select id="resid" hidden aria-hidden="true"></select>
@@ -905,7 +905,7 @@
       <a href="#" id="baseGo" data-i18n="baseChange"></a>
     </div>
     <div class="savebox">
-      <label for="savePct" data-i18n="saveLbl"></label> <strong id="savePctLbl">0%</strong> <a class="info" href="#gl-taxsave">?</a>
+      <label for="savePct" data-i18n="saveLbl"></label> <strong id="savePctLbl">0%</strong> <a class="info" href="#" data-tip-i18n="saveHint">?</a>
       <input type="range" id="savePct" min="0" max="100" step="5" value="0" aria-labelledby="savePctLbl">
     </div>
   </aside>
@@ -924,7 +924,7 @@
   </div>
 
   <section class="taxpane" id="ovPane" aria-labelledby="ovTitle">
-    <h2 id="ovTitle"><span data-i18n="ovTitle"></span> <a class="info" href="#gl-taxovr">?</a></h2>
+    <h2 id="ovTitle"><span data-i18n="ovTitle"></span> <a class="info" href="#" data-tip-i18n="ovSub">?</a></h2>
     <p class="sub" data-i18n="taxChartNote"></p>
     <p class="muted" data-i18n="ovSub" hidden></p>
     <div class="legend" id="taxLegend" style="margin:6px 0 10px"></div>
@@ -953,7 +953,7 @@
   </section>
 
   <section class="taxpane" id="secNL" aria-labelledby="nlTitle">
-    <h2 id="nlTitle"><span data-i18n="nlTitle"></span> <a class="info" href="#gl-taxnl">?</a></h2>
+    <h2 id="nlTitle"><span data-i18n="nlTitle"></span> <a class="info" href="#" data-tip-i18n="nlText">?</a></h2>
     <p data-i18n="nlText" hidden></p>
     <div class="tbl-wrap mcards">
       <table class="tbl">
@@ -977,7 +977,7 @@
   </section>
 
   <section class="taxpane" id="secUS" aria-labelledby="usTitle">
-    <h2 id="usTitle"><span data-i18n="usTitle"></span> <a class="info" href="#gl-taxus">?</a></h2>
+    <h2 id="usTitle"><span data-i18n="usTitle"></span> <a class="info" href="#" data-tip-i18n="usText">?</a></h2>
     <p data-i18n="usText" hidden></p>
     <div class="tbl-wrap mcards">
       <table class="tbl">
@@ -996,10 +996,10 @@
   </section>
 
   <section class="taxpane" id="secAR" aria-labelledby="arTitle">
-    <h2 id="arTitle"><span data-i18n="arTitle"></span> <a class="info" href="#gl-taxar">?</a></h2>
+    <h2 id="arTitle"><span data-i18n="arTitle"></span> <a class="info" href="#" data-tip-i18n="arText">?</a></h2>
     <p data-i18n="arText" hidden></p>
     <div class="arrate">
-      <label for="arRate"><span data-i18n="arRateLbl"></span></label> <a class="info" href="#gl-taxrate">?</a>
+      <label for="arRate"><span data-i18n="arRateLbl"></span></label> <a class="info" href="#" data-tip-i18n="arRateHint">?</a>
       <div class="ratefield">
         <input type="text" id="arRate" value="1780" inputmode="decimal" autocomplete="off">
         <a class="rbtn" href="https://www.cotizacion-dolar.com.ar/euro-hoy.php" target="_blank" rel="noopener noreferrer" data-i18n="arSrc"></a>
@@ -1080,20 +1080,8 @@
     <div id="gl-sequentie"><dt data-i18n="gl.seq.t"></dt><dd data-i18n="gl.seq.d"></dd><a class="glsrc" href="https://www.schwab.com/learn/story/timing-matters-understanding-sequence-returns-risk" target="_blank" rel="noopener noreferrer">Bron: Charles Schwab (EN)</a></div>
   </dl>
   <dl class="glossary" data-cat="tax" hidden>
-    <div id="gl-bronbelasting"><dt data-i18n="gl.bron.t"></dt><dd data-i18n="gl.bron.d"></dd><a class="glsrc" href="https://www.simplysafedividends.com/world-of-dividends/posts/31-guide-to-foreign-tax-withholding-on-dividends-for-u-s-investors" target="_blank" rel="noopener noreferrer">Bron: Simply Safe Dividends (EN)</a></div>
+    <div id="gl-bronbelasting"><dt data-i18n="gl.bron.t"></dt><dd data-i18n="gl.bron.d"></dd><a class="glsrc" href="https://taxsummaries.pwc.com/United-States/Corporate/Withholding-taxes" target="_blank" rel="noopener noreferrer">Bron: PwC Tax Summaries (EN)</a><a class="glsrc" href="https://www.simplysafedividends.com/world-of-dividends/posts/31-guide-to-foreign-tax-withholding-on-dividends-for-u-s-investors" target="_blank" rel="noopener noreferrer">Bron: Simply Safe Dividends (EN)</a></div>
     <div id="gl-box3"><dt data-i18n="gl.box3.t"></dt><dd data-i18n="gl.box3.d"></dd><a class="glsrc" href="https://financialfocus.abnamro.nl/fiscaliteiten/box-3-belasting-over-inkomen-uit-sparen-en-beleggen/" target="_blank" rel="noopener noreferrer">Bron: ABN AMRO (NL)</a></div>
-    <div id="gl-taxintro"><dt data-i18n="taxTitle"></dt><dd data-i18n="taxIntro"></dd></div>
-    <div id="gl-taxovr"><dt data-i18n="ovTitle"></dt><dd data-i18n="ovSub"></dd></div>
-    <div id="gl-taxovr2"><dt data-i18n="ovTotal"></dt><dd data-i18n="ovNote"></dd><a class="glsrc" href="https://taxsummaries.pwc.com/United-States/Corporate/Withholding-taxes" target="_blank" rel="noopener noreferrer">Bron: PwC Tax Summaries (EN)</a></div>
-    <div id="gl-taxovr3"><dt data-i18n="colYear"></dt><dd data-i18n="ovYearNote"></dd></div>
-    <div id="gl-taxsave"><dt data-i18n="saveLbl"></dt><dd data-i18n="saveHint"></dd></div>
-    <div id="gl-taxnl"><dt data-i18n="nlTitle"></dt><dd data-i18n="nlText"></dd></div>
-    <div id="gl-taxus"><dt data-i18n="usTitle"></dt><dd data-i18n="usText"></dd></div>
-    <div id="gl-taxus2"><dt data-i18n="usExposure"></dt><dd data-i18n="usNote"></dd></div>
-    <div id="gl-taxar"><dt data-i18n="arTitle"></dt><dd data-i18n="arText"></dd></div>
-    <div id="gl-taxar2"><dt data-i18n="arExt"></dt><dd data-i18n="arMore"></dd></div>
-    <div id="gl-taxrate"><dt data-i18n="arRateLbl"></dt><dd data-i18n="arRateHint"></dd></div>
-    <div id="gl-tax2028"><dt data-i18n="ovN28"></dt><dd data-i18n="tax2028Note"></dd></div>
   </dl>
 </div></dialog>
 
@@ -3086,6 +3074,8 @@ function openHelp(id){
   }
 }
 document.addEventListener('click', e => {
+  const tipLink = e.target.closest('a.info[href="#"]');
+  if (tipLink){ e.preventDefault(); return; }
   const a = e.target.closest('a[href^="#gl-"], a[href="#help"]');
   if (!a) return;
   e.preventDefault();
@@ -3606,7 +3596,7 @@ document.querySelectorAll('.sortbar .rbtn').forEach(b => b.addEventListener('cli
 }));
 function buildChips(){
   const box = document.getElementById('ovChips');
-  const chip = c => `<label class="cpick-opt"><input type="checkbox" data-k="${c.k}"><span data-nm="${c.k}"></span>${c.k === 'n28' ? '<a class="info" href="#gl-tax2028">?</a>' : ''}</label>`;
+  const chip = c => `<label class="cpick-opt"><input type="checkbox" data-k="${c.k}"><span data-nm="${c.k}"></span>${c.k === 'n28' ? `<a class="info" href="#" data-tip="${tr('tax2028Note')}">?</a>` : ''}</label>`;
   const main = ALL.filter(c => !EXTRA.some(e => e.k === c.k)), more = ALL.filter(c => EXTRA.some(e => e.k === c.k));
   box.innerHTML = `<details class="cpick cpick-tax" id="taxPick"><summary><span id="taxPickSum"></span></summary><div class="cpick-list"><div class="cpick-hint" id="pickCount"></div>${ALL.map(chip).join('')}</div></details>`;
   box.addEventListener('change', e => {
