@@ -4194,6 +4194,7 @@ function captureState(){
     monthly: monthlyAmt,
     wgoal: readEur('goalCap'),
     tax: Object.keys(taxOn).filter(k => taxOn[k]),
+    savePct: savePct,
     target: readEur('target'),
     funds: funds.map(f => ({id: f.id, w: f.w, g: f.g, y: f.y, ter: f.ter}))
   };
@@ -4212,6 +4213,12 @@ function applyState(s){
   if (Array.isArray(s.tax)) { Object.keys(taxOn).forEach(k => { taxOn[k] = s.tax.includes(k) && taxAllowed(k); }); updateChips(); }
   else setTaxDefaults();
   setEurField('target', s.target);
+  if (typeof s.savePct === 'number'){
+    savePct = Math.min(100, Math.max(0, s.savePct));
+    const sp = document.getElementById('savePct');
+    sp.value = savePct; sp.style.setProperty('--p', savePct + '%');
+  }
+  updateSaveLbl();
   s.funds.forEach(x => { const f = funds.find(q => q.id === x.id); if (f){ f.w = x.w; f.g = x.g; f.y = x.y; f.ter = x.ter; } });
   buildFundTable();
   syncAmountFromTarget();
