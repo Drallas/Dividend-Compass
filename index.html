@@ -549,6 +549,8 @@
 #taxKpis .taxcardwrap .kpi{flex:1}
 #taxKpis .n28opt{display:flex;align-items:center;gap:6px;font-size:.9em;color:var(--muted);padding:0 4px;cursor:pointer}
 #taxKpis .n28opt input{margin:0;accent-color:var(--text)}
+.wzhint{margin:6px 0 0;font-size:.92em;color:var(--muted)}
+.wzhint a{color:var(--accent,#2563eb);font-weight:600}
 .n28sec{display:flex;align-items:center;gap:8px;margin:0 0 14px;cursor:pointer}
 .n28sec input{margin:0;accent-color:var(--text)}
 .n28sec:has(input:disabled){opacity:.5;cursor:default}
@@ -641,6 +643,7 @@
     <p class="eyebrow" data-i18n="eyebrow"></p>
     <h1 data-i18n="h1"></h1>
     <p class="lede" data-i18n="lede"></p>
+    <p class="wzhint"><span data-i18n="wzHint"></span> <a href="#" data-openwiz data-i18n="wzOpen"></a></p>
   </div>
 </header>
 
@@ -1188,6 +1191,7 @@
   <button type="button" class="helpx" data-close="guideDlg" aria-label="×">×</button>
   <h2 id="guideTitle" data-i18n="guideTitle"></h2>
   <p class="sub" data-i18n="guideIntro"></p>
+  <p class="wzhint"><span data-i18n="wzHint"></span> <a href="#" data-openwiz data-i18n="wzOpen"></a></p>
   <ol class="guide">
       <li><b data-i18n="g1t"></b><span data-i18n="g1d"></span></li>
       <li><b data-i18n="g2t"></b><span data-i18n="g2d"></span></li>
@@ -1377,7 +1381,7 @@ const T = {
     pickTitle: 'Landen vergelijken', grpMain: 'Basisvergelijking', grpOther: 'Meer landen', pickOf: n => `${n} van 4`, pickMax: 'Maximaal 4 landen tegelijk. Zet er eerst een uit.',
     hTotals: 'Totaal per land', hYears: 'Belasting per jaar', hNotes: 'Uitgangspunten per land', colBase: 'Belast over (gem. per jaar)',
     noteGeneric: 'Voor de extra landen is per jaar gerekend over de uitkeringen en de waardestijging van dat jaar. Het zijn indicaties, geen belastingadvies; controleer de actuele regels.',
-    ovN28: 'NL nieuw stelsel (2028)', n28Add: 'ook NL 2028 tonen', tax2028Note: 'Voorstel: vanaf 1-1-2028 wordt in box 3 alleen het werkelijke rendement belast, 36% boven een heffingsvrij bedrag van € 1.800. Nog onder voorbehoud van de Eerste Kamer. Hier gerekend alsof het vanaf het eerste jaar geldt, met de waardestijging als rendement. Verliezen worden niet verrekend.',
+    ovN28: 'NL nieuw stelsel (2028)', n28Add: 'ook NL 2028 tonen', wzHint: 'Liever stap voor stap? Met de startwizard zet je de belangrijkste invoer in één keer.', wzOpen: 'Start de startwizard', tax2028Note: 'Voorstel: vanaf 1-1-2028 wordt in box 3 alleen het werkelijke rendement belast, 36% boven een heffingsvrij bedrag van € 1.800. Nog onder voorbehoud van de Eerste Kamer. Hier gerekend alsof het vanaf het eerste jaar geldt, met de waardestijging als rendement. Verliezen worden niet verrekend.',
     taxEyebrow: 'Belasting · schatting', taxH1: 'Belasting per land',
     taxLead: 'Hoeveel belasting je per jaar betaalt in de landen die je kiest (tot 4 tegelijk), op basis van je inleg, periode en mix. Schattingen, geen belastingadvies.',
     saveLbl: 'Deel op spaarrekening (box 3)', saveHint: 'Spaargeld telt in box 3 tegen het spaartarief (1,28%) in plaats van het forfaitair rendement (6%). Rente op je spaargeld zit niet in de prognose.',
@@ -1612,7 +1616,7 @@ const T = {
     pickTitle: 'Compare countries', grpMain: 'Core comparison', grpOther: 'More countries', pickOf: n => `${n} of 4`, pickMax: 'Maximum 4 countries at once. Turn one off first.',
     hTotals: 'Total per country', hYears: 'Tax per year', hNotes: 'Assumptions per country', colBase: 'Taxed on (avg per year)',
     noteGeneric: 'For the extra countries tax is calculated per year on that year\'s distributions and increase in value. These are indications, not tax advice; check the current rules.',
-    ovN28: 'NL new system (2028)', n28Add: 'also show NL 2028', tax2028Note: 'Proposal: from 1-1-2028 Dutch wealth taxes only the actual return, 36% above a tax-free amount of €1,800. Still subject to approval by the Senate. Calculated here as if it applies from year one, with the increase in value as return. Losses are not offset.',
+    ovN28: 'NL new system (2028)', n28Add: 'also show NL 2028', wzHint: 'Prefer step by step? The start wizard sets the main inputs in one go.', wzOpen: 'Start the start wizard', tax2028Note: 'Proposal: from 1-1-2028 Dutch wealth taxes only the actual return, 36% above a tax-free amount of €1,800. Still subject to approval by the Senate. Calculated here as if it applies from year one, with the increase in value as return. Losses are not offset.',
     taxEyebrow: 'Tax · estimate', taxH1: 'Tax per country',
     taxLead: 'How much tax you pay per year in the Netherlands, the US and Argentina, based on your investment, period and mix. Estimates, not tax advice.',
     saveLbl: 'Share in savings account (Dutch wealth tax)', saveHint: 'Savings count in Dutch wealth tax at the savings rate (1.28%) instead of the deemed return (6%). Interest on your savings is not in the forecast.',
@@ -1847,7 +1851,7 @@ const T = {
     pickTitle: 'Comparar países', grpMain: 'Comparación base', grpOther: 'Más países', pickOf: n => `${n} de 4`, pickMax: 'Máximo 4 países a la vez. Desactiva uno primero.',
     hTotals: 'Total por país', hYears: 'Impuesto por año', hNotes: 'Supuestos por país', colBase: 'Gravado sobre (media/año)',
     noteGeneric: 'En los países adicionales se calcula cada año sobre las distribuciones y la subida de valor de ese año. Son indicaciones, no asesoramiento fiscal; comprueba las normas vigentes.',
-    ovN28: 'Países Bajos nuevo sistema (2028)', n28Add: 'mostrar también P. Bajos 2028', tax2028Note: 'Propuesta: desde el 1-1-2028 la caja 3 solo grava el rendimiento real, al 36% por encima de un mínimo exento de 1.800 €. Aún pendiente de aprobación por el Senado. Aquí se calcula como si aplicara desde el primer año, con la subida del valor como rendimiento. Las pérdidas no se compensan.',
+    ovN28: 'Países Bajos nuevo sistema (2028)', n28Add: 'mostrar también P. Bajos 2028', wzHint: '¿Prefieres paso a paso? El asistente inicial configura los datos principales de una vez.', wzOpen: 'Abrir el asistente inicial', tax2028Note: 'Propuesta: desde el 1-1-2028 la caja 3 solo grava el rendimiento real, al 36% por encima de un mínimo exento de 1.800 €. Aún pendiente de aprobación por el Senado. Aquí se calcula como si aplicara desde el primer año, con la subida del valor como rendimiento. Las pérdidas no se compensan.',
     taxEyebrow: 'Impuestos · estimación', taxH1: 'Impuestos por país',
     taxLead: 'Cuánto impuesto pagas al año en Países Bajos, EE. UU. y Argentina, según tu inversión, periodo y mezcla. Estimaciones, no asesoramiento fiscal.',
     saveLbl: 'Parte en cuenta de ahorro (impuesto neerlandés sobre el patrimonio)', saveHint: 'El ahorro cuenta en impuesto neerlandés sobre el patrimonio al tipo de ahorro (1,28%) en lugar del rendimiento forfetario (6%). Los intereses de tu ahorro no están en la previsión.',
@@ -4096,64 +4100,82 @@ document.getElementById('welcomeDlg').addEventListener('close', () => { try { lo
 
 /* ============ startwizard: eenmalig de belangrijkste invoer doorlopen ============ */
 const WZ = {
-  nl: {of:'Stap {n} van {t}', back:'Terug', skip:'Overslaan', next:'Volgende', done:'Klaar', inCur:c=>'Bedrag in '+c, reinv:'Herinvesteren', pay:'Uitbetalen',
-    steps:[
-      {title:'Waar woon je?', sub:'Je land bepaalt welke belasting we schatten. Dit is een schatting, geen belastingadvies.'},
-      {title:'In welke valuta wil je rekenen?', sub:'Intern rekenen we altijd in euro; dollar is alleen de weergave.'},
-      {title:'Hoeveel stop je erin?', sub:'Je startvermogen. Een maandelijkse inleg kun je later instellen.'},
-      {title:'Hoeveel stort je er maandelijks bij?', sub:'Een vaste inleg per maand, bovenop je startvermogen. Vul 0 in als je geen inleg wilt.'},
-      {title:'Welk netto vermogen wil je halen?', sub:'Het doel in de netto waardeprognose. Vul 0 in als je geen doel wilt.'},
-      {title:'Wil je een vast bedrag per maand uit dividend?', sub:'Vul het gewenste bedrag per maand in. Vul 0 in als je dat niet wilt.'},
-      {title:'Wat doen we met de uitkeringen?', sub:'Herinvesteren laat ze meegroeien in het fonds. Uitbetalen zet ze apart op.'}]},
-  en: {of:'Step {n} of {t}', back:'Back', skip:'Skip', next:'Next', done:'Done', inCur:c=>'Amount in '+c, reinv:'Reinvest', pay:'Pay out',
-    steps:[
-      {title:'Where do you live?', sub:'Your country determines which tax we estimate. This is an estimate, not tax advice.'},
-      {title:'Which currency do you want to use?', sub:'We always calculate in euro internally; dollar is only the display.'},
-      {title:'How much do you start with?', sub:'Your starting capital. You can set a monthly contribution later.'},
-      {title:'How much do you add each month?', sub:'A fixed monthly contribution on top of your starting capital. Enter 0 if you do not want one.'},
-      {title:'What net wealth do you want to reach?', sub:'The goal in the net worth forecast. Enter 0 if you have no goal.'},
-      {title:'Do you want a fixed amount per month from dividends?', sub:'Enter the amount you want per month. Enter 0 if you do not.'},
-      {title:'What do we do with the distributions?', sub:'Reinvesting lets them grow inside the fund. Paying out sets them aside.'}]},
-  es: {of:'Paso {n} de {t}', back:'Atrás', skip:'Omitir', next:'Siguiente', done:'Listo', inCur:c=>'Importe en '+c, reinv:'Reinvertir', pay:'Pagar',
-    steps:[
-      {title:'¿Dónde vives?', sub:'Tu país determina qué impuesto estimamos. Es una estimación, no asesoramiento fiscal.'},
-      {title:'¿En qué moneda quieres calcular?', sub:'Internamente siempre calculamos en euros; el dólar es solo la visualización.'},
-      {title:'¿Con cuánto empiezas?', sub:'Tu capital inicial. Más adelante puedes fijar una aportación mensual.'},
-      {title:'¿Cuánto aportas cada mes?', sub:'Una aportación mensual fija sobre tu capital inicial. Introduce 0 si no quieres aportar.'},
-      {title:'¿Qué patrimonio neto quieres alcanzar?', sub:'La meta en la previsión de valor neto. Introduce 0 si no tienes meta.'},
-      {title:'¿Quieres una cantidad fija al mes de dividendos?', sub:'Introduce la cantidad mensual deseada. Introduce 0 si no la quieres.'},
-      {title:'¿Qué hacemos con las distribuciones?', sub:'Reinvertir hace que crezcan dentro del fondo. Pagar las aparta.'}]}
+  nl: {of:'Stap {n} van {t}', back:'Terug', skip:'Overslaan', next:'Volgende', done:'Klaar', inCur:c=>'Bedrag in '+c, reinv:'Herinvesteren', pay:'Uitbetalen', mixOwn:'Je gebruikt nu je eigen mix; deze stap heeft dan geen effect.',
+    steps:{
+      res:{title:'Waar woon je?', sub:'Je land bepaalt welke belasting we schatten. Dit is een schatting, geen belastingadvies.'},
+      cur:{title:'In welke valuta wil je rekenen?', sub:'Intern rekenen we altijd in euro; dollar is alleen de weergave.'},
+      start:{title:'Hoeveel stop je erin?', sub:'Je startvermogen.'},
+      monthly:{title:'Hoeveel stort je er maandelijks bij?', sub:'Een vaste inleg per maand, bovenop je startvermogen. Vul 0 in als je geen inleg wilt.'},
+      scen:{title:'Welk scenario past bij je?', sub:'Laag, basis of hoog rendement voor de voorbeeldstrategie. Dit zijn aannames, geen voorspelling.'},
+      mix:{title:'Hoeveel van je mix keert uit?', sub:'Het deel dat als dividend uitkeert tegenover het deel dat accumuleert.'},
+      goal:{title:'Welk netto vermogen wil je halen?', sub:'Het doel in de netto waardeprognose. Vul 0 in als je geen doel wilt.'},
+      target:{title:'Wil je een vast bedrag per maand uit dividend?', sub:'Vul het gewenste bedrag per maand in. Vul 0 in als je dat niet wilt.'},
+      reinv:{title:'Wat doen we met de uitkeringen?', sub:'Herinvesteren laat ze meegroeien in het fonds. Uitbetalen zet ze apart op.'}}},
+  en: {of:'Step {n} of {t}', back:'Back', skip:'Skip', next:'Next', done:'Done', inCur:c=>'Amount in '+c, reinv:'Reinvest', pay:'Pay out', mixOwn:'You are using your own mix; this step has no effect then.',
+    steps:{
+      res:{title:'Where do you live?', sub:'Your country determines which tax we estimate. This is an estimate, not tax advice.'},
+      cur:{title:'Which currency do you want to use?', sub:'We always calculate in euro internally; dollar is only the display.'},
+      start:{title:'How much do you start with?', sub:'Your starting capital.'},
+      monthly:{title:'How much do you add each month?', sub:'A fixed monthly contribution on top of your starting capital. Enter 0 if you do not want one.'},
+      scen:{title:'Which scenario fits you?', sub:'Low, base or high return for the example strategy. These are assumptions, not a forecast.'},
+      mix:{title:'How much of your mix pays out?', sub:'The share paid as dividend versus the share that accumulates.'},
+      goal:{title:'What net wealth do you want to reach?', sub:'The goal in the net worth forecast. Enter 0 if you have no goal.'},
+      target:{title:'Do you want a fixed amount per month from dividends?', sub:'Enter the amount you want per month. Enter 0 if you do not.'},
+      reinv:{title:'What do we do with the distributions?', sub:'Reinvesting lets them grow inside the fund. Paying out sets them aside.'}}},
+  es: {of:'Paso {n} de {t}', back:'Atrás', skip:'Omitir', next:'Siguiente', done:'Listo', inCur:c=>'Importe en '+c, reinv:'Reinvertir', pay:'Pagar', mixOwn:'Ahora usas tu propia mezcla; este paso no tiene efecto.',
+    steps:{
+      res:{title:'¿Dónde vives?', sub:'Tu país determina qué impuesto estimamos. Es una estimación, no asesoramiento fiscal.'},
+      cur:{title:'¿En qué moneda quieres calcular?', sub:'Internamente siempre calculamos en euros; el dólar es solo la visualización.'},
+      start:{title:'¿Con cuánto empiezas?', sub:'Tu capital inicial.'},
+      monthly:{title:'¿Cuánto aportas cada mes?', sub:'Una aportación mensual fija sobre tu capital inicial. Introduce 0 si no quieres aportar.'},
+      scen:{title:'¿Qué escenario se ajusta a ti?', sub:'Rendimiento bajo, base o alto para la estrategia de ejemplo. Son supuestos, no una previsión.'},
+      mix:{title:'¿Cuánto de tu mezcla paga dividendos?', sub:'La parte que paga dividendo frente a la que acumula.'},
+      goal:{title:'¿Qué patrimonio neto quieres alcanzar?', sub:'La meta en la previsión de valor neto. Introduce 0 si no tienes meta.'},
+      target:{title:'¿Quieres una cantidad fija al mes de dividendos?', sub:'Introduce la cantidad mensual deseada. Introduce 0 si no la quieres.'},
+      reinv:{title:'¿Qué hacemos con las distribuciones?', sub:'Reinvertir hace que crezcan dentro del fondo. Pagar las aparta.'}}}
 };
-let wzStep = 0, wzReinv = true;
-const WZN = WZ.en.steps.length;
+const WZKEYS = ['res','cur','start','monthly','scen','mix','goal','target','reinv'];
+const WZN = WZKEYS.length;
+let wzStep = 0, wzReinv = true, wzScen = 'basis', wzMix = 50;
 function wzText(){ return WZ[lang] || WZ.en; }
 function openStart(){
   wzStep = 0;
   wzReinv = document.getElementById('reinvest').checked;
+  const sc = document.querySelector('input[name=scen]:checked');
+  wzScen = sc ? sc.value : 'basis';
+  wzMix = +document.getElementById('mix').value;
   wzRender();
   const d = document.getElementById('startDlg');
   if (!d.open) d.showModal();
 }
 function wzBody(i, t){
-  if (i === 0){
+  const k = WZKEYS[i];
+  if (k === 'res'){
     const r = document.getElementById('resid');
     return '<select id="wzRes" class="wz-input">' + [...r.options].map(o => '<option value="' + o.value + '"' + (o.value === r.value ? ' selected' : '') + '>' + o.textContent + '</option>').join('') + '</select>';
   }
-  if (i === 1){
+  if (k === 'cur'){
     const usd = fxRate > 0;
     return '<div class="wz-seg"><button type="button" class="rbtn" data-wzc="EUR" aria-pressed="' + (curCode === 'EUR') + '">€ euro</button>' +
            '<button type="button" class="rbtn" data-wzc="USD" aria-pressed="' + (curCode === 'USD') + '"' + (usd ? '' : ' disabled') + '>$ dollar</button></div>';
   }
-  if (i === 6){
+  if (k === 'scen'){
+    return '<div class="wz-seg">' + ['laag','basis','hoog'].map(v => '<button type="button" class="rbtn" data-wzs="' + v + '" aria-pressed="' + (wzScen === v) + '">' + tr('sc' + v.charAt(0).toUpperCase() + v.slice(1)) + '</button>').join('') + '</div>';
+  }
+  if (k === 'mix'){
+    const own = fundsStore.on;
+    return '<label class="wz-lbl"><span id="wzMixV">' + wzMix + '%</span><input type="range" id="wzMixR" min="0" max="100" step="5" value="' + wzMix + '"' + (own ? ' disabled' : '') + '></label>' + (own ? '<p class="hint">' + t.mixOwn + '</p>' : '');
+  }
+  if (k === 'reinv'){
     return '<div class="wz-seg"><button type="button" class="rbtn" data-wzr="1" aria-pressed="' + wzReinv + '">' + t.reinv + '</button>' +
            '<button type="button" class="rbtn" data-wzr="0" aria-pressed="' + (!wzReinv) + '">' + t.pay + '</button></div>';
   }
-  const cur = i === 2 ? manualAmount : i === 3 ? monthlyAmt : i === 4 ? readEur('goalCap') : readEur('target');
+  const cur = k === 'start' ? manualAmount : k === 'monthly' ? monthlyAmt : k === 'goal' ? readEur('goalCap') : readEur('target');
   const v = toDisp(cur);
   return '<label class="wz-lbl">' + t.inCur(curSym()) + '<input type="text" inputmode="numeric" id="wzNum" class="wz-input" value="' + (v > 0 ? fmtNum(v) : '') + '"></label>';
 }
 function wzRender(){
-  const t = wzText(), S = t.steps[wzStep];
+  const t = wzText(), S = t.steps[WZKEYS[wzStep]];
   document.getElementById('startStep').textContent = t.of.replace('{n}', wzStep + 1).replace('{t}', WZN);
   document.getElementById('startTitle').textContent = S.title;
   document.getElementById('startSub').textContent = S.sub;
@@ -4164,16 +4186,23 @@ function wzRender(){
   document.getElementById('startNext').textContent = wzStep === WZN - 1 ? t.done : t.next;
 }
 function wzApply(i){
-  if (i === 0){
+  const k = WZKEYS[i];
+  if (k === 'res'){
     const s = document.getElementById('wzRes');
     if (s) pickResid(s.value);
-  } else if (i >= 2 && i <= 5){
+  } else if (k === 'start' || k === 'monthly' || k === 'goal' || k === 'target'){
     const inp = document.getElementById('wzNum');
     const eur = inp ? Math.round(fromDisp(digits(inp.value))) : 0;
-    const id = ['bedrag', 'monthly', 'goalCap', 'target'][i - 2];
+    const id = {start:'bedrag', monthly:'monthly', goal:'goalCap', target:'target'}[k];
     setEurField(id, eur);
     document.getElementById(id).dispatchEvent(new Event('input'));
-  } else if (i === 6){
+  } else if (k === 'scen'){
+    const r = document.querySelector('input[name=scen][value="' + wzScen + '"]');
+    if (r && !r.checked){ r.checked = true; r.dispatchEvent(new Event('change')); }
+  } else if (k === 'mix'){
+    const m = document.getElementById('mix');
+    if (!fundsStore.on && +m.value !== wzMix){ m.value = wzMix; m.dispatchEvent(new Event('input')); }
+  } else if (k === 'reinv'){
     const r = document.getElementById('reinvest');
     if (r.checked !== wzReinv){ r.checked = wzReinv; r.dispatchEvent(new Event('change')); }
   }
@@ -4181,8 +4210,13 @@ function wzApply(i){
 document.getElementById('startBody').addEventListener('click', e => {
   const c = e.target.closest('[data-wzc]');
   if (c && !c.disabled){ setCur(c.dataset.wzc); wzRender(); return; }
+  const s = e.target.closest('[data-wzs]');
+  if (s){ wzScen = s.dataset.wzs; wzRender(); return; }
   const r = e.target.closest('[data-wzr]');
   if (r){ wzReinv = r.dataset.wzr === '1'; wzRender(); }
+});
+document.getElementById('startBody').addEventListener('input', e => {
+  if (e.target.id === 'wzMixR'){ wzMix = +e.target.value; document.getElementById('wzMixV').textContent = wzMix + '%'; }
 });
 document.getElementById('startNext').addEventListener('click', () => {
   if (wzStep < WZN - 1){ wzApply(wzStep); wzStep++; wzRender(); }
@@ -4197,6 +4231,14 @@ document.getElementById('startX').addEventListener('click', () => document.getEl
 document.getElementById('startDlg').addEventListener('close', () => { try { localStorage.setItem('dk-start', '1'); } catch (e) {} });
 document.getElementById('menuWizard').addEventListener('click', () => {
   document.getElementById('setDlg').hidePopover();
+  openStart();
+});
+// links naar de wizard (onder de kop en in de gebruiksgids)
+document.addEventListener('click', e => {
+  const w = e.target.closest('[data-openwiz]');
+  if (!w) return;
+  e.preventDefault();
+  const g = document.getElementById('guideDlg'); if (g.open) g.close();
   openStart();
 });
 function startSeen(){ try { return !!localStorage.getItem('dk-start'); } catch (e) { return true; } }
