@@ -352,12 +352,12 @@
   .cpick[open] summary{border-color:var(--text)}
   .cpick-list{position:absolute;z-index:20;top:46px;left:0;right:0;max-height:320px;overflow:auto;padding:6px;border:1px solid var(--line);border-radius:12px;background:var(--panel);box-shadow:0 10px 28px rgba(0,0,0,.2)}
   .cpick-hint{margin:4px 8px 6px;font-size:11.5px;color:var(--muted)}
-  .cpick-opt{display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:8px;font-size:14px;cursor:pointer}
+  .cpick-opt{display:flex;gap:10px;align-items:center;width:100%;box-sizing:border-box;padding:9px 10px;border:0;border-radius:8px;background:none;color:var(--text);font:inherit;font-size:14px;text-align:left;cursor:pointer}
+  .cpick-opt[aria-pressed="true"]{font-weight:700;background:color-mix(in srgb,var(--text) 8%,transparent)}
+  .cpick-opt[aria-pressed="true"]::after{content:"";margin-left:auto;width:6px;height:11px;border-right:2px solid var(--text);border-bottom:2px solid var(--text);transform:rotate(45deg) translate(-2px,-2px)}
   .cpick-opt:hover{background:color-mix(in srgb,var(--text) 6%,transparent)}
-  .cpick-opt input{margin:0;width:16px;height:16px;accent-color:var(--text);cursor:pointer;flex:0 0 auto}
-  .cpick-opt input:disabled{cursor:not-allowed}
-  .cpick-opt input:disabled + span{opacity:.45}
   .cpick-opt .info{margin-left:auto}
+  .pfield-top{margin-bottom:6px}
   .cpick-tax .cpick-list{left:0;right:0}
   @media (max-width:600px){
     .calgrid table,.calgrid tbody,.calgrid tr,.calgrid th,.calgrid td{display:block;width:100%}
@@ -610,6 +610,9 @@
 
   <aside class="panel controls" aria-label="Settings">
     <h2 data-i18n="settings"></h2>
+    <div class="pfield pfield-top"><span class="pfield-lbl" id="residLblMain"><span data-i18n="residLbl"></span> <a class="tt info" href="#gl-taxnl" data-tip-i18n="residTip">?</a></span>
+      <details class="cpick" id="mainPick"><summary><span id="mainSum"></span></summary><div class="cpick-list" id="mainList"></div></details></div>
+    <select id="resid" hidden aria-hidden="true"></select>
     <section class="grp">
       <h3 data-i18n="grpStrat"></h3>
   <div class="field compact">
@@ -686,10 +689,6 @@
     </section>
     <section class="grp">
       <h3 data-i18n="grpTax"></h3>
-  <div class="field compact">
-        <div class="field-head"><label for="resid" data-i18n="residLbl"></label> <a class="tt info" href="#gl-taxnl" data-tip-i18n="residTip">?</a></div>
-        <select id="resid"></select>
-      </div>
     </section>
     </aside>
 
@@ -821,9 +820,9 @@
 <main class="fundswrap" id="tabWealth" hidden>
   <section class="panel">
     <div class="pfield"><span class="pfield-lbl" data-i18n="residLbl"></span>
-      <details class="cpick" id="domPick"><summary><span id="domSum"></span></summary><div class="cpick-list" id="domList" role="radiogroup"></div></details></div>
+      <details class="cpick" id="domPick"><summary><span id="domSum"></span></summary><div class="cpick-list" id="domList"></div></details></div>
     <div class="pfield"><span class="pfield-lbl" data-i18n="cmpLbl"></span>
-      <details class="cpick" id="cmpPick"><summary><span id="cmpSum"></span></summary><div class="cpick-list" id="cmpList" role="radiogroup"></div></details></div>
+      <details class="cpick" id="cmpPick"><summary><span id="cmpSum"></span></summary><div class="cpick-list" id="cmpList"></div></details></div>
     <label class="wslider" for="wealthYrs"><span id="wealthYrsLbl"></span></label>
     <input type="range" id="wealthYrs" min="1" max="40" step="1" value="15">
     <div id="wealthBody"></div>
@@ -2796,37 +2795,41 @@ function fillResid(){
   });
   buildCmp(countries);
 }
-// Vermogenstab: land van domicilie (precies één) en optioneel een tweede land om mee te vergelijken.
+// Enkelvoudige landkeuze: hoofdpagina (bovenaan de invoer), vermogenstab (domicilie) en optionele vergelijking.
+// Het verborgen select #resid blijft de bron; de lijsten zijn er alleen de weergave van.
 let cmp2 = '';
+function pickList(el, items, sel){
+  el.innerHTML = items.map(([v, n]) => `<button type="button" class="cpick-opt" data-v="${v}" aria-pressed="${v === sel}"><span>${n}</span></button>`).join('');
+}
 function buildCmp(countries){
-  const dom = document.getElementById('domList'), cmp = document.getElementById('cmpList');
-  if (!dom || !cmp) return;
-  dom.innerHTML = countries.map(([k, n]) => `<label class="cpick-opt"><input type="radio" name="domR" value="${k}"><span>${n}</span></label>`).join('')
-    + `<label class="cpick-opt"><input type="radio" name="domR" value="none"><span>${tr('wtNone')}</span></label>`;
-  cmp.innerHTML = `<label class="cpick-opt"><input type="radio" name="cmpR" value=""><span>${tr('cmpNone')}</span></label>`
-    + countries.map(([k, n]) => `<label class="cpick-opt"><input type="radio" name="cmpR" value="${k}"><span>${n}</span></label>`).join('');
+  const single = [['', tr('residPick')], ...countries, ['none', tr('wtNone')]];
+  pickList(document.getElementById('mainList'), single, document.getElementById('resid').value);
+  pickList(document.getElementById('domList'), single.slice(1), document.getElementById('resid').value);
+  pickList(document.getElementById('cmpList'), [['', tr('cmpNone')], ...countries], cmp2);
   syncCmp();
 }
 function syncCmp(){
   const r = document.getElementById('resid').value;
   if (cmp2 === r) cmp2 = '';
-  const dr = document.querySelector(`#domList input[value="${r}"]`) || document.querySelector('#domList input[value=""]');
-  if (dr) dr.checked = true;
-  const cr = document.querySelector(`#cmpList input[value="${cmp2}"]`) || document.querySelector('#cmpList input[value=""]');
-  if (cr) cr.checked = true;
-  const nameOf = el => el ? el.closest('label').querySelector('span').textContent : '';
-  const dsum = document.getElementById('domSum'), csum = document.getElementById('cmpSum');
-  if (dsum) dsum.textContent = r ? nameOf(document.querySelector(`#domList input[value="${r}"]`)) : tr('residPick');
-  if (csum) csum.textContent = cmp2 ? nameOf(document.querySelector(`#cmpList input[value="${cmp2}"]`)) : tr('cmpNone');
+  const nameOf = (list, v) => { const b = document.querySelector(`#${list} [data-v="${v}"] span`); return b ? b.textContent : ''; };
+  ['mainList', 'domList'].forEach(id => document.querySelectorAll(`#${id} [data-v]`).forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === r))));
+  document.querySelectorAll('#cmpList [data-v]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === cmp2)));
+  const ms = document.getElementById('mainSum'); if (ms) ms.textContent = r ? nameOf('mainList', r) : tr('residPick');
+  const ds = document.getElementById('domSum'); if (ds) ds.textContent = r ? nameOf('domList', r) : tr('residPick');
+  const cs = document.getElementById('cmpSum'); if (cs) cs.textContent = cmp2 ? nameOf('cmpList', cmp2) : tr('cmpNone');
 }
-document.getElementById('domList').addEventListener('change', e => {
+function pickResid(v){
   const r = document.getElementById('resid');
-  const v = e.target.value === 'none' ? 'none' : e.target.value;
-  document.getElementById('domPick').open = false;
   if (r.value !== v){ r.value = v; r.dispatchEvent(new Event('change')); } else syncCmp();
-});
-document.getElementById('cmpList').addEventListener('change', e => {
-  cmp2 = e.target.value;
+}
+['mainList', 'domList'].forEach(id => document.getElementById(id).addEventListener('click', e => {
+  const b = e.target.closest('[data-v]'); if (!b) return;
+  document.getElementById(id === 'mainList' ? 'mainPick' : 'domPick').open = false;
+  pickResid(b.dataset.v);
+}));
+document.getElementById('cmpList').addEventListener('click', e => {
+  const b = e.target.closest('[data-v]'); if (!b) return;
+  cmp2 = b.dataset.v;
   document.getElementById('cmpPick').open = false;
   syncCmp(); recalc();
 });
