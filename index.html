@@ -1565,7 +1565,7 @@ const T = {
     yearN: n => 'Jaar ' + n,
     tipDiv: 'Dividend', tipAcc: 'Acc',
     kEind: n => `Eindwaarde van het vermogen na ${n} ${n === 1 ? 'jaar' : 'jaar'}`,
-    kWaarde: 'Fondsen', kTotGen: 'Totaal', kUitb: 'Uitbetaald', totNote: 'Totaal = in fondsen + uitbetaald', mixGroup: 'Verdeling dividend / acc', presetLbl: 'Strategie', presetAgg: 'Agressief', presetBal: 'Gebalanceerd', presetCons: 'Defensief', presetHint: 'Agressief en defensief gaan over risico én over hoe het rendement komt: meer uitkering of meer groei. De verdeling dividend/acc volgt uit het voorstel. Je kunt daarna alles handmatig aanpassen.',
+    kWaarde: 'Fondsen', kTotGen: 'Totaal', kUitb: 'Uitbetaald', notWdr: 'Niet opgenomen', totNote: 'Totaal = in fondsen + uitbetaald', mixGroup: 'Verdeling dividend / acc', presetLbl: 'Strategie', presetAgg: 'Agressief', presetBal: 'Gebalanceerd', presetCons: 'Defensief', presetHint: 'Agressief en defensief gaan over risico én over hoe het rendement komt: meer uitkering of meer groei. De verdeling dividend/acc volgt uit het voorstel. Je kunt daarna alles handmatig aanpassen.',
     kRend: 'Bijdrage aan waardegroei (voor belasting)', retNote: 'Groei = eindwaarde (incl. uitkeringen) min ingelegd.', divRet: 'Dividend rendement', accRet: 'Acc rendement',
     kPerMaand: 'Dividend per maand bij start',
     kKosten: 'Kosten (TER) over de periode',
@@ -1801,7 +1801,7 @@ const T = {
     yearN: n => 'Year ' + n,
     tipDiv: 'Dividend', tipAcc: 'Acc',
     kEind: n => `Final value of the holdings after ${n} ${n === 1 ? 'year' : 'years'}`,
-    kWaarde: 'In funds', kTotGen: 'Total', kUitb: 'Paid out', totNote: 'Total = in funds + paid out', mixGroup: 'Split dividend / acc', presetLbl: 'Strategy', presetAgg: 'Aggressive', presetBal: 'Balanced', presetCons: 'Defensive', presetHint: 'Aggressive and defensive are about risk and where the return comes from: more payout or more growth. The dividend/acc split follows from the proposal. You can adjust everything by hand afterwards.',
+    kWaarde: 'In funds', kTotGen: 'Total', kUitb: 'Paid out', notWdr: 'Not withdrawn', totNote: 'Total = in funds + paid out', mixGroup: 'Split dividend / acc', presetLbl: 'Strategy', presetAgg: 'Aggressive', presetBal: 'Balanced', presetCons: 'Defensive', presetHint: 'Aggressive and defensive are about risk and where the return comes from: more payout or more growth. The dividend/acc split follows from the proposal. You can adjust everything by hand afterwards.',
     kRend: 'Contribution to value growth (before tax)', retNote: 'Growth = end value (incl. payouts) minus invested.', divRet: 'Dividend return', accRet: 'Acc return',
     kPerMaand: 'Dividend per month at start',
     kKosten: 'Costs (TER) over the period',
@@ -2037,7 +2037,7 @@ const T = {
     yearN: n => 'Año ' + n,
     tipDiv: 'Dividendo', tipAcc: 'Acum.',
     kEind: n => `Valor final de la inversión tras ${n} ${n === 1 ? 'año' : 'años'}`,
-    kWaarde: 'En fondos', kTotGen: 'Total', kUitb: 'Pagado', totNote: 'Total = en fondos + pagado', mixGroup: 'Reparto dividendo / acc', presetLbl: 'Estrategia', presetAgg: 'Agresiva', presetBal: 'Equilibrada', presetCons: 'Defensiva', presetHint: 'Agresiva y defensiva van sobre el riesgo y de dónde sale el rendimiento: más distribución o más crecimiento. El reparto dividendo/acc sale de la propuesta. Después puedes ajustarlo todo a mano.',
+    kWaarde: 'En fondos', kTotGen: 'Total', kUitb: 'Pagado', notWdr: 'No retirado', totNote: 'Total = en fondos + pagado', mixGroup: 'Reparto dividendo / acc', presetLbl: 'Estrategia', presetAgg: 'Agresiva', presetBal: 'Equilibrada', presetCons: 'Defensiva', presetHint: 'Agresiva y defensiva van sobre el riesgo y de dónde sale el rendimiento: más distribución o más crecimiento. El reparto dividendo/acc sale de la propuesta. Después puedes ajustarlo todo a mano.',
     kRend: 'Aportación al crecimiento (antes de impuestos)', retNote: 'Crecimiento = valor final (incl. pagos) menos invertido.', divRet: 'Rendimiento dividendo', accRet: 'Rendimiento acum.',
     kPerMaand: 'Dividendo al mes al inicio',
     kKosten: 'Costes (TER) del periodo',
@@ -3200,6 +3200,7 @@ function recalc(){
 
   const dCash = d.cashArr[years];
   const dTotal = d.vals[years] + dCash;
+  const dPaidTot = reinvest ? 0 : d.incArr[years];   // totaal uitgekeerd, ook wat al is opgenomen
   const aTotal = a.vals[years];
   const grand = dTotal + aTotal;
   // Onttrekkingen verlaten het vermogen: voor rendement en winst tellen ze mee, anders lijkt je rendement lager
@@ -3226,7 +3227,7 @@ function recalc(){
   const rl = k => T[lang].riskName[k] || k;
   document.getElementById('kpis').innerHTML = [
     kpiCard(tr('kEind')(years), [
-      ...(reinvest ? [] : [{k:'tot', name:tr('kWaarde'), v:EUR(d.vals[years] + a.vals[years])}, {k:'div', name:tr('kUitb'), v:EUR(dCash)}]),
+      ...(reinvest ? [] : [{k:'tot', name:tr('kWaarde'), v:EUR(d.vals[years] + a.vals[years])}, {k:'div', name:tr('notWdr'), v:EUR(dCash)}]),
       {k:'tot', name:tr('kTotGen'), v:EUR(grand)},
       ...(spendYr > 0 ? [{k:'acc', name:tr('kSpent'), v:'− ' + EUR(totSp)}] : [])
     ], `${tr('basedOn')}<a href="#" data-goto="tabInput">${tr('basedOnLink')}</a>.${spendYr > 0 ? ' ' + fillT('afterSpend', {x: EUR(spendEff)}) : ''}${depletedAt ? `<br><b class="warnline">${tr('depleted')(depletedAt)}</b>` : ''}`, undefined, '#2563eb', true),
@@ -3237,7 +3238,7 @@ function recalc(){
     ], tr('retNote'), undefined, '#10b981'),
     kpiCard(tr('kPerMaand'), [
       {k:'div', name: tr('approxMonth'), v:EUR(incomeMonth)},
-      ...(reinvest ? [] : [{k:'div', name: tr('paidTotal'), v:EUR(dCash)}])
+      ...(reinvest ? [] : [{k:'div', name: tr('paidTotal'), v:EUR(dPaidTot)}])
     ], coverTxt, targetMonth > 0 ? cover : undefined, '#f59e0b'),
     kpiCard(tr('kKosten'), [
       {k:'div', name:tr('dividendShort'), v:EUR(d.cost)},
@@ -3245,12 +3246,12 @@ function recalc(){
     ], `${tr('risk')}: ${tr('dividendShort').toLowerCase()} ${rl(d.risk)} · ${tr('accShort').toLowerCase()} ${rl(a.risk)}`, undefined, '#8b5cf6')
   ].join('');
 
-  const cashAll = reinvest ? tr('none') : EUR(dCash);
+  const cashAll = reinvest ? tr('none') : EUR(dPaidTot);
   const rows = [
     [tr('rStart'), EUR(dStart), EUR(aStart), EUR(amount)],
     [tr('rValueAfter')(years), EUR(d.vals[years]), EUR(a.vals[years]), EUR(d.vals[years] + a.vals[years])],
-    [reinvest ? tr('rCashReinv') : tr('rCash'), reinvest ? tr('none') : EUR(dCash), 'n.v.t.', cashAll],
-    [tr('rPaidMonth'), reinvest ? tr('none') : EUR(dCash / (years * 12)), 'n.v.t.', reinvest ? tr('none') : EUR(dCash / (years * 12))],
+    [reinvest ? tr('rCashReinv') : tr('rCash'), reinvest ? tr('none') : EUR(dPaidTot), 'n.v.t.', cashAll],
+    [tr('rPaidMonth'), reinvest ? tr('none') : EUR(dPaidTot / (years * 12)), 'n.v.t.', reinvest ? tr('none') : EUR(dPaidTot / (years * 12))],
     [tr('rTotal'), EUR(dTotal), EUR(aTotal), EUR(grand)],
     [tr('rGain'), EUR(dTotal - dIn), EUR(aTotal - aIn), EUR(grand - totIn)],
     [tr('rReturn'), PCT(dRet), PCT(aRet), PCT(totRet)],
