@@ -1126,7 +1126,6 @@
     <div class="menulist">
       <button type="button" class="rbtn menubtn" data-open="langDlg" data-i18n="menuLang"></button>
       <button type="button" class="rbtn menubtn" data-open="themeDlg" data-i18n="menuTheme"></button>
-      <button type="button" class="rbtn menubtn" id="menuCur" data-i18n="menuCur"></button>
     </div>
   </div>
   <div class="menugrp">
@@ -2186,7 +2185,6 @@ function updateCurUI(){
   b.disabled = !(fxRate > 0);
   b.title = fxRate > 0 ? (curOn() ? '$ · 1 EUR = ' + fxRate.toFixed(4) + ' USD' + (fxDate ? ' (' + fxDate + ')' : '') : '€ · schakel naar dollar') : '';
   b.setAttribute('aria-pressed', curOn() ? 'true' : 'false');
-  const mc = document.getElementById('menuCur'); if (mc) mc.disabled = b.disabled;
 }
 function setCur(c){
   if (c === 'USD' && !(fxRate > 0)) return;
@@ -3853,13 +3851,11 @@ document.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click'
   const parent = b.closest('dialog, [popover]');
   if (parent){ if (parent.tagName === 'DIALOG') parent.close(); else parent.hidePopover(); }
   if (b.dataset.open === 'scenDlg') renderScenarios();
-  if (FLYS.includes(b.dataset.open)) flyOpen(b.dataset.open, b); else openDlg(b.dataset.open);
+  // Vanuit het menu openen Taal en Thema naast hun icoon in de bovenbalk, niet naast het menu-item.
+  const top = b.closest('#setDlg') ? document.querySelector('.topbtns [data-open="' + b.dataset.open + '"]') : null;
+  if (FLYS.includes(b.dataset.open)) flyOpen(b.dataset.open, top || b); else openDlg(b.dataset.open);
 }));
 document.getElementById('residGo').addEventListener('click', e => { e.preventDefault(); document.querySelector('[data-tab="tabWealth"]').click(); });
-document.getElementById('menuCur').addEventListener('click', () => {
-  document.getElementById('setDlg').hidePopover();
-  document.getElementById('curBtn').click();
-});
 document.getElementById('menuHelp').addEventListener('click', () => {
   document.getElementById('setDlg').hidePopover();
   openHelp(null);
