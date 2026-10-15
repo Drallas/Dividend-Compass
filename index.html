@@ -1921,6 +1921,7 @@ const SYN_T = {
   "skNoteOwn": "Je eigen mix is actief; de berekening gebruikt die mix, niet de synthese.",
   "stratLineSyn": "Gekozen strategie: {s} · {m}% uitkerend · synthetische aannames · {a} over {n} jaar",
   "stratEdit": "aanpassen",
+  "mixFromStrat": "Bepaald door de gekozen strategie.",
   "stratLineOwn": "Eigen mix actief · {a} over {n} jaar",
   "stratNone": "eigen verdeling",
   "hc.syn": "Synthese",
@@ -2004,6 +2005,7 @@ const SYN_T = {
   "skNoteOwn": "Your own mix is active; the calculation uses that mix, not the synthesis.",
   "stratLineSyn": "Chosen strategy: {s} · {m}% distributing · synthetic assumptions · {a} over {n} years",
   "stratEdit": "change",
+  "mixFromStrat": "Set by the chosen strategy.",
   "stratLineOwn": "Own mix active · {a} over {n} years",
   "stratNone": "own split",
   "hc.syn": "Synthesis",
@@ -2087,6 +2089,7 @@ const SYN_T = {
   "skNoteOwn": "Tu cartera propia está activa; el cálculo usa esa cartera, no la síntesis.",
   "stratLineSyn": "Estrategia elegida: {s} · {m}% distribuyendo · supuestos sintéticos · {a} en {n} años",
   "stratEdit": "cambiar",
+  "mixFromStrat": "Lo define la estrategia elegida.",
   "stratLineOwn": "Cartera propia activa · {a} en {n} años",
   "stratNone": "reparto propio",
   "hc.syn": "Síntesis",
@@ -3142,6 +3145,29 @@ function syncSynth(){
   syncMixLock();
   recalc();
 }
+function updateMixLock(){
+  const slider = document.getElementById('mix');
+  if (!slider) return;
+  const locked = !fundsStore.on;
+  slider.hidden = locked;
+  slider.nextElementSibling.hidden = locked;   // range-ends
+  let info = document.getElementById('mixLockInfo');
+  if (!info){
+    info = document.createElement('p');
+    info.id = 'mixLockInfo';
+    info.className = 'hint';
+    slider.parentElement.querySelector('.mix-legend').after(info);
+  }
+  info.hidden = !locked;
+  if (locked){
+    info.textContent = tr('mixFromStrat') + ' ';
+    const go = document.createElement('a');
+    go.href = '#';
+    go.textContent = tr('stratEdit');
+    go.addEventListener('click', e => { e.preventDefault(); document.querySelector('[data-tab="tabFunds"]').click(); });
+    info.append(go);
+  }
+}
 function renderSynth(){
   document.getElementById('stratCards').innerHTML = SYNTH_STRAT.map(s =>
     `<button type="button" class="scard" data-strat="${s.id}" aria-pressed="${s.id === SYNTH_STATE.strat}" style="--c:${PAL[s.id]}"><span class="sc-name"><i class="sc-dot"></i>${stName(s)}</span><span class="sc-mix">${s.mix}% ${tr('synPayout')}</span><span class="sc-rows"><span>${tr('synRet')}</span><b>${numStr(weighted(s.g, 't'), 2)}%</b><span>${tr('synNet')}</span><b>${numStr(weighted(s.g, 't') - weighted(s.g, 'ter'), 2)}%</b><span>${tr('synRisk')}</span><b>${numStr(weighted(s.g, 'v'), 1)}%</b><span>${tr('synWorst')}</span><b>${numStr(weighted(s.g, 's'), 1)}%</b></span></button>`).join('');
@@ -3185,6 +3211,7 @@ function synthCalc(){
   document.getElementById('synthKpi').innerHTML = base + cards.map(c =>
     `<div class="skpi"><div class="lbl">${c[0]} <a class="info" href="#${c[2]}">?</a></div><div class="big">${c[1]}</div></div>`).join('');
   const stLine = document.getElementById('stratLine');
+  updateMixLock();
   if (stLine){
     stLine.textContent = fundsStore.on
       ? fillT('stratLineOwn', {a: EUR(A), n})
