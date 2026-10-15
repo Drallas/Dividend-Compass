@@ -703,27 +703,30 @@ details.collapse > summary h2{margin:0}
 /* prognose */
 .strat-line{margin:0;padding:12px 16px;border-radius:var(--radius);background:var(--panel);border:1px solid var(--line);font-size:13.5px}
 .inputwrap .phead{justify-content:flex-end;margin:0}
-/* belasting: kaarten bovenaan, instellingen als dunne balk eronder in drie delen */
-.panel.taxaside{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(0,1fr);align-items:center;gap:8px 28px;padding:12px 20px}
+/* belasting: kaarten bovenaan, instellingen als dunne balk eronder in drie delen met verticale lijnen */
+.panel.taxaside{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);align-items:stretch;gap:0;padding:16px 0}
 .panel.taxaside > h2{display:none}
-.taxaside .pfield{display:flex;align-items:center;gap:10px;margin:0;padding:0 16px 0 0;border:0;min-width:0}
-.taxaside .pfield-lbl{white-space:nowrap;font-size:12.5px;font-weight:600;color:var(--muted)}
-.taxaside .pfield > div{min-width:0;flex:1 1 auto}
+.taxaside > *{margin:0;padding:0 20px;min-width:0;border:0}
+.taxaside > .pfield{grid-row:1;grid-column:1;padding-left:20px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.taxaside > .savebox{grid-row:1;grid-column:2;border-left:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;gap:10px}
+.taxaside .savehead{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.taxaside > .basebox{grid-row:1;grid-column:3;border-left:1px solid var(--line);padding-right:20px;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.taxaside .pfield-lbl,.taxaside .savebox label{font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap}
 .taxaside .pfield #ovChips{min-width:0}
-.taxaside .cpick{min-width:200px}
-.taxaside .cpick summary{height:34px;font-size:13px}
-.taxaside .savebox{display:flex;align-items:center;gap:10px;margin:0;max-width:none;min-width:0;flex-wrap:nowrap}
-.taxaside .savebox label{font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap}
-.taxaside .savebox strong{font-size:12.5px;white-space:nowrap}
-.taxaside .savebox input{flex:1 1 auto;min-width:120px;margin:0;width:auto}
-.taxaside .basebox{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:0;padding:0;border:0;font-size:12.5px;color:var(--muted);min-width:0}
+.taxaside .cpick{width:100%;min-width:0}
+.taxaside .cpick summary{height:36px;font-size:13px}
+.taxaside .savebox{font-size:12.5px;padding-top:0}
+.taxaside .savebox strong{font-size:13px;color:var(--text);font-weight:600}
+.taxaside .savebox .info{margin-left:2px}
+.taxaside .savebox input{display:block;width:100%;min-width:0;margin:0}
+.taxaside .basebox{font-size:13px;color:var(--muted)}
 .taxaside .basebox .lbl{display:none}
-.taxaside .basebox .row{display:inline-flex;gap:6px;padding:0;white-space:nowrap}
+.taxaside .basebox .row{display:flex;justify-content:space-between;gap:12px;padding:0;white-space:nowrap}
 .taxaside .basebox .row b{color:var(--text);font-weight:600}
-.taxaside .basebox a{margin-left:auto;font-size:12.5px;font-weight:600;white-space:nowrap}
+.taxaside .basebox a{margin-top:6px;font-size:13px;font-weight:600;align-self:flex-start}
 .perland{display:grid;gap:12px;min-width:0;align-content:start}
 .perland .sechead{margin:0;min-height:36px}
-@media (max-width:900px){ .panel.taxaside{grid-template-columns:minmax(0,1fr);gap:12px} .taxaside .basebox a{margin-left:0} .taxaside .savebox{flex-wrap:wrap} .taxaside .savebox input{flex:1 1 100%;width:100%;min-width:0} .taxaside .cpick{min-width:0;width:100%} .taxaside .pfield{flex-wrap:wrap} }
+@media (max-width:900px){ .panel.taxaside{grid-template-columns:minmax(0,1fr);padding:8px 0} .taxaside > *{padding:14px 20px} .taxaside > .pfield{padding-left:20px} .taxaside > .savebox,.taxaside > .basebox{border-left:0;border-top:1px solid var(--line);padding-right:20px} .taxaside > *{grid-row:auto !important} .taxaside > .pfield{order:1} .taxaside > .savebox{order:2} .taxaside > .basebox{order:3} .taxaside > .savebox{grid-column:1} .taxaside > .pfield{grid-column:1} .taxaside > .basebox{grid-column:1} }
 .duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
 .duo .tbl{font-size:12.5px}
 .duo .tbl th,.duo .tbl td{padding:8px 6px}
@@ -1089,7 +1092,9 @@ svg#chart .line.acc{stroke-width:2}
       <a href="#" id="baseGo" data-i18n="baseChange"></a>
     </div>
     <div class="savebox">
+      <div class="savehead">
       <label for="savePct" data-i18n="saveLbl"></label> <strong id="savePctLbl">0%</strong> <a class="info" href="#" data-tip-i18n="saveHint">?</a>
+      </div>
       <input type="range" id="savePct" min="0" max="100" step="5" value="0" style="--p:0%" aria-labelledby="savePctLbl">
     </div>
   </aside>
