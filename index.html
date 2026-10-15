@@ -4265,11 +4265,12 @@ function renderScenarios(){
   // Alfabetisch op naam; de index verwijst nog naar de opslag, zodat laden, verwijderen en toepassen blijven kloppen.
   const order = arr.map((x, i) => i).sort((a, b) => arr[a].name.localeCompare(arr[b].name, loc(), {sensitivity: 'base'}));
   // Actief = het profiel dat exact overeenkomt met de huidige invoer.
-  const curKey = JSON.stringify(captureState());
+  const cur = captureState();
   list.innerHTML = order.map(i => {
     const x = arr[i];
     const d = x.data;
-    const isActive = JSON.stringify(d) === curKey;
+    // Oudere profielen missen nieuwe velden: alleen de aanwezige velden vergelijken.
+    const isActive = Object.keys(d).every(k => JSON.stringify(d[k]) === JSON.stringify(cur[k]));
     const meta = `${EUR(d.amount)} · ${tr('years')(d.years)} · ${tr(SCEN_KEY[d.scen])} · ${whenTxt(x)}`;
     return `<div class="scenrow${isActive ? ' active' : ''}"><div><b>${esc(x.name)}</b>${isActive ? `<em class="scenactive">${tr('scenActive')}</em>` : ''}<span>${meta}</span></div>
       <div class="scenbtns"><button type="button" class="rbtn" data-load="${i}">${tr('scenLoad')}</button><button type="button" class="rbtn" data-ren="${i}">${tr('scenRename')}</button><button type="button" class="rbtn" data-del="${i}">${tr('scenDel')}</button></div></div>`;
@@ -4379,9 +4380,19 @@ async function getDownloads(){
 }
 async function saveText(text, name){
   const dl = await getDownloads();
-  if (!dl) return 'unavailable';
-  try { await dl.save({filename: name, data: text}); return 'saved'; }
-  catch (e) { return e && e.code ? e.code : 'unavailable'; }
+  if (dl){
+    try { await dl.save({filename: name, data: text}); return 'saved'; }
+    catch (e) { return e && e.code ? e.code : 'unavailable'; }
+  }
+  // Geen downloadcapability (bv. GitHub Pages): gewoon een bestand laten downloaden.
+  try {
+    const blob = new Blob([text], {type: name.endsWith('.json') ? 'application/json' : 'text/csv'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    return 'saved';
+  } catch (e) { return 'unavailable'; }
 }
 function tableCSV(tbl){
   return [...tbl.querySelectorAll('tr')].map(r =>
@@ -4433,7 +4444,7 @@ function exportJson(){
 }
 document.getElementById('expCsv').addEventListener('click', exportCsv);
 document.getElementById('expJson').addEventListener('click', exportJson);
-getDownloads().then(dl => { if (!dl) { document.getElementById('expCsv').hidden = true; document.getElementById('expJson').hidden = true; } });
+
 document.getElementById('expPdf').addEventListener('click', () => {
   document.getElementById('expDlg').close();
   setTimeout(() => window.print(), 200);
