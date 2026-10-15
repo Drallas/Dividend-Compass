@@ -214,8 +214,6 @@
   .glossary dd{margin:4px 0 0;color:var(--muted);font-size:13px}
   .glossary div:target,.glossary div.hl{background:var(--div-soft);border-radius:10px;padding:12px;margin:-4px}
   .glossary[hidden]{display:none}
-  .glossary .glmore{display:inline-block;margin-top:6px;font-size:12px;font-weight:600;color:var(--div);text-decoration:none}
-  .glossary .glmore:hover{text-decoration:underline}
   .hcats{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
   .hcats .rbtn{min-width:96px}
   .helpdlg{width:min(900px,calc(100vw - 32px));max-height:86vh;padding:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:auto}
@@ -2896,20 +2894,6 @@ function recalc(){
 }
 
 /* ============ static text + language ============ */
-// Per begrip een link naar Wikipedia (in de juiste taal), via zoeken zodat de link altijd werkt.
-const GL_WIKI = {nl:'nl.wikipedia.org', en:'en.wikipedia.org', es:'es.wikipedia.org'};
-const GL_MORE = {nl:'Meer info op Wikipedia', en:'More on Wikipedia', es:'Más en Wikipedia'};
-function glossMore(){
-  document.querySelectorAll('dl.glossary > div').forEach(div => {
-    const dt = div.querySelector('dt'), dd = div.querySelector('dd');
-    if (!dt || !dd) return;
-    let a = dd.querySelector('a.glmore');
-    if (!a){ a = document.createElement('a'); a.className = 'glmore'; a.target = '_blank'; a.rel = 'noopener noreferrer'; dd.append(document.createElement('br'), a); }
-    const term = dt.textContent.replace(/\s*\(.*\)\s*$/, '').trim();
-    a.href = 'https://' + GL_WIKI[lang] + '/w/index.php?search=' + encodeURIComponent(term);
-    a.textContent = GL_MORE[lang] + ' →';
-  });
-}
 // Tekst onder het land: de naam van het tabblad Netto waardeprognose is zelf de link.
 function residHint(){
   const p = document.getElementById('residHint');
@@ -2928,7 +2912,6 @@ function applyStatic(){
     const v = tr(el.dataset.i18n);
     if (typeof v === 'string') el.textContent = v;
   });
-  glossMore();
   residHint();
   document.querySelectorAll('[data-i18n-html]').forEach(el => {
     const v = tr(el.dataset.i18nHtml);
