@@ -1104,7 +1104,7 @@ svg#chart .line.acc{stroke-width:2}
       <div class="savehead">
       <label for="savePct" data-i18n="saveLbl"></label> <strong id="savePctLbl">0%</strong> <a class="info" href="#" data-tip-i18n="saveHint">?</a>
       </div>
-      <input type="range" id="savePct" min="0" max="100" step="5" value="0" style="--p:0%" aria-labelledby="savePctLbl">
+      <input type="range" id="savePct" min="0" max="100" step="1" value="0" style="--p:0%" aria-labelledby="savePctLbl">
     </div>
   </aside>
   </div>
@@ -3863,6 +3863,13 @@ function updateChips(){
     i.parentNode.classList.toggle('on', i.checked); i.parentNode.classList.toggle('dis', i.disabled);
   });
   document.querySelectorAll('#ovChips [data-nm]').forEach(sp => { sp.textContent = shortName(ALL.find(c => c.k === sp.dataset.nm)); });
+  // Landenlijst altijd alfabetisch, in de taal van de pagina.
+  const lst = document.querySelector('#taxPick .cpick-list');
+  if (lst){
+    const opts = [...lst.querySelectorAll('label.cpick-opt')];
+    opts.sort((a, b) => a.querySelector('[data-nm]').textContent.localeCompare(b.querySelector('[data-nm]').textContent, loc()));
+    opts.forEach(o => lst.appendChild(o));
+  }
   document.getElementById('pickCount').textContent = tr('pickOf')(activeCount());
   const nSel = ALL.filter(c => c.k !== 'n28' && taxIsOn(c.k)).length;
   document.getElementById('taxPickSum').textContent = nSel === 0 ? tr('pickPlaceholder') : nSel === 1 ? tr('pickSel1') : fillT('pickSelN', {n: nSel});
@@ -4099,7 +4106,7 @@ function onDomicileChange(){
 }
 document.getElementById('resid').addEventListener('change', e => { saveResid(e.target.value); onDomicileChange(); syncCmp(); recalc(); });
 /* ============ merk, menu's, scenario's, export, kosten ============ */
-const APP_VERSION = '0.2';
+const APP_VERSION = '0.6';
 const SKEY = 'dk-scenarios';
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pad2 = n => String(n).padStart(2, '0');
