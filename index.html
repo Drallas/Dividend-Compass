@@ -422,7 +422,9 @@
   .io-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0}
   .io-file{cursor:pointer}
   .io-row .hint{margin:0}
-  .strat-line{margin:4px 0 10px;font-size:13.5px;color:var(--muted)}
+  .strat-line{margin:18px 0 12px;font-size:13.5px;color:var(--muted)}
+  .strat-line a{color:var(--div);font-weight:600;text-decoration:none;margin-left:6px;white-space:nowrap}
+  .strat-line a:hover{text-decoration:underline}
   .welcome-actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
   .disclaimer{font-size:12px;color:var(--muted);max-width:64ch;margin:10px auto 0;line-height:1.5}
   .controls .grp{border:1px solid var(--line);border-radius:12px;padding:12px 14px 4px;margin:0 0 12px}
@@ -1919,7 +1921,8 @@ const SYN_T = {
   "skBase": "Op basis van een inleg van <strong>{a}</strong> over <strong>{y}</strong>",
   "skNoteSyn": "Synthetische aannames, niet gekoppeld aan echte fondsen. Dividend/acc-verdeling volgt de strategie: {m}% uitkerend. Geen belasting berekend.",
   "skNoteOwn": "Je eigen mix is actief; de berekening gebruikt die mix, niet de synthese.",
-  "stratLineSyn": "Strategie: {s} · {m}% uitkerend · synthetische aannames · {a} over {n} jaar",
+  "stratLineSyn": "Gekozen strategie: {s} · {m}% uitkerend · synthetische aannames · {a} over {n} jaar",
+  "stratEdit": "aanpassen",
   "stratLineOwn": "Eigen mix actief · {a} over {n} jaar",
   "stratNone": "eigen verdeling",
   "hc.syn": "Synthese",
@@ -2001,7 +2004,8 @@ const SYN_T = {
   "skBase": "Based on an investment of <strong>{a}</strong> over <strong>{y}</strong>",
   "skNoteSyn": "Synthetic assumptions, not linked to real funds. The distributing/accumulating split follows the strategy: {m}% distributing. No tax calculated.",
   "skNoteOwn": "Your own mix is active; the calculation uses that mix, not the synthesis.",
-  "stratLineSyn": "Strategy: {s} · {m}% distributing · synthetic assumptions · {a} over {n} years",
+  "stratLineSyn": "Chosen strategy: {s} · {m}% distributing · synthetic assumptions · {a} over {n} years",
+  "stratEdit": "change",
   "stratLineOwn": "Own mix active · {a} over {n} years",
   "stratNone": "own split",
   "hc.syn": "Synthesis",
@@ -2083,7 +2087,8 @@ const SYN_T = {
   "skBase": "Basado en una inversión de <strong>{a}</strong> durante <strong>{y}</strong>",
   "skNoteSyn": "Supuestos sintéticos, no vinculados a fondos reales. La división distribuyendo/acumulando sigue a la estrategia: {m}% distribuyendo. No se calcula impuesto.",
   "skNoteOwn": "Tu cartera propia está activa; el cálculo usa esa cartera, no la síntesis.",
-  "stratLineSyn": "Estrategia: {s} · {m}% distribuyendo · supuestos sintéticos · {a} en {n} años",
+  "stratLineSyn": "Estrategia elegida: {s} · {m}% distribuyendo · supuestos sintéticos · {a} en {n} años",
+  "stratEdit": "cambiar",
   "stratLineOwn": "Cartera propia activa · {a} en {n} años",
   "stratNone": "reparto propio",
   "hc.syn": "Síntesis",
@@ -3182,9 +3187,18 @@ function synthCalc(){
   document.getElementById('synthKpi').innerHTML = base + cards.map(c =>
     `<div class="skpi"><div class="lbl">${c[0]} <a class="info" href="#${c[2]}">?</a></div><div class="big">${c[1]}</div></div>`).join('');
   const stLine = document.getElementById('stratLine');
-  if (stLine) stLine.textContent = fundsStore.on
-    ? fillT('stratLineOwn', {a: EUR(A), n})
-    : fillT('stratLineSyn', {s: stratOf() ? stName(stratOf()) : tr('stratNone'), m: SYNTH_STATE.mix, a: EUR(A), n});
+  if (stLine){
+    stLine.textContent = fundsStore.on
+      ? fillT('stratLineOwn', {a: EUR(A), n})
+      : fillT('stratLineSyn', {s: stratOf() ? stName(stratOf()) : tr('stratNone'), m: SYNTH_STATE.mix, a: EUR(A), n});
+    if (!fundsStore.on){
+      const go = document.createElement('a');
+      go.href = '#';
+      go.textContent = tr('stratEdit');
+      go.addEventListener('click', e => { e.preventDefault(); document.querySelector('[data-tab="tabFunds"]').click(); });
+      stLine.append(' ', go);
+    }
+  }
   document.getElementById('synthNote').textContent = fundsStore.on
     ? tr('skNoteOwn')
     : fillT('skNoteSyn', {m: SYNTH_STATE.mix});
