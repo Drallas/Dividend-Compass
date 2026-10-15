@@ -580,7 +580,6 @@
   .fview{display:flex;gap:4px;align-items:flex-end;margin:0 0 -1px;position:relative;z-index:1}
   .fview .rbtn{border-radius:12px 12px 0 0;border-bottom:0;padding:10px 18px;background:var(--bg);color:var(--muted);border-color:var(--line)}
   .fview .rbtn[aria-pressed="true"]{background:var(--panel);color:var(--text);border-color:var(--line)}
-  .fview #activeMixNote{margin:0 0 10px auto;font-size:12.5px}
   #basisPanel,#betaPanel{border-top-left-radius:0}
   #tabFunds > .fview{margin-bottom:-21px}
   @media (max-width:760px){#tabFunds > .fview{margin-bottom:-15px}}
@@ -774,7 +773,6 @@
     <div class="fview" role="group" aria-label="Weergave">
       <button type="button" class="rbtn" data-fview="synth" aria-pressed="true" data-i18n="fviewSynth"></button>
       <button type="button" class="rbtn" data-fview="own" aria-pressed="false" data-i18n="fviewOwn"></button>
-      <span class="hint" id="activeMixNote"></span>
     </div>
     <section class="panel" id="basisPanel" aria-labelledby="fundsTitle">
       <h2 id="fundsTitle" data-i18n="fundsTitle"></h2>
@@ -3230,8 +3228,6 @@ function setFview(v){
 }
 function syncFundsUi(){
   document.getElementById('customOn').checked = fundsStore.on;
-  const note = document.getElementById('activeMixNote');
-  if (note) note.textContent = tr(fundsStore.on ? 'activeOwn' : 'activeBasis');
   const basisBtn = document.querySelector('[data-fview="basis"]');
   if (basisBtn) basisBtn.textContent = tr('tabFunds');
   const ownBtn = document.querySelector('[data-fview="own"]');
