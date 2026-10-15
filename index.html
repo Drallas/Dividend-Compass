@@ -4087,7 +4087,7 @@ function renderWealth(){
   const tax2 = second ? taxSeries(second) : null;
   const net2 = second ? fund.map((v, t) => v + cash[t] + sav[t] - tax2[t]) : null;
   // NL 2028 ("ook NL 2028 tonen"): derde lijn naast het gekozen land en de vergelijking
-  const third = (taxOn.n28 && taxOn.nl && resid !== 'n28' && second !== 'n28') ? 'n28' : '';
+  const third = (taxOn.n28 && taxOn.nl && resid === 'nl' && second !== 'n28') ? 'n28' : '';
   const tax3 = third ? taxSeries('n28') : null;
   const net3 = third ? fund.map((v, t) => v + cash[t] + sav[t] - tax3[t]) : null;
   const name3 = third ? tr('ovN28') : '';

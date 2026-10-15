@@ -133,6 +133,9 @@ with sync_playwright() as p:
     check("13a zonder NL 2028-optie geen extra lijn", off == 0, off)
     check("13b met NL 2028-optie een extra lijn in de grafiek", on == 1, on)
     check("13c legenda bevat NL 2028", "2028" in pg.inner_text("#wealthBody .wlegend"))
+    pg.evaluate("() => { pickResid('ar'); taxOn.nl = true; taxOn.n28 = true; updateChips(); recalc(); }"); pg.wait_for_timeout(300)
+    other = pg.evaluate("document.querySelectorAll('#wealthBody svg.wchart path[style*=\"#c2410c\"]').length")
+    check("13e met een ander domicilie dan Nederland geen NL 2028-lijn", other == 0, other)
     check("13d geen fouten", not errs, errs)
     pg.close()
 
