@@ -3022,11 +3022,10 @@ function neededAmountNow(){
   const mix = parseFloat(document.getElementById('mix').value) / 100;
   return { targetMonth, need: neededAmount(targetMonth, mix, sc) };
 }
+// Startvermogen is altijd de waarde die de gebruiker invult; het dividenddoel rekent er alleen mee.
 function syncAmountFromTarget(){
-  const { targetMonth, need } = neededAmountNow();
-  if (targetMonth <= 0) { infeasible = false; amountNow = manualAmount; }
-  else if (need === null) { infeasible = false; amountNow = manualAmount; }
-  else { infeasible = false; amountNow = Math.round(need / 1000) * 1000; }
+  infeasible = false;
+  amountNow = manualAmount;
   renderBedrag();
 }
 
