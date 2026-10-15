@@ -4089,9 +4089,10 @@ function renderWealth(){
       const gain = (fund[t] + cash[t] + sav[t]) - (fund[t-1] + cash[t-1] + sav[t-1]) - yC;
       const cgT = Math.max(0, gain - divT);
       let yt = 0;
-      if (rs === 'nl') yt = box3Year(fund[t], cash[t] + sav[t], 0);
+      // Box 3 en Argentinië belasten de waarde aan het begin van het jaar (peildatum), net als het tabblad Belasting
+      if (rs === 'nl') yt = box3Year(fund[t-1], cash[t-1] + sav[t-1], 0);
       else if (rs === 'n28') yt = 0.36 * Math.max(0, gain - 1800);
-      else if (rs === 'ar') yt = arRateVal > 0 ? arTax((fund[t] + cash[t] + sav[t]) * arRateVal) / arRateVal : 0;
+      else if (rs === 'ar') yt = arRateVal > 0 ? arTax((fund[t-1] + cash[t-1] + sav[t-1]) * arRateVal) / arRateVal : 0;
       else { const e = EXTRA.find(x => x.k === rs); if (e) yt = e.f(divT, cgT, t - 1)[0]; }
       cumTax += yt; out[t] = cumTax;
     }
@@ -4629,7 +4630,7 @@ const EXPT = {
       kIn: 'Totale inleg', kGross: 'Waarde beleggingen', kPaid: 'Uitgekeerd dividend', kSav: 'Spaargeld', kNet: 'Netto vermogen na belasting', kTax: 'Belasting (box 3 / gekozen land)', kRet: 'Totaal rendement belegd deel', kPa: 'Rendement per jaar (belegd deel)', kInc: 'Dividend per maand bij start', kCost: 'Kosten (TER) cumulatief',
       year: 'Jaar', cFund: 'In fondsen', cPaid: 'Uitgekeerd', cSav: 'Spaargeld', cTax: 'Belasting cum.', cNet: 'Netto',
       country: 'Land', total: 'Belasting over de looptijd', pct: 'Aandeel van de winst', noTax: 'Geen landen gekozen voor de belastingvergelijking.',
-      notes: ['Dit is een rekenvoorbeeld op basis van aannames over rendement, dividend en kosten. Het is geen voorspelling en geen beleggings- of belastingadvies.', 'Belasting is een grove schatting per land. Controleer de actuele regels en je persoonlijke situatie bij een adviseur.', 'Het spaardeel wordt niet belegd en groeit met de ingevulde rente; het telt mee in het netto vermogen en in box 3.', 'In tabel 3 en 4 wordt belasting berekend over de waarde aan het einde van elk jaar, in tabel 5 over de waarde aan het begin van het jaar; daardoor kunnen de totalen iets verschillen.', 'Gemaakt met Dividend Compass.']},
+      notes: ['Dit is een rekenvoorbeeld op basis van aannames over rendement, dividend en kosten. Het is geen voorspelling en geen beleggings- of belastingadvies.', 'Belasting is een grove schatting per land. Controleer de actuele regels en je persoonlijke situatie bij een adviseur.', 'Het spaardeel wordt niet belegd en groeit met de ingevulde rente; het telt mee in het netto vermogen en in box 3.', 'Gemaakt met Dividend Compass.']},
     st: {head: 'Netto vermogen na', yrs: 'jaar', start: 'Startvermogen', strat: 'Strategie', cagr: 'Rendement per jaar', inc: 'Dividend per maand', gain: 'Winst na belasting', cta: 'Reken je eigen scenario door', disc: 'Voorbeeldberekening op aannames. Geen beleggingsadvies.', mixTxt: 'uitkerend'},
     saved: 'Opgeslagen.', fail: 'Exporteren lukte niet.', needCalc: 'Vul eerst een startvermogen in.'
   },
@@ -4645,7 +4646,7 @@ const EXPT = {
       kIn: 'Total invested', kGross: 'Value of investments', kPaid: 'Dividends paid out', kSav: 'Savings', kNet: 'Net worth after tax', kTax: 'Tax (box 3 / chosen country)', kRet: 'Total return invested part', kPa: 'Return per year (invested part)', kInc: 'Dividend per month at start', kCost: 'Costs (TER) cumulative',
       year: 'Year', cFund: 'In funds', cPaid: 'Paid out', cSav: 'Savings', cTax: 'Tax cum.', cNet: 'Net',
       country: 'Country', total: 'Tax over the horizon', pct: 'Share of the gain', noTax: 'No countries chosen for the tax comparison.',
-      notes: ['This is a calculation example based on assumptions about return, dividends and costs. It is not a forecast and not investment or tax advice.', 'Tax is a rough estimate per country. Check the current rules and your personal situation with an adviser.', 'The savings share is not invested and grows at the interest rate entered; it counts toward net worth and Dutch wealth tax.', 'In tables 3 and 4 tax is calculated on the value at the end of each year, in table 5 on the value at the start of the year, so totals can differ slightly.', 'Made with Dividend Compass.']},
+      notes: ['This is a calculation example based on assumptions about return, dividends and costs. It is not a forecast and not investment or tax advice.', 'Tax is a rough estimate per country. Check the current rules and your personal situation with an adviser.', 'The savings share is not invested and grows at the interest rate entered; it counts toward net worth and Dutch wealth tax.', 'Made with Dividend Compass.']},
     st: {head: 'Net worth after', yrs: 'years', start: 'Starting capital', strat: 'Strategy', cagr: 'Return per year', inc: 'Dividend per month', gain: 'Gain after tax', cta: 'Run your own scenario', disc: 'Example calculation on assumptions. Not investment advice.', mixTxt: 'distributing'},
     saved: 'Saved.', fail: 'Export failed.', needCalc: 'Enter a starting capital first.'
   },
@@ -4661,7 +4662,7 @@ const EXPT = {
       kIn: 'Total aportado', kGross: 'Valor de las inversiones', kPaid: 'Dividendos pagados', kSav: 'Ahorro', kNet: 'Patrimonio neto tras impuestos', kTax: 'Impuestos (caja 3 / país elegido)', kRet: 'Rentabilidad total parte invertida', kPa: 'Rentabilidad anual (parte invertida)', kInc: 'Dividendo mensual al inicio', kCost: 'Costes (TER) acumulados',
       year: 'Año', cFund: 'En fondos', cPaid: 'Pagado', cSav: 'Ahorro', cTax: 'Impuesto acum.', cNet: 'Neto',
       country: 'País', total: 'Impuestos en el plazo', pct: 'Parte de la ganancia', noTax: 'No hay países elegidos para la comparación fiscal.',
-      notes: ['Es un ejemplo de cálculo basado en supuestos de rentabilidad, dividendos y costes. No es una previsión ni asesoramiento de inversión o fiscal.', 'El impuesto es una estimación aproximada por país. Comprueba las normas vigentes y tu situación personal con un asesor.', 'La parte de ahorro no se invierte y crece al tipo de interés indicado; cuenta en el patrimonio neto y en la caja 3.', 'En las tablas 3 y 4 el impuesto se calcula sobre el valor al final de cada año, en la tabla 5 sobre el valor al inicio del año, por lo que los totales pueden diferir ligeramente.', 'Hecho con Dividend Compass.']},
+      notes: ['Es un ejemplo de cálculo basado en supuestos de rentabilidad, dividendos y costes. No es una previsión ni asesoramiento de inversión o fiscal.', 'El impuesto es una estimación aproximada por país. Comprueba las normas vigentes y tu situación personal con un asesor.', 'La parte de ahorro no se invierte y crece al tipo de interés indicado; cuenta en el patrimonio neto y en la caja 3.', 'Hecho con Dividend Compass.']},
     st: {head: 'Patrimonio neto en', yrs: 'años', start: 'Capital inicial', strat: 'Estrategia', cagr: 'Rentabilidad anual', inc: 'Dividendo al mes', gain: 'Ganancia tras impuestos', cta: 'Calcula tu propio escenario', disc: 'Cálculo de ejemplo con supuestos. No es asesoramiento de inversión.', mixTxt: 'distribuyendo'},
     saved: 'Guardado.', fail: 'La exportación falló.', needCalc: 'Introduce primero un capital inicial.'
   }

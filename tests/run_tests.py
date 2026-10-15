@@ -143,6 +143,16 @@ with sync_playwright() as p:
     check("14e geen fouten", not errs, errs)
     pg.close()
 
+    # 15. Belasting in netto waardeprognose komt overeen met het tabblad Belasting (zelfde peildatum)
+    pg, errs = new_page(b)
+    pg.evaluate("() => { manualAmount = 305000; amountNow = 305000; monthlyAmt = 500; pickResid('nl'); taxOn.nl = true; taxOn.n28 = true; taxOn.ar = true; cmp2 = 'ar'; updateChips(); recalc(); }")
+    pg.evaluate("document.querySelector('.tabs .tab[data-tab=\"tabWealth\"]').click()"); pg.wait_for_timeout(300)
+    d = pg.evaluate("() => { const sum = a => a.reduce((x, y) => x + (y || 0), 0); return {nlW: lastWealth.tax[lastWealth.H], nlT: sum(lastTx.tx.nl), arW: lastWealth.tax2[lastWealth.H], arT: sum(lastTx.tx.ar)}; }")
+    check("15a Nederland: belasting in vermogensprognose gelijk aan tabblad Belasting", abs(d['nlW'] - d['nlT']) < 1, d)
+    check("15b Argentinie: belasting in vermogensprognose gelijk aan tabblad Belasting", abs(d['arW'] - d['arT']) < 1, d)
+    check("15c geen fouten", not errs, errs)
+    pg.close()
+
     # 13. NL 2028 in de netto waardegrafiek als "ook NL 2028 tonen" aan staat
     pg, errs = new_page(b)
     pg.evaluate("() => { manualAmount = 330000; amountNow = 330000; monthlyAmt = 250; pickResid('nl'); taxOn.nl = true; taxOn.n28 = false; updateChips(); recalc(); }")
