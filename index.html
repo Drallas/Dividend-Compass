@@ -419,9 +419,12 @@
   html:not([lang="nl"]) .nlonly{display:none !important}
   .wchart{width:100%;height:auto;display:block;margin:6px 0 4px}
   .wchart text{font-variant-numeric:tabular-nums}
-  .wlegend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:0 0 4px}
-  .wlegend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
-  .wlegend i.dash{background:none;border-top:2px dashed var(--muted);height:0}
+  .wlegend{display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--text);margin:0 0 10px}
+  .wlegend > span{display:flex;align-items:center;gap:10px}
+  .wlegend i{display:inline-block;flex:none;width:30px;height:0;border-top:3px solid var(--div)}
+  .wlegend i.dash{border-top:2px dashed var(--muted)}
+  .wlegend i.dash2{border-top:3px dashed #f59e0b}
+  .wlegend i.goal{border-top:2px dotted #10b981}
   /* ---------- merk, menu's, dialogs, waarschuwing, print ---------- */
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;flex:1 1 100%}
   .brand{display:flex;align-items:center;gap:12px;min-width:0}
@@ -637,7 +640,7 @@
     <section class="grp">
       <h3 data-i18n="grpAmt"></h3>
   <div class="field">
-        <div class="field-head"><label for="bedrag" data-i18n="invested"></label> <a class="info" href="#gl-belegd">?</a></div>
+        <div class="field-head"><label for="bedrag" data-i18n="invested"></label> <a class="info" href="#gl-startvermogen">?</a></div>
         <div class="euro"><span>€</span><input type="text" id="bedrag" value="250000" inputmode="numeric" autocomplete="off"></div>
         <input type="range" id="bedragRange" min="0" max="1000000" step="1000" value="250000" aria-labelledby="bedrag">
         <div class="range-ends"><span id="bedMin"></span><span id="bedMax"></span></div>
@@ -1031,7 +1034,7 @@
     <div id="gl-reinvest"><dt data-i18n="gl.reinv.t"></dt><dd data-i18n="gl.reinv.d"></dd></div>
     <div id="gl-uitbetaald"><dt data-i18n="gl.uit.t"></dt><dd data-i18n="gl.uit.d"></dd></div>
     <div id="gl-totaal"><dt data-i18n="gl.totaal.t"></dt><dd data-i18n="gl.totaal.d"></dd></div>
-    <div id="gl-belegd"><dt data-i18n="gl.belegd.t"></dt><dd data-i18n="gl.belegd.d"></dd></div>
+    <div id="gl-startvermogen"><dt data-i18n="gl.belegd.t"></dt><dd data-i18n="gl.belegd.d"></dd></div>
     <div id="gl-maandbedrag"><dt data-i18n="gl.maand.t"></dt><dd data-i18n="gl.maand.d"></dd></div>
     <div id="gl-benodigd"><dt data-i18n="gl.benodigd.t"></dt><dd data-i18n="gl.benodigd.d"></dd></div>
   </dl>
@@ -1229,9 +1232,9 @@ const T = {
     reinvestOff: 'Uitkeringen worden aan jou uitbetaald. Dat geld verlaat het fonds; zie "Uitbetaald" in de kaarten en de tabel.',
     goalOn: 'Dividenddoel aan',
     noGoal: 'Geen dividenddoel: je ziet alleen wat het vermogen doet.',
-    targetHintFill: m => `Belegd vermogen is hierop ingesteld. Benodigd in het dividend-deel: ${m}.`,
+    targetHintFill: m => `Startvermogen is hierop ingesteld. Benodigd in het dividend-deel: ${m}.`,
     noMix: 'Bij 0% dividend keert niets uit: een maandinkomen is dan niet haalbaar.',
-    tooHigh: (m, x) => `Niet haalbaar met deze mix: je hebt ${m} nodig, boven het maximum van ${x}. Belegd vermogen is teruggezet naar je eigen bedrag; verhoog het dividend-aandeel of verlaag het maandbedrag.`,
+    tooHigh: (m, x) => `Niet haalbaar met deze mix: je hebt ${m} nodig, boven het maximum van ${x}. Startvermogen is teruggezet naar je eigen bedrag; verhoog het dividend-aandeel of verlaag het maandbedrag.`,
     naText: 'Niet haalbaar',
     years: n => n === 1 ? '1 jaar' : n + ' jaar',
     dur1: '1 jaar', dur10: '15 jaar',
@@ -1313,7 +1316,7 @@ const T = {
     'gl.seq.t': 'Sequentierisico', 'gl.seq.d': 'Het risico dat je uitkeringen opneemt terwijl de koers daalt, waardoor je in een slechte markt sneller stukken verkoopt.',
     'gl.bron.t': 'Bronbelasting', 'gl.bron.d': 'Belasting die een land inhoudt op dividend. Bij Amerikaanse aandelen 15%, die het fonds al inhoudt en die je niet kunt terugvragen.',
     'gl.box3.t': 'Box 3', 'gl.box3.d': 'De Nederlandse vermogensbelasting op spaargeld en beleggingen, berekend op je vermogen, niet op je rendement.',
-    'gl.belegd.t': 'Belegd vermogen', 'gl.belegd.d': 'Het bedrag dat je in totaal inlegt. Je vult het zelf in, of het wordt berekend uit het gewenste maandbedrag.',
+    'gl.belegd.t': 'Startvermogen', 'gl.belegd.d': 'Het bedrag waarmee je begint. Je vult het zelf in, of het wordt berekend uit het gewenste maandbedrag. Een maandelijkse inleg komt daar bovenop.',
     'gl.maand.t': 'Gewenst dividend per maand', 'gl.maand.d': 'Wat je per maand uit de dividend-fondsen wilt halen. Het belegd vermogen wordt hierop berekend, op basis van de gekozen mix en yield.',
     'gl.scen.t': 'Scenario', 'gl.scen.d': 'Een rekenvoorbeeld, geen voorspelling. Laag, basis of hoog bepaalt hoe optimistisch de koersgroei van alle fondsen wordt ingeschat. De yield past alleen de dividendfondsen aan. Laag rekent somberder, hoog optimistischer. Vergelijk de drie om de gevoeligheid te zien.',
     'gl.strat.t': 'Strategie', 'gl.strat.d': 'Een kant-en-klaar voorstel voor de verdeling van je geld. Defensief: 70% dividend, meer nadruk op regelmatige uitkering. Gebalanceerd: 50% dividend en 50% acc, een mix van uitkering en groei. Agressief: 60% dividend en 40% acc, meer nadruk op groei; het dividend blijft de grootste groep. Daarna kun je de verdeling per fonds nog zelf aanpassen.',
@@ -1547,7 +1550,7 @@ const T = {
     'gl.seq.t': 'Sequence risk', 'gl.seq.d': 'The risk that you withdraw distributions while the price falls, so you sell units faster in a bad market.',
     'gl.bron.t': 'Withholding tax', 'gl.bron.d': 'Tax a country withholds on dividends. On US shares 15%, which the fund already deducts and you cannot reclaim.',
     'gl.box3.t': 'Dutch wealth tax', 'gl.box3.d': 'The Dutch wealth tax on savings and investments, calculated on your assets, not your return.',
-    'gl.belegd.t': 'Invested amount', 'gl.belegd.d': 'The total amount you put in. You enter it yourself, or it is calculated from the desired monthly amount.',
+    'gl.belegd.t': 'Starting capital', 'gl.belegd.d': 'The amount you start with. You enter it yourself, or it is calculated from the desired monthly amount. A monthly contribution is added on top.',
     'gl.maand.t': 'Desired dividend per month', 'gl.maand.d': 'What you want to receive per month from the dividend funds. The invested amount is calculated from this, based on the chosen mix and yield.',
     'gl.scen.t': 'Scenario', 'gl.scen.d': 'An illustration, not a forecast. Low, base or high sets how optimistic the price growth of all funds is estimated to be. The yield only adjusts the dividend funds. Low is more pessimistic, high more optimistic. Compare all three to see the sensitivity.',
     'gl.strat.t': 'Strategy', 'gl.strat.d': 'A ready-made proposal for how to split your money. Defensive: 70% dividend, more emphasis on regular payouts. Balanced: 50% dividend and 50% acc, a mix of income and growth. Aggressive: 60% dividend and 40% acc, more emphasis on growth; dividend is still the largest group. You can still adjust the split per fund afterwards.',
@@ -1781,7 +1784,7 @@ const T = {
     'gl.seq.t': 'Riesgo de secuencia', 'gl.seq.d': 'El riesgo de retirar distribuciones mientras el precio baja, de modo que vendes participaciones más deprisa en un mal mercado.',
     'gl.bron.t': 'Retención en origen', 'gl.bron.d': 'Impuesto que un país retiene sobre los dividendos. En acciones de EE. UU. suele ser el 15%, que el fondo ya descuenta y que no puedes recuperar.',
     'gl.box3.t': 'impuesto neerlandés sobre el patrimonio', 'gl.box3.d': 'El impuesto neerlandés sobre el patrimonio (ahorro e inversiones), calculado sobre tu patrimonio y no sobre tu rentabilidad.',
-    'gl.belegd.t': 'Capital invertido', 'gl.belegd.d': 'El importe total que aportas. Lo introduces tú, o se calcula a partir del importe mensual deseado.',
+    'gl.belegd.t': 'Capital inicial', 'gl.belegd.d': 'El importe con el que empiezas. Lo introduces tú, o se calcula a partir del importe mensual deseado. Una aportación mensual se suma encima.',
     'gl.maand.t': 'Dividendo deseado al mes', 'gl.maand.d': 'Lo que quieres recibir al mes de los fondos de dividendos. El capital invertido se calcula a partir de esto, según la mezcla y el rendimiento elegidos.',
     'gl.scen.t': 'Escenario', 'gl.scen.d': 'Un ejemplo, no una predicción. Bajo, base o alto determina lo optimista que se estima el crecimiento del precio de todos los fondos. El rendimiento solo ajusta los fondos de dividendos. Bajo es más pesimista, alto más optimista. Compara los tres para ver la sensibilidad.',
     'gl.strat.t': 'Estrategia', 'gl.strat.d': 'Una propuesta lista para repartir tu dinero. Defensiva: 70% dividendo, más peso en pagos regulares. Equilibrada: 50% dividendo y 50% acumulación, una mezcla de ingresos y crecimiento. Agresiva: 60% dividendo y 40% acumulación, más peso en el crecimiento; el dividendo sigue siendo el grupo mayor. Después puedes ajustar el reparto por fondo.',
@@ -3647,7 +3650,7 @@ function renderWealth(){
     <h2>${W.title}</h2>
     <p class="sub">${W.sub}</p>
     <div class="calkpis">${cards.join('')}</div>
-    <div class="wlegend"><span><i style="background:var(--div)"></i>${name1}</span><span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span>${goalCap > 0 ? `<span><i style="background:#10b981"></i>${W.kGoal}: ${EUR(goalCap)}</span>` : ''}${net2 ? `<span><i class="dash2"></i>${name2}</span>` : ''}</div>
+    <div class="wlegend"><span><i></i>${resid && resid !== 'none' ? name1 + ': ' + W.legN : W.legN}</span>${net2 ? `<span><i class="dash2"></i>${name2}: ${W.legN}</span>` : ''}<span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span>${goalCap > 0 ? `<span><i class="goal"></i>${W.kGoal}: ${EUR(goalCap)}</span>` : ''}</div>
     <div class="wwrap">${svg}<div class="wtip" hidden></div></div>
     <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th><th>${W.colTax}${bx}</th><th>${W.colCost}</th><th>${W.colNet}</th>${net2 ? `<th>${name2}</th>` : ''}</tr></thead><tbody>${rows}</tbody></table></div>
     <div class="calnotes"><div class="calnotes-hd">${tr('calNotesHd')}</div><p class="sub calnote">${W.costNote}</p>
