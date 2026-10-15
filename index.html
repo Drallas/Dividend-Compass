@@ -477,8 +477,21 @@
   .curbtn:disabled{cursor:default}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .smalldlg{width:min(540px,calc(100vw - 32px))}
+  .profdlg{width:min(680px,calc(100vw - 32px))}
+  .profdlg .helpbody .sub{font-size:13px;line-height:1.5}
+  .profdlg h2{font-size:19px}
   .scenform{display:flex;gap:8px;margin:14px 0 6px}
-  .scenform input{flex:1;min-width:0;height:34px;padding:0 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);font:inherit;font-size:13px}
+  .profdlg .scenform{align-items:center}
+  .profdlg .scenapply label{flex:1;min-width:0;margin:0}
+  .profdlg .scenapply select{height:32px;font-size:13px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--text);padding:0 8px}
+  .scenrow b{font-size:14px}
+  .profdlg .scenrow span{font-size:12.5px;color:var(--text);opacity:.72}
+  .rbtn.strong,.scenrow .rbtn{font-weight:700;border-color:var(--muted)}
+  .rbtn.primary{background:var(--text);color:var(--panel);border-color:var(--text)}
+  .rbtn.primary:hover{color:var(--panel);opacity:.88}
+  .scenfoot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px;margin-top:4px}
+  .scenexpmsg{margin:0}
+  .scenform input{flex:1;min-width:0;height:32px;padding:0 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);font:inherit;font-size:13px}
   .scenmsg{color:#b45309;min-height:0;margin:0 0 4px}
   .scenmsg:empty{display:none}
   .scenrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line);flex-wrap:wrap}
@@ -504,7 +517,10 @@
   .exptxt{display:grid;gap:4px;min-width:0}
   .exptxt b{font-size:15px}
   .exptxt span{font-size:13px;line-height:1.4;color:var(--muted)}
-  .expprev{min-height:3.2em;margin:4px 0 6px;padding:10px 12px;border-radius:10px;background:var(--bg);font-size:13px;line-height:1.45;color:var(--muted)}
+  .expprev{display:grid;margin:4px 0 6px;padding:10px 12px;border-radius:10px;background:var(--bg);font-size:13px;line-height:1.45;color:var(--muted)}
+  .expprev .pv{grid-area:1/1;visibility:hidden}
+  .expprev .pv.on{visibility:visible}
+  .expopt.prof{border-style:dashed}
   .expprev b{color:var(--text)}
   @media (max-width:640px){.expopts{grid-template-columns:1fr}}
   #advisorReport{display:none}
@@ -1339,16 +1355,17 @@ svg#chart .line.acc{stroke-width:2}
   </dl>
 </div></dialog>
 
-<dialog id="scenDlg" class="helpdlg smalldlg" aria-labelledby="scenTitle"><div class="helpbody">
+<dialog id="scenDlg" class="helpdlg profdlg" aria-labelledby="scenTitle"><div class="helpbody">
   <button type="button" class="helpx" data-close="scenDlg" data-i18n-title="closeLbl" data-label>×</button>
   <h2 id="scenTitle" data-i18n="scenTitle"></h2>
   <p class="sub" data-i18n="scenIntro"></p>
-  <div class="scenform"><input type="text" id="scenName" maxlength="40" aria-label="Naam"><button type="button" class="rbtn" id="scenSave" data-i18n="scenSave"></button></div>
+  <div class="scenform"><input type="text" id="scenName" maxlength="40" data-i18n-ph="scenNamePh" data-i18n-title="scenNamePh" data-label><button type="button" class="rbtn" id="scenSave" data-i18n="scenSave"></button></div>
   <div class="scenform" id="scenUpdRow" hidden><button type="button" class="rbtn" id="scenUpdNow"></button></div>
   <p class="sub scenmsg" id="scenMsg"></p>
   <div class="scenform scenapply" id="scenApplyRow" hidden><label class="sub" for="scenApplySel" data-i18n="scenApplyLbl"></label><select id="scenApplySel"></select><button type="button" class="rbtn" id="scenApplyBtn" data-i18n="scenApply"></button></div>
   <div class="scenprompt" id="scenPrompt" hidden><p class="sub" id="scenPText"></p><div class="scenbtns"><button type="button" class="rbtn" id="scenPSave"></button><button type="button" class="rbtn" id="scenPDiscard"></button><button type="button" class="rbtn" id="scenPCancel"></button></div></div>
   <div id="scenList"></div>
+  <div class="scenfoot"><button type="button" class="rbtn strong" id="scenExpCur" data-i18n="scenExpCur"></button><p class="sub scenexpmsg" id="scenExpMsg" role="status"></p></div>
 </div></dialog>
 
 <div id="printHead" aria-hidden="true"></div>
@@ -1477,7 +1494,7 @@ const T = {
     btnScen: 'Profielen',
     btnExport: 'Exporteren',
     btnSettings: 'Instellingen',
-    scenTitle: 'Profielen',
+    scenTitle: 'Profielen', scenNamePh: 'Naam van het profiel', scenExpJ: 'Exporteer', scenExpCur: 'Huidige invoer exporteren (JSON)',
     scenIntro: 'Bewaar de huidige invoerwaarden, strategie en fondsaannames onder een naam. Alles blijft in deze browser; wis je browsergegevens, dan verdwijnen ze.',
     scenNamePh: 'Naam',
     scenDefault: 'Scenario',
@@ -1713,7 +1730,7 @@ const T = {
     btnScen: 'Profiles',
     btnExport: 'Export',
     btnSettings: 'Settings',
-    scenTitle: 'Profiles',
+    scenTitle: 'Profiles', scenNamePh: 'Profile name', scenExpJ: 'Export', scenExpCur: 'Export current inputs (JSON)',
     scenIntro: 'Save the current inputs, strategy and fund assumptions under a name. Everything stays in this browser; clearing browser data removes them.',
     scenNamePh: 'Name',
     scenDefault: 'Scenario',
@@ -1949,7 +1966,7 @@ const T = {
     btnScen: 'Perfiles',
     btnExport: 'Exportar',
     btnSettings: 'Ajustes',
-    scenTitle: 'Perfiles',
+    scenTitle: 'Perfiles', scenNamePh: 'Nombre del perfil', scenExpJ: 'Exportar', scenExpCur: 'Exportar entradas actuales (JSON)',
     scenIntro: 'Guarda las entradas, la estrategia y los supuestos de fondos con un nombre. Todo se queda en este navegador; si borras los datos del navegador, desaparecen.',
     scenNamePh: 'Nombre',
     scenDefault: 'Escenario',
@@ -3244,6 +3261,7 @@ function applyStatic(){
     const v = tr(el.dataset.tipI18n);
     if (typeof v === 'string') el.setAttribute('data-tip', v);
   });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { const v = tr(el.dataset.i18nPh); if (typeof v === 'string') el.setAttribute('placeholder', v); });
   document.querySelectorAll('[data-i18n-title]').forEach(el => {
     const v = tr(el.dataset.i18nTitle);
     if (typeof v === 'string'){ el.setAttribute('title', v); if (el.hasAttribute('data-label')) el.setAttribute('aria-label', v); }
@@ -4396,9 +4414,14 @@ function renderScenarios(){
     const changed = isActive && !sameAsProfile(d);
     const meta = `${EUR(d.amount)} · ${tr('years')(d.years)} · ${tr(SCEN_KEY[d.scen])} · ${whenTxt(x)}`;
     return `<div class="scenrow${isActive ? ' active' : ''}"><div><b>${esc(x.name)}</b>${isActive ? `<em class="scenactive">${tr('scenActive')}${changed ? ' · ' + tr('scenChanged') : ''}</em>` : ''}<span>${meta}</span></div>
-      <div class="scenbtns"><button type="button" class="rbtn" data-load="${i}">${tr('scenLoad')}</button><button type="button" class="rbtn" data-ren="${i}">${tr('scenRename')}</button><button type="button" class="rbtn" data-del="${i}">${tr('scenDel')}</button></div></div>`;
+      <div class="scenbtns"><button type="button" class="rbtn primary" data-load="${i}">${tr('scenLoad')}</button><button type="button" class="rbtn" data-expj="${i}">${tr('scenExpJ')}</button><button type="button" class="rbtn" data-ren="${i}">${tr('scenRename')}</button><button type="button" class="rbtn" data-del="${i}">${tr('scenDel')}</button></div></div>`;
   }).join('');
   updateProfBtn();
+  list.querySelectorAll('[data-expj]').forEach(b => b.addEventListener('click', () => {
+    const x = arr[+b.dataset.expj];
+    const live = x.name === getActiveName() && sameAsProfile(x.data);
+    exportJson(live ? captureState() : x.data, x.name, live);
+  }));
   list.querySelectorAll('[data-load]').forEach(b => b.addEventListener('click', () => {
     const i = +b.dataset.load;
     const ci = changedIdx();
@@ -4566,19 +4589,19 @@ function tableRows(tbl){
     return o;
   });
 }
-function exportJson(){
-  const s = captureState();
-  const tables = {};
-  ['yearly', 'results'].forEach(id => {
-    const tb = document.getElementById(id);
-    if (tb) tables[id] = tableRows(tb.closest('table'));
-  });
-  const payload = {
-    format: 'dividend-compass-export', version: 1, app: APP_VERSION,
-    exportedAt: new Date().toISOString(), inputs: s, tables
-  };
-  saveText(JSON.stringify(payload, null, 2), 'dividend-compass.json').then(res => {
-    document.getElementById('expMsg').textContent = res === 'saved' ? tr('csvSaved') : (res === 'declined' ? '' : tr('csvUnavailable'));
+// JSON-export: van de huidige invoer (met tabellen) of van een opgeslagen profiel (alleen invoer, tenzij het profiel actief en ongewijzigd is)
+function exportJson(state, name, withTables){
+  const payload = {format: 'dividend-compass-export', version: 1, app: APP_VERSION, exportedAt: new Date().toISOString()};
+  if (name) payload.profile = name;
+  payload.inputs = state;
+  if (withTables){
+    const tables = {};
+    ['yearly', 'results'].forEach(id => { const tb = document.getElementById(id); if (tb) tables[id] = tableRows(tb.closest('table')); });
+    payload.tables = tables;
+  }
+  const slug = name ? '-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : '';
+  saveText(JSON.stringify(payload, null, 2), 'dividend-compass' + slug + '.json').then(res => {
+    document.getElementById('scenExpMsg').textContent = res === 'saved' ? tr('csvSaved') : (res === 'declined' ? '' : tr('csvUnavailable'));
   });
 }
 
@@ -4596,11 +4619,10 @@ window.addEventListener('beforeprint', () => {
 const EXPT = {
   nl: {
     intro: 'Kies wat je wilt hebben. Beweeg over een kaart voor een voorbeeld.',
-    ex: 'Voorbeeld', hint: 'Beweeg over een keuze om te zien wat je krijgt.',
+    jsonT: 'Data', jsonLink: 'Alle invoer als JSON, per profiel. Open Profielen →', ex: 'Voorbeeld', hint: 'Beweeg over een keuze om te zien wat je krijgt.',
     pdf: {b: 'PDF', t: 'Adviesoverzicht', d: 'Compleet rapport voor je financieel adviseur, los van de tab waar je nu op staat.', e: 'A4-rapport van 2 tot 3 pagina’s: uitgangspunten, fondsen en aannames, resultaat en netto vermogen per jaar, belasting per land en een korte toelichting.'},
     story: {b: 'PNG', t: 'Instagram Story', d: 'Beeldvullende kaart (1080 × 1920) met je strategie, inleg en verwacht resultaat. Ter inspiratie om te delen.', e: 'Een kaart met bijvoorbeeld “€ 330.000 → € 576.000 in 10 jaar”, je strategie, een kleine grafiek en de naam van de tool.'},
     csv: {b: 'CSV', t: 'Spreadsheet', d: 'Jaartabel en resultaten om in Excel of Google Sheets te openen.', e: 'Rijen per jaar met kolommen als Jaar; Dividend (waarde); Dividend (uitbetaald); Acc (waarde); Totaal.'},
-    json: {b: 'JSON', t: 'Data', d: 'Alle invoer en tabellen als gestructureerde data, voor eigen analyse of scripts.', e: '{ "inputs": { "amount": 330000, "years": 10, … }, "tables": { "yearly": [ … ] } }'},
     r: {title: 'Adviesoverzicht', sub: 'Berekening op basis van de ingevulde uitgangspunten', date: 'Datum', s1: '1. Uitgangspunten', s2: '2. Fondsen en aannames', s3: '3. Resultaat', s4: '4. Netto vermogen per jaar', s5: '5. Belasting per land', s6: '6. Toelichting en voorbehoud',
       start: 'Startvermogen', monthly: 'Maandelijkse inleg', years: 'Looptijd', mix: 'Mix uitkerend / accumulerend', strat: 'Strategie', scen: 'Scenario', reinv: 'Dividend herinvesteren', yes: 'Ja', no: 'Nee', dom: 'Domicilie', none: '–', sav: 'Spaardeel', savRate: 'Rente op spaargeld', own: 'Eigen fondsen',
       fund: 'Fonds', grp: 'Groep', w: 'Gewicht', y: 'Dividendrendement', g: 'Koersgroei', ter: 'TER', div: 'Uitkerend', acc: 'Accumulerend',
@@ -4613,11 +4635,10 @@ const EXPT = {
   },
   en: {
     intro: 'Choose what you want. Hover a card for an example.',
-    ex: 'Example', hint: 'Hover a choice to see what you get.',
+    jsonT: 'Data', jsonLink: 'All inputs as JSON, per profile. Open Profiles →', ex: 'Example', hint: 'Hover a choice to see what you get.',
     pdf: {b: 'PDF', t: 'Advisor report', d: 'Complete report for your financial adviser, independent of the tab you are on.', e: 'A4 report of 2 to 3 pages: starting points, funds and assumptions, results and net worth per year, tax per country and a short explanation.'},
     story: {b: 'PNG', t: 'Instagram Story', d: 'Full-screen card (1080 × 1920) with your strategy, investment and expected result. To share as inspiration.', e: 'A card such as “€330,000 → €576,000 in 10 years”, your strategy, a small chart and the name of the tool.'},
     csv: {b: 'CSV', t: 'Spreadsheet', d: 'Yearly table and results to open in Excel or Google Sheets.', e: 'One row per year with columns like Year; Dividend (value); Dividend (paid out); Acc (value); Total.'},
-    json: {b: 'JSON', t: 'Data', d: 'All inputs and tables as structured data, for your own analysis or scripts.', e: '{ "inputs": { "amount": 330000, "years": 10, … }, "tables": { "yearly": [ … ] } }'},
     r: {title: 'Advisor report', sub: 'Calculation based on the entered starting points', date: 'Date', s1: '1. Starting points', s2: '2. Funds and assumptions', s3: '3. Result', s4: '4. Net worth per year', s5: '5. Tax per country', s6: '6. Notes and disclaimer',
       start: 'Starting capital', monthly: 'Monthly contribution', years: 'Horizon', mix: 'Mix distributing / accumulating', strat: 'Strategy', scen: 'Scenario', reinv: 'Reinvest dividends', yes: 'Yes', no: 'No', dom: 'Residence', none: '–', sav: 'Savings share', savRate: 'Interest on savings', own: 'Own funds',
       fund: 'Fund', grp: 'Group', w: 'Weight', y: 'Dividend yield', g: 'Price growth', ter: 'TER', div: 'Distributing', acc: 'Accumulating',
@@ -4630,11 +4651,10 @@ const EXPT = {
   },
   es: {
     intro: 'Elige lo que quieres. Pasa el cursor por una tarjeta para ver un ejemplo.',
-    ex: 'Ejemplo', hint: 'Pasa el cursor por una opción para ver qué obtienes.',
+    jsonT: 'Datos', jsonLink: 'Todas las entradas como JSON, por perfil. Abre Perfiles →', ex: 'Ejemplo', hint: 'Pasa el cursor por una opción para ver qué obtienes.',
     pdf: {b: 'PDF', t: 'Informe para asesor', d: 'Informe completo para tu asesor financiero, independiente de la pestaña en la que estés.', e: 'Informe A4 de 2 a 3 páginas: puntos de partida, fondos y supuestos, resultado y patrimonio neto por año, impuestos por país y una breve explicación.'},
     story: {b: 'PNG', t: 'Instagram Story', d: 'Tarjeta a pantalla completa (1080 × 1920) con tu estrategia, aportación y resultado esperado. Para compartir como inspiración.', e: 'Una tarjeta como “330.000 € → 576.000 € en 10 años”, tu estrategia, un pequeño gráfico y el nombre de la herramienta.'},
     csv: {b: 'CSV', t: 'Hoja de cálculo', d: 'Tabla anual y resultados para abrir en Excel o Google Sheets.', e: 'Una fila por año con columnas como Año; Dividendo (valor); Dividendo (pagado); Acc (valor); Total.'},
-    json: {b: 'JSON', t: 'Datos', d: 'Todas las entradas y tablas como datos estructurados, para tu propio análisis o scripts.', e: '{ "inputs": { "amount": 330000, "years": 10, … }, "tables": { "yearly": [ … ] } }'},
     r: {title: 'Informe para asesor', sub: 'Cálculo basado en los puntos de partida indicados', date: 'Fecha', s1: '1. Puntos de partida', s2: '2. Fondos y supuestos', s3: '3. Resultado', s4: '4. Patrimonio neto por año', s5: '5. Impuestos por país', s6: '6. Notas y advertencia',
       start: 'Capital inicial', monthly: 'Aportación mensual', years: 'Plazo', mix: 'Mezcla distribuyendo / acumulando', strat: 'Estrategia', scen: 'Escenario', reinv: 'Reinvertir dividendos', yes: 'Sí', no: 'No', dom: 'Residencia', none: '–', sav: 'Parte en ahorro', savRate: 'Interés del ahorro', own: 'Fondos propios',
       fund: 'Fondo', grp: 'Grupo', w: 'Peso', y: 'Rentab. por dividendo', g: 'Revalorización', ter: 'TER', div: 'Distribuye', acc: 'Acumula',
@@ -4654,7 +4674,7 @@ function strategyLabel(){
   return st ? stName(st) : tr('stratNone');
 }
 function expMsgSet(t){ const m = document.getElementById('expMsg'); if (m) m.textContent = t || ''; }
-const EXP_KEYS = ['pdf', 'story', 'csv', 'json'];
+const EXP_KEYS = ['pdf', 'story', 'csv'];
 const EXP_ICON = {pdf: '#2563eb', story: '#db2777', csv: '#16a34a', json: '#7c3aed'};
 function renderExpDlg(){
   const T = XT();
@@ -4662,12 +4682,13 @@ function renderExpDlg(){
   document.getElementById('expOpts').innerHTML = EXP_KEYS.map(k => {
     const o = T[k];
     return `<button type="button" class="expopt" data-exp="${k}" title="${escH(T.ex + ': ' + o.e)}" style="--c:${EXP_ICON[k]}"><span class="expbadge">${o.b}</span><span class="exptxt"><b>${escH(o.t)}</b><span>${escH(o.d)}</span></span></button>`;
-  }).join('');
+  }).join('') + `<button type="button" class="expopt prof" data-exp="prof" style="--c:#7c3aed"><span class="expbadge">JSON</span><span class="exptxt"><b>${escH(T.jsonT)}</b><span>${escH(T.jsonLink)}</span></span></button>`;
+  // Alle teksten liggen op elkaar in één grid-cel: de hoogte is die van de langste, dus het venster verspringt niet.
   const pv = document.getElementById('expPreview');
-  pv.textContent = T.hint;
+  pv.innerHTML = `<span class="pv on" data-k="hint">${escH(T.hint)}</span>` + EXP_KEYS.map(k => `<span class="pv" data-k="${k}"><b>${escH(T.ex)}:</b> ${escH(T[k].e)}</span>`).join('');
+  const setPv = k => pv.querySelectorAll('.pv').forEach(x => x.classList.toggle('on', x.dataset.k === k));
   document.querySelectorAll('#expOpts .expopt').forEach(b => {
-    const show = () => { pv.innerHTML = `<b>${escH(T.ex)}:</b> ${escH(T[b.dataset.exp].e)}`; };
-    const reset = () => { pv.textContent = T.hint; };
+    const show = () => setPv(b.dataset.exp === 'prof' ? 'hint' : b.dataset.exp), reset = () => setPv('hint');
     b.addEventListener('mouseenter', show); b.addEventListener('focus', show);
     b.addEventListener('mouseleave', reset); b.addEventListener('blur', reset);
   });
@@ -4790,8 +4811,9 @@ function exportStory(){
 }
 document.getElementById('expOpts').addEventListener('click', e => {
   const b = e.target.closest('[data-exp]'); if (!b) return;
-  ({pdf: exportAdvisorPdf, story: exportStory, csv: exportCsv, json: exportJson})[b.dataset.exp]();
+  ({pdf: exportAdvisorPdf, story: exportStory, csv: exportCsv, prof: () => { document.getElementById('expDlg').close(); renderScenarios(); openDlg('scenDlg'); }})[b.dataset.exp]();
 });
+document.getElementById('scenExpCur').addEventListener('click', () => exportJson(captureState(), '', true));
 
 /* ---- kosten (TER) ---- */
 function portfolioTer(){
