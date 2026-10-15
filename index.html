@@ -1543,7 +1543,7 @@ const T = {
     tipDiv: 'Dividend', tipAcc: 'Acc',
     kEind: n => `Eindwaarde van het vermogen na ${n} ${n === 1 ? 'jaar' : 'jaar'}`,
     kWaarde: 'Fondsen', kTotGen: 'Totaal', kUitb: 'Uitbetaald', totNote: 'Totaal = in fondsen + uitbetaald', mixGroup: 'Verdeling dividend / acc', presetLbl: 'Strategie', presetAgg: 'Agressief', presetBal: 'Gebalanceerd', presetCons: 'Defensief', presetHint: 'Agressief en defensief gaan over risico én over hoe het rendement komt: meer uitkering of meer groei. De verdeling dividend/acc volgt uit het voorstel. Je kunt daarna alles handmatig aanpassen.',
-    kRend: 'Rendement over de periode (voor belasting)', retNote: 'Voor belasting hebben uitkerend en accumulerend hier hetzelfde rendement; het verschil zit in belasting en uitbetaling (zie Belasting).', divRet: 'Dividend rendement', accRet: 'Acc rendement',
+    kRend: 'Bijdrage aan waardegroei (voor belasting)', retNote: 'Groei = eindwaarde (incl. uitkeringen) min ingelegd.', divRet: 'Dividend rendement', accRet: 'Acc rendement',
     kPerMaand: 'Dividend per maand bij start',
     kKosten: 'Kosten (TER) over de periode',
     startValue: 'Startwaarde',
@@ -1779,7 +1779,7 @@ const T = {
     tipDiv: 'Dividend', tipAcc: 'Acc',
     kEind: n => `Final value of the holdings after ${n} ${n === 1 ? 'year' : 'years'}`,
     kWaarde: 'In funds', kTotGen: 'Total', kUitb: 'Paid out', totNote: 'Total = in funds + paid out', mixGroup: 'Split dividend / acc', presetLbl: 'Strategy', presetAgg: 'Aggressive', presetBal: 'Balanced', presetCons: 'Defensive', presetHint: 'Aggressive and defensive are about risk and where the return comes from: more payout or more growth. The dividend/acc split follows from the proposal. You can adjust everything by hand afterwards.',
-    kRend: 'Return over the period (before tax)', retNote: 'Before tax, distributing and accumulating have the same return here; the difference lies in tax and payout (see Tax).', divRet: 'Dividend return', accRet: 'Acc return',
+    kRend: 'Contribution to value growth (before tax)', retNote: 'Growth = end value (incl. payouts) minus invested.', divRet: 'Dividend return', accRet: 'Acc return',
     kPerMaand: 'Dividend per month at start',
     kKosten: 'Costs (TER) over the period',
     startValue: 'Starting value',
@@ -2015,7 +2015,7 @@ const T = {
     tipDiv: 'Dividendo', tipAcc: 'Acum.',
     kEind: n => `Valor final de la inversión tras ${n} ${n === 1 ? 'año' : 'años'}`,
     kWaarde: 'En fondos', kTotGen: 'Total', kUitb: 'Pagado', totNote: 'Total = en fondos + pagado', mixGroup: 'Reparto dividendo / acc', presetLbl: 'Estrategia', presetAgg: 'Agresiva', presetBal: 'Equilibrada', presetCons: 'Defensiva', presetHint: 'Agresiva y defensiva van sobre el riesgo y de dónde sale el rendimiento: más distribución o más crecimiento. El reparto dividendo/acc sale de la propuesta. Después puedes ajustarlo todo a mano.',
-    kRend: 'Rendimiento del periodo (antes de impuestos)', retNote: 'Antes de impuestos, distribuir y acumular tienen aquí la misma rentabilidad; la diferencia está en los impuestos y el pago (ver Impuestos).', divRet: 'Rendimiento dividendo', accRet: 'Rendimiento acum.',
+    kRend: 'Aportación al crecimiento (antes de impuestos)', retNote: 'Crecimiento = valor final (incl. pagos) menos invertido.', divRet: 'Rendimiento dividendo', accRet: 'Rendimiento acum.',
     kPerMaand: 'Dividendo al mes al inicio',
     kKosten: 'Costes (TER) del periodo',
     startValue: 'Valor inicial',
@@ -3158,6 +3158,7 @@ function recalc(){
   const need = neededAmount(targetMonth, mix, sc);
   const coverTxt = targetMonth > 0 ? tr('cover')(Math.round(cover), EUR(targetMonth)) : (goalOn ? tr('coverFill') : tr('noGoal'));
 
+  const growTxt = (g, tot) => (g >= 0 ? '+' : '−') + EUR(Math.abs(g)).replace(/^-/, '') + (tot > 0 ? ' (' + Math.round(g / tot * 100) + '%)' : '');
   const rl = k => T[lang].riskName[k] || k;
   document.getElementById('kpis').innerHTML = [
     kpiCard(tr('kEind')(years), [
@@ -3167,9 +3168,10 @@ function recalc(){
       {k:'tot', name:tr('kTotGen'), v:EUR(grand)}
     ], `${tr('startValue')}: ${EUR(amount)}${monthlyAmt > 0 ? ' ' + fillT('perMonthPlus', {x: EUR(monthlyAmt)}) : ''}<br>${tr('totNote')}`, undefined, '#2563eb', true),
     kpiCard(tr('kRend'), [
-      {k:'div', name:tr('divRet'), v:PCT(dRet)},
-      {k:'acc', name:tr('accRet'), v:PCT(aRet)}
-    ], tr('avgPerYear')(PCT(dPa), PCT(aPa)) + '<br>' + fillT('investedSplit', {d: EUR(dIn), a: EUR(aIn)}) + '<br>' + tr('retNote'), undefined, '#10b981'),
+      {k:'div', name:tr('dividendShort'), v:growTxt(dTotal - dIn, dTotal - dIn + aTotal - aIn)},
+      {k:'acc', name:tr('accShort'), v:growTxt(aTotal - aIn, dTotal - dIn + aTotal - aIn)},
+      {k:'tot', name:tr('kTotGen'), v:growTxt(grand - totIn, 0)}
+    ], tr('retNote'), undefined, '#10b981'),
     kpiCard(tr('kPerMaand'), [
       {k:'div', name: tr('approxMonth'), v:EUR(incomeMonth)},
       ...(reinvest ? [] : [{k:'div', name: tr('paidTotal'), v:EUR(dCash)}])
