@@ -370,12 +370,15 @@
     .calgrid th[scope=row]{text-align:left;font-weight:700;font-size:14px;padding:6px 0 2px;border:0;white-space:normal}
     .calgrid td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0;text-align:right;white-space:normal}
     .calgrid td::before{content:attr(data-l);color:var(--muted);text-align:left}
+    .mcards{margin:0 0 18px}
     .mcards table,.mcards tbody,.mcards tfoot,.mcards tr,.mcards td{display:block;width:100%}
     .mcards thead{display:none}
-    .mcards tbody tr,.mcards tfoot tr{border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:10px}
-    .mcards td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0;text-align:right;white-space:normal}
-    .mcards td::before{content:attr(data-l);color:var(--muted);text-align:left}
-    .mcards td.rowname{display:block;font-weight:700;font-size:14px;text-align:left;padding:6px 0 2px}
+    .mcards tbody tr,.mcards tfoot tr{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 10px;background:var(--panel)}
+    .mcards td{display:flex;justify-content:space-between;align-items:baseline;gap:16px;border:0;padding:4px 0;text-align:right;white-space:normal;font-size:13px;line-height:1.4}
+    .mcards td::before{content:attr(data-l);color:var(--muted);text-align:left;flex:0 1 50%}
+    .mcards td:first-child{display:block;font-weight:700;font-size:14px;padding:0 0 6px;text-align:left;white-space:normal;min-width:0}
+    .mcards td:first-child::before{content:none}
+    .mcards td.rowname{display:block;font-weight:700;font-size:14px;text-align:left;padding:0 0 6px}
     .mcards td.rowname::before{content:none}
   }
   .calgrid table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
@@ -747,7 +750,7 @@
       <summary><h2 id="yrTitle" data-i18n="yearlySummary"></h2></summary>
       <div class="collapse-body">
       <p class="sub" data-i18n="yearlySub"></p>
-      <div class="tbl-wrap">
+      <div class="tbl-wrap mcards">
         <table class="tbl">
           <thead>
             <tr><th data-i18n="colYear"></th><th data-i18n="colDivValue"></th><th data-i18n="colDivCash"></th><th data-i18n="colAccValue"></th><th data-i18n="colTotY"></th><th data-i18n="colCagr"></th></tr>
@@ -784,7 +787,7 @@
         <input type="range" id="mixF" min="0" max="100" value="50" step="1" aria-label="Verdeling dividend en acc">
         <div class="range-ends"><span data-i18n="mixEndAcc"></span><span data-i18n="mixEndDiv"></span></div>
       </div>
-      <div class="tbl-wrap">
+      <div class="tbl-wrap mcards">
         <table class="tbl">
           <thead>
             <tr>
@@ -859,7 +862,7 @@
       <details class="collapse">
       <summary><h2 id="resTitle" data-i18n="resultTitle"></h2></summary>
       <div class="collapse-body">
-      <div class="tbl-wrap">
+      <div class="tbl-wrap mcards">
         <table class="tbl">
           <thead>
             <tr>
@@ -945,7 +948,7 @@
   <section class="taxpane" id="secNL" aria-labelledby="nlTitle">
     <h2 id="nlTitle"><span data-i18n="nlTitle"></span> <a class="info" href="#gl-taxnl">?</a></h2>
     <p data-i18n="nlText" hidden></p>
-    <div class="tbl-wrap">
+    <div class="tbl-wrap mcards">
       <table class="tbl">
         <thead><tr><th data-i18n="colItem"></th><th data-i18n="colValue"></th></tr></thead>
         <tbody>
@@ -957,7 +960,7 @@
       </table>
     </div>
     <h2 class="sub2" data-i18n="box3Yearly"></h2>
-    <div class="tbl-wrap">
+    <div class="tbl-wrap mcards">
       <table class="tbl">
         <thead><tr><th data-i18n="colYearT"></th><th data-i18n="colStart"></th><th data-i18n="colTaxYear"></th></tr></thead>
         <tbody id="box3Rows"></tbody>
@@ -969,7 +972,7 @@
   <section class="taxpane" id="secUS" aria-labelledby="usTitle">
     <h2 id="usTitle"><span data-i18n="usTitle"></span> <a class="info" href="#gl-taxus">?</a></h2>
     <p data-i18n="usText" hidden></p>
-    <div class="tbl-wrap">
+    <div class="tbl-wrap mcards">
       <table class="tbl">
         <thead><tr><th data-i18n="colFund"></th><th class="wrap" data-i18n="usExposure"></th></tr></thead>
         <tbody>
@@ -998,7 +1001,7 @@
       <p class="hint" id="arStamp"></p>
       <p class="hint" data-i18n="arRateHint" hidden></p>
     </div>
-    <div class="tbl-wrap">
+    <div class="tbl-wrap mcards">
       <table class="tbl">
         <thead><tr><th data-i18n="colItem"></th><th data-i18n="colValue"></th><th data-i18n="colEur"></th></tr></thead>
         <tbody>
@@ -2593,7 +2596,7 @@ function renderGeneric(k){
   box.innerHTML = `<h2><i class="dot" style="--c:${c.color}"></i>${c.name()}</h2>
     <p>${note}</p>
     <h3 class="subhead">${tr('hYears')}</h3>
-    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>${tr('colYear')}</th><th>${tr('colBaseY')}</th><th>${tr('colTaxGen')}</th></tr></thead>
+    <div class="tbl-wrap mcards"><table class="tbl"><thead><tr><th>${tr('colYear')}</th><th>${tr('colBaseY')}</th><th>${tr('colTaxGen')}</th></tr></thead>
     <tbody>${rows}</tbody><tfoot><tr><td>${tr('ovSumRow')}</td><td></td><td class="num">${EUR(st)}</td></tr></tfoot></table></div>
     ${e && e.src ? `<p class="muted" style="margin-top:12px"><a href="${e.src}" target="_blank" rel="noopener noreferrer">${tr('srcLbl')} ↗</a></p>` : ''}`;
 }
@@ -3958,6 +3961,23 @@ saveLast();
 function welcomeSeen(){ try { return !!localStorage.getItem('dk-welcome'); } catch (e) { return true; } }
 document.getElementById('welcomeDlg').addEventListener('close', () => { try { localStorage.setItem('dk-welcome', '1'); } catch (e) {} });
 if (!welcomeSeen()) openDlg('welcomeDlg');
+
+(function(){
+  const label = () => {
+    document.querySelectorAll('.mcards table').forEach(t => {
+      const hs = [...t.querySelectorAll('thead th')].map(th => th.textContent.trim());
+      t.querySelectorAll('tbody tr, tfoot tr').forEach(tr => {
+        [...tr.children].forEach((c, i) => {
+          if (c.tagName === 'TD' && hs[i] && c.dataset.l !== hs[i]) c.dataset.l = hs[i];
+        });
+      });
+    });
+  };
+  let queued = false;
+  new MutationObserver(() => { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; label(); }); } })
+    .observe(document.body, {childList: true, subtree: true});
+  label();
+})();
 </script>
 </body>
 </html>
