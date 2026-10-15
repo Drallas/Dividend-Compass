@@ -339,7 +339,7 @@
   .calk b{display:block;font-size:20px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
   .calgrid{overflow-x:auto}
   .cpick{position:relative;min-width:240px;max-width:100%}
-  .cpick summary{display:block;list-style:none;cursor:pointer;height:32px;line-height:32px;padding:0 32px 0 10px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--text);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative}
+  .cpick summary{display:block;list-style:none;caret-color:transparent;user-select:none;cursor:pointer;height:32px;line-height:32px;padding:0 32px 0 10px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--text);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative}
   .cpick summary::-webkit-details-marker,.cpick summary::marker{display:none;content:''}
   .cpick summary::after{content:"";position:absolute;right:12px;top:12px;width:6px;height:6px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:rotate(45deg)}
   .cpick[open] summary::after{top:14px;transform:rotate(225deg)}
@@ -357,7 +357,6 @@
   .calnotes .calnote{margin-top:8px;font-size:12.5px;line-height:1.5}
   .cpick-tax{min-width:0;width:100%;margin:6px 0 10px}
   .cpick-tax .cpick-list{min-width:0;left:0;right:0}
-  .cpick-tax .pickgrid{grid-template-columns:1fr 1fr}
   @media (max-width:600px){
     .calgrid table,.calgrid tbody,.calgrid tr,.calgrid th,.calgrid td{display:block;width:100%}
     .calgrid thead{display:none}
@@ -3388,9 +3387,9 @@ document.querySelectorAll('.sortbar .rbtn').forEach(b => b.addEventListener('cli
 }));
 function buildChips(){
   const box = document.getElementById('ovChips');
-  const chip = c => `<label class="ovchip" style="--c:${c.color}"><input type="checkbox" data-k="${c.k}"><i class="dot"></i><span data-nm="${c.k}"></span>${c.k === 'n28' ? '<a class="info" href="#gl-tax2028">?</a>' : ''}</label>`;
+  const chip = c => `<label class="cpick-opt"><input type="checkbox" data-k="${c.k}"><span data-nm="${c.k}"></span>${c.k === 'n28' ? '<a class="info" href="#gl-tax2028">?</a>' : ''}</label>`;
   const main = ALL.filter(c => !EXTRA.some(e => e.k === c.k)), more = ALL.filter(c => EXTRA.some(e => e.k === c.k));
-  box.innerHTML = `<details class="cpick cpick-tax" id="taxPick"><summary id="taxPickSum"></summary><div class="cpick-list"><div class="pickhead"><span></span><span id="pickCount"></span></div><div class="pickgrid">${ALL.map(chip).join('')}</div></div></details>`;
+  box.innerHTML = `<details class="cpick cpick-tax" id="taxPick"><summary id="taxPickSum"></summary><div class="cpick-list"><div class="pickhead"><span></span><span id="pickCount"></span></div>${ALL.map(chip).join('')}</div></details>`;
   box.addEventListener('change', e => {
     const k = e.target.dataset.k;
     if (!k) return;
