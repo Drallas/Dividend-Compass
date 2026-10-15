@@ -1109,6 +1109,7 @@
     <div class="menulist">
       <button type="button" class="rbtn menubtn" data-open="scenDlg" data-i18n="btnScen"></button>
       <button type="button" class="rbtn menubtn" data-open="expDlg" data-i18n="btnExport"></button>
+      <button type="button" class="rbtn menubtn" id="menuReset" data-i18n="menuReset"></button>
     </div>
   </div>
   <div class="menugrp">
@@ -1216,7 +1217,7 @@ const T = {
     exportPdf: 'Als PDF (afdrukken)',
     exportCsv: 'Als CSV',
     setTitle: 'Menu',
-    grpData: 'Gegevens', grpSet: 'Instellingen', grpInfo: 'Info', menuLang: 'Taal', menuTheme: 'Thema', menuCur: 'Valuta',
+    grpData: 'Gegevens', grpSet: 'Instellingen', grpInfo: 'Info', menuLang: 'Taal', menuTheme: 'Thema', menuCur: 'Valuta', menuReset: 'Alle invoer wissen', resetConfirm: 'Alle ingevulde waarden en eigen instellingen wissen? De app start daarna opnieuw.',
     setTheme: 'Thema',
     setLang: 'Taal',
     aboutBtn: 'Over Dividend Compass',
@@ -1451,7 +1452,7 @@ const T = {
     exportPdf: 'As PDF (print)',
     exportCsv: 'As CSV',
     setTitle: 'Menu',
-    grpData: 'Data', grpSet: 'Settings', grpInfo: 'Info', menuLang: 'Language', menuTheme: 'Theme', menuCur: 'Currency',
+    grpData: 'Data', grpSet: 'Settings', grpInfo: 'Info', menuLang: 'Language', menuTheme: 'Theme', menuCur: 'Currency', menuReset: 'Clear all input', resetConfirm: 'Clear all entered values and own settings? The app will restart.',
     setTheme: 'Theme',
     setLang: 'Language',
     aboutBtn: 'About Dividend Compass',
@@ -1686,7 +1687,7 @@ const T = {
     exportPdf: 'Como PDF (imprimir)',
     exportCsv: 'Como CSV',
     setTitle: 'Menú',
-    grpData: 'Datos', grpSet: 'Ajustes', grpInfo: 'Info', menuLang: 'Idioma', menuTheme: 'Tema', menuCur: 'Moneda',
+    grpData: 'Datos', grpSet: 'Ajustes', grpInfo: 'Info', menuLang: 'Idioma', menuTheme: 'Tema', menuCur: 'Moneda', menuReset: 'Borrar todos los datos', resetConfirm: '¿Borrar todos los valores introducidos y los ajustes propios? La app se reiniciará.',
     setTheme: 'Tema',
     setLang: 'Idioma',
     aboutBtn: 'Sobre Dividend Compass',
@@ -3849,6 +3850,14 @@ document.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click'
   const top = b.closest('#setDlg') ? document.querySelector('.topbtns [data-open="' + b.dataset.open + '"]') : null;
   if (FLYS.includes(b.dataset.open)) flyOpen(b.dataset.open, top || b); else openDlg(b.dataset.open);
 }));
+// Alle ingevulde waarden en eigen instellingen wissen; taal blijft. Daarna opnieuw starten.
+document.getElementById('menuReset').addEventListener('click', () => {
+  if (!confirm(tr('resetConfirm'))) return;
+  try {
+    Object.keys(localStorage).forEach(k => { if (k.startsWith('dk-') && k !== 'dk-lang' && !k.includes('theme')) localStorage.removeItem(k); });
+  } catch (e) {}
+  location.reload();
+});
 document.getElementById('menuHelp').addEventListener('click', () => {
   document.getElementById('setDlg').hidePopover();
   openHelp(null);
