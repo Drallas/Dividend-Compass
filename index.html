@@ -338,6 +338,28 @@
   .calk span{display:block;font-size:12.5px;color:var(--muted)}
   .calk b{display:block;font-size:20px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
   .calgrid{overflow-x:auto}
+  .cpick{position:relative;min-width:240px;max-width:100%}
+  .cpick summary{display:block;list-style:none;cursor:pointer;height:32px;line-height:32px;padding:0 32px 0 10px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--text);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative}
+  .cpick summary::-webkit-details-marker,.cpick summary::marker{display:none;content:''}
+  .cpick summary::after{content:"";position:absolute;right:12px;top:12px;width:6px;height:6px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:rotate(45deg)}
+  .cpick[open] summary::after{top:14px;transform:rotate(225deg)}
+  .cpick-list{position:absolute;z-index:20;top:36px;left:0;right:0;min-width:240px;max-height:320px;overflow:auto;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--panel);box-shadow:0 8px 24px rgba(0,0,0,.18)}
+  .cpick-hint{margin:2px 4px 8px;font-size:12px;color:var(--muted)}
+  .cpick-opt{display:flex;gap:8px;align-items:center;padding:7px 6px;border-radius:7px;font-size:13.5px;cursor:pointer}
+  .cpick-opt:hover{background:color-mix(in srgb,var(--text) 6%,transparent)}
+  .cpick-opt input:disabled + span{opacity:.45}
+  .cmp-lbl{font-size:13px;font-weight:600;margin-right:8px}
+  .cmpbar{flex-wrap:wrap}
+  .dash2{display:inline-block;width:14px;border-top:2.5px dashed #f59e0b;vertical-align:middle}
+  .calgrid td.tot2{color:#b45309}
+  @media (max-width:600px){
+    .calgrid table,.calgrid tbody,.calgrid tr,.calgrid th,.calgrid td{display:block;width:100%}
+    .calgrid thead{display:none}
+    .calgrid tbody tr{border-top:1px solid var(--line);padding:8px 0}
+    .calgrid th[scope=row]{text-align:left;font-weight:700;font-size:14px;padding:6px 0 2px;border:0;white-space:normal}
+    .calgrid td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0;text-align:right;white-space:normal}
+    .calgrid td::before{content:attr(data-l);color:var(--muted);text-align:left}
+  }
   .calgrid table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
   .calgrid th,.calgrid td{padding:9px 6px;border-top:1px solid var(--line);text-align:right;white-space:nowrap}
   .calgrid thead th{color:var(--muted);font-weight:600;font-size:12px;border-top:0}
@@ -789,7 +811,8 @@
 
 <main class="fundswrap" id="tabWealth" hidden>
   <section class="panel">
-    <div class="regbar"><label for="wealthResid" data-i18n="residLbl"></label><select id="wealthResid"></select></div>
+    <div class="regbar cmpbar"><span class="cmp-lbl" data-i18n="residLbl"></span>
+      <details class="cpick" id="cpick"><summary id="cpickSum"></summary><div class="cpick-list" id="cpickList"></div></details></div>
     <label class="wslider" for="wealthYrs"><span id="wealthYrsLbl"></span></label>
     <input type="range" id="wealthYrs" min="1" max="40" step="1" value="15">
     <div id="wealthBody"></div>
@@ -1823,6 +1846,7 @@ const SYN_T = {
   "synthLink": "Inleg en looptijd komen uit de invoer bovenaan.",
   "synthSum": "Gewichten tellen op tot {s}%; de uitkomst wordt genormaliseerd naar 100%.",
   "synPayout": "uitkerend",
+  "wcmpMax": "Kies één of twee landen om te vergelijken.",
   "synNet": "Na kosten (TER)",
   "synRet": "Rendement per jaar",
   "synRisk": "risico",
@@ -1883,6 +1907,7 @@ const SYN_T = {
   "synthLink": "Investment and term come from the input at the top.",
   "synthSum": "Weights add up to {s}%; the outcome is normalised to 100%.",
   "synPayout": "distributing",
+  "wcmpMax": "Pick one or two countries to compare.",
   "synNet": "After costs (TER)",
   "synRet": "Return per year",
   "synRisk": "risk",
@@ -1943,6 +1968,7 @@ const SYN_T = {
   "synthLink": "La inversión y el plazo vienen de los datos de entrada de arriba.",
   "synthSum": "Los pesos suman {s}%; el resultado se normaliza a 100%.",
   "synPayout": "distribuyendo",
+  "wcmpMax": "Elige uno o dos países para comparar.",
   "synNet": "Después de costes (TER)",
   "synRet": "Rendimiento por año",
   "synRisk": "riesgo",
@@ -2721,14 +2747,51 @@ function fillResid(){
   const countries = [['nl', tr('ovNL')], ['n28', tr('ovN28')], ['ar', tr('ovAR')], ...EXTRA.map(e => [e.k, e.names[lang]])]
     .sort((a, b) => a[1].localeCompare(b[1], lang));
   const opts = [['', tr('residPick')], ...countries, ['none', tr('wtNone')]];
-  ['resid', 'wealthResid'].forEach(id => {
+  ['resid'].forEach(id => {
     const sel = document.getElementById(id);
     if (!sel) return;
     const v = sel.value || '';
     sel.innerHTML = opts.map(([k, n]) => `<option value="${k}">${n}</option>`).join('');
     sel.value = opts.some(o => o[0] === v) ? v : '';
   });
+  buildCmp(countries);
 }
+// Vinkjeslijst op het tabblad Vermogen: één of twee landen tegelijk vergelijken.
+let cmp2 = '';
+function buildCmp(countries){
+  const list = document.getElementById('cpickList');
+  if (!list) return;
+  list.innerHTML = `<p class="cpick-hint">${tr('wcmpMax')}</p>` + countries.map(([k, n]) =>
+    `<label class="cpick-opt"><input type="checkbox" value="${k}"><span>${n}</span></label>`).join('');
+  syncCmp();
+}
+function cmpChecked(){ return [...document.querySelectorAll('#cpickList input:checked')].map(i => i.value); }
+function syncCmp(){
+  const r = document.getElementById('resid').value;
+  if (cmp2 === r) cmp2 = '';
+  const want = [r, cmp2].filter(x => x && x !== 'none');
+  const boxes = document.querySelectorAll('#cpickList input');
+  boxes.forEach(b => { b.checked = want.includes(b.value); b.disabled = want.length >= 2 && !b.checked; });
+  const names = [...document.querySelectorAll('#cpickList input:checked')].map(b => b.closest('label').querySelector('span').textContent);
+  const sum = document.getElementById('cpickSum');
+  if (sum) sum.textContent = names.length ? names.join(' + ') : (r === 'none' ? tr('wtNone') : tr('residPick'));
+}
+function onCmpChange(e){
+  const boxes = [...document.querySelectorAll('#cpickList input')];
+  let checked = cmpChecked();
+  if (checked.length > 2){ e.target.checked = false; return; }
+  const r = document.getElementById('resid').value;
+  const cur = (r && r !== 'none') ? r : '';
+  let primary = cur, second = '';
+  if (checked.length === 0){ primary = ''; second = ''; }
+  else if (cur && checked.includes(cur)){ primary = cur; second = checked.find(x => x !== cur) || ''; }
+  else { primary = checked[0]; second = checked[1] || ''; }
+  cmp2 = second;
+  const res = document.getElementById('resid');
+  if (primary !== cur){ res.value = primary; res.dispatchEvent(new Event('change')); }
+  else { syncCmp(); recalc(); }
+}
+document.getElementById('cpickList').addEventListener('change', onCmpChange);
 function setLang(l){
   lang = l;
   try { localStorage.setItem('dk-lang', l); } catch (e) {}
@@ -3364,7 +3427,7 @@ const WL = {
   es:{yrs:'Periodo', title:'Previsión de patrimonio neto', sub:'Cómo evoluciona tu patrimonio con las entradas, la estrategia y el escenario que elegiste. El neto es después de la estimación de impuestos que elijas.', kGross:'Patrimonio bruto', kNet:'Patrimonio neto', kPaid:'Pagado', kTax:'Impuestos, estimados', kDouble:'Doblar el neto', dNo:'No dentro del periodo', legG:'Patrimonio bruto', legN:'Patrimonio neto', legI:'Invertido', year:'Año', colFund:'En fondos', colCash:'Pagado', colTax:'Impuestos acumulados', colNet:'Neto', colCost:'Costes (TER)', kCost:'Pagado en costes (TER)', costNote:'Los costes ya están incluidos en el valor de los fondos y no se restan otra vez. Se muestran para que veas lo que te cuestan.', noDom:'Elige arriba tu país de residencia; hasta entonces los impuestos son 0.', resNote:'Estimación para el país de residencia elegido. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.', noTax:'No hay estimación de impuestos elegida, así que los impuestos son 0.', note:'La estimación de impuesto neerlandés sobre el patrimonio usa el mínimo exento y el rendimiento forfait de la pestaña Impuestos. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.'}
 };
 function renderWealth(){
-  document.getElementById('wealthResid').value = document.getElementById('resid').value;
+  syncCmp();
   const el = document.getElementById('wealthBody');
   if (!el) return;
   const W = WL[lang] || WL.nl;
@@ -3380,23 +3443,30 @@ function renderWealth(){
   const a = basket('acc', amountNow * (1 - mix), H, reinvest, sc);
   const fund = [], cash = [], tax = [], net = [];
   for (let t = 0; t <= H; t++){ fund[t] = d.vals[t] + a.vals[t]; cash[t] = d.cashArr[t] + a.cashArr[t]; }
-  let cumTax = 0;
-  tax[0] = 0;
   const dPay = basket('div', amountNow * mix, H, false, sc), aPay = basket('acc', amountNow * (1 - mix), H, false, sc);
   const paid = [];
   for (let t = 0; t <= H; t++) paid[t] = dPay.cashArr[t] + aPay.cashArr[t];
-  for (let t = 1; t <= H; t++){
-    const divT = Math.max(0, paid[t] - paid[t-1]);
-    const gain = (fund[t] + cash[t]) - (fund[t-1] + cash[t-1]);
-    const cgT = Math.max(0, gain - divT);
-    let yt = 0;
-    if (resid === 'nl') yt = box3Year(fund[t], cash[t], sp);
-    else if (resid === 'n28') yt = 0.36 * Math.max(0, gain - 1800);
-    else if (resid === 'ar') yt = arRateVal > 0 ? arTax((fund[t] + cash[t]) * arRateVal) / arRateVal : 0;
-    else { const e = EXTRA.find(x => x.k === resid); if (e) yt = e.f(divT, cgT, t - 1)[0]; }
-    cumTax += yt; tax[t] = cumTax;
-  }
+  const taxSeries = rs => {
+    const out = [0]; let cumTax = 0;
+    for (let t = 1; t <= H; t++){
+      const divT = Math.max(0, paid[t] - paid[t-1]);
+      const gain = (fund[t] + cash[t]) - (fund[t-1] + cash[t-1]);
+      const cgT = Math.max(0, gain - divT);
+      let yt = 0;
+      if (rs === 'nl') yt = box3Year(fund[t], cash[t], sp);
+      else if (rs === 'n28') yt = 0.36 * Math.max(0, gain - 1800);
+      else if (rs === 'ar') yt = arRateVal > 0 ? arTax((fund[t] + cash[t]) * arRateVal) / arRateVal : 0;
+      else { const e = EXTRA.find(x => x.k === rs); if (e) yt = e.f(divT, cgT, t - 1)[0]; }
+      cumTax += yt; out[t] = cumTax;
+    }
+    return out;
+  };
+  tax.push(...taxSeries(resid));
   for (let t = 0; t <= H; t++) net[t] = fund[t] + cash[t] - tax[t];
+  const second = (cmp2 && cmp2 !== resid && cmp2 !== 'none') ? cmp2 : '';
+  const name2 = second ? (ALL.find(c => c.k === second) ? ALL.find(c => c.k === second).name() : (EXTRA.find(e => e.k === second) || {names:{}}).names[lang] || second) : '';
+  const tax2 = second ? taxSeries(second) : null;
+  const net2 = second ? fund.map((v, t) => v + cash[t] - tax2[t]) : null;
   const inleg = amountNow;
   const costYr = new Array(H + 1).fill(0);
   funds.forEach(f => {
@@ -3425,7 +3495,7 @@ function renderWealth(){
   ];
 
   const Wd = 640, Ht = 280, pl = 64, pr = 14, pt = 14, pb = 30;
-  const max = (Math.max(...fund, ...net, inleg) * 1.05) || 1;
+  const max = (Math.max(...fund, ...net, ...(net2 || []), inleg) * 1.05) || 1;
   const x = t => pl + (Wd - pl - pr) * (H ? t / H : 0);
   const y = v => pt + (Ht - pt - pb) * (1 - v / max);
   const path = arr => arr.map((v, t) => `${t ? 'L' : 'M'}${x(t).toFixed(1)},${y(v).toFixed(1)}`).join('');
@@ -3443,6 +3513,7 @@ function renderWealth(){
     <line x1="${pl}" x2="${Wd - pr}" y1="${y(inleg).toFixed(1)}" y2="${y(inleg).toFixed(1)}" style="stroke:var(--muted);stroke-dasharray:4 4"/>
     <path d="${path(fund)}" fill="none" style="stroke:var(--acc);stroke-width:2"/>
     <path d="${path(net)}" fill="none" style="stroke:var(--div);stroke-width:3"/>
+    ${net2 ? `<path d="${path(net2)}" fill="none" style="stroke:#f59e0b;stroke-width:2.5;stroke-dasharray:6 4"/>` : ''}
     <line class="wcur" y1="${pt}" y2="${Ht - pb}" style="stroke:var(--muted);display:none"/>
   </svg>`;
 
@@ -3450,16 +3521,16 @@ function renderWealth(){
   let rows = '';
   for (let t = 1; t <= H; t++){
     if (t % step && t !== H) continue;
-    rows += `<tr><th scope="row">${W.year} ${t}</th><td>${EUR(fund[t])}</td><td>${EUR(cash[t])}</td><td>${EUR(tax[t])}</td><td>${EUR(costCum[t])}</td><td class="tot">${EUR(net[t])}</td></tr>`;
+    rows += `<tr><th scope="row">${W.year} ${t}</th><td data-l="${W.colFund}">${EUR(fund[t])}</td><td data-l="${W.colCash}">${EUR(cash[t])}</td><td data-l="${W.colTax}${bx}">${EUR(tax[t])}</td><td data-l="${W.colCost}">${EUR(costCum[t])}</td><td class="tot" data-l="${W.colNet}">${EUR(net[t])}</td>${net2 ? `<td class="tot2" data-l="${name2}">${EUR(net2[t])}</td>` : ''}</tr>`;
   }
 
   el.innerHTML = `
     <h2>${W.title}</h2>
     <p class="sub">${W.sub}</p>
     <div class="calkpis">${cards.join('')}</div>
-    <div class="wlegend"><span><i style="background:var(--div)"></i>${W.legN}</span><span><i style="background:var(--acc)"></i>${W.legG}</span><span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span></div>
+    <div class="wlegend"><span><i style="background:var(--div)"></i>${W.legN}</span><span><i style="background:var(--acc)"></i>${W.legG}</span><span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span>${net2 ? `<span><i class="dash2"></i>${name2}</span>` : ''}</div>
     <div class="wwrap">${svg}<div class="wtip" hidden></div></div>
-    <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th><th>${W.colTax}${bx}</th><th>${W.colCost}</th><th>${W.colNet}</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th><th>${W.colTax}${bx}</th><th>${W.colCost}</th><th>${W.colNet}</th>${net2 ? `<th>${name2}</th>` : ''}</tr></thead><tbody>${rows}</tbody></table></div>
     <p class="sub calnote">${W.costNote}</p>
     <p class="sub calnote">${resid === '' ? W.noDom : (resid === 'none' ? W.noTax : W.resNote)}</p>`;
   const svgEl = el.querySelector('svg.wchart');
@@ -3498,12 +3569,7 @@ function setTaxDefaults(){
   document.querySelector('.savebox').style.display = r === 'nl' ? '' : 'none';
   updateChips();
 }
-document.getElementById('resid').addEventListener('change', () => { document.getElementById('wealthResid').value = document.getElementById('resid').value; setTaxDefaults(); recalc(); });
-document.getElementById('wealthResid').addEventListener('change', e => {
-  const r = document.getElementById('resid');
-  r.value = e.target.value;
-  r.dispatchEvent(new Event('change'));
-});
+document.getElementById('resid').addEventListener('change', () => { setTaxDefaults(); syncCmp(); recalc(); });
 /* ============ merk, menu's, scenario's, export, kosten ============ */
 const APP_VERSION = '0.2';
 const SKEY = 'dk-scenarios';
@@ -3557,6 +3623,7 @@ function captureState(){
     scen: document.querySelector('input[name=scen]:checked').value,
     reinvest: document.getElementById('reinvest').checked,
     resid: document.getElementById('resid').value,
+    cmp2: cmp2,
     tax: Object.keys(taxOn).filter(k => taxOn[k]),
     goalOn: document.getElementById('goalOn').checked,
     target: digits(document.getElementById('target').value),
@@ -3571,6 +3638,7 @@ function applyState(s){
   if (r) r.checked = true;
   document.getElementById('reinvest').checked = s.reinvest;
   if (s.resid && document.querySelector('#resid option[value="' + s.resid + '"]')) document.getElementById('resid').value = s.resid;
+  cmp2 = (typeof s.cmp2 === 'string' && document.querySelector('#resid option[value="' + s.cmp2 + '"]')) ? s.cmp2 : '';
   if (Array.isArray(s.tax)) { Object.keys(taxOn).forEach(k => { taxOn[k] = s.tax.includes(k) && taxAllowed(k); }); updateChips(); }
   else setTaxDefaults();
   document.getElementById('goalOn').checked = s.goalOn;
