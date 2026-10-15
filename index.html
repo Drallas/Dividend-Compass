@@ -933,12 +933,12 @@ svg#chart .line.acc{stroke-width:2}
 
     <div class="incol">
     <section class="grp">
-      <h3 data-i18n="grpSpend"></h3>
+      <h3 id="spendHd"><span data-i18n="grpSpend"></span> <a class="tt info" href="#" data-tip-i18n="spendTip">?</a></h3>
       <div class="field">
-        <div class="field-head"><label for="spend" data-i18n="spendLbl"></label> <a class="tt info" href="#" data-tip-i18n="spendTip">?</a></div>
-        <div class="euro"><span>€</span><input type="text" id="spend" value="0" inputmode="numeric" autocomplete="off"></div>
-        <input type="range" id="spendRange" min="0" max="10000" step="50" value="0" aria-labelledby="spend">
+        <div class="euro"><span>€</span><input type="text" id="spend" value="0" inputmode="numeric" autocomplete="off" aria-labelledby="spendHd"></div>
+        <input type="range" id="spendRange" min="0" max="10000" step="1" value="0" aria-labelledby="spendHd">
         <div class="range-ends"><span id="spMin"></span><span id="spMax"></span></div>
+        <p class="hint spendwarn" id="spendWarn" role="alert" hidden></p>
       </div>
     </section>
     <section class="grp">
@@ -1565,7 +1565,7 @@ const T = {
     kRend: 'Bijdrage aan waardegroei (voor belasting)', retNote: 'Groei = eindwaarde (incl. uitkeringen) min ingelegd.', divRet: 'Dividend rendement', accRet: 'Acc rendement',
     kPerMaand: 'Dividend per maand bij start',
     kKosten: 'Kosten (TER) over de periode',
-    startValue: 'Startwaarde', grpSpend: 'Maandelijkse uitgaven', spendLbl: 'Uitgaven per maand', spendTip: 'Wat je per maand uitgeeft, in euro’s van nu (zonder inflatie). Het wordt eerst betaald uit de uitkeringen van je fondsen; wat tekortkomt wordt naar rato verkocht uit je fondsen. Een hoger bedrag dan je vermogen aankan laat het vermogen opraken.', kSpent: 'Uitgaven (verrekend)', basedOn: 'Gebaseerd op je ', basedOnLink: 'startwaarden', afterSpend: 'Na uitgaven van {x} per maand.', depleted: n => `Let op: het vermogen is op na jaar ${n}.`, rSpent: 'Uitgaven',
+    startValue: 'Startwaarde', grpSpend: 'Onttrekkingen per maand', spendTip: 'Wat je per maand opneemt, in euro’s van nu (zonder inflatie). Maximaal het dividend dat je bij start per maand ontvangt. Het wordt eerst betaald uit de uitkeringen; bij herbeleggen wordt het benodigde deel uit de fondsen gehaald.', spendMax: x => `max. ${x} (je dividend per maand)`, spendNone: 'Geen dividend in je mix, dus geen onttrekking mogelijk.', spendWarn: x => `Dat kan niet: je kunt maximaal het dividend opnemen dat je ontvangt (${x} per maand). Het bedrag is teruggezet.`, kSpent: 'Onttrekkingen (verrekend)', basedOn: 'Gebaseerd op je ', basedOnLink: 'startwaarden', afterSpend: 'Na onttrekkingen van {x} per maand.', depleted: n => `Let op: het vermogen is op na jaar ${n}.`, rSpent: 'Onttrekkingen',
     avgPerYear: (d,a) => `Gemiddeld ${d} per jaar (dividend) · ${a} (acc)`, investedSplit: 'Ingelegd: dividend {d}, acc {a}', goalOut: 'Doel buiten beeld:', wHint: 'Beweeg over de grafiek (of tik erop) voor de waarden per jaar.',
     coverFill: 'Vul een gewenst maandbedrag in',
     cover: (p, m) => `Dekt ${p}% van ${m} per maand`,
@@ -1801,7 +1801,7 @@ const T = {
     kRend: 'Contribution to value growth (before tax)', retNote: 'Growth = end value (incl. payouts) minus invested.', divRet: 'Dividend return', accRet: 'Acc return',
     kPerMaand: 'Dividend per month at start',
     kKosten: 'Costs (TER) over the period',
-    startValue: 'Starting value', grpSpend: 'Monthly spending', spendLbl: 'Spending per month', spendTip: 'What you spend per month, in today’s euros (no inflation). It is paid from your funds’ payouts first; any shortfall is sold pro rata from your funds. A higher amount than your wealth can sustain will run it down.', kSpent: 'Spending (included)', basedOn: 'Based on your ', basedOnLink: 'starting values', afterSpend: 'After spending {x} per month.', depleted: n => `Note: wealth runs out after year ${n}.`, rSpent: 'Spending',
+    startValue: 'Starting value', grpSpend: 'Withdrawals per month', spendTip: 'What you withdraw per month, in today’s euros (no inflation). At most the dividend you receive per month at the start. It is paid from the payouts first; when reinvesting, the part needed is taken from the funds.', spendMax: x => `max. ${x} (your dividend per month)`, spendNone: 'No dividend in your mix, so no withdrawal is possible.', spendWarn: x => `That is not possible: you can withdraw at most the dividend you receive (${x} per month). The amount was reset.`, kSpent: 'Withdrawals (included)', basedOn: 'Based on your ', basedOnLink: 'starting values', afterSpend: 'After withdrawing {x} per month.', depleted: n => `Note: wealth runs out after year ${n}.`, rSpent: 'Withdrawals',
     avgPerYear: (d,a) => `Average ${d} per year (dividend) · ${a} (acc)`, investedSplit: 'Invested: dividend {d}, acc {a}', goalOut: 'Goal off chart:', wHint: 'Hover over the chart (or tap it) for the values per year.',
     coverFill: 'Enter a desired monthly amount',
     cover: (p, m) => `Covers ${p}% of ${m} per month`,
@@ -2037,7 +2037,7 @@ const T = {
     kRend: 'Aportación al crecimiento (antes de impuestos)', retNote: 'Crecimiento = valor final (incl. pagos) menos invertido.', divRet: 'Rendimiento dividendo', accRet: 'Rendimiento acum.',
     kPerMaand: 'Dividendo al mes al inicio',
     kKosten: 'Costes (TER) del periodo',
-    startValue: 'Valor inicial', grpSpend: 'Gastos mensuales', spendLbl: 'Gastos al mes', spendTip: 'Lo que gastas al mes, en euros de hoy (sin inflación). Se paga primero con los pagos de tus fondos; lo que falte se vende a prorrata de tus fondos. Un importe mayor del que aguanta tu patrimonio lo agotará.', kSpent: 'Gastos (incluidos)', basedOn: 'Basado en tus ', basedOnLink: 'valores iniciales', afterSpend: 'Tras gastar {x} al mes.', depleted: n => `Atención: el patrimonio se agota tras el año ${n}.`, rSpent: 'Gastos',
+    startValue: 'Valor inicial', grpSpend: 'Retiradas al mes', spendTip: 'Lo que retiras al mes, en euros de hoy (sin inflación). Como máximo el dividendo que recibes al mes al inicio. Se paga primero con los pagos; al reinvertir, la parte necesaria sale de los fondos.', spendMax: x => `máx. ${x} (tu dividendo al mes)`, spendNone: 'No hay dividendo en tu mezcla, así que no es posible retirar.', spendWarn: x => `No es posible: puedes retirar como máximo el dividendo que recibes (${x} al mes). El importe se ha restablecido.`, kSpent: 'Retiradas (incluidas)', basedOn: 'Basado en tus ', basedOnLink: 'valores iniciales', afterSpend: 'Tras retirar {x} al mes.', depleted: n => `Atención: el patrimonio se agota tras el año ${n}.`, rSpent: 'Retiradas',
     avgPerYear: (d,a) => `Media ${d} al año (dividendo) · ${a} (acum.)`, investedSplit: 'Invertido: dividendo {d}, acc {a}', goalOut: 'Meta fuera del gráfico:', wHint: 'Pasa el cursor por el gráfico (o tócalo) para ver los valores por año.',
     coverFill: 'Indica un importe mensual deseado',
     cover: (p, m) => `Cubre el ${p}% de ${m} al mes`,
@@ -2517,7 +2517,7 @@ const riskLabel = s => s < 1.75 ? 'Laag' : s < 2.5 ? 'Middel' : s < 2.9 ? 'Midde
 const MAX_BEDRAG = 1000000;
 let manualAmount = 0; // het bedrag dat jij zelf invult
 let monthlyAmt = 0; // maandelijkse inleg (periodiek bijstorten)
-let spendMonthly = 0; // maandelijkse uitgaven (uit uitkeringen, rest uit verkoop van fondsen)
+let spendMonthly = 0; // maandelijkse onttrekkingen (uit uitkeringen, rest uit verkoop van fondsen)
 let amountNow = 0, infeasible = false;
 
 /* ============ fund table ============ */
@@ -2617,8 +2617,8 @@ function basket(group, amount, years, reinvest, sc, contrib = 0){
   });
   return {vals, cashArr, incArr, cost, startYield, risk: riskLabel(riskSum)};
 }
-// Beide mixen samen simuleren, zodat uitgaven (per jaar, aan het eind van het jaar) eerst uit de uitkeringen van alle fondsen worden betaald
-// en een tekort naar rato uit de fondsen wordt verkocht. Zonder uitgaven is het resultaat gelijk aan basket().
+// Beide mixen samen simuleren, zodat onttrekkingen (per jaar, aan het eind van het jaar) eerst uit de uitkeringen van alle fondsen worden betaald
+// en een tekort naar rato uit de fondsen wordt verkocht. Zonder onttrekkingen is het resultaat gelijk aan basket().
 function pairSim(dAmt, aAmt, years, reinvest, sc, dC, aC, spendYr = 0){
   const meta = {d: basket('div', dAmt, years, reinvest, sc, dC), a: basket('acc', aAmt, years, false, sc, aC)};
   const mk = () => ({vals: new Array(years+1).fill(0), cashArr: new Array(years+1).fill(0), incArr: new Array(years+1).fill(0), costArr: new Array(years+1).fill(0), spentArr: new Array(years+1).fill(0)});
@@ -3140,6 +3140,9 @@ function recalc(){
   updateProfBtn();
   if (typeof synthCalc === 'function') synthCalc();
   renderMonthly();
+  spendCapNow = spendCap();
+  spendOver = spendMonthly > spendCapNow;
+  if (spendOver) spendMonthly = spendCapNow;
   renderSpend();
   syncGoal();
   persistFunds();
@@ -3192,7 +3195,7 @@ function recalc(){
   const dTotal = d.vals[years] + dCash;
   const aTotal = a.vals[years];
   const grand = dTotal + aTotal;
-  // Uitgaven verlaten het vermogen: voor rendement en winst tellen ze mee, anders lijkt je rendement lager
+  // Onttrekkingen verlaten het vermogen: voor rendement en winst tellen ze mee, anders lijkt je rendement lager
   const dSp = d.spentArr[years], aSp = a.spentArr[years], totSp = dSp + aSp;
   const dRet = dIn > 0 ? (dTotal + dSp - dIn) / dIn * 100 : 0;
   const aRet = aIn > 0 ? (aTotal + aSp - aIn) / aIn * 100 : 0;
@@ -3910,15 +3913,28 @@ document.getElementById('monthlyRange').addEventListener('input', e => {
   monthlyAmt = digits(e.target.value);
   recalc();
 });
+// Onttrekkingen kunnen niet hoger zijn dan het dividend dat je bij start per maand ontvangt
+function spendCap(){
+  const sc = scen[document.querySelector('input[name=scen]:checked').value];
+  const mix = parseFloat(document.getElementById('mix').value) / 100;
+  const sy = basket('div', 1, 1, false, sc).startYield;
+  return Math.max(0, Math.floor(amountNow * (1 - spNow()) * mix * sy / 100 / 12));
+}
+let spendCapNow = 0, spendOver = false;
 function renderSpend(){
   const el = document.getElementById('spend');
   if (document.activeElement !== el) el.value = fmtNum(toDisp(spendMonthly));
   const r = document.getElementById('spendRange');
-  r.value = Math.min(10000, Math.max(0, spendMonthly));
-  r.style.setProperty('--p', (r.value / 10000 * 100) + '%');
+  r.max = spendCapNow;
+  r.disabled = spendCapNow <= 0;
+  r.value = Math.min(spendCapNow, Math.max(0, spendMonthly));
+  r.style.setProperty('--p', (spendCapNow > 0 ? r.value / spendCapNow * 100 : 0) + '%');
   r.style.setProperty('--fill', 'var(--div)');
   document.getElementById('spMin').textContent = EUR(0);
-  document.getElementById('spMax').textContent = EUR(10000);
+  document.getElementById('spMax').textContent = spendCapNow > 0 ? tr('spendMax')(EUR(spendCapNow)) : tr('spendNone');
+  const w = document.getElementById('spendWarn');
+  w.hidden = !spendOver;
+  w.textContent = spendOver ? (spendCapNow > 0 ? tr('spendWarn')(EUR(spendCapNow)) : tr('spendNone')) : '';
 }
 document.getElementById('spend').addEventListener('input', () => { spendMonthly = readEur('spend'); recalc(); });
 document.getElementById('spend').addEventListener('blur', renderSpend);
@@ -4645,7 +4661,7 @@ const EXPT = {
     story: {b: 'PNG', t: 'Instagram Story', d: 'Beeldvullende kaart (1080 × 1920) met je strategie, inleg en verwacht resultaat. Ter inspiratie om te delen.', e: 'Een kaart met bijvoorbeeld “€ 330.000 → € 576.000 in 10 jaar”, je strategie, een kleine grafiek en de naam van de tool.'},
     csv: {b: 'CSV', t: 'Spreadsheet', d: 'Jaartabel en resultaten om in Excel of Google Sheets te openen.', e: 'Rijen per jaar met kolommen als Jaar; Dividend (waarde); Dividend (uitbetaald); Acc (waarde); Totaal.'},
     r: {title: 'Adviesoverzicht', sub: 'Berekening op basis van de ingevulde uitgangspunten', date: 'Datum', s1: '1. Uitgangspunten', s2: '2. Fondsen en aannames', s3: '3. Resultaat', s4: '4. Netto vermogen per jaar', s5: '5. Belasting per land', s6: '6. Toelichting en voorbehoud',
-      start: 'Startvermogen', monthly: 'Maandelijkse inleg', spend: 'Maandelijkse uitgaven', years: 'Looptijd', mix: 'Mix uitkerend / accumulerend', strat: 'Strategie', scen: 'Scenario', reinv: 'Dividend herinvesteren', yes: 'Ja', no: 'Nee', dom: 'Domicilie', none: '–', sav: 'Spaardeel', savRate: 'Rente op spaargeld', own: 'Eigen fondsen',
+      start: 'Startvermogen', monthly: 'Maandelijkse inleg', spend: 'Maandelijkse onttrekkingen', years: 'Looptijd', mix: 'Mix uitkerend / accumulerend', strat: 'Strategie', scen: 'Scenario', reinv: 'Dividend herinvesteren', yes: 'Ja', no: 'Nee', dom: 'Domicilie', none: '–', sav: 'Spaardeel', savRate: 'Rente op spaargeld', own: 'Eigen fondsen',
       fund: 'Fonds', grp: 'Groep', w: 'Gewicht', y: 'Dividendrendement', g: 'Koersgroei', ter: 'TER', div: 'Uitkerend', acc: 'Accumulerend',
       kIn: 'Totale inleg', kGross: 'Waarde beleggingen', kPaid: 'Uitgekeerd dividend', kSav: 'Spaargeld', kNet: 'Netto vermogen na belasting', kTax: 'Belasting (box 3 / gekozen land)', kRet: 'Totaal rendement belegd deel', kPa: 'Rendement per jaar (belegd deel)', kInc: 'Dividend per maand bij start', kCost: 'Kosten (TER) cumulatief',
       year: 'Jaar', cFund: 'In fondsen', cPaid: 'Uitgekeerd', cSav: 'Spaargeld', cTax: 'Belasting cum.', cNet: 'Netto',
@@ -4661,7 +4677,7 @@ const EXPT = {
     story: {b: 'PNG', t: 'Instagram Story', d: 'Full-screen card (1080 × 1920) with your strategy, investment and expected result. To share as inspiration.', e: 'A card such as “€330,000 → €576,000 in 10 years”, your strategy, a small chart and the name of the tool.'},
     csv: {b: 'CSV', t: 'Spreadsheet', d: 'Yearly table and results to open in Excel or Google Sheets.', e: 'One row per year with columns like Year; Dividend (value); Dividend (paid out); Acc (value); Total.'},
     r: {title: 'Advisor report', sub: 'Calculation based on the entered starting points', date: 'Date', s1: '1. Starting points', s2: '2. Funds and assumptions', s3: '3. Result', s4: '4. Net worth per year', s5: '5. Tax per country', s6: '6. Notes and disclaimer',
-      start: 'Starting capital', monthly: 'Monthly contribution', spend: 'Monthly spending', years: 'Horizon', mix: 'Mix distributing / accumulating', strat: 'Strategy', scen: 'Scenario', reinv: 'Reinvest dividends', yes: 'Yes', no: 'No', dom: 'Residence', none: '–', sav: 'Savings share', savRate: 'Interest on savings', own: 'Own funds',
+      start: 'Starting capital', monthly: 'Monthly contribution', spend: 'Monthly withdrawals', years: 'Horizon', mix: 'Mix distributing / accumulating', strat: 'Strategy', scen: 'Scenario', reinv: 'Reinvest dividends', yes: 'Yes', no: 'No', dom: 'Residence', none: '–', sav: 'Savings share', savRate: 'Interest on savings', own: 'Own funds',
       fund: 'Fund', grp: 'Group', w: 'Weight', y: 'Dividend yield', g: 'Price growth', ter: 'TER', div: 'Distributing', acc: 'Accumulating',
       kIn: 'Total invested', kGross: 'Value of investments', kPaid: 'Dividends paid out', kSav: 'Savings', kNet: 'Net worth after tax', kTax: 'Tax (box 3 / chosen country)', kRet: 'Total return invested part', kPa: 'Return per year (invested part)', kInc: 'Dividend per month at start', kCost: 'Costs (TER) cumulative',
       year: 'Year', cFund: 'In funds', cPaid: 'Paid out', cSav: 'Savings', cTax: 'Tax cum.', cNet: 'Net',
@@ -4677,7 +4693,7 @@ const EXPT = {
     story: {b: 'PNG', t: 'Instagram Story', d: 'Tarjeta a pantalla completa (1080 × 1920) con tu estrategia, aportación y resultado esperado. Para compartir como inspiración.', e: 'Una tarjeta como “330.000 € → 576.000 € en 10 años”, tu estrategia, un pequeño gráfico y el nombre de la herramienta.'},
     csv: {b: 'CSV', t: 'Hoja de cálculo', d: 'Tabla anual y resultados para abrir en Excel o Google Sheets.', e: 'Una fila por año con columnas como Año; Dividendo (valor); Dividendo (pagado); Acc (valor); Total.'},
     r: {title: 'Informe para asesor', sub: 'Cálculo basado en los puntos de partida indicados', date: 'Fecha', s1: '1. Puntos de partida', s2: '2. Fondos y supuestos', s3: '3. Resultado', s4: '4. Patrimonio neto por año', s5: '5. Impuestos por país', s6: '6. Notas y advertencia',
-      start: 'Capital inicial', monthly: 'Aportación mensual', spend: 'Gastos mensuales', years: 'Plazo', mix: 'Mezcla distribuyendo / acumulando', strat: 'Estrategia', scen: 'Escenario', reinv: 'Reinvertir dividendos', yes: 'Sí', no: 'No', dom: 'Residencia', none: '–', sav: 'Parte en ahorro', savRate: 'Interés del ahorro', own: 'Fondos propios',
+      start: 'Capital inicial', monthly: 'Aportación mensual', spend: 'Retiradas mensuales', years: 'Plazo', mix: 'Mezcla distribuyendo / acumulando', strat: 'Estrategia', scen: 'Escenario', reinv: 'Reinvertir dividendos', yes: 'Sí', no: 'No', dom: 'Residencia', none: '–', sav: 'Parte en ahorro', savRate: 'Interés del ahorro', own: 'Fondos propios',
       fund: 'Fondo', grp: 'Grupo', w: 'Peso', y: 'Rentab. por dividendo', g: 'Revalorización', ter: 'TER', div: 'Distribuye', acc: 'Acumula',
       kIn: 'Total aportado', kGross: 'Valor de las inversiones', kPaid: 'Dividendos pagados', kSav: 'Ahorro', kNet: 'Patrimonio neto tras impuestos', kTax: 'Impuestos (caja 3 / país elegido)', kRet: 'Rentabilidad total parte invertida', kPa: 'Rentabilidad anual (parte invertida)', kInc: 'Dividendo mensual al inicio', kCost: 'Costes (TER) acumulados',
       year: 'Año', cFund: 'En fondos', cPaid: 'Pagado', cSav: 'Ahorro', cTax: 'Impuesto acum.', cNet: 'Neto',
