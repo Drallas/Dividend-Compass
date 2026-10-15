@@ -668,7 +668,7 @@ details.collapse > summary h2{margin:0}
 .kpi .lbl{min-height:0;font-size:12.5px;font-weight:500}
 .calk span{font-size:12.5px;color:var(--muted)}
 .calk b{font-size:24px;font-weight:700;letter-spacing:-.01em;margin-top:6px;line-height:1.2}
-.kpirow.sm .calk{padding:12px 16px;background:transparent;box-shadow:none}
+.kpirow.sm .calk{padding:12px 16px}
 .kpirow.sm .calk b{font-size:16px;margin-top:4px}
 @media (max-width:900px){ .kpis,.kpirow{grid-template-columns:repeat(2,minmax(0,1fr))} }
 /* belasting per land */
@@ -703,15 +703,22 @@ details.collapse > summary h2{margin:0}
 /* prognose */
 .strat-line{margin:0;padding:12px 16px;border-radius:var(--radius);background:var(--panel);border:1px solid var(--line);font-size:13.5px}
 .inputwrap .phead{justify-content:flex-end;margin:0}
-/* belasting: instellingen als rustige regel, niet als blok */
-.toolbar.taxaside{background:transparent;border:0;box-shadow:none;padding:0;align-items:center;gap:10px 28px}
-.taxaside .pfield{grid-template-columns:auto minmax(0,220px);align-items:center;gap:10px;flex:0 1 auto;max-width:none}
-.taxaside .cpick summary{height:34px;font-size:13px}
-.taxaside .savebox{flex:0 1 auto;max-width:none;display:flex;align-items:center;gap:8px}
-.taxaside .savebox input{width:140px;margin:0}
-.taxaside .basebox{order:3;flex:1 1 100%;border-top:0;padding:0;gap:4px 14px;font-size:12.5px}
-.taxaside .basebox .lbl{font-weight:500;color:var(--muted)}
-.taxaside .basebox a{margin-left:4px;font-size:12.5px}
+/* belasting: instellingen links in een kaart, landen rechts */
+.taxtop{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px;align-items:start}
+.panel.taxaside{display:grid;gap:18px;padding:20px;align-content:start}
+.panel.taxaside > h2{margin:0}
+.taxaside .pfield{display:grid;gap:6px;padding:0;margin:0;border:0}
+.taxaside .savebox{display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:4px 6px;margin:0;max-width:none}
+.taxaside .savebox label{font-size:12.5px;font-weight:600;color:var(--muted)}
+.taxaside .savebox strong{font-size:12.5px}
+.taxaside .savebox input{grid-column:1/-1;margin:10px 0 4px;width:100%}
+.taxaside .basebox{order:3;display:grid;gap:6px;margin:0;padding:14px 0 0;border:0;border-top:1px solid var(--line);border-radius:0;font-size:13px}
+.taxaside .basebox .lbl{font-size:12.5px;font-weight:600;color:var(--muted);margin:0}
+.taxaside .basebox .row{display:flex;justify-content:space-between;padding:0}
+.taxaside .basebox a{margin-top:4px;font-size:13px;font-weight:600}
+.perland{display:grid;gap:12px;min-width:0;align-content:start}
+.perland .sechead{margin:0;min-height:36px}
+@media (max-width:900px){ .taxtop{grid-template-columns:minmax(0,1fr)} }
 .duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
 .duo .tbl{font-size:12.5px}
 .duo .tbl th,.duo .tbl td{padding:8px 6px}
@@ -737,7 +744,7 @@ details.collapse > summary h2{margin:0}
 .strat-line{font-size:13px}
 .duo .collapse-body .tbl-wrap{max-height:332px;overflow:auto}
 .duo .tbl thead th{position:sticky;top:0;background:var(--panel);z-index:1}
-@media (max-width:1000px){ .duo .collapse-body .tbl-wrap{max-height:none} }
+@media (max-width:640px){ .tabs{display:flex !important;overflow-x:auto;scrollbar-width:none;gap:6px;padding-bottom:2px} .tabs::-webkit-scrollbar{display:none} .tabs .tab{flex:0 0 auto;white-space:nowrap;padding:9px 12px} .taxcard .row{flex-direction:row;align-items:baseline} #kpis{grid-template-columns:minmax(0,1fr)} .duo .collapse-body .tbl-wrap{max-height:420px} }
 /* lijnen die samenvallen: blauw breder eronder, oranje erop */
 svg#chart .line.div{stroke-width:4.5}
 svg#chart .line.acc{stroke-width:2}
@@ -751,9 +758,6 @@ svg#chart .line.acc{stroke-width:2}
   .toolbar{padding:14px 16px;gap:14px}
   .toolbar .pfield,.toolbar .savebox{flex:1 1 100%;max-width:none}
   .toolbar .basebox a{margin-left:0}
-  .taxaside .pfield{grid-template-columns:minmax(0,1fr);flex:1 1 100%}
-  .taxaside .savebox{flex:1 1 100%;flex-wrap:wrap}
-  .taxaside .savebox input{flex:1 1 100%;width:auto}
   .panel,.taxpane{padding:16px}
 }
 @media (max-width:520px){ .kpis,.kpirow{grid-template-columns:repeat(2,minmax(0,1fr))} .calk b{font-size:20px} .kpirow.sm .calk b{font-size:15px} }
@@ -822,8 +826,7 @@ svg#chart .line.acc{stroke-width:2}
     </section>
 
     <section class="panel" aria-labelledby="yrTitle">
-      <details class="collapse" open>
-      <summary><h2 id="yrTitle" data-i18n="yearlySummary"></h2></summary>
+      <h2 id="yrTitle" data-i18n="yearlySummary"></h2>
       <div class="collapse-body">
       <p class="sub" data-i18n="yearlySub"></p>
       <div class="tbl-wrap mcards">
@@ -835,7 +838,7 @@ svg#chart .line.acc{stroke-width:2}
         </table>
       </div>
       </div>
-      </details>
+      
     </section>
     </div>
   </div>
@@ -843,8 +846,7 @@ svg#chart .line.acc{stroke-width:2}
 
 <main class="inputwrap" id="tabInput" hidden>
   <aside class="panel controls" aria-label="Settings">
-    <header class="phead inhead">
-      <div class="phact"><span data-i18n="wzHint"></span><a href="#" class="btn" data-openwiz data-i18n="wzOpen"></a></div></header>
+
     <div class="incol">
     <section class="grp">
       <h3 data-i18n="grpTax"></h3>
@@ -1057,7 +1059,10 @@ svg#chart .line.acc{stroke-width:2}
 </main>
 
 <main class="taxwrap" id="tabTax" hidden>
-  <aside class="toolbar taxaside" aria-label="Instellingen">
+
+  <div class="taxtop">
+  <aside class="panel taxaside" aria-label="Instellingen">
+    <h2 data-i18n="taxBarTitle"></h2>
     <div class="pfield"><span class="pfield-lbl" data-i18n="pickLbl"></span><div id="ovChips" role="group"></div></div>
     <p class="muted" id="pickMax" data-i18n="pickMax" hidden></p>
     <div class="basebox">
@@ -1072,7 +1077,7 @@ svg#chart .line.acc{stroke-width:2}
       <input type="range" id="savePct" min="0" max="100" step="5" value="0" style="--p:0%" aria-labelledby="savePctLbl">
     </div>
   </aside>
-  <div class="stack">
+  <div class="perland">
   <div class="sechead"><h3 data-i18n="hPerCountry"></h3>
   <div class="sortbar">
     <button type="button" class="rbtn" data-sort="desc" aria-pressed="true" data-i18n="sortDesc"></button>
@@ -1080,6 +1085,9 @@ svg#chart .line.acc{stroke-width:2}
     <button type="button" class="rbtn" data-sort="fixed" aria-pressed="false" data-i18n="sortFixed"></button>
   </div></div>
   <section class="kpis" id="taxKpis" aria-live="polite"></section>
+  </div>
+  </div>
+  <div class="stack">
   <section class="panel taxblock">
   <div class="regbar">
     <label for="regSel" data-i18n="regLbl"></label>
@@ -1523,7 +1531,7 @@ const T = {
     'gl.uit.t': 'Uitbetaald', 'gl.uit.d': 'Het geld dat je per uitkering ontvangt als je niet herinvesteert.',
     vibePre: 'Vibe coded met', vibePost: 'door Drallas', vibeTitle: 'Bekijk de README op GitHub', aboutRepo: 'Broncode op GitHub', na: 'n.v.t.', none: '–', helpLink: 'Help', mSuffix: ' mln',
     hPerCountry: 'Per land', sortLbl: 'Sorteren:', sortFixed: 'Vaste volgorde', sortDesc: 'Hoogste bedrag eerst', sortAlpha: 'Alfabetisch',
-    baseTitle: 'Berekend over', baseInv: 'Startvermogen', baseMonthly: 'Maandelijkse inleg', baseYears: 'Looptijd', baseYrs: 'jaar', baseChange: 'Aanpassen op Prognose',
+    baseTitle: 'Berekend over', baseInv: 'Startvermogen', baseMonthly: 'Maandelijkse inleg', baseYears: 'Looptijd', baseYrs: 'jaar', baseChange: 'Wijzigen in Startwaarden',
     pickTitle: 'Landen vergelijken', grpMain: 'Basisvergelijking', grpOther: 'Meer landen', pickOf: n => `${n} van 4`, pickMax: 'Maximaal 4 landen tegelijk. Zet er eerst een uit.',
     hTotals: 'Totaal per land', hYears: 'Belasting per jaar', hNotes: 'Uitgangspunten per land', colBase: 'Belast over (gem. per jaar)',
     noteGeneric: 'Voor de extra landen is per jaar gerekend over de uitkeringen en de waardestijging van dat jaar. Het zijn indicaties, geen belastingadvies; controleer de actuele regels.',
@@ -1758,7 +1766,7 @@ const T = {
     'gl.uit.t': 'Paid out', 'gl.uit.d': 'The money you receive per distribution when you do not reinvest.',
     vibePre: 'Vibe coded with', vibePost: 'by Drallas', vibeTitle: 'View the README on GitHub', aboutRepo: 'Source code on GitHub', na: 'n/a', none: '–', helpLink: 'Help', mSuffix: 'm',
     hPerCountry: 'Per country', sortLbl: 'Sort:', sortFixed: 'Fixed order', sortDesc: 'Highest amount first', sortAlpha: 'Alphabetical',
-    baseTitle: 'Calculated on', baseInv: 'Starting capital', baseMonthly: 'Monthly contribution', baseYears: 'Period', baseYrs: 'years', baseChange: 'Change on Forecast',
+    baseTitle: 'Calculated on', baseInv: 'Starting capital', baseMonthly: 'Monthly contribution', baseYears: 'Period', baseYrs: 'years', baseChange: 'Change in Starting values',
     pickTitle: 'Compare countries', grpMain: 'Core comparison', grpOther: 'More countries', pickOf: n => `${n} of 4`, pickMax: 'Maximum 4 countries at once. Turn one off first.',
     hTotals: 'Total per country', hYears: 'Tax per year', hNotes: 'Assumptions per country', colBase: 'Taxed on (avg per year)',
     noteGeneric: 'For the extra countries tax is calculated per year on that year\'s distributions and increase in value. These are indications, not tax advice; check the current rules.',
@@ -1993,7 +2001,7 @@ const T = {
     'gl.uit.t': 'Pagado', 'gl.uit.d': 'El dinero que recibes por cada distribución si no reinviertes.',
     vibePre: 'Vibe coded con', vibePost: 'por Drallas', vibeTitle: 'Ver el README en GitHub', aboutRepo: 'Código en GitHub', na: 'n/d', none: '–', helpLink: 'Ayuda', mSuffix: ' mill.',
     hPerCountry: 'Por país', sortLbl: 'Ordenar:', sortFixed: 'Orden fijo', sortDesc: 'Mayor importe primero', sortAlpha: 'Alfabético',
-    baseTitle: 'Calculado sobre', baseInv: 'Capital inicial', baseMonthly: 'Aportación mensual', baseYears: 'Plazo', baseYrs: 'años', baseChange: 'Cambiar en Previsión',
+    baseTitle: 'Calculado sobre', baseInv: 'Capital inicial', baseMonthly: 'Aportación mensual', baseYears: 'Plazo', baseYrs: 'años', baseChange: 'Cambiar en Valores iniciales',
     pickTitle: 'Comparar países', grpMain: 'Comparación base', grpOther: 'Más países', pickOf: n => `${n} de 4`, pickMax: 'Máximo 4 países a la vez. Desactiva uno primero.',
     hTotals: 'Total por país', hYears: 'Impuesto por año', hNotes: 'Supuestos por país', colBase: 'Gravado sobre (media/año)',
     noteGeneric: 'En los países adicionales se calcula cada año sobre las distribuciones y la subida de valor de ese año. Son indicaciones, no asesoramiento fiscal; comprueba las normas vigentes.',
@@ -2757,7 +2765,8 @@ function renderOverview(){
     tg += `<line class="grid" x1="${TL}" x2="${TW - TR}" y1="${yy}" y2="${yy}"/>`;
     tg += `<text class="axis" x="${TL - 8}" y="${yy + 4}" text-anchor="end">${EUR(val)}</text>`;
   }
-  for (let t = 0; t < years; t++) tg += `<text class="axis" x="${xp(t)}" y="${TH - 10}" text-anchor="middle">${t + 1}</text>`;
+  const xst = Math.max(1, Math.ceil(years / Math.floor(TW / 34)));
+  for (let t = 0; t < years; t++) if ((t + 1) % xst === 0 || (xst === 1)) tg += `<text class="axis" x="${xp(t)}" y="${TH - 10}" text-anchor="middle">${t + 1}</text>`;
   meta.forEach(m => {
     const series = tx[m.k].map(v => v || 0);
     const pts = series.map((v, t) => `${xp(t).toFixed(1)},${yp(v).toFixed(1)}`).join(' ');
@@ -2811,7 +2820,7 @@ document.getElementById('regSel').addEventListener('change', e => gotoSub(e.targ
 let lastGeom = null;
 function niceCeil(v){ const p = Math.pow(10, Math.floor(Math.log10(v))); const s = p/2; return Math.ceil(v/s)*s; }
 
-if (innerWidth < 1000) { const yd = document.querySelector('#tabProg .duo details.collapse'); if (yd) yd.open = false; }
+document.querySelectorAll('.tabs .tab').forEach(b => b.addEventListener('click', () => { const n = b.parentNode; if (n.scrollWidth > n.clientWidth) n.scrollTo({left: b.offsetLeft - (n.clientWidth - b.offsetWidth) / 2, behavior: 'smooth'}); }));
 function chartWidth(el){ const w = el && el.clientWidth; return w ? Math.max(300, Math.min(1200, Math.round(w))) : 760; }
 function drawChart(dSeries, aSeries, years){
   const W = chartWidth(document.getElementById('chartWrap')), H = W < 500 ? 240 : 300, L = W < 500 ? 52 : 64, R = 16, T_ = 16, B = 34;
@@ -3787,7 +3796,7 @@ document.getElementById('taxKpis').addEventListener('click', e => {
 });
 document.getElementById('baseGo').addEventListener('click', e => {
   e.preventDefault();
-  document.querySelector('.tabs .tab').click();
+  document.querySelector('.tabs .tab[data-tab="tabInput"]').click();
 });
 document.querySelectorAll('.sortbar .rbtn').forEach(x => x.setAttribute('aria-pressed', x.dataset.sort === taxSort ? 'true' : 'false'));
 document.querySelectorAll('.sortbar .rbtn').forEach(b => b.addEventListener('click', () => {
@@ -3871,6 +3880,7 @@ function renderWealth(){
   const H = parseInt(document.getElementById('jaren').value, 10);
   document.getElementById('wealthYrsLbl').textContent = tr('duration') + ': ' + tr('years')(H);
   document.getElementById('wealthYrs').value = H;
+  document.getElementById('wealthYrs').style.setProperty('--p', ((H - 1) / 24 * 100) + '%');
   const sc = scen[document.querySelector('input[name=scen]:checked').value];
   const reinvest = document.getElementById('reinvest').checked;
   const mix = parseFloat(document.getElementById('mix').value) / 100;
