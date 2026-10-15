@@ -366,6 +366,13 @@
     .calgrid th[scope=row]{text-align:left;font-weight:700;font-size:14px;padding:6px 0 2px;border:0;white-space:normal}
     .calgrid td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0;text-align:right;white-space:normal}
     .calgrid td::before{content:attr(data-l);color:var(--muted);text-align:left}
+    .mcards table,.mcards tbody,.mcards tfoot,.mcards tr,.mcards td{display:block;width:100%}
+    .mcards thead{display:none}
+    .mcards tbody tr,.mcards tfoot tr{border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:10px}
+    .mcards td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0;text-align:right;white-space:normal}
+    .mcards td::before{content:attr(data-l);color:var(--muted);text-align:left}
+    .mcards td.rowname{display:block;font-weight:700;font-size:14px;text-align:left;padding:6px 0 2px}
+    .mcards td.rowname::before{content:none}
   }
   .calgrid table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
   .calgrid th,.calgrid td{padding:9px 6px;border-top:1px solid var(--line);text-align:right;white-space:nowrap}
@@ -908,7 +915,7 @@
     </div>
     <svg id="ovChart" viewBox="0 0 760 160" role="img" aria-label="Vergelijking belasting per land" hidden></svg>
     <h3 class="subhead" data-i18n="hTotals"></h3>
-    <div class="tbl-wrap">
+    <div class="tbl-wrap mcards">
       <table class="tbl">
         <thead><tr><th data-i18n="ovCountry"></th><th data-i18n="colBase"></th><th data-i18n="ovTotal"></th><th data-i18n="ovPerYear"></th><th data-i18n="ovPct"></th></tr></thead>
         <tbody id="ovRows"></tbody>
@@ -918,7 +925,7 @@
     <p class="muted" id="arZero" hidden></p>
     <p class="muted" data-i18n="ovYearNote" hidden></p>
     <h3 class="subhead" data-i18n="hYears"></h3>
-    <div class="tbl-wrap" id="ovYearWrap"></div>
+    <div class="tbl-wrap mcards" id="ovYearWrap"></div>
     <h3 class="subhead" data-i18n="hNotes" id="notesHead"></h3>
     <p class="muted" data-i18n="noteGeneric"></p>
     <dl class="notes" id="ovNotes"></dl>
@@ -2448,9 +2455,9 @@ function renderOverview(){
   svg.innerHTML = g;
   tb.innerHTML = meta.map(m => {
     const tot = totals[m.k];
-    if (tot === null) return `<tr><td>${m.name}</td><td class="num" colspan="4">${tr('ovNeedRate')}</td></tr>`;
+    if (tot === null) return `<tr><td class="rowname">${m.name}</td><td class="num" colspan="4">${tr('ovNeedRate')}</td></tr>`;
     const avgBase = txb[m.k].reduce((acc, v) => acc + (v || 0), 0) / years;
-    return `<tr><td>${m.name}</td><td class="num">${EUR(avgBase)}</td><td class="num">${EUR(tot)}</td><td class="num">${EUR(tot / years)}</td><td class="num">${PCT(amount > 0 ? tot / amount * 100 : 0)}</td></tr>`;
+    return `<tr><td class="rowname">${m.name}</td><td class="num" data-l="${tr('colBase')}">${EUR(avgBase)}</td><td class="num" data-l="${tr('ovTotal')}">${EUR(tot)}</td><td class="num" data-l="${tr('ovPerYear')}">${EUR(tot / years)}</td><td class="num" data-l="${tr('ovPct')}">${PCT(amount > 0 ? tot / amount * 100 : 0)}</td></tr>`;
   }).join('');
   document.getElementById('ovNote').textContent = tr('ovNote');
   const colSums = meta.map(() => 0);
@@ -2459,15 +2466,15 @@ function renderOverview(){
   for (let t = 0; t < years; t++){
     const cells = meta.map((m, i) => {
       const v = tx[m.k][t];
-      if (v === null) return `<td class="num">–</td>`;
+      if (v === null) return `<td class="num" data-l="${m.name}">–</td>`;
       colSums[i] += v;
-      return `<td class="num">${EUR(v)}</td>`;
+      return `<td class="num" data-l="${m.name}">${EUR(v)}</td>`;
     });
     const s = meta.reduce((acc, m) => acc + (tx[m.k][t] || 0), 0);
     grand += s;
-    yh += `<tr><td>${t + 1}</td>${cells.join('')}<td class="num">${EUR(s)}</td></tr>`;
+    yh += `<tr><td class="rowname">${tr('colYear')} ${t + 1}</td>${cells.join('')}<td class="num" data-l="${tr('ovSumCol')}">${EUR(s)}</td></tr>`;
   }
-  yh += `</tbody><tfoot><tr><td>${tr('ovSumRow')}</td>${colSums.map(v => `<td class="num">${EUR(v)}</td>`).join('')}<td class="num">${EUR(grand)}</td></tr></tfoot></table>`;
+  yh += `</tbody><tfoot><tr><td class="rowname">${tr('ovSumRow')}</td>${colSums.map((v, i) => `<td class="num" data-l="${meta[i].name}">${EUR(v)}</td>`).join('')}<td class="num" data-l="${tr('ovSumCol')}">${EUR(grand)}</td></tr></tfoot></table>`;
   document.getElementById('ovYearWrap').innerHTML = yh;
 
   const TW = chartWidth(document.getElementById('taxChart').parentNode), TH = TW < 500 ? 220 : 240, TL = TW < 500 ? 64 : 90, TR = 16, TT = 16, TB = 34;
