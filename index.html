@@ -338,25 +338,27 @@
   .calk span{display:block;font-size:12.5px;color:var(--muted)}
   .calk b{display:block;font-size:20px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
   .calgrid{overflow-x:auto}
-  .cpick{position:relative;min-width:240px;max-width:100%}
-  .cpick summary{display:block;list-style:none;caret-color:transparent;user-select:none;cursor:pointer;height:32px;line-height:32px;padding:0 32px 0 10px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--text);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;position:relative}
+  .pfield{display:grid;gap:6px;padding:0 0 16px;margin:0 0 16px;border-bottom:1px solid var(--line)}
+  .pfield:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0}
+  .pfield-lbl{font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--muted)}
+  .cpick{position:relative;width:100%}
+  .cpick summary{display:flex;align-items:center;justify-content:space-between;gap:8px;height:40px;box-sizing:border-box;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);font-size:14px;font-weight:600;cursor:pointer;user-select:none;caret-color:transparent;list-style:none;white-space:nowrap;overflow:hidden}
   .cpick summary::-webkit-details-marker,.cpick summary::marker{display:none;content:''}
-  .cpick summary::after{content:"";position:absolute;right:12px;top:12px;width:6px;height:6px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:rotate(45deg)}
-  .cpick[open] summary::after{top:14px;transform:rotate(225deg)}
-  .cpick-list{position:absolute;z-index:20;top:36px;left:0;right:0;min-width:240px;max-height:320px;overflow:auto;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--panel);box-shadow:0 8px 24px rgba(0,0,0,.18)}
-  .cpick-hint{margin:2px 4px 8px;font-size:12px;color:var(--muted)}
-  .cpick-opt{display:flex;gap:8px;align-items:center;padding:7px 6px;border-radius:7px;font-size:13.5px;cursor:pointer}
+  .cpick summary::before{display:none}
+  .cpick summary > span{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;text-align:left}
+  .cpick summary::after{content:"";flex:0 0 auto;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg) translate(-2px,-2px);transition:transform .15s}
+  .cpick[open] summary::after{transform:rotate(225deg) translate(-2px,-2px)}
+  .cpick summary:hover{border-color:color-mix(in srgb,var(--text) 35%,var(--line))}
+  .cpick[open] summary{border-color:var(--text)}
+  .cpick-list{position:absolute;z-index:20;top:46px;left:0;right:0;max-height:320px;overflow:auto;padding:6px;border:1px solid var(--line);border-radius:12px;background:var(--panel);box-shadow:0 10px 28px rgba(0,0,0,.2)}
+  .cpick-hint{margin:4px 8px 6px;font-size:11.5px;color:var(--muted)}
+  .cpick-opt{display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:8px;font-size:14px;cursor:pointer}
   .cpick-opt:hover{background:color-mix(in srgb,var(--text) 6%,transparent)}
+  .cpick-opt input{margin:0;width:16px;height:16px;accent-color:var(--text);cursor:pointer;flex:0 0 auto}
+  .cpick-opt input:disabled{cursor:not-allowed}
   .cpick-opt input:disabled + span{opacity:.45}
-  .cmp-lbl{font-size:13px;font-weight:600;margin-right:8px}
-  .cmpbar{flex-wrap:wrap}
-  .dash2{display:inline-block;width:14px;border-top:2.5px dashed #f59e0b;vertical-align:middle}
-  .calgrid td.tot2{color:#b45309}
-  .calnotes{border-top:1px solid var(--line);margin-top:18px;padding-top:10px}
-  .calnotes-hd{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-  .calnotes .calnote{margin-top:8px;font-size:12.5px;line-height:1.5}
-  .cpick-tax{min-width:0;width:100%;margin:6px 0 10px}
-  .cpick-tax .cpick-list{min-width:0;left:0;right:0}
+  .cpick-opt .info{margin-left:auto}
+  .cpick-tax .cpick-list{left:0;right:0}
   @media (max-width:600px){
     .calgrid table,.calgrid tbody,.calgrid tr,.calgrid th,.calgrid td{display:block;width:100%}
     .calgrid thead{display:none}
@@ -818,8 +820,10 @@
 
 <main class="fundswrap" id="tabWealth" hidden>
   <section class="panel">
-    <div class="regbar cmpbar"><span class="cmp-lbl" data-i18n="residLbl"></span>
-      <details class="cpick" id="cpick"><summary id="cpickSum"></summary><div class="cpick-list" id="cpickList"></div></details></div>
+    <div class="pfield"><span class="pfield-lbl" data-i18n="residLbl"></span>
+      <details class="cpick" id="domPick"><summary><span id="domSum"></span></summary><div class="cpick-list" id="domList" role="radiogroup"></div></details></div>
+    <div class="pfield"><span class="pfield-lbl" data-i18n="cmpLbl"></span>
+      <details class="cpick" id="cmpPick"><summary><span id="cmpSum"></span></summary><div class="cpick-list" id="cmpList" role="radiogroup"></div></details></div>
     <label class="wslider" for="wealthYrs"><span id="wealthYrsLbl"></span></label>
     <input type="range" id="wealthYrs" min="1" max="40" step="1" value="15">
     <div id="wealthBody"></div>
@@ -854,7 +858,7 @@
 
   <aside class="panel taxaside" aria-label="Instellingen">
     <h2 data-i18n="settings"></h2>
-    <div class="ovtoggles" id="ovChips" role="group" aria-label="Landen"></div>
+    <div class="pfield"><span class="pfield-lbl" data-i18n="pickLbl"></span><div id="ovChips" role="group"></div></div>
     <p class="muted" id="pickMax" data-i18n="pickMax" hidden></p>
     <div class="basebox">
       <div class="lbl" data-i18n="baseTitle"></div>
@@ -1853,6 +1857,10 @@ const SYN_T = {
   "synthLink": "Inleg en looptijd komen uit de invoer bovenaan.",
   "synthSum": "Gewichten tellen op tot {s}%; de uitkomst wordt genormaliseerd naar 100%.",
   "synPayout": "uitkerend",
+  "pickPlaceholder": "Kies landen",
+  "pickLbl": "Landen om te vergelijken (max. 4)",
+  "cmpNone": "Geen vergelijking",
+  "cmpLbl": "Vergelijk met (optioneel)",
   "calNotesHd": "Toelichting",
   "wcmpMax": "Kies één of twee landen om te vergelijken.",
   "synNet": "Na kosten (TER)",
@@ -1915,6 +1923,10 @@ const SYN_T = {
   "synthLink": "Investment and term come from the input at the top.",
   "synthSum": "Weights add up to {s}%; the outcome is normalised to 100%.",
   "synPayout": "distributing",
+  "pickPlaceholder": "Choose countries",
+  "pickLbl": "Countries to compare (max. 4)",
+  "cmpNone": "No comparison",
+  "cmpLbl": "Compare with (optional)",
   "fviewSynth": "Synthesis",
   "sourceLbl": "Source of the mix",
   "srcSynth": "Synthetic",
@@ -1984,6 +1996,10 @@ const SYN_T = {
   "synthLink": "La inversión y el plazo vienen de los datos de entrada de arriba.",
   "synthSum": "Los pesos suman {s}%; el resultado se normaliza a 100%.",
   "synPayout": "distribuyendo",
+  "pickPlaceholder": "Elige países",
+  "pickLbl": "Países a comparar (máx. 4)",
+  "cmpNone": "Sin comparación",
+  "cmpLbl": "Comparar con (opcional)",
   "fviewSynth": "Síntesis",
   "sourceLbl": "Fuente de la mezcla",
   "srcSynth": "Sintético",
@@ -2780,42 +2796,40 @@ function fillResid(){
   });
   buildCmp(countries);
 }
-// Vinkjeslijst op het tabblad Vermogen: één of twee landen tegelijk vergelijken.
+// Vermogenstab: land van domicilie (precies één) en optioneel een tweede land om mee te vergelijken.
 let cmp2 = '';
 function buildCmp(countries){
-  const list = document.getElementById('cpickList');
-  if (!list) return;
-  list.innerHTML = `<p class="cpick-hint">${tr('wcmpMax')}</p>` + countries.map(([k, n]) =>
-    `<label class="cpick-opt"><input type="checkbox" value="${k}"><span>${n}</span></label>`).join('');
+  const dom = document.getElementById('domList'), cmp = document.getElementById('cmpList');
+  if (!dom || !cmp) return;
+  dom.innerHTML = countries.map(([k, n]) => `<label class="cpick-opt"><input type="radio" name="domR" value="${k}"><span>${n}</span></label>`).join('')
+    + `<label class="cpick-opt"><input type="radio" name="domR" value="none"><span>${tr('wtNone')}</span></label>`;
+  cmp.innerHTML = `<label class="cpick-opt"><input type="radio" name="cmpR" value=""><span>${tr('cmpNone')}</span></label>`
+    + countries.map(([k, n]) => `<label class="cpick-opt"><input type="radio" name="cmpR" value="${k}"><span>${n}</span></label>`).join('');
   syncCmp();
 }
-function cmpChecked(){ return [...document.querySelectorAll('#cpickList input:checked')].map(i => i.value); }
 function syncCmp(){
   const r = document.getElementById('resid').value;
   if (cmp2 === r) cmp2 = '';
-  const want = [r, cmp2].filter(x => x && x !== 'none');
-  const boxes = document.querySelectorAll('#cpickList input');
-  boxes.forEach(b => { b.checked = want.includes(b.value); b.disabled = want.length >= 2 && !b.checked; });
-  const names = [...document.querySelectorAll('#cpickList input:checked')].map(b => b.closest('label').querySelector('span').textContent);
-  const sum = document.getElementById('cpickSum');
-  if (sum) sum.textContent = names.length ? names.join(' + ') : (r === 'none' ? tr('wtNone') : tr('residPick'));
+  const dr = document.querySelector(`#domList input[value="${r}"]`) || document.querySelector('#domList input[value=""]');
+  if (dr) dr.checked = true;
+  const cr = document.querySelector(`#cmpList input[value="${cmp2}"]`) || document.querySelector('#cmpList input[value=""]');
+  if (cr) cr.checked = true;
+  const nameOf = el => el ? el.closest('label').querySelector('span').textContent : '';
+  const dsum = document.getElementById('domSum'), csum = document.getElementById('cmpSum');
+  if (dsum) dsum.textContent = r ? nameOf(document.querySelector(`#domList input[value="${r}"]`)) : tr('residPick');
+  if (csum) csum.textContent = cmp2 ? nameOf(document.querySelector(`#cmpList input[value="${cmp2}"]`)) : tr('cmpNone');
 }
-function onCmpChange(e){
-  const boxes = [...document.querySelectorAll('#cpickList input')];
-  let checked = cmpChecked();
-  if (checked.length > 2){ e.target.checked = false; return; }
-  const r = document.getElementById('resid').value;
-  const cur = (r && r !== 'none') ? r : '';
-  let primary = cur, second = '';
-  if (checked.length === 0){ primary = ''; second = ''; }
-  else if (cur && checked.includes(cur)){ primary = cur; second = checked.find(x => x !== cur) || ''; }
-  else { primary = checked[0]; second = checked[1] || ''; }
-  cmp2 = second;
-  const res = document.getElementById('resid');
-  if (primary !== cur){ res.value = primary; res.dispatchEvent(new Event('change')); }
-  else { syncCmp(); recalc(); }
-}
-document.getElementById('cpickList').addEventListener('change', onCmpChange);
+document.getElementById('domList').addEventListener('change', e => {
+  const r = document.getElementById('resid');
+  const v = e.target.value === 'none' ? 'none' : e.target.value;
+  document.getElementById('domPick').open = false;
+  if (r.value !== v){ r.value = v; r.dispatchEvent(new Event('change')); } else syncCmp();
+});
+document.getElementById('cmpList').addEventListener('change', e => {
+  cmp2 = e.target.value;
+  document.getElementById('cmpPick').open = false;
+  syncCmp(); recalc();
+});
 function setLang(l){
   lang = l;
   try { localStorage.setItem('dk-lang', l); } catch (e) {}
@@ -3389,7 +3403,7 @@ function buildChips(){
   const box = document.getElementById('ovChips');
   const chip = c => `<label class="cpick-opt"><input type="checkbox" data-k="${c.k}"><span data-nm="${c.k}"></span>${c.k === 'n28' ? '<a class="info" href="#gl-tax2028">?</a>' : ''}</label>`;
   const main = ALL.filter(c => !EXTRA.some(e => e.k === c.k)), more = ALL.filter(c => EXTRA.some(e => e.k === c.k));
-  box.innerHTML = `<details class="cpick cpick-tax" id="taxPick"><summary id="taxPickSum"></summary><div class="cpick-list"><div class="pickhead"><span></span><span id="pickCount"></span></div>${ALL.map(chip).join('')}</div></details>`;
+  box.innerHTML = `<details class="cpick cpick-tax" id="taxPick"><summary><span id="taxPickSum"></span></summary><div class="cpick-list"><div class="cpick-hint" id="pickCount"></div>${ALL.map(chip).join('')}</div></details>`;
   box.addEventListener('change', e => {
     const k = e.target.dataset.k;
     if (!k) return;
@@ -3409,7 +3423,7 @@ function updateChips(){
   document.querySelectorAll('#ovChips [data-nm]').forEach(sp => { sp.textContent = shortName(ALL.find(c => c.k === sp.dataset.nm)); });
   document.getElementById('pickCount').textContent = tr('pickOf')(activeCount());
   const picked = ALL.filter(c => taxIsOn(c.k)).map(c => shortName(c));
-  document.getElementById('taxPickSum').textContent = picked.length ? picked.join(' + ') : tr('pickOf')(0);
+  document.getElementById('taxPickSum').textContent = picked.length ? picked.join(' + ') : tr('pickPlaceholder');
   document.getElementById('pickMax').hidden = !full;
 }
 buildChips();
