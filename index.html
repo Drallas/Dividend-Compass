@@ -3616,7 +3616,10 @@ function renderWealth(){
     `<div class="calk"><span>${W.kNet}</span><b>${EUR(net[H])}</b></div>`,
     `<div class="calk"><span>${W.kPaid}</span><b>${EUR(cash[H])}</b></div>`,
     `<div class="calk"><span>${W.kCost}</span><b>${EUR(costCum[H])}</b></div>`,
-    `<div class="calk"><span>${W.kTax}${bx}</span><b>${EUR(tax[H])}</b></div>`,
+    ...(net2 ? [
+      `<div class="calk"><span>${name1}: ${W.kTax}</span><b>${EUR(tax[H])}</b></div>`,
+      `<div class="calk"><span>${name2}: ${W.kTax}</span><b>${EUR(tax2[H])}</b></div>`
+    ] : [`<div class="calk"><span>${W.kTax}${bx}</span><b>${EUR(tax[H])}</b></div>`]),
     `<div class="calk"><span>${W.kDouble}</span><b>${dbl ? tr('years')(dbl) : W.dNo}</b></div>`
   ];
   if (goalCap > 0) cards.push(`<div class="calk"><span>${W.kGoal}</span><b>${goalYr ? tr('years')(goalYr) : W.dNo}</b></div>`);
@@ -3673,11 +3676,11 @@ function renderWealth(){
     cur.setAttribute('x2', xp);
     cur.style.display = '';
     tip.innerHTML = `<b>${W.year} ${tt}</b>
-      <div><i style="background:var(--div)"></i>${name1}: ${EUR(net[tt])}</div>
-      ${net2 ? `<div><i style="background:#f59e0b"></i>${name2}: ${EUR(net2[tt])}</div>` : ''}
+      <div><i style="background:var(--div)"></i>${name1}: ${EUR(net[tt])}${net2 ? ` · ${W.colTax}: ${EUR(tax[tt])}` : ''}</div>
+      ${net2 ? `<div><i style="background:#f59e0b"></i>${name2}: ${EUR(net2[tt])} · ${W.colTax}: ${EUR(tax2[tt])}</div>` : ''}
       <div><i class="dash"></i>${W.legI}: ${EUR(inArr[tt])}</div>
       <div>${W.colCash}: ${EUR(cash[tt])}</div>
-      <div>${W.colTax}${bx}: ${EUR(tax[tt])}</div>
+      ${net2 ? '' : `<div>${W.colTax}${bx}: ${EUR(tax[tt])}</div>`}
       <div>${W.colCost}: ${EUR(costCum[tt])}</div>`;
     tip.hidden = false;
     const left = xp / Wd * rect.width;
