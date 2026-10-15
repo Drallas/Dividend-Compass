@@ -547,7 +547,9 @@
     #taxKpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .wzhint{margin:6px 0 0;font-size:.92em;color:var(--muted)}
-.wzline{margin:12px 16px 4px;font-size:.9em}
+.wzgrp{padding-bottom:12px}
+.wzgrp .wzhint{margin:0;font-size:14px;color:var(--text)}
+.wzgrp .wzhint a{margin-left:6px;white-space:nowrap}
 .wzhint a{color:var(--accent,#2563eb);font-weight:600}
 .taxmain{display:block;width:100%;margin:0;padding:0;border:0;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;box-sizing:border-box;appearance:none;-webkit-appearance:none;-webkit-tap-highlight-color:transparent;border-radius:0}
 .taxmain:focus-visible{outline:2px solid var(--text);outline-offset:4px;border-radius:6px}
@@ -652,16 +654,21 @@
   <button type="button" class="tab" role="tab" aria-selected="false" data-tab="tabTax" data-i18n="tabTax"></button>
   <button type="button" class="tab" role="tab" aria-selected="false" data-tab="tabFunds" data-i18n="tabFunds"></button>
 </nav>
-<p class="wzhint wzline"><span data-i18n="wzHint"></span> <a href="#" data-openwiz data-i18n="wzOpen"></a></p>
 
 <main class="layout" id="tabProg">
   <div class="warnbar terWarn" hidden></div>
 
   <aside class="panel controls" aria-label="Settings">
     <h2 data-i18n="settings"></h2>
-    <div class="pfield pfield-top"><span class="pfield-lbl" id="residLblMain"><span data-i18n="residLbl"></span> <a class="tt info" href="#" data-tip-i18n="residTip">?</a></span>
-      <details class="cpick" id="mainPick"><summary><span id="mainSum"></span></summary><div class="cpick-list" id="mainList"></div></details>
-      <p class="hint residhint" id="residHint"></p></div>
+    <section class="grp wzgrp">
+      <p class="wzhint"><span data-i18n="wzHint"></span> <a href="#" data-openwiz data-i18n="wzOpen"></a></p>
+    </section>
+    <section class="grp">
+      <h3 data-i18n="grpTax"></h3>
+      <div class="pfield pfield-top"><span class="pfield-lbl" id="residLblMain"><span data-i18n="residLbl"></span> <a class="tt info" href="#" data-tip-i18n="residTip">?</a></span>
+        <details class="cpick" id="mainPick"><summary><span id="mainSum"></span></summary><div class="cpick-list" id="mainList"></div></details>
+        <p class="hint residhint" id="residHint"></p></div>
+    </section>
     <select id="resid" hidden aria-hidden="true"></select>
     <section class="grp">
       <h3 data-i18n="grpStrat"></h3>
@@ -1380,7 +1387,7 @@ const T = {
     pickTitle: 'Landen vergelijken', grpMain: 'Basisvergelijking', grpOther: 'Meer landen', pickOf: n => `${n} van 4`, pickMax: 'Maximaal 4 landen tegelijk. Zet er eerst een uit.',
     hTotals: 'Totaal per land', hYears: 'Belasting per jaar', hNotes: 'Uitgangspunten per land', colBase: 'Belast over (gem. per jaar)',
     noteGeneric: 'Voor de extra landen is per jaar gerekend over de uitkeringen en de waardestijging van dat jaar. Het zijn indicaties, geen belastingadvies; controleer de actuele regels.',
-    ovN28: 'NL nieuw stelsel (2028)', ovPctOf: 'Totale belasting over {n} jaar is {p} van je startvermogen ({s})', n28Add: 'ook NL 2028 tonen', wzHint: 'Liever stap voor stap? Met de startwizard zet je de belangrijkste invoer in één keer.', wzOpen: 'Start de startwizard', tax2028Note: 'Voorstel: vanaf 1-1-2028 wordt in box 3 alleen het werkelijke rendement belast, 36% boven een heffingsvrij bedrag van € 1.800. Nog onder voorbehoud van de Eerste Kamer. Hier gerekend alsof het vanaf het eerste jaar geldt, met de waardestijging als rendement. Verliezen worden niet verrekend.',
+    ovN28: 'NL nieuw stelsel (2028)', ovPctOf: 'Totale belasting over {n} jaar is {p} van je startvermogen ({s})', n28Add: 'ook NL 2028 tonen', wzHint: 'Liever stap voor stap?', wzOpen: 'Start de startwizard', tax2028Note: 'Voorstel: vanaf 1-1-2028 wordt in box 3 alleen het werkelijke rendement belast, 36% boven een heffingsvrij bedrag van € 1.800. Nog onder voorbehoud van de Eerste Kamer. Hier gerekend alsof het vanaf het eerste jaar geldt, met de waardestijging als rendement. Verliezen worden niet verrekend.',
     taxEyebrow: 'Belasting · schatting', taxH1: 'Belasting per land',
     taxLead: 'Hoeveel belasting je per jaar betaalt in de landen die je kiest (tot 4 tegelijk), op basis van je inleg, periode en mix. Schattingen, geen belastingadvies.',
     saveLbl: 'Deel op spaarrekening (box 3)', saveHint: 'Spaargeld telt in box 3 tegen het spaartarief (1,28%) in plaats van het forfaitair rendement (6%). Rente op je spaargeld zit niet in de prognose.',
@@ -1615,7 +1622,7 @@ const T = {
     pickTitle: 'Compare countries', grpMain: 'Core comparison', grpOther: 'More countries', pickOf: n => `${n} of 4`, pickMax: 'Maximum 4 countries at once. Turn one off first.',
     hTotals: 'Total per country', hYears: 'Tax per year', hNotes: 'Assumptions per country', colBase: 'Taxed on (avg per year)',
     noteGeneric: 'For the extra countries tax is calculated per year on that year\'s distributions and increase in value. These are indications, not tax advice; check the current rules.',
-    ovN28: 'NL new system (2028)', ovPctOf: 'Total tax over {n} years is {p} of your starting capital ({s})', n28Add: 'also show NL 2028', wzHint: 'Prefer step by step? The start wizard sets the main inputs in one go.', wzOpen: 'Start the start wizard', tax2028Note: 'Proposal: from 1-1-2028 Dutch wealth taxes only the actual return, 36% above a tax-free amount of €1,800. Still subject to approval by the Senate. Calculated here as if it applies from year one, with the increase in value as return. Losses are not offset.',
+    ovN28: 'NL new system (2028)', ovPctOf: 'Total tax over {n} years is {p} of your starting capital ({s})', n28Add: 'also show NL 2028', wzHint: 'Prefer step by step?', wzOpen: 'Start the start wizard', tax2028Note: 'Proposal: from 1-1-2028 Dutch wealth taxes only the actual return, 36% above a tax-free amount of €1,800. Still subject to approval by the Senate. Calculated here as if it applies from year one, with the increase in value as return. Losses are not offset.',
     taxEyebrow: 'Tax · estimate', taxH1: 'Tax per country',
     taxLead: 'How much tax you pay per year in the Netherlands, the US and Argentina, based on your investment, period and mix. Estimates, not tax advice.',
     saveLbl: 'Share in savings account (Dutch wealth tax)', saveHint: 'Savings count in Dutch wealth tax at the savings rate (1.28%) instead of the deemed return (6%). Interest on your savings is not in the forecast.',
@@ -1850,7 +1857,7 @@ const T = {
     pickTitle: 'Comparar países', grpMain: 'Comparación base', grpOther: 'Más países', pickOf: n => `${n} de 4`, pickMax: 'Máximo 4 países a la vez. Desactiva uno primero.',
     hTotals: 'Total por país', hYears: 'Impuesto por año', hNotes: 'Supuestos por país', colBase: 'Gravado sobre (media/año)',
     noteGeneric: 'En los países adicionales se calcula cada año sobre las distribuciones y la subida de valor de ese año. Son indicaciones, no asesoramiento fiscal; comprueba las normas vigentes.',
-    ovN28: 'Países Bajos nuevo sistema (2028)', ovPctOf: 'El impuesto total en {n} años es el {p} de tu capital inicial ({s})', n28Add: 'mostrar también P. Bajos 2028', wzHint: '¿Prefieres paso a paso? El asistente inicial configura los datos principales de una vez.', wzOpen: 'Abrir el asistente inicial', tax2028Note: 'Propuesta: desde el 1-1-2028 la caja 3 solo grava el rendimiento real, al 36% por encima de un mínimo exento de 1.800 €. Aún pendiente de aprobación por el Senado. Aquí se calcula como si aplicara desde el primer año, con la subida del valor como rendimiento. Las pérdidas no se compensan.',
+    ovN28: 'Países Bajos nuevo sistema (2028)', ovPctOf: 'El impuesto total en {n} años es el {p} de tu capital inicial ({s})', n28Add: 'mostrar también P. Bajos 2028', wzHint: '¿Prefieres paso a paso?', wzOpen: 'Abrir el asistente inicial', tax2028Note: 'Propuesta: desde el 1-1-2028 la caja 3 solo grava el rendimiento real, al 36% por encima de un mínimo exento de 1.800 €. Aún pendiente de aprobación por el Senado. Aquí se calcula como si aplicara desde el primer año, con la subida del valor como rendimiento. Las pérdidas no se compensan.',
     taxEyebrow: 'Impuestos · estimación', taxH1: 'Impuestos por país',
     taxLead: 'Cuánto impuesto pagas al año en Países Bajos, EE. UU. y Argentina, según tu inversión, periodo y mezcla. Estimaciones, no asesoramiento fiscal.',
     saveLbl: 'Parte en cuenta de ahorro (impuesto neerlandés sobre el patrimonio)', saveHint: 'El ahorro cuenta en impuesto neerlandés sobre el patrimonio al tipo de ahorro (1,28%) en lugar del rendimiento forfetario (6%). Los intereses de tu ahorro no están en la previsión.',
