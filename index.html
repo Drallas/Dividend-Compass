@@ -384,7 +384,6 @@
   .calnote{margin-top:18px}
   /* ---------- vermogensprognose ---------- */
   .wslider{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
-  #wealthYrs{width:100%;margin:0 0 4px}
   body.nogoal .tabs .tab[data-tab="tabPay"]{display:none !important}
   .strat-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,158px),1fr));gap:10px;margin:10px 0 16px}
   .scard{display:flex;flex-direction:column;gap:6px;height:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--panel);color:var(--text);text-align:left;cursor:pointer;font:inherit}
@@ -841,8 +840,6 @@
       <details class="cpick" id="domPick"><summary><span id="domSum"></span></summary><div class="cpick-list" id="domList"></div></details></div>
     <div class="pfield"><span class="pfield-lbl" data-i18n="cmpLbl"></span>
       <details class="cpick" id="cmpPick"><summary><span id="cmpSum"></span></summary><div class="cpick-list" id="cmpList"></div></details></div>
-    <div class="pfield"><span class="pfield-lbl" id="wealthYrsLbl"></span>
-      <input type="range" id="wealthYrs" min="1" max="40" step="1" value="15" aria-labelledby="wealthYrsLbl"></div>
     <div id="wealthBody"></div>
   </section>
   <section class="panel" aria-labelledby="resTitle">
@@ -1179,7 +1176,7 @@ const T = {
     mixEndDiv: '100% dividend',
     targetLabel: 'Gewenst dividend per maand',
     targetTip: 'Wat je per maand uit de dividend-fondsen wilt ontvangen. De pagina rekent terug hoeveel vermogen daarvoor nodig is.',
-    duration: 'Duur',
+    duration: 'Beleggingshorizon',
     scenario: 'Scenario',
     presetTip: 'Drie kant-en-klare verdelingen tussen dividend en acc. Klik op ? voor de uitleg.', 'hc.fund': 'Fondsen', 'hc.prog': 'Prognose', 'hc.risk': 'Risico', 'hc.tax': 'Belasting',
     pageTitle: 'Dividend Compass · prognose',
@@ -1413,7 +1410,7 @@ const T = {
     mixEndDiv: '100% dividend',
     targetLabel: 'Desired dividend per month',
     targetTip: 'What you want to receive per month from the dividend funds. The page works out how much capital that requires.',
-    duration: 'Duration',
+    duration: 'Investment horizon',
     scenario: 'Scenario',
     presetTip: 'Three ready-made splits between dividend and acc. Click ? for details.', 'hc.fund': 'Funds', 'hc.prog': 'Forecast', 'hc.risk': 'Risk', 'hc.tax': 'Tax',
     pageTitle: 'Dividend Compass · forecast',
@@ -1647,7 +1644,7 @@ const T = {
     mixEndDiv: '100% dividendo',
     targetLabel: 'Dividendo deseado al mes',
     targetTip: 'Lo que quieres recibir al mes de los fondos de dividendos. La página calcula cuánto capital hace falta.',
-    duration: 'Duración',
+    duration: 'Horizonte de inversión',
     scenario: 'Escenario',
     presetTip: 'Tres repartos listos entre dividendo y acumulación. Pulsa ? para más detalles.', 'hc.fund': 'Fondos', 'hc.prog': 'Previsión', 'hc.risk': 'Riesgo', 'hc.tax': 'Impuestos',
     pageTitle: 'Dividend Compass · previsión',
@@ -3551,8 +3548,7 @@ function renderWealth(){
   const el = document.getElementById('wealthBody');
   if (!el) return;
   const W = WL[lang] || WL.nl;
-  const H = parseInt(document.getElementById('wealthYrs').value, 10);
-  document.getElementById('wealthYrsLbl').textContent = W.yrs + ': ' + tr('years')(H);
+  const H = parseInt(document.getElementById('jaren').value, 10);
   const sc = scen[document.querySelector('input[name=scen]:checked').value];
   const reinvest = document.getElementById('reinvest').checked;
   const mix = parseFloat(document.getElementById('mix').value) / 100;
@@ -3695,7 +3691,6 @@ function renderWealth(){
   svgEl.addEventListener('pointerleave', () => { tip.hidden = true; cur.style.display = 'none'; });
 }
 
-document.getElementById('wealthYrs').addEventListener('input', renderWealth);
 document.getElementById('goalCap').addEventListener('input', () => { document.getElementById('goalCap').value = fmtNum(digits(document.getElementById('goalCap').value)) || ''; recalc(); });
 function setTaxDefaults(){
   Object.keys(taxOn).forEach(k => { taxOn[k] = false; });
