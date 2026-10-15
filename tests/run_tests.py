@@ -71,6 +71,15 @@ with sync_playwright() as p:
     check("1k niet opslaan wijzigt het andere profiel niet", pg.evaluate("loadScen().find(x=>x.name==='Hoog').data.amount") == 500000)
     pg.close()
 
+    # 9. Toegankelijkheid: elke icoonknop heeft een tooltip (title) en een toegankelijke naam
+    pg, errs = new_page(b)
+    bad = pg.evaluate("""() => [...document.querySelectorAll('button')].filter(e => {
+        const txt = e.textContent.trim();
+        return txt.length <= 2 && e.getClientRects().length > 0 && (!e.title || !(e.getAttribute('aria-label') || '').trim());
+      }).map(e => e.id || e.className)""")
+    check("9 icoonknoppen hebben tooltip en toegankelijke naam", not bad, bad)
+    pg.close()
+
     # 1. Roundtrip: alle opgeslagen waarden komen terug
     pg, errs = new_page(b)
     set_domicile(pg, "nl")

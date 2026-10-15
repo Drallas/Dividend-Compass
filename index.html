@@ -6,7 +6,7 @@
 <title>Prognose dividend vs acc</title>
 <style>
   :root{
-    --bg:#f4f5f8; --panel:#ffffff; --text:#1c1d21; --muted:#6b7280; --line:#e4e6eb;
+    --bg:#f4f5f8; --panel:#ffffff; --text:#1c1d21; --muted:#636a77; --line:#e4e6eb;
     --div:#2563eb; --div-soft:rgba(37,99,235,.12);
     --acc:#e8842a; --acc-soft:rgba(232,132,42,.14);
     --shadow:0 1px 2px rgba(16,24,40,.05), 0 6px 20px rgba(16,24,40,.06);
@@ -467,6 +467,7 @@
   .brandtag{font-size:12px;color:var(--muted);line-height:1.3}
   .iconbtn{appearance:none;font:inherit;width:36px;height:34px;display:inline-grid;place-items:center;padding:0;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);cursor:pointer;box-shadow:var(--shadow)}
   .iconbtn:hover{color:var(--div)}
+  #mixLockInfo a{text-decoration:underline}
   .profbtn{position:relative;font-weight:700;font-size:14px}
   .profbtn[hidden]{display:none}
   .profdot{position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--div);box-shadow:0 0 0 2px var(--panel)}
@@ -823,25 +824,25 @@ svg#chart .line.acc{stroke-width:2}
       </div>
     </div>
     <div class="topbtns">
-      <button type="button" class="iconbtn" data-open="langDlg" aria-label="Language"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></button>
-      <button type="button" class="iconbtn" data-open="themeDlg" aria-label="Theme"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
-      <button type="button" class="iconbtn curbtn" id="curBtn" aria-label="Valuta" disabled><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><text id="curGlyph" x="12" y="17.6" text-anchor="middle" font-size="16" font-weight="700" fill="currentColor" stroke="none" font-family="inherit">€</text></svg></button>
+      <button type="button" class="iconbtn" data-open="langDlg" data-i18n-title="menuLang" data-label><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></button>
+      <button type="button" class="iconbtn" data-open="themeDlg" data-i18n-title="menuTheme" data-label><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+      <button type="button" class="iconbtn curbtn" id="curBtn" data-i18n-title="menuCur" data-label disabled><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><text id="curGlyph" x="12" y="17.6" text-anchor="middle" font-size="16" font-weight="700" fill="currentColor" stroke="none" font-family="inherit">€</text></svg></button>
       <span id="langCur" hidden></span>
-      <button type="button" class="iconbtn" data-open="setDlg" aria-label="Menu"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+      <button type="button" class="iconbtn" data-open="setDlg" data-i18n-title="setTitle" data-label><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
       <button type="button" class="iconbtn profbtn" id="profBtn" data-open="scenDlg" hidden><span class="proflet" id="profLet"></span><i class="profdot" id="profDot" hidden></i></button>
     </div>
   </div>
   <h1 class="sr-only" data-i18n="h1"></h1>
 </header>
 
-<nav class="tabs" role="tablist">
+<div class="tabsnav" role="navigation" aria-label="Dividend Compass" style="display:contents"><div class="tabs" role="tablist">
   <button type="button" class="tab" role="tab" aria-selected="true" data-tab="tabProg" data-i18n="tabProg"></button>
   <button type="button" class="tab" role="tab" aria-selected="false" data-tab="tabWealth" data-i18n="tabWealth"></button>
   <button type="button" class="tab" role="tab" aria-selected="false" data-tab="tabPay" data-i18n="tabPay"></button>
   <button type="button" class="tab" role="tab" aria-selected="false" data-tab="tabTax" data-i18n="tabTax"></button>
   <button type="button" class="tab" role="tab" aria-selected="false" data-tab="tabInput" data-i18n="tabInput"></button>
   <button type="button" class="tab" role="tab" aria-selected="false" data-tab="tabFunds" data-i18n="tabFunds"></button>
-</nav>
+</div></div>
 
 <main class="layout tabprog" id="tabProg">
   <div class="warnbar terWarn" hidden></div>
@@ -1257,7 +1258,7 @@ svg#chart .line.acc{stroke-width:2}
 </main>
 
 <dialog id="helpDlg" class="helpdlg" aria-labelledby="glTitle"><div class="helpbody">
-  <button type="button" id="helpClose" class="helpx" aria-label="Close">×</button>
+  <button type="button" id="helpClose" class="helpx" data-i18n-title="closeLbl" data-label>×</button>
   <h2 id="glTitle" data-i18n="glTitle"></h2>
   <div class="hcats" role="tablist">
     <button type="button" class="rbtn hcat" data-cat="fund" aria-pressed="true" data-i18n="hc.fund"></button>
@@ -1310,7 +1311,7 @@ svg#chart .line.acc{stroke-width:2}
 </div></dialog>
 
 <dialog id="scenDlg" class="helpdlg smalldlg" aria-labelledby="scenTitle"><div class="helpbody">
-  <button type="button" class="helpx" data-close="scenDlg" aria-label="×">×</button>
+  <button type="button" class="helpx" data-close="scenDlg" data-i18n-title="closeLbl" data-label>×</button>
   <h2 id="scenTitle" data-i18n="scenTitle"></h2>
   <p class="sub" data-i18n="scenIntro"></p>
   <div class="scenform"><input type="text" id="scenName" maxlength="40" aria-label="Naam"><button type="button" class="rbtn" id="scenSave" data-i18n="scenSave"></button></div>
@@ -1324,7 +1325,7 @@ svg#chart .line.acc{stroke-width:2}
 <div id="printHead" aria-hidden="true"></div>
 
 <dialog id="expDlg" class="helpdlg smalldlg" aria-labelledby="expTitle"><div class="helpbody">
-  <button type="button" class="helpx" data-close="expDlg" aria-label="×">×</button>
+  <button type="button" class="helpx" data-close="expDlg" data-i18n-title="closeLbl" data-label>×</button>
   <h2 id="expTitle" data-i18n="exportTitle"></h2>
   <p class="sub" data-i18n="exportIntro"></p>
   <p class="sub scenmsg" id="expMsg"></p>
@@ -1353,7 +1354,7 @@ svg#chart .line.acc{stroke-width:2}
 </div>
 
 <dialog id="aboutDlg" class="helpdlg smalldlg" aria-labelledby="aboutTitle"><div class="helpbody">
-  <button type="button" class="helpx" data-close="aboutDlg" aria-label="×">×</button>
+  <button type="button" class="helpx" data-close="aboutDlg" data-i18n-title="closeLbl" data-label>×</button>
   <h2 id="aboutTitle" data-i18n="aboutTitle"></h2>
   <p class="verline"><span data-i18n="brandName"></span> · <span id="appVer"></span></p>
   <p class="sub" data-i18n="about1"></p>
@@ -1381,7 +1382,7 @@ svg#chart .line.acc{stroke-width:2}
 </div>
 
 <dialog id="startDlg" class="helpdlg smalldlg" aria-labelledby="startTitle"><div class="helpbody">
-  <button type="button" class="helpx" id="startX" aria-label="×">×</button>
+  <button type="button" class="helpx" id="startX" data-i18n-title="closeLbl" data-label>×</button>
   <div class="wz-seg wz-langs" id="wzLang" role="group" aria-label="Taal / Language / Idioma"></div>
   <p class="verline" id="startStep"></p>
   <h2 id="startTitle"></h2>
@@ -1393,14 +1394,14 @@ svg#chart .line.acc{stroke-width:2}
   </div>
 </div></dialog>
 <dialog id="welcomeDlg" class="helpdlg smalldlg" aria-labelledby="welcomeTitle"><div class="helpbody">
-  <button type="button" class="helpx" data-close="welcomeDlg" aria-label="×">×</button>
+  <button type="button" class="helpx" data-close="welcomeDlg" data-i18n-title="closeLbl" data-label>×</button>
   <h2 id="welcomeTitle" data-i18n="welcomeTitle"></h2>
   <p class="sub" data-i18n="welcomeBody"></p>
   <p class="sub disclaimer" data-i18n="disclaimer"></p>
   <p class="welcome-actions"><button type="button" class="rbtn" data-open="guideDlg" data-i18n="welcomeGuide"></button> <button type="button" class="rbtn" data-close="welcomeDlg" data-i18n="welcomeStart"></button></p>
 </div></dialog>
 <dialog id="guideDlg" class="helpdlg smalldlg" aria-labelledby="guideTitle"><div class="helpbody">
-  <button type="button" class="helpx" data-close="guideDlg" aria-label="×">×</button>
+  <button type="button" class="helpx" data-close="guideDlg" data-i18n-title="closeLbl" data-label>×</button>
   <h2 id="guideTitle" data-i18n="guideTitle"></h2>
   <p class="sub" data-i18n="guideIntro"></p>
   <p class="wzhint"><span data-i18n="wzHint"></span> <a href="#" data-openwiz data-i18n="wzOpen"></a></p>
@@ -1460,7 +1461,7 @@ const T = {
     exportPdf: 'Als PDF (afdrukken)',
     exportCsv: 'Als CSV (spreadsheet)',
     exportJson: 'Als JSON (data)',
-    setTitle: 'Menu',
+    setTitle: 'Menu', closeLbl: 'Sluiten',
     grpData: 'Gegevens', grpSet: 'Instellingen', grpInfo: 'Info', menuLang: 'Taal', menuTheme: 'Thema', menuCur: 'Valuta', menuReset: 'Alle invoer wissen', menuWizard: 'Startwizard', resetConfirm: 'Alle ingevulde waarden en eigen instellingen wissen? De app start daarna opnieuw.',
     setTheme: 'Thema',
     setLang: 'Taal',
@@ -1696,7 +1697,7 @@ const T = {
     exportPdf: 'As PDF (print)',
     exportCsv: 'As CSV (spreadsheet)',
     exportJson: 'As JSON (data)',
-    setTitle: 'Menu',
+    setTitle: 'Menu', closeLbl: 'Close',
     grpData: 'Data', grpSet: 'Settings', grpInfo: 'Info', menuLang: 'Language', menuTheme: 'Theme', menuCur: 'Currency', menuReset: 'Clear all input', menuWizard: 'Getting started', resetConfirm: 'Clear all entered values and own settings? The app will restart.',
     setTheme: 'Theme',
     setLang: 'Language',
@@ -1932,7 +1933,7 @@ const T = {
     exportPdf: 'Como PDF (imprimir)',
     exportCsv: 'Como CSV (hoja de cálculo)',
     exportJson: 'Como JSON (datos)',
-    setTitle: 'Menú',
+    setTitle: 'Menú', closeLbl: 'Cerrar',
     grpData: 'Datos', grpSet: 'Ajustes', grpInfo: 'Info', menuLang: 'Idioma', menuTheme: 'Tema', menuCur: 'Moneda', menuReset: 'Borrar todos los datos', menuWizard: 'Inicio guiado', resetConfirm: '¿Borrar todos los valores introducidos y los ajustes propios? La app se reiniciará.',
     setTheme: 'Tema',
     setLang: 'Idioma',
@@ -2416,7 +2417,7 @@ function updateCurUI(){
   if (!b) return;
   const g = document.getElementById('curGlyph'); if (g) g.textContent = curSym();
   b.disabled = !(fxRate > 0);
-  b.title = fxRate > 0 ? (curOn() ? '$ · 1 EUR = ' + fxRate.toFixed(4) + ' USD' + (fxDate ? ' (' + fxDate + ')' : '') : '€ · schakel naar dollar') : '';
+  b.title = fxRate > 0 ? (curOn() ? '$ · 1 EUR = ' + fxRate.toFixed(4) + ' USD' + (fxDate ? ' (' + fxDate + ')' : '') : '€ · schakel naar dollar') : tr('menuCur');
   b.setAttribute('aria-pressed', curOn() ? 'true' : 'false');
 }
 function setCur(c){
@@ -3201,7 +3202,7 @@ function applyStatic(){
   });
   document.querySelectorAll('[data-i18n-title]').forEach(el => {
     const v = tr(el.dataset.i18nTitle);
-    if (typeof v === 'string') el.setAttribute('title', v);
+    if (typeof v === 'string'){ el.setAttribute('title', v); if (el.hasAttribute('data-label')) el.setAttribute('aria-label', v); }
   });
   document.getElementById('dur1').textContent = tr('dur1');
   document.getElementById('dur10').textContent = tr('dur10');
@@ -3488,7 +3489,7 @@ function renderSynth(){
   document.getElementById('stratCards').innerHTML = SYNTH_STRAT.map(s =>
     `<button type="button" class="scard" data-strat="${s.id}" aria-pressed="${s.id === SYNTH_STATE.strat}" style="--c:${PAL[s.id]}"><span class="sc-name"><i class="sc-dot"></i>${stName(s)}</span><span class="sc-mix">${s.mix}% ${tr('synPayout')}</span><span class="sc-rows"><span>${tr('synRet')}</span><b>${numStr(weighted(s.g, 't'), 2)}%</b><span>${tr('synNet')}</span><b>${numStr(weighted(s.g, 't') - weighted(s.g, 'ter'), 2)}%</b><span>${tr('synRisk')}</span><b>${numStr(weighted(s.g, 'v'), 1)}%</b><span>${tr('synWorst')}</span><b>${numStr(weighted(s.g, 's'), 1)}%</b></span></button>`).join('');
   document.getElementById('synthTiles').innerHTML = Object.keys(SYNTH_IX).filter(id => SYNTH_STATE.w[id] > 0).map(id =>
-    `<div class="stile" style="--c:${PAL[id]}"><div class="sname">${ixName(id)}</div><div class="sctl"><button type="button" data-dec="${id}" aria-label="${tr('synMinus')}">−</button><span class="sval">${SYNTH_STATE.w[id]}%</span><button type="button" data-inc="${id}" aria-label="${tr('synPlus')}">+</button><button type="button" class="srm" data-rm="${id}" aria-label="${tr('synRemove')}">×</button></div></div>`).join('');
+    `<div class="stile" style="--c:${PAL[id]}"><div class="sname">${ixName(id)}</div><div class="sctl"><button type="button" data-dec="${id}" aria-label="${tr('synMinus')}" title="${tr('synMinus')}">−</button><span class="sval">${SYNTH_STATE.w[id]}%</span><button type="button" data-inc="${id}" aria-label="${tr('synPlus')}" title="${tr('synPlus')}">+</button><button type="button" class="srm" data-rm="${id}" aria-label="${tr('synRemove')}" title="${tr('synRemove')}">×</button></div></div>`).join('');
   const add = Object.keys(SYNTH_IX).filter(id => !(SYNTH_STATE.w[id] > 0));
   document.getElementById('synthAdd').innerHTML = add.map(id => `<button type="button" class="achip" data-add="${id}">+ ${ixName(id)}</button>`).join('');
   const sum = Object.values(SYNTH_STATE.w).reduce((a, b) => a + b, 0);
@@ -3733,6 +3734,7 @@ attachHover();
   const ft = document.createElement('div');
   ft.id = 'floattip';
   ft.setAttribute('role', 'tooltip');
+  ft.setAttribute('aria-hidden', 'true');
   document.body.appendChild(ft);
   const SEL = '[data-tip], a.info[href^="#gl-"]';
   const tipOf = el => {
@@ -3746,6 +3748,7 @@ attachHover();
     const txt = tipOf(el);
     if (!txt) return;
     ft.textContent = txt;
+    ft.removeAttribute('aria-hidden');
     ft.style.opacity = 1;
     const r = el.getBoundingClientRect();
     const w = ft.offsetWidth, h = ft.offsetHeight;
@@ -3756,7 +3759,7 @@ attachHover();
     ft.style.left = left + 'px';
     ft.style.top = top + 'px';
   };
-  const hide = () => { ft.style.opacity = 0; };
+  const hide = () => { ft.style.opacity = 0; ft.setAttribute('aria-hidden', 'true'); };
   document.addEventListener('mouseover', e => {
     const el = e.target.closest && e.target.closest(SEL);
     if (el) show(el); else hide();
@@ -3771,6 +3774,7 @@ attachHover();
   document.addEventListener('focusout', hide);
   window.addEventListener('scroll', hide, {passive: true});
 })();
+document.querySelectorAll('.tbl-wrap').forEach(e => e.setAttribute('tabindex', '0'));
 document.getElementById('bedrag').addEventListener('input', () => {
   manualAmount = readEur('bedrag');
   amountNow = manualAmount; infeasible = false;
