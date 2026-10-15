@@ -2811,6 +2811,7 @@ document.getElementById('regSel').addEventListener('change', e => gotoSub(e.targ
 let lastGeom = null;
 function niceCeil(v){ const p = Math.pow(10, Math.floor(Math.log10(v))); const s = p/2; return Math.ceil(v/s)*s; }
 
+if (innerWidth < 1000) { const yd = document.querySelector('#tabProg .duo details.collapse'); if (yd) yd.open = false; }
 function chartWidth(el){ const w = el && el.clientWidth; return w ? Math.max(300, Math.min(1200, Math.round(w))) : 760; }
 function drawChart(dSeries, aSeries, years){
   const W = chartWidth(document.getElementById('chartWrap')), H = W < 500 ? 240 : 300, L = W < 500 ? 52 : 64, R = 16, T_ = 16, B = 34;
