@@ -638,6 +638,23 @@
   .controls .presets-side{gap:8px;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr) minmax(0,1fr)}
   .controls .presets-side .rbtn{font-size:12px;padding:9px 4px;min-width:0;min-height:40px;line-height:1.2;overflow-wrap:anywhere}
   .controls .range-ends{margin-top:-4px}
+
+/* ===== Herontwerp Netto waarde, Belasting en Fondsen (ruimte benutten, minder blokken) ===== */
+.taxwrap{grid-template-columns:minmax(0,1fr)}
+.taxaside{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr);gap:16px 20px;align-items:start;padding:18px 20px}
+.taxaside > h2{grid-column:1/-1;margin:0}
+.taxaside > .pfield{margin:0}
+.taxaside .basebox,.taxaside .savebox{margin:0}
+@media (max-width:900px){ .taxaside{grid-template-columns:minmax(0,1fr)} }
+#tabWealth > section.panel:first-of-type{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.1fr);gap:14px 18px;align-items:end;padding:18px 20px}
+#tabWealth > section.panel:first-of-type > .pfield{margin:0}
+#tabWealth > section.panel:first-of-type > #wealthBody{grid-column:1/-1}
+#tabWealth .kpis{grid-template-columns:repeat(auto-fit,minmax(118px,1fr))}
+@media (max-width:820px){ #tabWealth > section.panel:first-of-type{grid-template-columns:minmax(0,1fr)} }
+#synthKpi{grid-template-columns:repeat(auto-fit,minmax(128px,1fr))}
+@media (min-width:1000px){ #synthKpi{grid-template-columns:repeat(7,minmax(0,1fr))} }
+.synth-kpis .skpi .lbl{min-height:0}
+#synthKpi .skpi .big{font-size:21px}
 </style>
 <meta name="theme-color" content="#2563eb">
 <link rel="manifest" href="manifest.webmanifest">
@@ -945,7 +962,7 @@
 <main class="taxwrap" id="tabTax" hidden>
 
   <aside class="panel taxaside" aria-label="Instellingen">
-    <h2 data-i18n="settings"></h2>
+    <h2 data-i18n="taxBarTitle"></h2>
     <div class="pfield"><span class="pfield-lbl" data-i18n="pickLbl"></span><div id="ovChips" role="group"></div></div>
     <p class="muted" id="pickMax" data-i18n="pickMax" hidden></p>
     <div class="basebox">
@@ -1415,7 +1432,7 @@ const T = {
     pickTitle: 'Landen vergelijken', grpMain: 'Basisvergelijking', grpOther: 'Meer landen', pickOf: n => `${n} van 4`, pickMax: 'Maximaal 4 landen tegelijk. Zet er eerst een uit.',
     hTotals: 'Totaal per land', hYears: 'Belasting per jaar', hNotes: 'Uitgangspunten per land', colBase: 'Belast over (gem. per jaar)',
     noteGeneric: 'Voor de extra landen is per jaar gerekend over de uitkeringen en de waardestijging van dat jaar. Het zijn indicaties, geen belastingadvies; controleer de actuele regels.',
-    ovN28: 'NL nieuw stelsel (2028)', ovPctOf: 'Over {n} jaar: {p} van je startvermogen ({s})', n28Add: 'ook NL 2028 tonen', wzHint: 'Liever stap voor stap?', tabInput: 'Startwaarden', inputTitle: 'Startwaarden', inputSub: 'Je uitgangspunten. De prognose rekent direct mee.', invGoTxt: 'Wil je je startwaarden aanpassen?', invGoLink: 'Ga naar Startwaarden', wzOpen: 'Start de startwizard', tax2028Note: 'Voorstel: vanaf 1-1-2028 wordt in box 3 alleen het werkelijke rendement belast, 36% boven een heffingsvrij bedrag van € 1.800. Nog onder voorbehoud van de Eerste Kamer. Hier gerekend alsof het vanaf het eerste jaar geldt, met de waardestijging als rendement. Verliezen worden niet verrekend.',
+    ovN28: 'NL nieuw stelsel (2028)', ovPctOf: 'Over {n} jaar: {p} van je startvermogen ({s})', n28Add: 'ook NL 2028 tonen', wzHint: 'Liever stap voor stap?', tabInput: 'Startwaarden', taxBarTitle: 'Landen vergelijken', inputTitle: 'Startwaarden', inputSub: 'Je uitgangspunten. De prognose rekent direct mee.', invGoTxt: 'Wil je je startwaarden aanpassen?', invGoLink: 'Ga naar Startwaarden', wzOpen: 'Start de startwizard', tax2028Note: 'Voorstel: vanaf 1-1-2028 wordt in box 3 alleen het werkelijke rendement belast, 36% boven een heffingsvrij bedrag van € 1.800. Nog onder voorbehoud van de Eerste Kamer. Hier gerekend alsof het vanaf het eerste jaar geldt, met de waardestijging als rendement. Verliezen worden niet verrekend.',
     taxEyebrow: 'Belasting · schatting', taxH1: 'Belasting per land',
     taxLead: 'Hoeveel belasting je per jaar betaalt in de landen die je kiest (tot 4 tegelijk), op basis van je inleg, periode en mix. Schattingen, geen belastingadvies.',
     saveLbl: 'Deel op spaarrekening (box 3)', saveHint: 'Spaargeld telt in box 3 tegen het spaartarief (1,28%) in plaats van het forfaitair rendement (6%). Rente op je spaargeld zit niet in de prognose.',
@@ -1650,7 +1667,7 @@ const T = {
     pickTitle: 'Compare countries', grpMain: 'Core comparison', grpOther: 'More countries', pickOf: n => `${n} of 4`, pickMax: 'Maximum 4 countries at once. Turn one off first.',
     hTotals: 'Total per country', hYears: 'Tax per year', hNotes: 'Assumptions per country', colBase: 'Taxed on (avg per year)',
     noteGeneric: 'For the extra countries tax is calculated per year on that year\'s distributions and increase in value. These are indications, not tax advice; check the current rules.',
-    ovN28: 'NL new system (2028)', ovPctOf: 'Over {n} years: {p} of your starting capital ({s})', n28Add: 'also show NL 2028', wzHint: 'Prefer step by step?', tabInput: 'Starting values', inputTitle: 'Starting values', inputSub: 'Your starting points. The forecast updates right away.', invGoTxt: 'Want to change your starting values?', invGoLink: 'Go to Starting values', wzOpen: 'Start the start wizard', tax2028Note: 'Proposal: from 1-1-2028 Dutch wealth taxes only the actual return, 36% above a tax-free amount of €1,800. Still subject to approval by the Senate. Calculated here as if it applies from year one, with the increase in value as return. Losses are not offset.',
+    ovN28: 'NL new system (2028)', ovPctOf: 'Over {n} years: {p} of your starting capital ({s})', n28Add: 'also show NL 2028', wzHint: 'Prefer step by step?', tabInput: 'Starting values', taxBarTitle: 'Compare countries', inputTitle: 'Starting values', inputSub: 'Your starting points. The forecast updates right away.', invGoTxt: 'Want to change your starting values?', invGoLink: 'Go to Starting values', wzOpen: 'Start the start wizard', tax2028Note: 'Proposal: from 1-1-2028 Dutch wealth taxes only the actual return, 36% above a tax-free amount of €1,800. Still subject to approval by the Senate. Calculated here as if it applies from year one, with the increase in value as return. Losses are not offset.',
     taxEyebrow: 'Tax · estimate', taxH1: 'Tax per country',
     taxLead: 'How much tax you pay per year in the Netherlands, the US and Argentina, based on your investment, period and mix. Estimates, not tax advice.',
     saveLbl: 'Share in savings account (Dutch wealth tax)', saveHint: 'Savings count in Dutch wealth tax at the savings rate (1.28%) instead of the deemed return (6%). Interest on your savings is not in the forecast.',
@@ -1885,7 +1902,7 @@ const T = {
     pickTitle: 'Comparar países', grpMain: 'Comparación base', grpOther: 'Más países', pickOf: n => `${n} de 4`, pickMax: 'Máximo 4 países a la vez. Desactiva uno primero.',
     hTotals: 'Total por país', hYears: 'Impuesto por año', hNotes: 'Supuestos por país', colBase: 'Gravado sobre (media/año)',
     noteGeneric: 'En los países adicionales se calcula cada año sobre las distribuciones y la subida de valor de ese año. Son indicaciones, no asesoramiento fiscal; comprueba las normas vigentes.',
-    ovN28: 'Países Bajos nuevo sistema (2028)', ovPctOf: 'En {n} años: {p} de tu capital inicial ({s})', n28Add: 'mostrar también P. Bajos 2028', wzHint: '¿Prefieres paso a paso?', tabInput: 'Valores iniciales', inputTitle: 'Valores iniciales', inputSub: 'Tus puntos de partida. La previsión se actualiza al momento.', invGoTxt: '¿Quieres cambiar tus valores iniciales?', invGoLink: 'Ir a Valores iniciales', wzOpen: 'Abrir el asistente inicial', tax2028Note: 'Propuesta: desde el 1-1-2028 la caja 3 solo grava el rendimiento real, al 36% por encima de un mínimo exento de 1.800 €. Aún pendiente de aprobación por el Senado. Aquí se calcula como si aplicara desde el primer año, con la subida del valor como rendimiento. Las pérdidas no se compensan.',
+    ovN28: 'Países Bajos nuevo sistema (2028)', ovPctOf: 'En {n} años: {p} de tu capital inicial ({s})', n28Add: 'mostrar también P. Bajos 2028', wzHint: '¿Prefieres paso a paso?', tabInput: 'Valores iniciales', taxBarTitle: 'Comparar países', inputTitle: 'Valores iniciales', inputSub: 'Tus puntos de partida. La previsión se actualiza al momento.', invGoTxt: '¿Quieres cambiar tus valores iniciales?', invGoLink: 'Ir a Valores iniciales', wzOpen: 'Abrir el asistente inicial', tax2028Note: 'Propuesta: desde el 1-1-2028 la caja 3 solo grava el rendimiento real, al 36% por encima de un mínimo exento de 1.800 €. Aún pendiente de aprobación por el Senado. Aquí se calcula como si aplicara desde el primer año, con la subida del valor como rendimiento. Las pérdidas no se compensan.',
     taxEyebrow: 'Impuestos · estimación', taxH1: 'Impuestos por país',
     taxLead: 'Cuánto impuesto pagas al año en Países Bajos, EE. UU. y Argentina, según tu inversión, periodo y mezcla. Estimaciones, no asesoramiento fiscal.',
     saveLbl: 'Parte en cuenta de ahorro (impuesto neerlandés sobre el patrimonio)', saveHint: 'El ahorro cuenta en impuesto neerlandés sobre el patrimonio al tipo de ahorro (1,28%) en lugar del rendimiento forfetario (6%). Los intereses de tu ahorro no están en la previsión.',
@@ -2587,6 +2604,7 @@ function renderOverview(){
     document.getElementById('arZero').hidden = true;
     document.getElementById('ovYearWrap').innerHTML = '';
     document.getElementById('taxChart').innerHTML = '';
+    document.getElementById('taxChart').style.display = 'none';
     document.getElementById('taxLegend').innerHTML = '';
     return;
   }
@@ -2632,6 +2650,7 @@ function renderOverview(){
   document.getElementById('yearStepNote').hidden = years <= 10;
 
   const TW = chartWidth(document.getElementById('taxChart').parentNode), TH = TW < 500 ? 220 : 240, TL = TW < 500 ? 64 : 90, TR = 16, TT = 16, TB = 34;
+  document.getElementById('taxChart').style.display = '';
   document.getElementById('taxChart').setAttribute('viewBox', `0 0 ${TW} ${TH}`);
   const vals = meta.flatMap(m => tx[m.k].map(v => v || 0));
   const topY = niceCeil(Math.max(1, ...vals) * 1.1);
