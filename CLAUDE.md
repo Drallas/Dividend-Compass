@@ -8,3 +8,5 @@ Lees eerst `DESIGN.md`. Dat is de ontwerpstandaard; wijk er niet van af zonder d
 - Taal: Nederlands, tenzij Allard in een andere taal schrijft. Bedragen in euro, datum als DD-MM-JJJJ.
 - Het hele front-end staat in `index.html` (HTML, CSS en JavaScript in één bestand).
 - Commits eindigen met de regels `Co-Authored-By:` en `Claude-Session:` zoals gebruikelijk in dit project.
+
+- Draai vóór elke merge naar main `python3 tests/run_tests.py`; alle tests moeten slagen. Zie TESTPLAN.md.
