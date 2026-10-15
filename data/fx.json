@@ -1,7 +1,11 @@
 {
-  "updated": null,
+  "updated": "2026-10-14",
   "base": "EUR",
-  "rates": {},
-  "avg12m": {},
-  "bron": "Frankfurter (ECB-referentiekoersen); wordt dagelijks bijgewerkt door GitHub Actions"
+  "rates": {
+    "USD": 1.1195
+  },
+  "avg12m": {
+    "USD": 1.1599
+  },
+  "bron": "ECB-referentiekoersen (ECB-XML); 12m-gemiddelde via Frankfurter. Wordt dagelijks bijgewerkt door GitHub Actions"
 }
