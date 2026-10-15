@@ -786,6 +786,7 @@
 
 <main class="fundswrap" id="tabWealth" hidden>
   <section class="panel">
+    <div class="regbar"><label for="wealthResid" data-i18n="residLbl"></label><select id="wealthResid"></select></div>
     <label class="wslider" for="wealthYrs"><span id="wealthYrsLbl"></span></label>
     <input type="range" id="wealthYrs" min="1" max="40" step="1" value="15">
     <div id="wealthBody"></div>
@@ -2707,14 +2708,17 @@ function applyStatic(){
 }
 
 function fillResid(){
-  const sel = document.getElementById('resid');
-  if (!sel) return;
-  const v = sel.value || '';
+  // Eén land-keuze, twee plekken: de invoer bovenaan en het tabblad Vermogen. Beide blijven gelijk.
   const countries = [['nl', tr('ovNL')], ['n28', tr('ovN28')], ...EXTRA.map(e => [e.k, e.names[lang]])]
     .sort((a, b) => a[1].localeCompare(b[1], lang));
   const opts = [['', tr('residPick')], ...countries, ['none', tr('wtNone')]];
-  sel.innerHTML = opts.map(([k, n]) => `<option value="${k}">${n}</option>`).join('');
-  sel.value = opts.some(o => o[0] === v) ? v : '';
+  ['resid', 'wealthResid'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    const v = sel.value || '';
+    sel.innerHTML = opts.map(([k, n]) => `<option value="${k}">${n}</option>`).join('');
+    sel.value = opts.some(o => o[0] === v) ? v : '';
+  });
 }
 function setLang(l){
   lang = l;
@@ -3351,6 +3355,7 @@ const WL = {
   es:{yrs:'Periodo', title:'Previsión de patrimonio neto', sub:'Cómo evoluciona tu patrimonio con las entradas, la estrategia y el escenario que elegiste. El neto es después de la estimación de impuestos que elijas.', kGross:'Patrimonio bruto', kNet:'Patrimonio neto', kPaid:'Pagado', kTax:'Impuestos, estimados', kDouble:'Doblar el neto', dNo:'No dentro del periodo', legG:'Patrimonio bruto', legN:'Patrimonio neto', legI:'Invertido', year:'Año', colFund:'En fondos', colCash:'Pagado', colTax:'Impuestos acumulados', colNet:'Neto', colCost:'Costes (TER)', kCost:'Pagado en costes (TER)', costNote:'Los costes ya están incluidos en el valor de los fondos y no se restan otra vez. Se muestran para que veas lo que te cuestan.', noDom:'Elige arriba tu país de residencia; hasta entonces los impuestos son 0.', resNote:'Estimación para el país de residencia elegido. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.', noTax:'No hay estimación de impuestos elegida, así que los impuestos son 0.', note:'La estimación de impuesto neerlandés sobre el patrimonio usa el mínimo exento y el rendimiento forfait de la pestaña Impuestos. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.'}
 };
 function renderWealth(){
+  document.getElementById('wealthResid').value = document.getElementById('resid').value;
   const el = document.getElementById('wealthBody');
   if (!el) return;
   const W = WL[lang] || WL.nl;
@@ -3483,7 +3488,12 @@ function setTaxDefaults(){
   document.querySelector('.savebox').style.display = r === 'nl' ? '' : 'none';
   updateChips();
 }
-document.getElementById('resid').addEventListener('change', () => { setTaxDefaults(); recalc(); });
+document.getElementById('resid').addEventListener('change', () => { document.getElementById('wealthResid').value = document.getElementById('resid').value; setTaxDefaults(); recalc(); });
+document.getElementById('wealthResid').addEventListener('change', e => {
+  const r = document.getElementById('resid');
+  r.value = e.target.value;
+  r.dispatchEvent(new Event('change'));
+});
 /* ============ merk, menu's, scenario's, export, kosten ============ */
 const APP_VERSION = '0.2';
 const SKEY = 'dk-scenarios';
