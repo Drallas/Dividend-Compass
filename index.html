@@ -484,12 +484,25 @@
   .verline span:first-child{font-weight:700;color:var(--text)}
   .warnbar{grid-column:1/-1;padding:12px 14px;border-radius:12px;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.55);color:var(--text);font-size:13px;line-height:1.45}
   @page{size:A4;margin:12mm}
+  #printHead{display:none}
   @media print{
-    body{background:#fff!important;color:#000!important}
+    @page{size:A4;margin:12mm}
+    body{background:#fff!important;color:#000!important;font-size:10.5pt}
+    #printHead{display:block!important;border-bottom:1.5pt solid #000;padding:0 0 6pt;margin:0 0 10pt;font-size:10pt}
+    #printHead b{font-size:13pt}
+    #printHead div{margin-top:2pt}
+    table{width:100%!important;border-collapse:collapse;font-size:9pt}
+    thead{display:table-header-group}
+    tr,td,th{break-inside:avoid}
+    th,td{border-bottom:0.5pt solid #999;padding:2pt 4pt}
+    svg,canvas,img{max-width:100%!important;height:auto!important}
+    *{box-shadow:none!important;text-shadow:none!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    a{color:#000!important;text-decoration:none!important}
     .top .topbtns,.tabs,.helplink,.foot-note,.vibe,.warnbar,dialog,#floattip,.brand .brandtag,.topbar{display:none!important}
     .top{padding:0 0 8px!important}
     .layout,.fundswrap,.taxwrap{display:block!important;padding:0!important}
-    .panel{box-shadow:none!important;border:0!important;break-inside:avoid}
+    .panel{box-shadow:none!important;border:0!important;break-inside:avoid;page-break-inside:avoid}
+    .panel h2,.panel h3{break-after:avoid}
     details.collapse > summary{display:none}
     main[hidden]{display:none!important}
   }
@@ -1109,6 +1122,8 @@ svg#chart .line.acc{stroke-width:2}
       <label for="savePct" data-i18n="saveLbl"></label> <strong id="savePctLbl">0%</strong> <a class="info" href="#" data-tip-i18n="saveHint">?</a>
       </div>
       <label class="savamt"><span data-i18n="saveAmtLbl"></span><input type="text" inputmode="numeric" id="savAmt"></label>
+      <label class="savamt"><span data-i18n="saveRateLbl"></span><input type="text" inputmode="decimal" id="savRate" value="2"><span class="savrate-unit">%</span></label>
+      <p class="savint" id="savInt"></p>
       <input type="range" id="savePct" min="0" max="100" step="0.25" value="0" style="--p:0%" aria-labelledby="savePctLbl">
     </div>
   </aside>
@@ -1294,12 +1309,14 @@ svg#chart .line.acc{stroke-width:2}
   <div id="scenList"></div>
 </div></dialog>
 
+<div id="printHead" aria-hidden="true"></div>
+
 <dialog id="expDlg" class="helpdlg smalldlg" aria-labelledby="expTitle"><div class="helpbody">
   <button type="button" class="helpx" data-close="expDlg" aria-label="×">×</button>
   <h2 id="expTitle" data-i18n="exportTitle"></h2>
   <p class="sub" data-i18n="exportIntro"></p>
   <p class="sub scenmsg" id="expMsg"></p>
-  <div class="scenbtns"><button type="button" class="rbtn" id="expPdf" data-i18n="exportPdf"></button><button type="button" class="rbtn" id="expCsv" data-i18n="exportCsv"></button></div>
+  <div class="scenbtns"><button type="button" class="rbtn" id="expPdf" data-i18n="exportPdf"></button><button type="button" class="rbtn" id="expCsv" data-i18n="exportCsv"></button><button type="button" class="rbtn" id="expJson" data-i18n="exportJson"></button></div>
 </div></dialog>
 
 <div id="setDlg" class="flymenu" popover>
@@ -1419,16 +1436,17 @@ const T = {
     scenIntro: 'Bewaar de huidige invoerwaarden, strategie en fondsaannames onder een naam. Alles blijft in deze browser; wis je browsergegevens, dan verdwijnen ze.',
     scenNamePh: 'Naam',
     scenDefault: 'Scenario',
-    scenSave: 'Bewaar huidige invoer', scenDup: 'Er bestaat al een profiel met deze naam. Kies een andere naam, of werk het bestaande profiel bij.', scenUpd: 'Bijwerken met huidige invoer', scenApplyLbl: 'Huidige instellingen toepassen op een bestaand profiel', scenApply: 'Toepassen', scenActive: 'Actief', scenRename: 'Hernoem', agoNow: 'zojuist', agoMin: n => `${n} min geleden`, agoHr: n => `${n} uur geleden`,
+    scenSave: 'Bewaar huidige invoer', scenDup: 'Er bestaat al een profiel met deze naam. Kies een andere naam, of werk het bestaande profiel bij.', scenUpd: 'Bijwerken met huidige invoer', scenApplyLbl: 'Huidige instellingen toepassen op een bestaand profiel', scenApply: 'Toepassen', saveRateLbl: 'Rente spaargeld per jaar', saveRateYr: 'Rente per jaar op spaargeld', saveRateNote: 'Voorbeeld, nog niet in de totalen verwerkt.', scenActive: 'Actief', scenRename: 'Hernoem', agoNow: 'zojuist', agoMin: n => `${n} min geleden`, agoHr: n => `${n} uur geleden`,
     scenLoad: 'Laad',
     scenDel: 'Verwijder',
     scenEmpty: 'Nog geen scenario\'s opgeslagen.',
     scenFull: 'Je kunt maximaal 20 scenario\'s bewaren. Verwijder er eerst een.',
     scenFail: 'Opslaan lukt niet in deze browser.',
     exportTitle: 'Exporteren',
-    exportIntro: 'PDF opent het afdrukvenster; kies daar "Opslaan als PDF". CSV bevat de jaartabel en het resultaat, te openen in Excel.',
+    exportIntro: 'PDF: afdrukvenster, kies "Opslaan als PDF" (A4, met kopregel). CSV: jaartabel en resultaat voor Excel of Sheets. JSON: volledige invoer en tabellen als data.',
     exportPdf: 'Als PDF (afdrukken)',
-    exportCsv: 'Als CSV',
+    exportCsv: 'Als CSV (spreadsheet)',
+    exportJson: 'Als JSON (data)',
     setTitle: 'Menu',
     grpData: 'Gegevens', grpSet: 'Instellingen', grpInfo: 'Info', menuLang: 'Taal', menuTheme: 'Thema', menuCur: 'Valuta', menuReset: 'Alle invoer wissen', menuWizard: 'Startwizard', resetConfirm: 'Alle ingevulde waarden en eigen instellingen wissen? De app start daarna opnieuw.',
     setTheme: 'Thema',
@@ -1654,16 +1672,17 @@ const T = {
     scenIntro: 'Save the current inputs, strategy and fund assumptions under a name. Everything stays in this browser; clearing browser data removes them.',
     scenNamePh: 'Name',
     scenDefault: 'Scenario',
-    scenSave: 'Save current inputs', scenDup: 'A profile with this name already exists. Choose another name, or update the existing profile.', scenUpd: 'Update with current inputs', scenApplyLbl: 'Apply current settings to an existing profile', scenApply: 'Apply', scenActive: 'Active', scenRename: 'Rename', agoNow: 'just now', agoMin: n => `${n} min ago`, agoHr: n => `${n} h ago`,
+    scenSave: 'Save current inputs', scenDup: 'A profile with this name already exists. Choose another name, or update the existing profile.', scenUpd: 'Update with current inputs', scenApplyLbl: 'Apply current settings to an existing profile', scenApply: 'Apply', saveRateLbl: 'Interest on savings per year', saveRateYr: 'Interest per year on savings', saveRateNote: 'Example only, not yet in the totals.', scenActive: 'Active', scenRename: 'Rename', agoNow: 'just now', agoMin: n => `${n} min ago`, agoHr: n => `${n} h ago`,
     scenLoad: 'Load',
     scenDel: 'Delete',
     scenEmpty: 'No saved scenarios yet.',
     scenFull: 'You can keep up to 20 scenarios. Delete one first.',
     scenFail: 'Saving does not work in this browser.',
     exportTitle: 'Export',
-    exportIntro: 'PDF opens the print window; choose "Save as PDF". CSV contains the yearly table and the results, to open in Excel.',
+    exportIntro: 'PDF: print window, choose "Save as PDF" (A4, with header). CSV: yearly table and results for Excel or Sheets. JSON: full inputs and tables as data.',
     exportPdf: 'As PDF (print)',
-    exportCsv: 'As CSV',
+    exportCsv: 'As CSV (spreadsheet)',
+    exportJson: 'As JSON (data)',
     setTitle: 'Menu',
     grpData: 'Data', grpSet: 'Settings', grpInfo: 'Info', menuLang: 'Language', menuTheme: 'Theme', menuCur: 'Currency', menuReset: 'Clear all input', menuWizard: 'Getting started', resetConfirm: 'Clear all entered values and own settings? The app will restart.',
     setTheme: 'Theme',
@@ -1889,16 +1908,17 @@ const T = {
     scenIntro: 'Guarda las entradas, la estrategia y los supuestos de fondos con un nombre. Todo se queda en este navegador; si borras los datos del navegador, desaparecen.',
     scenNamePh: 'Nombre',
     scenDefault: 'Escenario',
-    scenSave: 'Guardar entradas actuales', scenDup: 'Ya existe un perfil con ese nombre. Elige otro nombre o actualiza el perfil existente.', scenUpd: 'Actualizar con las entradas actuales', scenApplyLbl: 'Aplicar los ajustes actuales a un perfil existente', scenApply: 'Aplicar', scenActive: 'Activo', scenRename: 'Renombrar', agoNow: 'justo ahora', agoMin: n => `hace ${n} min`, agoHr: n => `hace ${n} h`,
+    scenSave: 'Guardar entradas actuales', scenDup: 'Ya existe un perfil con ese nombre. Elige otro nombre o actualiza el perfil existente.', scenUpd: 'Actualizar con las entradas actuales', scenApplyLbl: 'Aplicar los ajustes actuales a un perfil existente', scenApply: 'Aplicar', saveRateLbl: 'Interés del ahorro por año', saveRateYr: 'Interés anual del ahorro', saveRateNote: 'Solo ejemplo, aún no incluido en los totales.', scenActive: 'Activo', scenRename: 'Renombrar', agoNow: 'justo ahora', agoMin: n => `hace ${n} min`, agoHr: n => `hace ${n} h`,
     scenLoad: 'Cargar',
     scenDel: 'Eliminar',
     scenEmpty: 'Aún no hay escenarios guardados.',
     scenFull: 'Puedes guardar hasta 20 escenarios. Elimina uno primero.',
     scenFail: 'No se puede guardar en este navegador.',
     exportTitle: 'Exportar',
-    exportIntro: 'PDF abre la ventana de impresión; elige "Guardar como PDF". CSV contiene la tabla anual y los resultados, para abrir en Excel.',
+    exportIntro: 'PDF: ventana de impresión, elige "Guardar como PDF" (A4, con cabecera). CSV: tabla anual y resultados para Excel o Sheets. JSON: entradas completas y tablas como datos.',
     exportPdf: 'Como PDF (imprimir)',
-    exportCsv: 'Como CSV',
+    exportCsv: 'Como CSV (hoja de cálculo)',
+    exportJson: 'Como JSON (datos)',
     setTitle: 'Menú',
     grpData: 'Datos', grpSet: 'Ajustes', grpInfo: 'Info', menuLang: 'Idioma', menuTheme: 'Tema', menuCur: 'Moneda', menuReset: 'Borrar todos los datos', menuWizard: 'Inicio guiado', resetConfirm: '¿Borrar todos los valores introducidos y los ajustes propios? La app se reiniciará.',
     setTheme: 'Tema',
@@ -2988,6 +3008,12 @@ function syncGoal(){
   if (!on && pay && pay.getAttribute('aria-selected') === 'true') document.querySelector('.tabs .tab[data-tab="tabProg"]').click();
 }
 // Toont het percentage en het bijbehorende eurobedrag van het startvermogen dat op de spaarrekening staat.
+function rateVal(){ const v = parseFloat(String(document.getElementById('savRate').value).replace(',', '.')); return isFinite(v) && v >= 0 ? v : 0; }
+function updateSavInt(){
+  const el = document.getElementById('savInt'); if (!el) return;
+  const eur = amountNow * savePct / 100 * rateVal() / 100;
+  el.innerHTML = `${tr('saveRateYr')}: <b>${EUR(eur)}</b> <span class="muted">· ${tr('saveRateNote')}</span>`;
+}
 function updateSaveLbl(){
   const el = document.getElementById('savePctLbl'); if (!el) return;
   const eur = amountNow * savePct / 100;
@@ -2997,7 +3023,9 @@ function updateSaveLbl(){
     ai.value = eur > 0 ? fmtNum(toDisp(Math.round(eur))) : '';
     ai.disabled = amountNow <= 0;
   }
+  updateSavInt();
 }
+document.getElementById('savRate').addEventListener('input', () => { updateSavInt(); saveLast(); });
 function recalc(){
   updateSaveLbl();
   if (typeof synthCalc === 'function') synthCalc();
@@ -4198,6 +4226,7 @@ function captureState(){
     wgoal: readEur('goalCap'),
     tax: Object.keys(taxOn).filter(k => taxOn[k]),
     savePct: savePct,
+    savRate: rateVal(),
     target: readEur('target'),
     funds: funds.map(f => ({id: f.id, w: f.w, g: f.g, y: f.y, ter: f.ter}))
   };
@@ -4216,6 +4245,7 @@ function applyState(s){
   if (Array.isArray(s.tax)) { Object.keys(taxOn).forEach(k => { taxOn[k] = s.tax.includes(k) && taxAllowed(k); }); updateChips(); }
   else setTaxDefaults();
   setEurField('target', s.target);
+  if (typeof s.savRate === 'number') document.getElementById('savRate').value = String(s.savRate).replace('.', ',');
   if (typeof s.savePct === 'number'){
     savePct = Math.min(100, Math.max(0, s.savePct));
     const sp = document.getElementById('savePct');
@@ -4376,14 +4406,46 @@ function exportCsv(){
     document.getElementById('expMsg').textContent = res === 'saved' ? tr('csvSaved') : (res === 'declined' ? '' : tr('csvUnavailable'));
   });
 }
+function tableRows(tbl){
+  const trs = [...tbl.querySelectorAll('tr')];
+  if (!trs.length) return [];
+  const head = [...trs[0].children].map(c => c.textContent.replace(/\s+/g, ' ').trim());
+  return trs.slice(1).map(r => {
+    const o = {};
+    [...r.children].forEach((c, i) => { o[head[i] || ('col' + (i + 1))] = c.textContent.replace(/\s+/g, ' ').trim(); });
+    return o;
+  });
+}
+function exportJson(){
+  const s = captureState();
+  const tables = {};
+  ['yearly', 'results'].forEach(id => {
+    const tb = document.getElementById(id);
+    if (tb) tables[id] = tableRows(tb.closest('table'));
+  });
+  const payload = {
+    format: 'dividend-compass-export', version: 1, app: APP_VERSION,
+    exportedAt: new Date().toISOString(), inputs: s, tables
+  };
+  saveText(JSON.stringify(payload, null, 2), 'dividend-compass.json').then(res => {
+    document.getElementById('expMsg').textContent = res === 'saved' ? tr('csvSaved') : (res === 'declined' ? '' : tr('csvUnavailable'));
+  });
+}
 document.getElementById('expCsv').addEventListener('click', exportCsv);
-getDownloads().then(dl => { if (!dl) document.getElementById('expCsv').hidden = true; });
+document.getElementById('expJson').addEventListener('click', exportJson);
+getDownloads().then(dl => { if (!dl) { document.getElementById('expCsv').hidden = true; document.getElementById('expJson').hidden = true; } });
 document.getElementById('expPdf').addEventListener('click', () => {
   document.getElementById('expDlg').close();
   setTimeout(() => window.print(), 200);
 });
 window.addEventListener('beforeprint', () => {
   document.querySelectorAll('details.collapse').forEach(d => { d.open = true; });
+  const s = captureState();
+  const dom = s.resid ? s.resid.toUpperCase() : '—';
+  const head = document.getElementById('printHead');
+  head.innerHTML = `<b>Dividend Compass</b> · ${new Date().toLocaleDateString('nl-NL')}` +
+    `<div>${tr('invested')}: <b>${EUR(s.amount)}</b> · ${tr('years')}: <b>${tr('years')(s.years)}</b> · ${tr('mix')}: <b>${Math.round(s.mix)}% / ${Math.round(100 - s.mix)}%</b></div>` +
+    `<div>${tr('scenario')}: <b>${tr(SCEN_KEY[s.scen])}</b> · Domicilie: <b>${dom}</b> · v${APP_VERSION}</div>`;
 });
 
 /* ---- kosten (TER) ---- */

@@ -31,12 +31,17 @@ with sync_playwright() as p:
     pg.evaluate("() => { manualAmount = 330000; amountNow = 330000; monthlyAmt = 250; recalc(); }")
     pg.evaluate("() => { taxOn.us = true; taxOn.ar = true; updateChips(); }")
     pg.evaluate("() => { const s = document.getElementById('savePct'); s.value = 7.25; s.dispatchEvent(new Event('input')); }")
+    pg.evaluate("document.querySelector('.tabs .tab[data-tab=\"tabTax\"]').click()"); pg.wait_for_timeout(300)
+    pg.fill("#savRate", "3,5")
+    pg.wait_for_timeout(100)
     before = pg.evaluate("captureState()")
-    pg.evaluate("() => { savePct = 0; document.getElementById('savePct').value = 0; }")
+    pg.evaluate("() => { savePct = 0; document.getElementById('savePct').value = 0; document.getElementById('savRate').value = '1'; }")
     pg.evaluate("s => applyState(s)", before)
     pg.wait_for_timeout(200)
     after = pg.evaluate("captureState()")
     check("1 profiel opslaan en laden: waarden gelijk", before == after, f"{before} vs {after}")
+    check("1a spaarrente opgeslagen en teruggezet", pg.input_value("#savRate") == "3,5", pg.input_value("#savRate"))
+    check("1c voorbeeld spaarrente toont bedrag", "€" in pg.inner_text("#savInt"), pg.inner_text("#savInt"))
     check("1b geen fouten bij laden", not errs, errs)
     pg.close()
 
@@ -61,9 +66,9 @@ with sync_playwright() as p:
     # 4. Profielen blijven na reset
     pg, errs = new_page(b)
     pg.evaluate("() => localStorage.setItem('dk-scenarios', JSON.stringify([{name:'Test',date:'15-10-2026',ts:Date.now(),data:{}}]))")
-    pg.evaluate("document.getElementById('menuReset').click()"); pg.wait_for_timeout(800)
+    pg.evaluate("document.getElementById('menuReset').click()"); pg.wait_for_timeout(1200)
     kept = pg.evaluate("localStorage.getItem('dk-scenarios')")
-    check("4 profielen na reset behouden", kept is not None and "Test" in kept)
+    check("4 profielen na reset behouden", kept is not None and "Test" in kept, kept)
     # 4b. Alle andere invoer is gewist
     st = pg.evaluate("() => { try { return JSON.parse(localStorage.getItem('dk-last-v2')) || {}; } catch (e) { return {}; } }")
     clean = st.get("resid", "") == "" and len(st.get("tax", [])) == 0 and st.get("amount", 0) == 0
