@@ -45,8 +45,6 @@
   .lede{margin:0;color:var(--muted);max-width:760px}
   .topbtns{display:flex;gap:10px;align-items:center;flex-wrap:nowrap;flex-shrink:0;margin-left:auto}
   .topbtns > *{white-space:nowrap}
-  .curbtn{font-size:18px;font-weight:600;line-height:1;color:var(--text)}
-  .curbtn:hover{color:var(--div)}
   .curbtn:disabled{cursor:default}
   .helplink{display:inline-block;font-size:12.5px;font-weight:600;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);box-shadow:var(--shadow);text-decoration:none}
   .helplink:hover{color:var(--div)}
@@ -611,7 +609,7 @@
     <div class="topbtns">
       <button type="button" class="iconbtn" data-open="langDlg" aria-label="Language"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></button>
       <button type="button" class="iconbtn" data-open="themeDlg" aria-label="Theme"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
-      <button type="button" class="iconbtn curbtn" id="curBtn" aria-label="Valuta" disabled><span>€</span></button>
+      <button type="button" class="iconbtn curbtn" id="curBtn" aria-label="Valuta" disabled><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><text id="curGlyph" x="12" y="16.5" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor" stroke="none" font-family="inherit">€</text></svg></button>
       <span id="langCur" hidden></span>
       <button type="button" class="iconbtn" data-open="setDlg" aria-label="Menu"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
     </div>
@@ -2147,7 +2145,7 @@ function updateCurUI(){
   document.querySelectorAll('.euro > span').forEach(sp => { sp.textContent = curSym(); });
   const b = document.getElementById('curBtn');
   if (!b) return;
-  b.textContent = curSym();
+  const g = document.getElementById('curGlyph'); if (g) g.textContent = curSym();
   b.disabled = !(fxRate > 0);
   b.title = fxRate > 0 ? (curOn() ? '$ · 1 EUR = ' + fxRate.toFixed(4) + ' USD' + (fxDate ? ' (' + fxDate + ')' : '') : '€ · schakel naar dollar') : '';
   b.setAttribute('aria-pressed', curOn() ? 'true' : 'false');
