@@ -4222,7 +4222,10 @@ function renderScenarios(){
   const list = document.getElementById('scenList');
   const arr = loadScen();
   if (!arr.length){ list.innerHTML = `<p class="sub">${tr('scenEmpty')}</p>`; return; }
-  list.innerHTML = arr.map((x, i) => {
+  // Alfabetisch op naam; de index verwijst nog naar de opslag, zodat laden, verwijderen en toepassen blijven kloppen.
+  const order = arr.map((x, i) => i).sort((a, b) => arr[a].name.localeCompare(arr[b].name, loc(), {sensitivity: 'base'}));
+  list.innerHTML = order.map(i => {
+    const x = arr[i];
     const d = x.data;
     const meta = `${EUR(d.amount)} · ${tr('years')(d.years)} · ${tr(SCEN_KEY[d.scen])} · ${whenTxt(x)}`;
     return `<div class="scenrow"><div><b>${esc(x.name)}</b><span>${meta}</span></div>
@@ -4233,7 +4236,7 @@ function renderScenarios(){
     if (s){ applyState(s.data); document.getElementById('scenDlg').close(); }
   }));
   const sel = document.getElementById('scenApplySel');
-  sel.innerHTML = arr.map((x, i) => `<option value="${i}">${esc(x.name)}</option>`).join('');
+  sel.innerHTML = order.map(i => `<option value="${i}">${esc(arr[i].name)}</option>`).join('');
   document.getElementById('scenApplyRow').hidden = !arr.length;
   list.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => {
     const a = loadScen(); a.splice(+b.dataset.del, 1); storeScen(a); renderScenarios();
