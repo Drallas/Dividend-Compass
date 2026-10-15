@@ -549,6 +549,9 @@
 #taxKpis .taxcardwrap .kpi{flex:1}
 #taxKpis .n28opt{display:flex;align-items:center;gap:6px;font-size:.9em;color:var(--muted);padding:0 4px;cursor:pointer}
 #taxKpis .n28opt input{margin:0;accent-color:var(--text)}
+.n28sec{display:flex;align-items:center;gap:8px;margin:0 0 14px;cursor:pointer}
+.n28sec input{margin:0;accent-color:var(--text)}
+.n28sec:has(input:disabled){opacity:.5;cursor:default}
     .sortbar{flex-wrap:wrap}
     .sortbar > span:first-child{flex:0 0 100%}
     .sortbar .rbtn{flex:1 1 0;min-width:0;white-space:normal;text-align:center;padding:8px 4px;line-height:1.2}
@@ -966,6 +969,7 @@
   <section class="taxpane" id="secNL" aria-labelledby="nlTitle">
     <h2 id="nlTitle"><span data-i18n="nlTitle"></span> <a class="info" href="#" data-tip-i18n="nlText">?</a></h2>
     <p data-i18n="nlText" hidden></p>
+    <label class="n28opt n28sec"><input type="checkbox" id="n28Sec"><span data-i18n="n28Add"></span></label>
     <div class="tbl-wrap mcards">
       <table class="tbl">
         <thead><tr><th data-i18n="colItem"></th><th data-i18n="colValue"></th></tr></thead>
@@ -2510,6 +2514,7 @@ function renderTaxCards(list, totals, amount, years){
 
 function renderOverview(){
   normN28();
+  { const ns = document.getElementById('n28Sec'); if (ns){ ns.checked = !!taxOn.n28; ns.disabled = !taxOn.nl; } }
   if (!taxAllowed(subTab)) subTab = 'ov';
   if (subTab === 'n28' && !taxOn.n28) subTab = 'ov';
   applySub();
@@ -2957,7 +2962,7 @@ function applyStatic(){
 
 function fillResid(){
   // Eén land-keuze, twee plekken: de invoer bovenaan en het tabblad Vermogen. Beide blijven gelijk.
-  const countries = [['nl', tr('ovNL')], ['n28', tr('ovN28')], ['ar', tr('ovAR')], ...EXTRA.map(e => [e.k, e.names[lang]])]
+  const countries = [['nl', tr('ovNL')], ['ar', tr('ovAR')], ...EXTRA.map(e => [e.k, e.names[lang]])]
     .sort((a, b) => a[1].localeCompare(b[1], lang));
   const opts = [['', tr('residPick')], ...countries, ['none', tr('wtNone')]];
   ['resid'].forEach(id => {
@@ -3608,6 +3613,7 @@ document.getElementById('savePct').addEventListener('input', e => {
   document.getElementById('savePctLbl').textContent = savePct + '%';
   recalc();
 });
+document.getElementById('n28Sec').addEventListener('change', e => { taxOn.n28 = e.target.checked; saveLast(); renderOverview(); });
 document.getElementById('taxKpis').addEventListener('change', e => {
   const cb = e.target.closest('input[data-n28]');
   if (!cb) return;
