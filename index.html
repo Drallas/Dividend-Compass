@@ -2925,7 +2925,7 @@ function neededAmountNow(){
 function syncAmountFromTarget(){
   const { targetMonth, need } = neededAmountNow();
   if (targetMonth <= 0) { infeasible = false; amountNow = manualAmount; }
-  else if (need === null || need > MAX_BEDRAG) { infeasible = true; amountNow = manualAmount; }
+  else if (need === null) { infeasible = false; amountNow = manualAmount; }
   else { infeasible = false; amountNow = Math.round(need / 1000) * 1000; }
   renderBedrag();
 }
