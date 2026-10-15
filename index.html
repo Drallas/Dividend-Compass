@@ -262,6 +262,7 @@
   .mixgroup{display:grid;gap:6px;margin:0 0 16px;max-width:520px}
   .mixgroup .mix-legend strong{font-size:14px}
   .sortbar{display:flex;gap:8px;align-items:center;margin:0 0 12px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+  .subhead.perland{margin:32px 0 4px}
   button.taxcard{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;appearance:none}
   .taxcard.off{opacity:.42}
   .taxcard .lbl::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-right:7px;vertical-align:1px}
@@ -892,8 +893,8 @@
     </div>
   </aside>
   <div class="stack">
+  <h3 class="subhead perland" data-i18n="hPerCountry"></h3>
   <div class="sortbar">
-    <span data-i18n="sortLbl"></span>
     <button type="button" class="rbtn" data-sort="desc" aria-pressed="true" data-i18n="sortDesc"></button>
     <button type="button" class="rbtn" data-sort="alpha" aria-pressed="false" data-i18n="sortAlpha"></button>
     <button type="button" class="rbtn" data-sort="fixed" aria-pressed="false" data-i18n="sortFixed"></button>
@@ -1330,7 +1331,7 @@ const T = {
     'gl.reinv.t': 'Uitkeringen herinvesteren', 'gl.reinv.d': 'Aan: de uitkering gaat terug in het fonds en groeit mee. Uit: de uitkering wordt aan jou uitbetaald en apart getoond als "Uitbetaald".',
     'gl.uit.t': 'Uitbetaald', 'gl.uit.d': 'Het geld dat je per uitkering ontvangt als je niet herinvesteert. Het verlaat het fonds en telt niet meer mee in het vermogen, maar het is niet verloren.',
     vibePre: 'Vibe coded met', vibePost: 'door Drallas', vibeTitle: 'Bekijk de README op GitHub', aboutRepo: 'Broncode op GitHub', na: 'n.v.t.', none: '–', helpLink: 'Help', mSuffix: ' mln',
-    sortLbl: 'Sorteren:', sortFixed: 'Vaste volgorde', sortDesc: 'Hoogste bedrag eerst', sortAlpha: 'Alfabetisch',
+    hPerCountry: 'Per land', sortLbl: 'Sorteren:', sortFixed: 'Vaste volgorde', sortDesc: 'Hoogste bedrag eerst', sortAlpha: 'Alfabetisch',
     baseTitle: 'Berekend over', baseInv: 'Startvermogen', baseMonthly: 'Maandelijkse inleg', baseYears: 'Looptijd', baseYrs: 'jaar', baseChange: 'Aanpassen op Prognose',
     pickTitle: 'Landen vergelijken', grpMain: 'Basisvergelijking', grpOther: 'Meer landen', pickOf: n => `${n} van 4`, pickMax: 'Maximaal 4 landen tegelijk. Zet er eerst een uit.',
     hTotals: 'Totaal per land', hYears: 'Belasting per jaar', hNotes: 'Uitgangspunten per land', colBase: 'Belast over (gem. per jaar)',
@@ -1564,7 +1565,7 @@ const T = {
     'gl.reinv.t': 'Reinvest distributions', 'gl.reinv.d': 'On: the distribution goes back into the fund and grows. Off: the distribution is paid out to you and shown as "Paid out".',
     'gl.uit.t': 'Paid out', 'gl.uit.d': 'The money you receive per distribution when you do not reinvest. It leaves the fund and no longer counts toward the value, but it is not lost.',
     vibePre: 'Vibe coded with', vibePost: 'by Drallas', vibeTitle: 'View the README on GitHub', aboutRepo: 'Source code on GitHub', na: 'n/a', none: '–', helpLink: 'Help', mSuffix: 'm',
-    sortLbl: 'Sort:', sortFixed: 'Fixed order', sortDesc: 'Highest amount first', sortAlpha: 'Alphabetical',
+    hPerCountry: 'Per country', sortLbl: 'Sort:', sortFixed: 'Fixed order', sortDesc: 'Highest amount first', sortAlpha: 'Alphabetical',
     baseTitle: 'Calculated on', baseInv: 'Starting capital', baseMonthly: 'Monthly contribution', baseYears: 'Period', baseYrs: 'years', baseChange: 'Change on Forecast',
     pickTitle: 'Compare countries', grpMain: 'Core comparison', grpOther: 'More countries', pickOf: n => `${n} of 4`, pickMax: 'Maximum 4 countries at once. Turn one off first.',
     hTotals: 'Total per country', hYears: 'Tax per year', hNotes: 'Assumptions per country', colBase: 'Taxed on (avg per year)',
@@ -1798,7 +1799,7 @@ const T = {
     'gl.reinv.t': 'Reinvertir distribuciones', 'gl.reinv.d': 'Sí: la distribución vuelve al fondo y crece. No: la distribución se te paga y aparece como "Pagado".',
     'gl.uit.t': 'Pagado', 'gl.uit.d': 'El dinero que recibes por cada distribución si no reinviertes. Sale del fondo y ya no cuenta en el valor, pero no se pierde.',
     vibePre: 'Vibe coded con', vibePost: 'por Drallas', vibeTitle: 'Ver el README en GitHub', aboutRepo: 'Código en GitHub', na: 'n/d', none: '–', helpLink: 'Ayuda', mSuffix: ' mill.',
-    sortLbl: 'Ordenar:', sortFixed: 'Orden fijo', sortDesc: 'Mayor importe primero', sortAlpha: 'Alfabético',
+    hPerCountry: 'Por país', sortLbl: 'Ordenar:', sortFixed: 'Orden fijo', sortDesc: 'Mayor importe primero', sortAlpha: 'Alfabético',
     baseTitle: 'Calculado sobre', baseInv: 'Capital inicial', baseMonthly: 'Aportación mensual', baseYears: 'Plazo', baseYrs: 'años', baseChange: 'Cambiar en Previsión',
     pickTitle: 'Comparar países', grpMain: 'Comparación base', grpOther: 'Más países', pickOf: n => `${n} de 4`, pickMax: 'Máximo 4 países a la vez. Desactiva uno primero.',
     hTotals: 'Total por país', hYears: 'Impuesto por año', hNotes: 'Supuestos por país', colBase: 'Gravado sobre (media/año)',
