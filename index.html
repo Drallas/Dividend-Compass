@@ -214,6 +214,8 @@
   .glossary dd{margin:4px 0 0;color:var(--muted);font-size:13px}
   .glossary div:target,.glossary div.hl{background:var(--div-soft);border-radius:10px;padding:12px;margin:-4px}
   .glossary[hidden]{display:none}
+  .glsrc{display:inline-block;margin-top:6px;font-size:12px;font-weight:600;color:var(--div);text-decoration:none}
+  .glsrc:hover{text-decoration:underline}
   .hcats{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
   .hcats .rbtn{min-width:96px}
   .helpdlg{width:min(900px,calc(100vw - 32px));max-height:86vh;padding:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);color:var(--text);box-shadow:0 20px 60px rgba(0,0,0,.35);overflow:auto}
@@ -1042,14 +1044,14 @@
   </div>
   <dl class="glossary" data-cat="fund">
     <div id="gl-groep"><dt data-i18n="gl.groep.t"></dt><dd data-i18n="gl.groep.d"></dd></div>
-    <div id="gl-acc"><dt data-i18n="gl.acc.t"></dt><dd data-i18n="gl.acc.d"></dd></div>
+    <div id="gl-acc"><dt data-i18n="gl.acc.t"></dt><dd data-i18n="gl.acc.d"></dd><a class="glsrc" href="https://www.finder.com/uk/accumulating-vs-distributing-etfs" target="_blank" rel="noopener noreferrer">Bron: Finder (EN)</a></div>
     <div id="gl-dist"><dt data-i18n="gl.dist.t"></dt><dd data-i18n="gl.dist.d"></dd></div>
     <div id="gl-mix"><dt data-i18n="gl.mix.t"></dt><dd data-i18n="gl.mix.d"></dd></div>
     <div id="gl-koersgroei"><dt data-i18n="gl.koers.t"></dt><dd data-i18n="gl.koers.d"></dd></div>
     <div id="gl-yield"><dt data-i18n="gl.yield.t"></dt><dd data-i18n="gl.yield.d"></dd></div>
     <div id="gl-startyield"><dt data-i18n="gl.start.t"></dt><dd data-i18n="gl.start.d"></dd></div>
-    <div id="gl-ter"><dt data-i18n="gl.ter.t"></dt><dd data-i18n="gl.ter.d"></dd></div>
-    <div id="gl-covered"><dt data-i18n="gl.covered.t"></dt><dd data-i18n="gl.covered.d"></dd></div>
+    <div id="gl-ter"><dt data-i18n="gl.ter.t"></dt><dd data-i18n="gl.ter.d"></dd><a class="glsrc" href="https://ryanoconnellfinance.com/expense-ratio/" target="_blank" rel="noopener noreferrer">Bron: Ryan O'Connell (EN)</a></div>
+    <div id="gl-covered"><dt data-i18n="gl.covered.t"></dt><dd data-i18n="gl.covered.d"></dd><a class="glsrc" href="https://www.fidelity.ca/en/insights/articles/covered-calls-explained/" target="_blank" rel="noopener noreferrer">Bron: Fidelity (EN)</a></div>
   </dl>
   <dl class="glossary" data-cat="prog" hidden>
     <div id="gl-strat"><dt data-i18n="gl.strat.t"></dt><dd data-i18n="gl.strat.d"></dd></div>
@@ -1074,12 +1076,12 @@
   <dl class="glossary" data-cat="risk" hidden>
     <div id="gl-risico"><dt data-i18n="gl.risico.t"></dt><dd data-i18n="gl.risico.d"></dd></div>
     <div id="gl-volatiliteit"><dt data-i18n="gl.vol.t"></dt><dd data-i18n="gl.vol.d"></dd></div>
-    <div id="gl-maxdaling"><dt data-i18n="gl.maxd.t"></dt><dd data-i18n="gl.maxd.d"></dd></div>
-    <div id="gl-sequentie"><dt data-i18n="gl.seq.t"></dt><dd data-i18n="gl.seq.d"></dd></div>
+    <div id="gl-maxdaling"><dt data-i18n="gl.maxd.t"></dt><dd data-i18n="gl.maxd.d"></dd><a class="glsrc" href="https://wallstreetmojo.com/maximum-drawdown" target="_blank" rel="noopener noreferrer">Bron: WallStreetMojo (EN)</a></div>
+    <div id="gl-sequentie"><dt data-i18n="gl.seq.t"></dt><dd data-i18n="gl.seq.d"></dd><a class="glsrc" href="https://www.schwab.com/learn/story/timing-matters-understanding-sequence-returns-risk" target="_blank" rel="noopener noreferrer">Bron: Charles Schwab (EN)</a></div>
   </dl>
   <dl class="glossary" data-cat="tax" hidden>
-    <div id="gl-bronbelasting"><dt data-i18n="gl.bron.t"></dt><dd data-i18n="gl.bron.d"></dd></div>
-    <div id="gl-box3"><dt data-i18n="gl.box3.t"></dt><dd data-i18n="gl.box3.d"></dd></div>
+    <div id="gl-bronbelasting"><dt data-i18n="gl.bron.t"></dt><dd data-i18n="gl.bron.d"></dd><a class="glsrc" href="https://www.simplysafedividends.com/world-of-dividends/posts/31-guide-to-foreign-tax-withholding-on-dividends-for-u-s-investors" target="_blank" rel="noopener noreferrer">Bron: Simply Safe Dividends (EN)</a></div>
+    <div id="gl-box3"><dt data-i18n="gl.box3.t"></dt><dd data-i18n="gl.box3.d"></dd><a class="glsrc" href="https://financialfocus.abnamro.nl/fiscaliteiten/box-3-belasting-over-inkomen-uit-sparen-en-beleggen/" target="_blank" rel="noopener noreferrer">Bron: ABN AMRO (NL)</a></div>
     <div id="gl-taxintro"><dt data-i18n="taxTitle"></dt><dd data-i18n="taxIntro"></dd></div>
     <div id="gl-taxovr"><dt data-i18n="ovTitle"></dt><dd data-i18n="ovSub"></dd></div>
     <div id="gl-taxovr2"><dt data-i18n="ovTotal"></dt><dd data-i18n="ovNote"></dd></div>
