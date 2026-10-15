@@ -430,6 +430,7 @@
   .wz-amt{display:flex;align-items:center;gap:14px;margin-top:16px}.wz-amt input[type=range]{flex:1;min-width:0}.wz-amt strong{min-width:110px;text-align:right;font-size:15px;font-variant-numeric:tabular-nums;color:var(--text)}
   .wz-seg{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
   .wz-seg .rbtn[aria-pressed="true"]{border-color:var(--text);box-shadow:inset 0 0 0 1px var(--text);font-weight:700}
+  .wz-langs{margin:0 0 12px;justify-content:flex-start}
   .wz-lbl{display:grid;gap:4px;font-size:13px;color:var(--muted)}
   .wz-nav{display:flex;justify-content:space-between;gap:8px;margin-top:20px;flex-wrap:wrap}
   .wz-right{display:flex;gap:8px}
@@ -731,6 +732,7 @@ details.collapse > summary h2{margin:0}
 .panel.taxaside.no-box3 > .basebox{grid-column:2}
 .taxaside > .basebox{grid-row:1;grid-column:3;border-left:1px solid var(--line);padding-right:20px;display:flex;flex-direction:column;justify-content:center;gap:6px}
 .taxaside .pfield-lbl,.taxaside .savebox label{font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+.taxaside .savehead label{white-space:normal;line-height:1.35}
 .taxaside .pfield #ovChips{min-width:0}
 .taxaside .cpick{width:100%;min-width:0}
 .taxaside .cpick summary{height:36px;font-size:13px}
@@ -1370,6 +1372,7 @@ svg#chart .line.acc{stroke-width:2}
 
 <dialog id="startDlg" class="helpdlg smalldlg" aria-labelledby="startTitle"><div class="helpbody">
   <button type="button" class="helpx" id="startX" aria-label="×">×</button>
+  <div class="wz-seg wz-langs" id="wzLang" role="group" aria-label="Taal / Language / Idioma"></div>
   <p class="verline" id="startStep"></p>
   <h2 id="startTitle"></h2>
   <p class="sub" id="startSub"></p>
@@ -2118,7 +2121,13 @@ const T = {
   }
 };
 
-let lang = (() => { try { return localStorage.getItem('dk-lang') || 'en'; } catch (e) { return 'en'; } })();
+// Taal: opgeslagen keuze, anders de eerste ondersteunde taal van de browser, anders Engels.
+function detectLang(){
+  const list = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en'])
+    .map(x => String(x).slice(0, 2).toLowerCase());
+  return list.find(l => ['nl', 'en', 'es'].includes(l)) || 'en';
+}
+let lang = (() => { try { return localStorage.getItem('dk-lang') || detectLang(); } catch (e) { return detectLang(); } })();
 const SYN_T = {
  "nl": {
   "synthTitle": "Synthetische voorbeeldscenario's",
@@ -4614,6 +4623,7 @@ function wzBody(i, t){
 }
 function wzRender(){
   const t = wzText(), S = t.steps[WZKEYS[wzStep]];
+  document.getElementById('wzLang').innerHTML = ['nl', 'en', 'es'].map(l => '<button type="button" class="rbtn" data-wzl="' + l + '" aria-pressed="' + (lang === l) + '">' + l.toUpperCase() + '</button>').join('');
   document.getElementById('startStep').textContent = t.of.replace('{n}', wzStep + 1).replace('{t}', WZN);
   document.getElementById('startTitle').textContent = S.title;
   document.getElementById('startSub').textContent = S.sub;
@@ -4649,6 +4659,11 @@ function wzApply(i){
     if (r.checked !== wzReinv){ r.checked = wzReinv; r.dispatchEvent(new Event('change')); }
   }
 }
+document.getElementById('wzLang').addEventListener('click', e => {
+  const b = e.target.closest('[data-wzl]'); if (!b) return;
+  if (b.dataset.wzl !== lang) setLang(b.dataset.wzl);
+  wzRender();
+});
 document.getElementById('startBody').addEventListener('click', e => {
   const c = e.target.closest('[data-wzc]');
   if (c && !c.disabled){ setCur(c.dataset.wzc); wzRender(); return; }

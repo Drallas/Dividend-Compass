@@ -25,6 +25,16 @@ def set_domicile(pg, v):
 with sync_playwright() as p:
     b = p.chromium.launch(executable_path="/opt/pw-browsers/chromium")
 
+    # 0. Taal: browsertaal bepaalt de startaal, Engels als standaard
+    for loc, want in [("nl-NL", "nl"), ("es-ES", "es"), ("de-DE", "en")]:
+        ctx = b.new_context(locale=loc, viewport={"width": 1280, "height": 900})
+        pg = ctx.new_page()
+        pg.add_init_script("try{localStorage.setItem('dk-welcome','1');localStorage.setItem('dk-start','1')}catch(e){}")
+        pg.goto(URL); pg.wait_for_timeout(300)
+        got = pg.evaluate("lang")
+        check(f"0 browsertaal {loc} geeft taal {want}", got == want, got)
+        ctx.close()
+
     # 1. Roundtrip: alle opgeslagen waarden komen terug
     pg, errs = new_page(b)
     set_domicile(pg, "nl")
