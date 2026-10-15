@@ -6,7 +6,7 @@ import datetime
 import json
 import urllib.request
 
-BASE = "https://api.frankfurter.app"
+BASE = "https://api.frankfurter.dev/v1"
 CURRENCIES = ["USD"]
 OUT = "data/fx.json"
 
@@ -19,9 +19,9 @@ def get(url):
 today = datetime.date.today()
 symbols = ",".join(CURRENCIES)
 
-latest = get(f"{BASE}/latest?from=EUR&to={symbols}")
+latest = get(f"{BASE}/latest?base=EUR&symbols={symbols}")
 start = today - datetime.timedelta(days=365)
-series = get(f"{BASE}/{start.isoformat()}..{today.isoformat()}?from=EUR&to={symbols}")
+series = get(f"{BASE}/{start.isoformat()}..{today.isoformat()}?base=EUR&symbols={symbols}")
 
 avg = {}
 for c in CURRENCIES:
