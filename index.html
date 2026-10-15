@@ -148,6 +148,8 @@
   .kpi .row small{font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:6px;min-width:0}
   .kpi .row b{white-space:nowrap}
   .kpi .foot{margin-top:10px;font-size:12px;color:var(--muted)}
+  .kpi .foot a{text-decoration:underline}
+  .kpi .warnline{color:#b45309}
   .meter{height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:8px}
   .meter i{display:block;height:100%;background:var(--div);border-radius:999px;transition:width .25s}
 
@@ -939,6 +941,15 @@ svg#chart .line.acc{stroke-width:2}
 
     <div class="incol">
     <section class="grp">
+      <h3 data-i18n="grpSpend"></h3>
+      <div class="field">
+        <div class="field-head"><label for="spend" data-i18n="spendLbl"></label> <a class="tt info" href="#" data-tip-i18n="spendTip">?</a></div>
+        <div class="euro"><span>€</span><input type="text" id="spend" value="0" inputmode="numeric" autocomplete="off"></div>
+        <input type="range" id="spendRange" min="0" max="10000" step="50" value="0" aria-labelledby="spend">
+        <div class="range-ends"><span id="spMin"></span><span id="spMax"></span></div>
+      </div>
+    </section>
+    <section class="grp">
       <h3 data-i18n="grpTax"></h3>
       <div class="pfield pfield-top"><span class="pfield-lbl" id="residLblMain"><span data-i18n="residLbl"></span> <a class="tt info" href="#" data-tip-i18n="residTip">?</a></span>
         <details class="cpick" id="mainPick"><summary><span id="mainSum"></span></summary><div class="cpick-list" id="mainList"></div></details>
@@ -1563,7 +1574,7 @@ const T = {
     kRend: 'Bijdrage aan waardegroei (voor belasting)', retNote: 'Groei = eindwaarde (incl. uitkeringen) min ingelegd.', divRet: 'Dividend rendement', accRet: 'Acc rendement',
     kPerMaand: 'Dividend per maand bij start',
     kKosten: 'Kosten (TER) over de periode',
-    startValue: 'Startwaarde',
+    startValue: 'Startwaarde', grpSpend: 'Maandelijkse uitgaven', spendLbl: 'Uitgaven per maand', spendTip: 'Wat je per maand uitgeeft, in euro’s van nu (zonder inflatie). Het wordt eerst betaald uit de uitkeringen van je fondsen; wat tekortkomt wordt naar rato verkocht uit je fondsen. Een hoger bedrag dan je vermogen aankan laat het vermogen opraken.', kSpent: 'Uitgaven (al afgetrokken)', basedOn: 'Gebaseerd op je ', basedOnLink: 'startwaarden', afterSpend: 'Na uitgaven van {x} per maand.', depleted: n => `Let op: het vermogen is op na jaar ${n}.`, rSpent: 'Uitgaven',
     avgPerYear: (d,a) => `Gemiddeld ${d} per jaar (dividend) · ${a} (acc)`, investedSplit: 'Ingelegd: dividend {d}, acc {a}', goalOut: 'Doel buiten beeld:', wHint: 'Beweeg over de grafiek (of tik erop) voor de waarden per jaar.',
     coverFill: 'Vul een gewenst maandbedrag in',
     cover: (p, m) => `Dekt ${p}% van ${m} per maand`,
@@ -1799,7 +1810,7 @@ const T = {
     kRend: 'Contribution to value growth (before tax)', retNote: 'Growth = end value (incl. payouts) minus invested.', divRet: 'Dividend return', accRet: 'Acc return',
     kPerMaand: 'Dividend per month at start',
     kKosten: 'Costs (TER) over the period',
-    startValue: 'Starting value',
+    startValue: 'Starting value', grpSpend: 'Monthly spending', spendLbl: 'Spending per month', spendTip: 'What you spend per month, in today’s euros (no inflation). It is paid from your funds’ payouts first; any shortfall is sold pro rata from your funds. A higher amount than your wealth can sustain will run it down.', kSpent: 'Spending (already deducted)', basedOn: 'Based on your ', basedOnLink: 'starting values', afterSpend: 'After spending {x} per month.', depleted: n => `Note: wealth runs out after year ${n}.`, rSpent: 'Spending',
     avgPerYear: (d,a) => `Average ${d} per year (dividend) · ${a} (acc)`, investedSplit: 'Invested: dividend {d}, acc {a}', goalOut: 'Goal off chart:', wHint: 'Hover over the chart (or tap it) for the values per year.',
     coverFill: 'Enter a desired monthly amount',
     cover: (p, m) => `Covers ${p}% of ${m} per month`,
@@ -2035,7 +2046,7 @@ const T = {
     kRend: 'Aportación al crecimiento (antes de impuestos)', retNote: 'Crecimiento = valor final (incl. pagos) menos invertido.', divRet: 'Rendimiento dividendo', accRet: 'Rendimiento acum.',
     kPerMaand: 'Dividendo al mes al inicio',
     kKosten: 'Costes (TER) del periodo',
-    startValue: 'Valor inicial',
+    startValue: 'Valor inicial', grpSpend: 'Gastos mensuales', spendLbl: 'Gastos al mes', spendTip: 'Lo que gastas al mes, en euros de hoy (sin inflación). Se paga primero con los pagos de tus fondos; lo que falte se vende a prorrata de tus fondos. Un importe mayor del que aguanta tu patrimonio lo agotará.', kSpent: 'Gastos (ya restados)', basedOn: 'Basado en tus ', basedOnLink: 'valores iniciales', afterSpend: 'Tras gastar {x} al mes.', depleted: n => `Atención: el patrimonio se agota tras el año ${n}.`, rSpent: 'Gastos',
     avgPerYear: (d,a) => `Media ${d} al año (dividendo) · ${a} (acum.)`, investedSplit: 'Invertido: dividendo {d}, acc {a}', goalOut: 'Meta fuera del gráfico:', wHint: 'Pasa el cursor por el gráfico (o tócalo) para ver los valores por año.',
     coverFill: 'Indica un importe mensual deseado',
     cover: (p, m) => `Cubre el ${p}% de ${m} al mes`,
@@ -2515,6 +2526,7 @@ const riskLabel = s => s < 1.75 ? 'Laag' : s < 2.5 ? 'Middel' : s < 2.9 ? 'Midde
 const MAX_BEDRAG = 1000000;
 let manualAmount = 0; // het bedrag dat jij zelf invult
 let monthlyAmt = 0; // maandelijkse inleg (periodiek bijstorten)
+let spendMonthly = 0; // maandelijkse uitgaven (uit uitkeringen, rest uit verkoop van fondsen)
 let amountNow = 0, infeasible = false;
 
 /* ============ fund table ============ */
@@ -2613,6 +2625,45 @@ function basket(group, amount, years, reinvest, sc, contrib = 0){
     riskSum += share * riskScore[f.risk];
   });
   return {vals, cashArr, incArr, cost, startYield, risk: riskLabel(riskSum)};
+}
+// Beide mixen samen simuleren, zodat uitgaven (per jaar, aan het eind van het jaar) eerst uit de uitkeringen van alle fondsen worden betaald
+// en een tekort naar rato uit de fondsen wordt verkocht. Zonder uitgaven is het resultaat gelijk aan basket().
+function pairSim(dAmt, aAmt, years, reinvest, sc, dC, aC, spendYr = 0){
+  const meta = {d: basket('div', dAmt, years, reinvest, sc, dC), a: basket('acc', aAmt, years, false, sc, aC)};
+  const mk = () => ({vals: new Array(years+1).fill(0), cashArr: new Array(years+1).fill(0), incArr: new Array(years+1).fill(0), costArr: new Array(years+1).fill(0), spentArr: new Array(years+1).fill(0)});
+  const out = {d: mk(), a: mk()};
+  const list = [];
+  [['div', 'd', dAmt, dC, reinvest], ['acc', 'a', aAmt, aC, false]].forEach(([grp, key, amt, contrib, reinv]) => {
+    const members = funds.filter(f => f.group === grp);
+    const sumW = members.reduce((x, f) => x + f.w, 0) || 1;
+    members.forEach(f => list.push({key, reinv, ter: f.ter, gr: f.g + sc.dg, y: f.y > 0 ? Math.max(0, f.y + sc.dy) : 0,
+      c: contrib * f.w / sumW, v: amt * f.w / sumW, cash: 0, inc: 0}));
+  });
+  const rec = t => list.forEach(x => { const o = out[x.key]; o.vals[t] += x.v; o.cashArr[t] += x.cash; o.incArr[t] += x.inc; });
+  rec(0);
+  const cumCost = {d: 0, a: 0}, cumSpent = {d: 0, a: 0};
+  for (let t = 1; t <= years; t++){
+    list.forEach(x => {
+      const base = x.v + x.c;
+      const cy = base * x.y / 100;
+      cumCost[x.key] += base * x.ter / 100;
+      x.v = base * (1 + (x.gr - x.ter) / 100) + (x.reinv ? cy : 0);
+      if (!x.reinv) x.cash += cy;
+      x.inc += cy;
+    });
+    if (spendYr > 0){
+      const totCash = list.reduce((q, x) => q + x.cash, 0);
+      const useCash = Math.min(totCash, spendYr);
+      if (useCash > 0) list.forEach(x => { const tk = useCash * x.cash / totCash; x.cash -= tk; cumSpent[x.key] += tk; });
+      const totV = list.reduce((q, x) => q + x.v, 0);
+      const sell = Math.min(spendYr - useCash, totV);
+      if (sell > 0) list.forEach(x => { const tk = sell * x.v / totV; x.v -= tk; cumSpent[x.key] += tk; });
+    }
+    rec(t);
+    ['d', 'a'].forEach(k => { out[k].costArr[t] = cumCost[k]; out[k].spentArr[t] = cumSpent[k]; });
+  }
+  ['d', 'a'].forEach(k => { out[k].cost = cumCost[k]; out[k].startYield = meta[k].startYield; out[k].risk = meta[k].risk; });
+  return out;
 }
 // Jaarlijks rendement (%) waarmee startbedrag s en jaarlijkse inleg c (aan begin van elk jaar) in n jaar tot fv groeien
 function annualRate(s, c, n, fv){
@@ -2752,7 +2803,8 @@ function renderTax(d, a, years, dStart, sc, amount){
     const tax = box3Year(fund, cash, 0);
     nl.push(tax);
     // voorstel box 3 vanaf 2028: 36% over het werkelijke rendement boven € 1.800 (verliezen niet verrekend)
-    const gain28 = (d.vals[t + 1] + a.vals[t + 1] + d.cashArr[t + 1] + savAt(t + 1)) - (fund + cash) - 12 * monthlyAmt;
+    const spentYr = (d.spentArr[t + 1] - d.spentArr[t]) + (a.spentArr[t + 1] - a.spentArr[t]);   // uitgegeven geld is geen verlies
+    const gain28 = (d.vals[t + 1] + a.vals[t + 1] + d.cashArr[t + 1] + savAt(t + 1)) - (fund + cash) - 12 * monthlyAmt + spentYr;
     n28.push(0.36 * Math.max(0, gain28 - 1800));
     bs.nl.push(Math.max(0, fund + cash - BOX3.hv));
     bs.n28.push(Math.max(0, gain28 - 1800));
@@ -2769,7 +2821,7 @@ function renderTax(d, a, years, dStart, sc, amount){
   document.getElementById('box3Rows').innerHTML = rows;
   document.getElementById('box3Total').textContent = EUR(nl.reduce((s,v) => s + v, 0));
   // winst = eindvermogen (incl. uitbetaald) min alles wat je hebt ingelegd
-  const gain = d.vals[years] + a.vals[years] + d.cashArr[years] + savAt(years) - savAt(0) - (amount + 12 * monthlyAmt * years);
+  const gain = d.vals[years] + a.vals[years] + d.cashArr[years] + savAt(years) - savAt(0) - (amount + 12 * monthlyAmt * years) + d.spentArr[years] + a.spentArr[years];
   lastTx = {tx:{nl, us, ar, n28, ...ex}, txb:{...bs, ...exb}, amount, years, gain};
   renderOverview();
 }
@@ -3109,6 +3161,7 @@ function recalc(){
   updateProfBtn();
   if (typeof synthCalc === 'function') synthCalc();
   renderMonthly();
+  renderSpend();
   syncGoal();
   persistFunds();
   const amount = amountNow * (1 - spNow());   // het spaardeel wordt niet belegd
@@ -3152,23 +3205,28 @@ function recalc(){
   const yC = 12 * monthlyAmt, dC = yC * mix, aC = yC * (1 - mix);
   const dStart = amount * mix, aStart = amount * (1 - mix);
   const dIn = dStart + dC * years, aIn = aStart + aC * years, totIn = amount + yC * years;
-  const d = basket('div', dStart, years, reinvest, sc, dC);
-  const a = basket('acc', aStart, years, false, sc, aC);
+  const spendYr = 12 * spendMonthly;
+  const ps = pairSim(dStart, aStart, years, reinvest, sc, dC, aC, spendYr);
+  const d = ps.d, a = ps.a;
 
   const dCash = d.cashArr[years];
   const dTotal = d.vals[years] + dCash;
   const aTotal = a.vals[years];
   const grand = dTotal + aTotal;
-  const dRet = dIn > 0 ? (dTotal - dIn) / dIn * 100 : 0;
-  const aRet = aIn > 0 ? (aTotal - aIn) / aIn * 100 : 0;
-  const totRet = totIn > 0 ? (grand - totIn) / totIn * 100 : 0;
-  const dPa = annualRate(dStart, dC, years, dTotal);
-  const aPa = annualRate(aStart, aC, years, aTotal);
-  const totPa = annualRate(amount, yC, years, grand);
+  // Uitgaven verlaten het vermogen: voor rendement en winst tellen ze mee, anders lijkt je rendement lager
+  const dSp = d.spentArr[years], aSp = a.spentArr[years], totSp = dSp + aSp;
+  const dRet = dIn > 0 ? (dTotal + dSp - dIn) / dIn * 100 : 0;
+  const aRet = aIn > 0 ? (aTotal + aSp - aIn) / aIn * 100 : 0;
+  const totRet = totIn > 0 ? (grand + totSp - totIn) / totIn * 100 : 0;
+  const dPa = annualRate(dStart, dC, years, dTotal + dSp);
+  const aPa = annualRate(aStart, aC, years, aTotal + aSp);
+  const totPa = annualRate(amount, yC, years, grand + totSp);
+  let depletedAt = 0;
+  if (spendYr > 0) for (let t = 1; t <= years; t++){ if (d.vals[t] + a.vals[t] + d.cashArr[t] + a.cashArr[t] < 1){ depletedAt = t; break; } }
 
   const incomeYear = dStart * d.startYield / 100;
   const incomeMonth = incomeYear / 12;
-  lastProg = {amount, years, mix, dIn, aIn, totIn, dTotal, aTotal, grand, dRet, aRet, totRet, dPa, aPa, totPa, incomeMonth, dCash};
+  lastProg = {amount, years, mix, dIn, aIn, totIn, dTotal, aTotal, grand, dRet, aRet, totRet, dPa, aPa, totPa, incomeMonth, dCash, totSp};
   const benodigd = d.startYield > 0 ? target / (d.startYield / 100) : 0;
   const cover = targetMonth > 0 ? Math.min(100, incomeMonth / targetMonth * 100) : 0;
 
@@ -3179,15 +3237,14 @@ function recalc(){
   const rl = k => T[lang].riskName[k] || k;
   document.getElementById('kpis').innerHTML = [
     kpiCard(tr('kEind')(years), [
-      {k:'div', name:tr('dividendShort'), v:EUR(d.vals[years])},
-      {k:'acc', name:tr('accShort'), v:EUR(a.vals[years])},
       ...(reinvest ? [] : [{k:'tot', name:tr('kWaarde'), v:EUR(d.vals[years] + a.vals[years])}, {k:'div', name:tr('kUitb'), v:EUR(dCash)}]),
-      {k:'tot', name:tr('kTotGen'), v:EUR(grand)}
-    ], `${tr('startValue')}: ${EUR(amount)}${monthlyAmt > 0 ? ' ' + fillT('perMonthPlus', {x: EUR(monthlyAmt)}) : ''}<br>${tr('totNote')}`, undefined, '#2563eb', true),
+      {k:'tot', name:tr('kTotGen'), v:EUR(grand)},
+      ...(spendYr > 0 ? [{k:'acc', name:tr('kSpent'), v:'− ' + EUR(totSp)}] : [])
+    ], `${tr('basedOn')}<a href="#" data-goto="tabInput">${tr('basedOnLink')}</a>.${spendYr > 0 ? ' ' + fillT('afterSpend', {x: EUR(spendMonthly)}) : ''}${depletedAt ? `<br><b class="warnline">${tr('depleted')(depletedAt)}</b>` : ''}`, undefined, '#2563eb', true),
     kpiCard(tr('kRend'), [
-      {k:'div', name:tr('dividendShort'), v:growTxt(dTotal - dIn, dTotal - dIn + aTotal - aIn)},
-      {k:'acc', name:tr('accShort'), v:growTxt(aTotal - aIn, dTotal - dIn + aTotal - aIn)},
-      {k:'tot', name:tr('kTotGen'), v:growTxt(grand - totIn, 0)}
+      {k:'div', name:tr('dividendShort'), v:growTxt(dTotal + dSp - dIn, dTotal + dSp - dIn + aTotal + aSp - aIn)},
+      {k:'acc', name:tr('accShort'), v:growTxt(aTotal + aSp - aIn, dTotal + dSp - dIn + aTotal + aSp - aIn)},
+      {k:'tot', name:tr('kTotGen'), v:growTxt(grand + totSp - totIn, 0)}
     ], tr('retNote'), undefined, '#10b981'),
     kpiCard(tr('kPerMaand'), [
       {k:'div', name: tr('approxMonth'), v:EUR(incomeMonth)},
@@ -3874,6 +3931,19 @@ document.getElementById('monthlyRange').addEventListener('input', e => {
   monthlyAmt = digits(e.target.value);
   recalc();
 });
+function renderSpend(){
+  const el = document.getElementById('spend');
+  if (document.activeElement !== el) el.value = fmtNum(toDisp(spendMonthly));
+  const r = document.getElementById('spendRange');
+  r.value = Math.min(10000, Math.max(0, spendMonthly));
+  r.style.setProperty('--p', (r.value / 10000 * 100) + '%');
+  r.style.setProperty('--fill', 'var(--div)');
+  document.getElementById('spMin').textContent = EUR(0);
+  document.getElementById('spMax').textContent = EUR(10000);
+}
+document.getElementById('spend').addEventListener('input', () => { spendMonthly = readEur('spend'); recalc(); });
+document.getElementById('spend').addEventListener('blur', renderSpend);
+document.getElementById('spendRange').addEventListener('input', e => { spendMonthly = digits(e.target.value); recalc(); });
 document.getElementById('jaren').addEventListener('input', recalc);
 // De vermogenstab gebruikt dezelfde horizon: aanpassen op een van beide past beide aan.
 document.getElementById('wealthYrs').addEventListener('input', e => {
@@ -4075,18 +4145,19 @@ function renderWealth(){
   const bx = (resid === 'nl' && isNL()) ? ' (box 3)' : '';
   const yC = 12 * monthlyAmt, dC = yC * mix, aC = yC * (1 - mix);
   const inv = amountNow * (1 - sp);   // belegd deel; het spaardeel groeit met de spaarrente
-  const d = basket('div', inv * mix, H, reinvest, sc, dC);
-  const a = basket('acc', inv * (1 - mix), H, reinvest, sc, aC);
-  const fund = [], cash = [], sav = [], tax = [], net = [];
-  for (let t = 0; t <= H; t++){ fund[t] = d.vals[t] + a.vals[t]; cash[t] = d.cashArr[t] + a.cashArr[t]; sav[t] = savAt(t); }
-  const dPay = basket('div', inv * mix, H, false, sc, dC), aPay = basket('acc', inv * (1 - mix), H, false, sc, aC);
+  const spendYr = 12 * spendMonthly;
+  const psim = pairSim(inv * mix, inv * (1 - mix), H, reinvest, sc, dC, aC, spendYr);
+  const d = psim.d, a = psim.a;
+  const fund = [], cash = [], sav = [], tax = [], net = [], spent = [];
+  for (let t = 0; t <= H; t++){ fund[t] = d.vals[t] + a.vals[t]; cash[t] = d.cashArr[t] + a.cashArr[t]; sav[t] = savAt(t); spent[t] = d.spentArr[t] + a.spentArr[t]; }
+  const pp = pairSim(inv * mix, inv * (1 - mix), H, false, sc, dC, aC, spendYr);   // bruto uitkeringen, als er niet herbelegd werd
   const paid = [];
-  for (let t = 0; t <= H; t++) paid[t] = dPay.cashArr[t] + aPay.cashArr[t];
+  for (let t = 0; t <= H; t++) paid[t] = pp.d.incArr[t] + pp.a.incArr[t];
   const taxSeries = rs => {
     const out = [0]; let cumTax = 0;
     for (let t = 1; t <= H; t++){
       const divT = Math.max(0, paid[t] - paid[t-1]);
-      const gain = (fund[t] + cash[t] + sav[t]) - (fund[t-1] + cash[t-1] + sav[t-1]) - yC;
+      const gain = (fund[t] + cash[t] + sav[t]) - (fund[t-1] + cash[t-1] + sav[t-1]) - yC + (spent[t] - spent[t-1]);
       const cgT = Math.max(0, gain - divT);
       let yt = 0;
       // Box 3 en Argentinië belasten de waarde aan het begin van het jaar (peildatum), net als het tabblad Belasting
@@ -4113,34 +4184,21 @@ function renderWealth(){
   // ingelegd: vast startbedrag, stijgt alleen met de maandelijkse inleg
   const inArr = []; for (let t = 0; t <= H; t++) inArr[t] = amountNow + yC * t;
   const inleg = inArr[H];
-  const costYr = new Array(H + 1).fill(0);
-  funds.forEach(f => {
-    const share = (f.group === 'div' ? inv * mix : inv * (1 - mix)) * f.w / groupSum(f.group);
-    const g = f.g + sc.dg;
-    const y = f.y > 0 ? Math.max(0, f.y + sc.dy) : 0;
-    const cf = (f.group === 'div' ? yC * mix : yC * (1 - mix)) * f.w / groupSum(f.group);
-    let v = share;
-    for (let t = 1; t <= H; t++){
-      const base = v + cf;
-      costYr[t] += base * f.ter / 100;
-      v = base * (1 + (g - f.ter) / 100) + (reinvest ? base * y / 100 : 0);
-    }
-  });
   const costCum = [];
-  let cc = 0;
-  for (let t = 0; t <= H; t++){ cc += costYr[t]; costCum[t] = cc; }
+  for (let t = 0; t <= H; t++) costCum[t] = d.costArr[t] + a.costArr[t];
   let dbl = null;
   for (let t = 1; t <= H; t++){ if (net[t] >= 2 * inArr[t]){ dbl = t; break; } }
 
   const goalCap = readEur('goalCap');
   let goalYr = null;
   if (goalCap > 0) for (let t = 1; t <= H; t++){ if (net[t] >= goalCap){ goalYr = t; break; } }
-  lastWealth = {H, fund, cash, sav, tax, net, inArr, costCum, inleg, dbl, goalYr, goalCap, name1, net2, name2, tax2, sp};
+  lastWealth = {H, fund, cash, sav, tax, net, inArr, costCum, inleg, dbl, goalYr, goalCap, name1, net2, name2, tax2, sp, spent};
   const cards = [
     `<div class="calk"><span>${W.kInleg}</span><b>${EUR(inleg)}</b></div>`,
     `<div class="calk"><span>${W.kGross}</span><b>${EUR(fund[H])}</b></div>`,
     `<div class="calk"><span>${W.kNet}</span><b>${EUR(net[H])}</b></div>`,
     `<div class="calk"><span>${W.kPaid}</span><b>${EUR(cash[H])}</b></div>`,
+    ...(spendYr > 0 ? [`<div class="calk"><span>${tr('rSpent')}</span><b>${EUR(spent[H])}</b></div>`] : []),
     ...(sp > 0 ? [`<div class="calk"><span>${W.kSav}</span><b>${EUR(sav[H])}</b></div>`] : []),
     `<div class="calk"><span>${W.kCost}</span><b>${EUR(costCum[H])}</b></div>`,
     ...(net2 ? [
@@ -4365,6 +4423,7 @@ function captureState(){
     resid: document.getElementById('resid').value,
     cmp2: cmp2,
     monthly: monthlyAmt,
+    spend: spendMonthly,
     wgoal: readEur('goalCap'),
     tax: Object.keys(taxOn).filter(k => taxOn[k]),
     savePct: savePct,
@@ -4376,6 +4435,7 @@ function captureState(){
 function applyState(s){
   manualAmount = s.amount;
   monthlyAmt = typeof s.monthly === 'number' ? s.monthly : 0;
+  spendMonthly = typeof s.spend === 'number' ? s.spend : 0;
   setEurField('goalCap', s.wgoal);
   document.getElementById('jaren').value = s.years;
   document.getElementById('mix').value = s.mix;
@@ -4625,7 +4685,7 @@ const EXPT = {
     story: {b: 'PNG', t: 'Instagram Story', d: 'Beeldvullende kaart (1080 × 1920) met je strategie, inleg en verwacht resultaat. Ter inspiratie om te delen.', e: 'Een kaart met bijvoorbeeld “€ 330.000 → € 576.000 in 10 jaar”, je strategie, een kleine grafiek en de naam van de tool.'},
     csv: {b: 'CSV', t: 'Spreadsheet', d: 'Jaartabel en resultaten om in Excel of Google Sheets te openen.', e: 'Rijen per jaar met kolommen als Jaar; Dividend (waarde); Dividend (uitbetaald); Acc (waarde); Totaal.'},
     r: {title: 'Adviesoverzicht', sub: 'Berekening op basis van de ingevulde uitgangspunten', date: 'Datum', s1: '1. Uitgangspunten', s2: '2. Fondsen en aannames', s3: '3. Resultaat', s4: '4. Netto vermogen per jaar', s5: '5. Belasting per land', s6: '6. Toelichting en voorbehoud',
-      start: 'Startvermogen', monthly: 'Maandelijkse inleg', years: 'Looptijd', mix: 'Mix uitkerend / accumulerend', strat: 'Strategie', scen: 'Scenario', reinv: 'Dividend herinvesteren', yes: 'Ja', no: 'Nee', dom: 'Domicilie', none: '–', sav: 'Spaardeel', savRate: 'Rente op spaargeld', own: 'Eigen fondsen',
+      start: 'Startvermogen', monthly: 'Maandelijkse inleg', spend: 'Maandelijkse uitgaven', years: 'Looptijd', mix: 'Mix uitkerend / accumulerend', strat: 'Strategie', scen: 'Scenario', reinv: 'Dividend herinvesteren', yes: 'Ja', no: 'Nee', dom: 'Domicilie', none: '–', sav: 'Spaardeel', savRate: 'Rente op spaargeld', own: 'Eigen fondsen',
       fund: 'Fonds', grp: 'Groep', w: 'Gewicht', y: 'Dividendrendement', g: 'Koersgroei', ter: 'TER', div: 'Uitkerend', acc: 'Accumulerend',
       kIn: 'Totale inleg', kGross: 'Waarde beleggingen', kPaid: 'Uitgekeerd dividend', kSav: 'Spaargeld', kNet: 'Netto vermogen na belasting', kTax: 'Belasting (box 3 / gekozen land)', kRet: 'Totaal rendement belegd deel', kPa: 'Rendement per jaar (belegd deel)', kInc: 'Dividend per maand bij start', kCost: 'Kosten (TER) cumulatief',
       year: 'Jaar', cFund: 'In fondsen', cPaid: 'Uitgekeerd', cSav: 'Spaargeld', cTax: 'Belasting cum.', cNet: 'Netto',
@@ -4641,7 +4701,7 @@ const EXPT = {
     story: {b: 'PNG', t: 'Instagram Story', d: 'Full-screen card (1080 × 1920) with your strategy, investment and expected result. To share as inspiration.', e: 'A card such as “€330,000 → €576,000 in 10 years”, your strategy, a small chart and the name of the tool.'},
     csv: {b: 'CSV', t: 'Spreadsheet', d: 'Yearly table and results to open in Excel or Google Sheets.', e: 'One row per year with columns like Year; Dividend (value); Dividend (paid out); Acc (value); Total.'},
     r: {title: 'Advisor report', sub: 'Calculation based on the entered starting points', date: 'Date', s1: '1. Starting points', s2: '2. Funds and assumptions', s3: '3. Result', s4: '4. Net worth per year', s5: '5. Tax per country', s6: '6. Notes and disclaimer',
-      start: 'Starting capital', monthly: 'Monthly contribution', years: 'Horizon', mix: 'Mix distributing / accumulating', strat: 'Strategy', scen: 'Scenario', reinv: 'Reinvest dividends', yes: 'Yes', no: 'No', dom: 'Residence', none: '–', sav: 'Savings share', savRate: 'Interest on savings', own: 'Own funds',
+      start: 'Starting capital', monthly: 'Monthly contribution', spend: 'Monthly spending', years: 'Horizon', mix: 'Mix distributing / accumulating', strat: 'Strategy', scen: 'Scenario', reinv: 'Reinvest dividends', yes: 'Yes', no: 'No', dom: 'Residence', none: '–', sav: 'Savings share', savRate: 'Interest on savings', own: 'Own funds',
       fund: 'Fund', grp: 'Group', w: 'Weight', y: 'Dividend yield', g: 'Price growth', ter: 'TER', div: 'Distributing', acc: 'Accumulating',
       kIn: 'Total invested', kGross: 'Value of investments', kPaid: 'Dividends paid out', kSav: 'Savings', kNet: 'Net worth after tax', kTax: 'Tax (box 3 / chosen country)', kRet: 'Total return invested part', kPa: 'Return per year (invested part)', kInc: 'Dividend per month at start', kCost: 'Costs (TER) cumulative',
       year: 'Year', cFund: 'In funds', cPaid: 'Paid out', cSav: 'Savings', cTax: 'Tax cum.', cNet: 'Net',
@@ -4657,7 +4717,7 @@ const EXPT = {
     story: {b: 'PNG', t: 'Instagram Story', d: 'Tarjeta a pantalla completa (1080 × 1920) con tu estrategia, aportación y resultado esperado. Para compartir como inspiración.', e: 'Una tarjeta como “330.000 € → 576.000 € en 10 años”, tu estrategia, un pequeño gráfico y el nombre de la herramienta.'},
     csv: {b: 'CSV', t: 'Hoja de cálculo', d: 'Tabla anual y resultados para abrir en Excel o Google Sheets.', e: 'Una fila por año con columnas como Año; Dividendo (valor); Dividendo (pagado); Acc (valor); Total.'},
     r: {title: 'Informe para asesor', sub: 'Cálculo basado en los puntos de partida indicados', date: 'Fecha', s1: '1. Puntos de partida', s2: '2. Fondos y supuestos', s3: '3. Resultado', s4: '4. Patrimonio neto por año', s5: '5. Impuestos por país', s6: '6. Notas y advertencia',
-      start: 'Capital inicial', monthly: 'Aportación mensual', years: 'Plazo', mix: 'Mezcla distribuyendo / acumulando', strat: 'Estrategia', scen: 'Escenario', reinv: 'Reinvertir dividendos', yes: 'Sí', no: 'No', dom: 'Residencia', none: '–', sav: 'Parte en ahorro', savRate: 'Interés del ahorro', own: 'Fondos propios',
+      start: 'Capital inicial', monthly: 'Aportación mensual', spend: 'Gastos mensuales', years: 'Plazo', mix: 'Mezcla distribuyendo / acumulando', strat: 'Estrategia', scen: 'Escenario', reinv: 'Reinvertir dividendos', yes: 'Sí', no: 'No', dom: 'Residencia', none: '–', sav: 'Parte en ahorro', savRate: 'Interés del ahorro', own: 'Fondos propios',
       fund: 'Fondo', grp: 'Grupo', w: 'Peso', y: 'Rentab. por dividendo', g: 'Revalorización', ter: 'TER', div: 'Distribuye', acc: 'Acumula',
       kIn: 'Total aportado', kGross: 'Valor de las inversiones', kPaid: 'Dividendos pagados', kSav: 'Ahorro', kNet: 'Patrimonio neto tras impuestos', kTax: 'Impuestos (caja 3 / país elegido)', kRet: 'Rentabilidad total parte invertida', kPa: 'Rentabilidad anual (parte invertida)', kInc: 'Dividendo mensual al inicio', kCost: 'Costes (TER) acumulados',
       year: 'Año', cFund: 'En fondos', cPaid: 'Pagado', cSav: 'Ahorro', cTax: 'Impuesto acum.', cNet: 'Neto',
@@ -4705,7 +4765,7 @@ function buildReport(){
   const kv = (a, b) => `<tr><th>${escH(a)}</th><td>${b}</td></tr>`;
   const inputs = [
     kv(R.start, EUR(amountNow)), kv(R.monthly, EUR(monthlyAmt)), kv(R.years, tr('years')(H)),
-    kv(R.mix, `${Math.round(s.mix)}% / ${Math.round(100 - s.mix)}%`), kv(R.strat, escH(strategyLabel())),
+    ...(spendMonthly > 0 ? [kv(R.spend, EUR(spendMonthly))] : []), kv(R.mix, `${Math.round(s.mix)}% / ${Math.round(100 - s.mix)}%`), kv(R.strat, escH(strategyLabel())),
     kv(R.scen, escH(tr(SCEN_KEY[s.scen]))), kv(R.reinv, s.reinvest ? R.yes : R.no), kv(R.dom, escH(domTxt))
   ];
   if (Wd.sp > 0) inputs.push(kv(R.sav, `${(Wd.sp * 100).toLocaleString(loc(), {maximumFractionDigits: 2})}% · ${EUR(amountNow * Wd.sp)}`), kv(R.savRate, `${rateVal().toLocaleString(loc(), {maximumFractionDigits: 2})}%`));
