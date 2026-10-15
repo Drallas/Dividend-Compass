@@ -666,6 +666,10 @@
         <input type="range" id="jaren" min="1" max="15" value="5" step="1" aria-label="Duration">
         <div class="range-ends"><span id="dur1"></span><span id="dur10"></span></div>
       </div>
+  <div class="field">
+        <div class="field-head"><label for="goalCap" data-i18n="goalCapLbl"></label></div>
+        <div class="euro"><span>€</span><input type="text" id="goalCap" value="" inputmode="numeric" autocomplete="off" data-i18n-ph="goalCapPh"></div>
+      </div>
     </section>
     <section class="grp">
       <h3 data-i18n="grpMix"></h3>
@@ -839,8 +843,6 @@
       <details class="cpick" id="cmpPick"><summary><span id="cmpSum"></span></summary><div class="cpick-list" id="cmpList"></div></details></div>
     <div class="pfield"><span class="pfield-lbl" id="wealthYrsLbl"></span>
       <input type="range" id="wealthYrs" min="1" max="40" step="1" value="15" aria-labelledby="wealthYrsLbl"></div>
-    <div class="pfield"><label class="pfield-lbl" for="wealthGoal" data-i18n="goalCapLbl"></label>
-      <div class="euro"><span>€</span><input type="text" id="wealthGoal" value="" inputmode="numeric" autocomplete="off" data-i18n-ph="goalCapPh"></div></div>
     <div id="wealthBody"></div>
   </section>
   <section class="panel" aria-labelledby="resTitle">
@@ -3605,7 +3607,7 @@ function renderWealth(){
   let dbl = null;
   for (let t = 1; t <= H; t++){ if (net[t] >= 2 * inArr[t]){ dbl = t; break; } }
 
-  const goalCap = digits(document.getElementById('wealthGoal').value);
+  const goalCap = digits(document.getElementById('goalCap').value);
   let goalYr = null;
   if (goalCap > 0) for (let t = 1; t <= H; t++){ if (net[t] >= goalCap){ goalYr = t; break; } }
   const cards = [
@@ -3687,7 +3689,7 @@ function renderWealth(){
 }
 
 document.getElementById('wealthYrs').addEventListener('input', renderWealth);
-document.getElementById('wealthGoal').addEventListener('input', () => { document.getElementById('wealthGoal').value = fmtNum(digits(document.getElementById('wealthGoal').value)) || ''; recalc(); });
+document.getElementById('goalCap').addEventListener('input', () => { document.getElementById('goalCap').value = fmtNum(digits(document.getElementById('goalCap').value)) || ''; recalc(); });
 function setTaxDefaults(){
   Object.keys(taxOn).forEach(k => { taxOn[k] = false; });
   const r = document.getElementById('resid').value;
@@ -3751,7 +3753,7 @@ function captureState(){
     resid: document.getElementById('resid').value,
     cmp2: cmp2,
     monthly: monthlyAmt,
-    wgoal: digits(document.getElementById('wealthGoal').value),
+    wgoal: digits(document.getElementById('goalCap').value),
     tax: Object.keys(taxOn).filter(k => taxOn[k]),
     goalOn: document.getElementById('goalOn').checked,
     target: digits(document.getElementById('target').value),
@@ -3761,7 +3763,7 @@ function captureState(){
 function applyState(s){
   manualAmount = s.amount;
   monthlyAmt = typeof s.monthly === 'number' ? s.monthly : 0;
-  document.getElementById('wealthGoal').value = s.wgoal > 0 ? fmtNum(s.wgoal) : '';
+  document.getElementById('goalCap').value = s.wgoal > 0 ? fmtNum(s.wgoal) : '';
   document.getElementById('jaren').value = s.years;
   document.getElementById('mix').value = s.mix;
   const r = document.querySelector(`input[name=scen][value="${s.scen}"]`);
