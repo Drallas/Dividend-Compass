@@ -478,6 +478,8 @@
   .scenrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line);flex-wrap:wrap}
   .scenrow span{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
   .scenbtns{display:flex;gap:8px;flex-wrap:wrap}
+  .scenprompt{margin:12px 0;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+  .scenprompt .sub{margin:0 0 10px}
   .setrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line);flex-wrap:wrap}
   .setrow > span{font-size:13px;font-weight:600}
   #setDlg .langbtn{display:none}
@@ -1310,6 +1312,7 @@ svg#chart .line.acc{stroke-width:2}
   <div class="scenform" id="scenUpdRow" hidden><button type="button" class="rbtn" id="scenUpdNow"></button></div>
   <p class="sub scenmsg" id="scenMsg"></p>
   <div class="scenform scenapply" id="scenApplyRow" hidden><label class="sub" for="scenApplySel" data-i18n="scenApplyLbl"></label><select id="scenApplySel"></select><button type="button" class="rbtn" id="scenApplyBtn" data-i18n="scenApply"></button></div>
+  <div class="scenprompt" id="scenPrompt" hidden><p class="sub" id="scenPText"></p><div class="scenbtns"><button type="button" class="rbtn" id="scenPSave"></button><button type="button" class="rbtn" id="scenPDiscard"></button><button type="button" class="rbtn" id="scenPCancel"></button></div></div>
   <div id="scenList"></div>
 </div></dialog>
 
@@ -1441,7 +1444,7 @@ const T = {
     scenIntro: 'Bewaar de huidige invoerwaarden, strategie en fondsaannames onder een naam. Alles blijft in deze browser; wis je browsergegevens, dan verdwijnen ze.',
     scenNamePh: 'Naam',
     scenDefault: 'Scenario',
-    scenSave: 'Bewaar huidige invoer', scenDup: 'Er bestaat al een profiel met deze naam. Kies een andere naam, of werk het bestaande profiel bij.', scenUpd: 'Bijwerken met huidige invoer', scenApplyLbl: 'Huidige instellingen toepassen op een bestaand profiel', scenApply: 'Toepassen', saveRateLbl: 'Rente spaargeld per jaar', saveRateYr: 'Rente per jaar op spaargeld', saveRateNote: 'Voorbeeld, nog niet in de totalen verwerkt.', scenActive: 'Actief', scenChanged: 'gewijzigd', scenRename: 'Hernoem', agoNow: 'zojuist', agoMin: n => `${n} min geleden`, agoHr: n => `${n} uur geleden`,
+    scenSave: 'Bewaar huidige invoer', scenDup: 'Er bestaat al een profiel met deze naam. Kies een andere naam, of werk het bestaande profiel bij.', scenUpd: 'Bijwerken met huidige invoer', scenApplyLbl: 'Huidige instellingen toepassen op een bestaand profiel', scenApply: 'Toepassen', saveRateLbl: 'Rente spaargeld per jaar', saveRateYr: 'Rente per jaar op spaargeld', saveRateNote: 'Voorbeeld, nog niet in de totalen verwerkt.', scenActive: 'Actief', scenChanged: 'gewijzigd', scenPrompt: n => `Je hebt wijzigingen in "${n}" die nog niet zijn opgeslagen. Wat doen we ermee?`, scenPSaveBtn: n => `Opslaan in "${n}"`, scenPDiscard: 'Niet opslaan', scenPCancel: 'Annuleren', scenRename: 'Hernoem', agoNow: 'zojuist', agoMin: n => `${n} min geleden`, agoHr: n => `${n} uur geleden`,
     scenLoad: 'Laad',
     scenDel: 'Verwijder',
     scenEmpty: 'Nog geen scenario\'s opgeslagen.',
@@ -1677,7 +1680,7 @@ const T = {
     scenIntro: 'Save the current inputs, strategy and fund assumptions under a name. Everything stays in this browser; clearing browser data removes them.',
     scenNamePh: 'Name',
     scenDefault: 'Scenario',
-    scenSave: 'Save current inputs', scenDup: 'A profile with this name already exists. Choose another name, or update the existing profile.', scenUpd: 'Update with current inputs', scenApplyLbl: 'Apply current settings to an existing profile', scenApply: 'Apply', saveRateLbl: 'Interest on savings per year', saveRateYr: 'Interest per year on savings', saveRateNote: 'Example only, not yet in the totals.', scenActive: 'Active', scenChanged: 'changed', scenRename: 'Rename', agoNow: 'just now', agoMin: n => `${n} min ago`, agoHr: n => `${n} h ago`,
+    scenSave: 'Save current inputs', scenDup: 'A profile with this name already exists. Choose another name, or update the existing profile.', scenUpd: 'Update with current inputs', scenApplyLbl: 'Apply current settings to an existing profile', scenApply: 'Apply', saveRateLbl: 'Interest on savings per year', saveRateYr: 'Interest per year on savings', saveRateNote: 'Example only, not yet in the totals.', scenActive: 'Active', scenChanged: 'changed', scenPrompt: n => `You have unsaved changes in "${n}". What should we do with them?`, scenPSaveBtn: n => `Save to "${n}"`, scenPDiscard: 'Discard', scenPCancel: 'Cancel', scenRename: 'Rename', agoNow: 'just now', agoMin: n => `${n} min ago`, agoHr: n => `${n} h ago`,
     scenLoad: 'Load',
     scenDel: 'Delete',
     scenEmpty: 'No saved scenarios yet.',
@@ -1913,7 +1916,7 @@ const T = {
     scenIntro: 'Guarda las entradas, la estrategia y los supuestos de fondos con un nombre. Todo se queda en este navegador; si borras los datos del navegador, desaparecen.',
     scenNamePh: 'Nombre',
     scenDefault: 'Escenario',
-    scenSave: 'Guardar entradas actuales', scenDup: 'Ya existe un perfil con ese nombre. Elige otro nombre o actualiza el perfil existente.', scenUpd: 'Actualizar con las entradas actuales', scenApplyLbl: 'Aplicar los ajustes actuales a un perfil existente', scenApply: 'Aplicar', saveRateLbl: 'Interés del ahorro por año', saveRateYr: 'Interés anual del ahorro', saveRateNote: 'Solo ejemplo, aún no incluido en los totales.', scenActive: 'Activo', scenChanged: 'modificado', scenRename: 'Renombrar', agoNow: 'justo ahora', agoMin: n => `hace ${n} min`, agoHr: n => `hace ${n} h`,
+    scenSave: 'Guardar entradas actuales', scenDup: 'Ya existe un perfil con ese nombre. Elige otro nombre o actualiza el perfil existente.', scenUpd: 'Actualizar con las entradas actuales', scenApplyLbl: 'Aplicar los ajustes actuales a un perfil existente', scenApply: 'Aplicar', saveRateLbl: 'Interés del ahorro por año', saveRateYr: 'Interés anual del ahorro', saveRateNote: 'Solo ejemplo, aún no incluido en los totales.', scenActive: 'Activo', scenChanged: 'modificado', scenPrompt: n => `Tienes cambios sin guardar en "${n}". ¿Qué hacemos con ellos?`, scenPSaveBtn: n => `Guardar en "${n}"`, scenPDiscard: 'No guardar', scenPCancel: 'Cancelar', scenRename: 'Renombrar', agoNow: 'justo ahora', agoMin: n => `hace ${n} min`, agoHr: n => `hace ${n} h`,
     scenLoad: 'Cargar',
     scenDel: 'Eliminar',
     scenEmpty: 'Aún no hay escenarios guardados.',
@@ -4222,6 +4225,26 @@ document.getElementById('homeBtn').addEventListener('click', e => {
 
 /* ---- scenario's opslaan ---- */
 function loadScen(){ try { return JSON.parse(localStorage.getItem(SKEY)) || []; } catch (e) { return []; } }
+// Profiel laden met vraag bij niet-opgeslagen wijzigingen in het actieve profiel.
+let pendingLoad = -1;
+function changedIdx(){
+  const n = getActiveName(); if (!n) return -1;
+  const a = loadScen(); const i = a.findIndex(x => x.name === n);
+  return i >= 0 && !sameAsProfile(a[i].data) ? i : -1;
+}
+function hidePrompt(){ pendingLoad = -1; document.getElementById('scenPrompt').hidden = true; }
+function doLoad(i){
+  const s = loadScen()[i]; if (!s) return;
+  applyState(s.data); setActiveName(s.name); hidePrompt();
+  document.getElementById('scenDlg').close();
+}
+document.getElementById('scenPSave').addEventListener('click', () => {
+  const ci = changedIdx(); if (ci >= 0) overwriteScen(ci);
+  if (pendingLoad >= 0) doLoad(pendingLoad);
+});
+document.getElementById('scenPDiscard').addEventListener('click', () => { if (pendingLoad >= 0) doLoad(pendingLoad); });
+document.getElementById('scenPCancel').addEventListener('click', hidePrompt);
+document.getElementById('scenDlg').addEventListener('close', hidePrompt);
 // Actief profiel = naam van het profiel waarmee je laatst hebt geladen, opgeslagen of bijgewerkt.
 function getActiveName(){ try { return localStorage.getItem('dk-active-scen') || ''; } catch (e) { return ''; } }
 function setActiveName(n){ try { if (n) localStorage.setItem('dk-active-scen', n); else localStorage.removeItem('dk-active-scen'); } catch (e) {} }
@@ -4292,8 +4315,16 @@ function renderScenarios(){
       <div class="scenbtns"><button type="button" class="rbtn" data-load="${i}">${tr('scenLoad')}</button><button type="button" class="rbtn" data-ren="${i}">${tr('scenRename')}</button><button type="button" class="rbtn" data-del="${i}">${tr('scenDel')}</button></div></div>`;
   }).join('');
   list.querySelectorAll('[data-load]').forEach(b => b.addEventListener('click', () => {
-    const s = loadScen()[+b.dataset.load];
-    if (s){ applyState(s.data); setActiveName(s.name); document.getElementById('scenDlg').close(); }
+    const i = +b.dataset.load;
+    const ci = changedIdx();
+    if (ci < 0){ doLoad(i); return; }
+    // Actief profiel heeft niet-opgeslagen wijzigingen: eerst vragen.
+    pendingLoad = i;
+    document.getElementById('scenPText').textContent = tr('scenPrompt')(loadScen()[ci].name);
+    document.getElementById('scenPSave').textContent = tr('scenPSaveBtn')(loadScen()[ci].name);
+    document.getElementById('scenPDiscard').textContent = tr('scenPDiscard');
+    document.getElementById('scenPCancel').textContent = tr('scenPCancel');
+    document.getElementById('scenPrompt').hidden = false;
   }));
   const sel = document.getElementById('scenApplySel');
   sel.innerHTML = order.map(i => `<option value="${i}">${esc(arr[i].name)}</option>`).join('');

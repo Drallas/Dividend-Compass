@@ -53,6 +53,24 @@ with sync_playwright() as p:
     check("1f na wijzigen staat 'gewijzigd' bij het actieve profiel", pg.locator(".scenrow.active", has_text="Basis").count() == 1 and ("gewijzigd" in pg.inner_text("#scenList") or "changed" in pg.inner_text("#scenList")))
     pg.close()
 
+    # 1h. Profiel laden bij niet-opgeslagen wijzigingen vraagt eerst: opslaan of niet opslaan
+    pg, errs = new_page(b)
+    pg.evaluate("() => { manualAmount = 330000; amountNow = 330000; recalc(); }")
+    pg.evaluate("() => document.getElementById('scenDlg').showModal()"); pg.wait_for_timeout(200)
+    pg.fill("#scenName", "Basis"); pg.click("#scenSave"); pg.wait_for_timeout(200)
+    pg.fill("#scenName", "Hoog"); pg.evaluate("() => { manualAmount = 500000; amountNow = 500000; recalc(); }")
+    pg.click("#scenSave"); pg.wait_for_timeout(200)
+    pg.evaluate("() => { manualAmount = 400000; amountNow = 400000; recalc(); }")
+    pg.click('[data-load="0"]'); pg.wait_for_timeout(300)
+    check("1h bij wijzigingen verschijnt de vraag en blijft de dialoog open", pg.is_visible("#scenPrompt") and pg.evaluate("document.getElementById('scenDlg').open"))
+    pg.click("#scenPCancel"); pg.wait_for_timeout(200)
+    check("1i annuleren laadt niets", pg.evaluate("amountNow") == 400000)
+    pg.click('[data-load="0"]'); pg.wait_for_timeout(300)
+    pg.click("#scenPDiscard"); pg.wait_for_timeout(300)
+    check("1j niet opslaan laadt het gekozen profiel", pg.evaluate("amountNow") == 330000)
+    check("1k niet opslaan wijzigt het andere profiel niet", pg.evaluate("loadScen().find(x=>x.name==='Hoog').data.amount") == 500000)
+    pg.close()
+
     # 1. Roundtrip: alle opgeslagen waarden komen terug
     pg, errs = new_page(b)
     set_domicile(pg, "nl")
