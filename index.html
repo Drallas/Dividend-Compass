@@ -645,7 +645,7 @@
     <h2 data-i18n="settings"></h2>
     <div class="pfield pfield-top"><span class="pfield-lbl" id="residLblMain"><span data-i18n="residLbl"></span> <a class="tt info" href="#gl-taxnl" data-tip-i18n="residTip">?</a></span>
       <details class="cpick" id="mainPick"><summary><span id="mainSum"></span></summary><div class="cpick-list" id="mainList"></div></details>
-      <p class="hint residhint"><span data-i18n="residHintTxt"></span> <a href="#" id="residGo" data-i18n="residGo"></a></p></div>
+      <p class="hint residhint" id="residHint"></p></div>
     <select id="resid" hidden aria-hidden="true"></select>
     <section class="grp">
       <h3 data-i18n="grpStrat"></h3>
@@ -1946,8 +1946,7 @@ const SYN_T = {
   "skNoteOwn": "Je eigen mix is actief; de berekening gebruikt die mix, niet de synthese.",
   "stratLineSyn": "Gekozen strategie: {s} · {m}% uitkerend · synthetische aannames · {a} over {n} jaar",
   "stratEdit": "aanpassen",
-  "residHintTxt": "Belasting van dit land zit niet in de cijfers hier. Het effect zie je in de Netto waardeprognose.",
-  "residGo": "Naar netto waarde",
+  "residHintTxt": "Belasting van dit land zit niet in de cijfers hier. Het effect zie je in de {t}.",
   "mixFromStrat": "Bepaald door de gekozen strategie.",
   "stratLineOwn": "Eigen mix actief · {a} over {n} jaar",
   "stratNone": "eigen verdeling",
@@ -2032,8 +2031,7 @@ const SYN_T = {
   "skNoteOwn": "Your own mix is active; the calculation uses that mix, not the synthesis.",
   "stratLineSyn": "Chosen strategy: {s} · {m}% distributing · synthetic assumptions · {a} over {n} years",
   "stratEdit": "change",
-  "residHintTxt": "Tax for this country is not in the figures here. You see its effect in the Net value forecast.",
-  "residGo": "See net value",
+  "residHintTxt": "Tax for this country is not in the figures here. You see its effect in the {t}.",
   "mixFromStrat": "Set by the chosen strategy.",
   "stratLineOwn": "Own mix active · {a} over {n} years",
   "stratNone": "own split",
@@ -2118,8 +2116,7 @@ const SYN_T = {
   "skNoteOwn": "Tu cartera propia está activa; el cálculo usa esa cartera, no la síntesis.",
   "stratLineSyn": "Estrategia elegida: {s} · {m}% distribuyendo · supuestos sintéticos · {a} en {n} años",
   "stratEdit": "cambiar",
-  "residHintTxt": "Los impuestos de este país no están en las cifras de aquí. Su efecto se ve en la Previsión de valor neto.",
-  "residGo": "Ver valor neto",
+  "residHintTxt": "Los impuestos de este país no están en las cifras de aquí. Su efecto se ve en la {t}.",
   "mixFromStrat": "Lo define la estrategia elegida.",
   "stratLineOwn": "Cartera propia activa · {a} en {n} años",
   "stratNone": "reparto propio",
@@ -2913,6 +2910,18 @@ function glossMore(){
     a.textContent = GL_MORE[lang] + ' →';
   });
 }
+// Tekst onder het land: de naam van het tabblad Netto waardeprognose is zelf de link.
+function residHint(){
+  const p = document.getElementById('residHint');
+  if (!p) return;
+  const parts = tr('residHintTxt').split('{t}');
+  p.textContent = parts[0];
+  const a = document.createElement('a');
+  a.href = '#';
+  a.textContent = tr('tabWealth');
+  a.addEventListener('click', e => { e.preventDefault(); document.querySelector('[data-tab="tabWealth"]').click(); });
+  p.append(a, parts[1] || '');
+}
 function applyStatic(){
   document.documentElement.lang = lang;
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -2920,6 +2929,7 @@ function applyStatic(){
     if (typeof v === 'string') el.textContent = v;
   });
   glossMore();
+  residHint();
   document.querySelectorAll('[data-i18n-html]').forEach(el => {
     const v = tr(el.dataset.i18nHtml);
     if (typeof v === 'string') el.innerHTML = v;
@@ -3872,7 +3882,6 @@ document.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click'
   const top = b.closest('#setDlg') ? document.querySelector('.topbtns [data-open="' + b.dataset.open + '"]') : null;
   if (FLYS.includes(b.dataset.open)) flyOpen(b.dataset.open, top || b); else openDlg(b.dataset.open);
 }));
-document.getElementById('residGo').addEventListener('click', e => { e.preventDefault(); document.querySelector('[data-tab="tabWealth"]').click(); });
 document.getElementById('menuHelp').addEventListener('click', () => {
   document.getElementById('setDlg').hidePopover();
   openHelp(null);
