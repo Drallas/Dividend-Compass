@@ -4072,7 +4072,15 @@ function restoreResid(){
   applyBox3();
   syncCmp();
 }
-document.getElementById('resid').addEventListener('change', e => { saveResid(e.target.value); setTaxDefaults(); syncCmp(); recalc(); });
+// Bij wijzigen van het domicilie blijven de gekozen landen staan; alleen het nieuwe domicilie komt erbij.
+function onDomicileChange(){
+  const r = document.getElementById('resid').value;
+  if (r && r !== 'none' && r in taxOn) taxOn[r] = true;
+  if (r === 'n28') { taxOn.nl = true; taxOn.n28 = true; }
+  applyBox3();
+  updateChips();
+}
+document.getElementById('resid').addEventListener('change', e => { saveResid(e.target.value); onDomicileChange(); syncCmp(); recalc(); });
 /* ============ merk, menu's, scenario's, export, kosten ============ */
 const APP_VERSION = '0.2';
 const SKEY = 'dk-scenarios';
