@@ -4195,7 +4195,7 @@ function renderScenarios(){
   if (!arr.length){ list.innerHTML = `<p class="sub">${tr('scenEmpty')}</p>`; return; }
   list.innerHTML = arr.map((x, i) => {
     const d = x.data;
-    const meta = `${whenTxt(x)} · ${EUR(d.amount)} · ${tr('years')(d.years)} · ${tr(SCEN_KEY[d.scen])}`;
+    const meta = `${EUR(d.amount)} · ${tr('years')(d.years)} · ${tr(SCEN_KEY[d.scen])} · ${whenTxt(x)}`;
     return `<div class="scenrow"><div><b>${esc(x.name)}</b><span>${meta}</span></div>
       <div class="scenbtns"><button type="button" class="rbtn" data-load="${i}">${tr('scenLoad')}</button><button type="button" class="rbtn" data-del="${i}">${tr('scenDel')}</button></div></div>`;
   }).join('');
