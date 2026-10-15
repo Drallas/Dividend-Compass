@@ -710,6 +710,8 @@ details.collapse > summary h2{margin:0}
 .taxaside > .pfield{grid-row:1;grid-column:1;padding-left:20px;display:flex;flex-direction:column;justify-content:center;gap:8px}
 .taxaside > .savebox{grid-row:1;grid-column:2;border-left:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;gap:10px}
 .taxaside .savehead{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.panel.taxaside.no-box3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.panel.taxaside.no-box3 > .basebox{grid-column:2}
 .taxaside > .basebox{grid-row:1;grid-column:3;border-left:1px solid var(--line);padding-right:20px;display:flex;flex-direction:column;justify-content:center;gap:6px}
 .taxaside .pfield-lbl,.taxaside .savebox label{font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap}
 .taxaside .pfield #ovChips{min-width:0}
@@ -4050,6 +4052,7 @@ function setTaxDefaults(){
   if (r && r !== 'none' && r in taxOn) taxOn[r] = true;
   if (r === 'n28') { taxOn.nl = true; taxOn.n28 = true; }
   document.querySelector('.savebox').style.display = r === 'nl' ? '' : 'none';
+  document.querySelector('.taxaside').classList.toggle('no-box3', r !== 'nl');
   updateChips();
 }
 document.getElementById('resid').addEventListener('change', () => { setTaxDefaults(); syncCmp(); recalc(); });
