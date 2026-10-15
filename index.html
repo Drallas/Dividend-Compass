@@ -727,6 +727,9 @@ details.collapse > summary h2{margin:0}
 .taxaside .savebox strong{font-size:13px;color:var(--text);font-weight:600}
 .taxaside .savebox .info{margin-left:2px}
 .taxaside .savebox input{display:block;width:100%;min-width:0;margin:0}
+.taxaside .savamt{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--muted)}
+.taxaside .savamt input{flex:1;min-width:0;height:34px;padding:0 10px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:13px;color:var(--text);background:var(--panel);box-sizing:border-box}
+.taxaside .savamt input:disabled{opacity:.5}
 .taxaside .basebox{font-size:13px;color:var(--muted)}
 .taxaside .basebox .lbl{display:none}
 .taxaside .basebox .row{display:flex;justify-content:space-between;gap:12px;padding:0;white-space:nowrap}
@@ -1104,7 +1107,8 @@ svg#chart .line.acc{stroke-width:2}
       <div class="savehead">
       <label for="savePct" data-i18n="saveLbl"></label> <strong id="savePctLbl">0%</strong> <a class="info" href="#" data-tip-i18n="saveHint">?</a>
       </div>
-      <input type="range" id="savePct" min="0" max="100" step="1" value="0" style="--p:0%" aria-labelledby="savePctLbl">
+      <input type="range" id="savePct" min="0" max="100" step="0.25" value="0" style="--p:0%" aria-labelledby="savePctLbl">
+      <label class="savamt"><span data-i18n="saveAmtLbl"></span><input type="text" inputmode="numeric" id="savAmt"></label>
     </div>
   </aside>
   </div>
@@ -1561,7 +1565,7 @@ const T = {
     ovN28: 'NL nieuw stelsel (2028)', ovPctOf: 'Over {n} jaar: {p} van je winst ({s})', n28Add: 'ook NL 2028 tonen', wzHint: 'Liever stap voor stap?', tabInput: 'Startwaarden', stratWhere: 'Strategieën en eigen mix pas je aan op Fondsen en aannames.', stratWhereLink: 'Openen', phProg: 'Hoe je inleg groeit, verdeeld over uitkerend en accumulerend.', phWealth: 'Je vermogen na kosten en belasting, voor het land dat je kiest.', phTax: 'Wat je per land aan belasting betaalt over de looptijd.', phFunds: 'De fondsen en rendementen waarop de prognose rekent.', taxBarTitle: 'Landen vergelijken', inputTitle: 'Startwaarden', inputSub: 'Je uitgangspunten. De prognose rekent direct mee.', invGoTxt: 'Wil je je startwaarden aanpassen?', invGoLink: 'Ga naar Startwaarden', wzOpen: 'Start de startwizard', tax2028Note: 'Voorstel: vanaf 1-1-2028 wordt in box 3 alleen het werkelijke rendement belast, 36% boven een heffingsvrij bedrag van € 1.800. Nog onder voorbehoud van de Eerste Kamer. Hier gerekend alsof het vanaf het eerste jaar geldt, met de waardestijging als rendement. Verliezen worden niet verrekend.',
     taxEyebrow: 'Belasting · schatting', taxH1: 'Belasting per land',
     taxLead: 'Hoeveel belasting je per jaar betaalt in de landen die je kiest (tot 4 tegelijk), op basis van je inleg, periode en mix. Schattingen, geen belastingadvies.',
-    saveLbl: 'Deel op spaarrekening (box 3)', saveHint: 'Spaargeld telt in box 3 tegen het spaartarief (1,28%) in plaats van het forfaitair rendement (6%). Rente op je spaargeld zit niet in de prognose.',
+    saveLbl: 'Deel op spaarrekening (box 3)', saveAmtLbl: 'of typ het bedrag', saveHint: 'Spaargeld telt in box 3 tegen het spaartarief (1,28%) in plaats van het forfaitair rendement (6%). Rente op je spaargeld zit niet in de prognose.',
     ovYearNote: 'Per jaar: belasting over het vermogen aan het begin van dat jaar (NL en AR) en de inhouding op uitkeringen (VS). Bedragen in euro, voor de gekozen periode en instellingen.',
     ovSumCol: 'Totaal', ovSumRow: 'Totaal over periode',
     colEur: '≈ in €',
@@ -1796,7 +1800,7 @@ const T = {
     ovN28: 'NL new system (2028)', ovPctOf: 'Over {n} years: {p} of your gain ({s})', n28Add: 'also show NL 2028', wzHint: 'Prefer step by step?', tabInput: 'Starting values', stratWhere: 'Strategies and your own mix are changed on Funds and assumptions.', stratWhereLink: 'Open', phProg: 'How your investment grows, split between distributing and accumulating.', phWealth: 'Your wealth after costs and tax, for the country you choose.', phTax: 'What you pay in tax per country over the horizon.', phFunds: 'The funds and returns the forecast is based on.', taxBarTitle: 'Compare countries', inputTitle: 'Starting values', inputSub: 'Your starting points. The forecast updates right away.', invGoTxt: 'Want to change your starting values?', invGoLink: 'Go to Starting values', wzOpen: 'Start the start wizard', tax2028Note: 'Proposal: from 1-1-2028 Dutch wealth taxes only the actual return, 36% above a tax-free amount of €1,800. Still subject to approval by the Senate. Calculated here as if it applies from year one, with the increase in value as return. Losses are not offset.',
     taxEyebrow: 'Tax · estimate', taxH1: 'Tax per country',
     taxLead: 'How much tax you pay per year in the Netherlands, the US and Argentina, based on your investment, period and mix. Estimates, not tax advice.',
-    saveLbl: 'Share in savings account (Dutch wealth tax)', saveHint: 'Savings count in Dutch wealth tax at the savings rate (1.28%) instead of the deemed return (6%). Interest on your savings is not in the forecast.',
+    saveLbl: 'Share in savings account (Dutch wealth tax)', saveAmtLbl: 'or type the amount', saveHint: 'Savings count in Dutch wealth tax at the savings rate (1.28%) instead of the deemed return (6%). Interest on your savings is not in the forecast.',
     ovYearNote: 'Per year: tax on assets at the start of that year (NL and AR) and the withholding on distributions (US). Amounts in euro, for the chosen period and settings.',
     ovSumCol: 'Total', ovSumRow: 'Total over period',
     colEur: '≈ in €',
@@ -2031,7 +2035,7 @@ const T = {
     ovN28: 'Países Bajos nuevo sistema (2028)', ovPctOf: 'En {n} años: {p} de tu ganancia ({s})', n28Add: 'mostrar también P. Bajos 2028', wzHint: '¿Prefieres paso a paso?', tabInput: 'Valores iniciales', stratWhere: 'Las estrategias y tu propia mezcla se cambian en Fondos y supuestos.', stratWhereLink: 'Abrir', phProg: 'Cómo crece tu inversión, repartida entre distribución y acumulación.', phWealth: 'Tu patrimonio después de costes e impuestos, para el país que elijas.', phTax: 'Lo que pagas de impuestos por país durante el plazo.', phFunds: 'Los fondos y rendimientos en los que se basa la previsión.', taxBarTitle: 'Comparar países', inputTitle: 'Valores iniciales', inputSub: 'Tus puntos de partida. La previsión se actualiza al momento.', invGoTxt: '¿Quieres cambiar tus valores iniciales?', invGoLink: 'Ir a Valores iniciales', wzOpen: 'Abrir el asistente inicial', tax2028Note: 'Propuesta: desde el 1-1-2028 la caja 3 solo grava el rendimiento real, al 36% por encima de un mínimo exento de 1.800 €. Aún pendiente de aprobación por el Senado. Aquí se calcula como si aplicara desde el primer año, con la subida del valor como rendimiento. Las pérdidas no se compensan.',
     taxEyebrow: 'Impuestos · estimación', taxH1: 'Impuestos por país',
     taxLead: 'Cuánto impuesto pagas al año en Países Bajos, EE. UU. y Argentina, según tu inversión, periodo y mezcla. Estimaciones, no asesoramiento fiscal.',
-    saveLbl: 'Parte en cuenta de ahorro (impuesto neerlandés sobre el patrimonio)', saveHint: 'El ahorro cuenta en impuesto neerlandés sobre el patrimonio al tipo de ahorro (1,28%) en lugar del rendimiento forfetario (6%). Los intereses de tu ahorro no están en la previsión.',
+    saveLbl: 'Parte en cuenta de ahorro (impuesto neerlandés sobre el patrimonio)', saveAmtLbl: 'o escribe el importe', saveHint: 'El ahorro cuenta en impuesto neerlandés sobre el patrimonio al tipo de ahorro (1,28%) en lugar del rendimiento forfetario (6%). Los intereses de tu ahorro no están en la previsión.',
     ovYearNote: 'Por año: impuesto sobre el patrimonio al inicio de ese año (NL y AR) y la retención sobre distribuciones (EE. UU.). Importes en euros, para el periodo y los ajustes elegidos.',
     ovSumCol: 'Total', ovSumRow: 'Total en el periodo',
     colEur: '≈ en €',
@@ -2985,7 +2989,13 @@ function syncGoal(){
 // Toont het percentage en het bijbehorende eurobedrag van het startvermogen dat op de spaarrekening staat.
 function updateSaveLbl(){
   const el = document.getElementById('savePctLbl'); if (!el) return;
-  el.textContent = savePct + '%  ·  ' + EUR(amountNow * savePct / 100);
+  const eur = amountNow * savePct / 100;
+  el.textContent = savePct.toLocaleString(loc(), {maximumFractionDigits: 2}) + '%  ·  ' + EUR(eur);
+  const ai = document.getElementById('savAmt');
+  if (ai && document.activeElement !== ai){
+    ai.value = eur > 0 ? fmtNum(toDisp(Math.round(eur))) : '';
+    ai.disabled = amountNow <= 0;
+  }
 }
 function recalc(){
   updateSaveLbl();
@@ -3808,6 +3818,18 @@ document.getElementById('savePct').addEventListener('input', e => {
   savePct = +e.target.value;
   updateSaveLbl();
   e.target.style.setProperty('--p', savePct + '%');
+  recalc();
+});
+// Bedrag typen: het percentage volgt, afgerond op 0,25%.
+document.getElementById('savAmt').addEventListener('input', e => {
+  if (amountNow <= 0) return;
+  const eur = Math.max(0, fromDisp(digits(e.target.value)));
+  const pct = Math.min(100, Math.round(eur / amountNow * 400) / 4);
+  savePct = pct;
+  document.getElementById('savePct').value = pct;
+  document.getElementById('savePct').style.setProperty('--p', pct + '%');
+  const el = document.getElementById('savePctLbl');
+  el.textContent = pct.toLocaleString(loc(), {maximumFractionDigits: 2}) + '%  ·  ' + EUR(amountNow * pct / 100);
   recalc();
 });
 document.getElementById('taxKpis').addEventListener('keydown', e => {
