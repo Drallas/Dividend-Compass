@@ -1084,7 +1084,7 @@
     <div id="gl-box3"><dt data-i18n="gl.box3.t"></dt><dd data-i18n="gl.box3.d"></dd><a class="glsrc" href="https://financialfocus.abnamro.nl/fiscaliteiten/box-3-belasting-over-inkomen-uit-sparen-en-beleggen/" target="_blank" rel="noopener noreferrer">Bron: ABN AMRO (NL)</a></div>
     <div id="gl-taxintro"><dt data-i18n="taxTitle"></dt><dd data-i18n="taxIntro"></dd></div>
     <div id="gl-taxovr"><dt data-i18n="ovTitle"></dt><dd data-i18n="ovSub"></dd></div>
-    <div id="gl-taxovr2"><dt data-i18n="ovTotal"></dt><dd data-i18n="ovNote"></dd></div>
+    <div id="gl-taxovr2"><dt data-i18n="ovTotal"></dt><dd data-i18n="ovNote"></dd><a class="glsrc" href="https://taxsummaries.pwc.com/United-States/Corporate/Withholding-taxes" target="_blank" rel="noopener noreferrer">Bron: PwC Tax Summaries (EN)</a></div>
     <div id="gl-taxovr3"><dt data-i18n="colYear"></dt><dd data-i18n="ovYearNote"></dd></div>
     <div id="gl-taxsave"><dt data-i18n="saveLbl"></dt><dd data-i18n="saveHint"></dd></div>
     <div id="gl-taxnl"><dt data-i18n="nlTitle"></dt><dd data-i18n="nlText"></dd></div>
@@ -1385,7 +1385,7 @@ const T = {
     ovNeedRate: 'Vul de koers in', ovNone: 'Alle landen staan uit. Zet er minstens één aan.',
     arRateLbl: 'Koers: ARS per €1 (voor Argentinië)',
     arRateHint: 'Ingevuld met de BCRA-gemiddelde verkoopkoers van 14-10-2026 (ca. ARS 1.780 per euro). Pas aan als je een andere koers wilt.',
-    ovNote: 'Nederland en Argentinië zijn vermogensbelasting over je totale vermogen per jaar. Bij de VS gaat het om de 15% bronbelasting op uitkeringen, die het fonds al inhoudt; het Amerikaanse aandeel per dividendfonds is mijn schatting (SDIV 75%, JEPG 50%, JEPQ 85%, LGQD 55%). Accumulerende fondsen tonen geen bedrag, want daar zit de inhouding in de koers. De Argentijnse regels gelden voor inwoners van Argentinië; dit is de binnenlandse schaal op de gekozen bedragen, zonder bezittingen in het buitenland.',
+    ovNote: 'Per jaar: vermogensbelasting (NL en AR) over je totale vermogen, plus de bronbelasting (VS) die het fonds al inhoudt. Accumulerende fondsen tonen geen VS-bedrag.',
     tabProg: 'Investeringsprognose', tabFunds: 'Fondsen en aannames', tabWealth: 'Netto waardeprognose', tabPay: 'Uitkeringsprognose', tabTax: 'Belasting', themeAuto: 'Auto', themeDark: 'Donker', themeLight: 'Licht',
     taxTitle: 'Belasting per land',
     taxIntro: 'Schattingen op basis van de instellingen van de prognose. Dit is geen belastingadvies; controleer de actuele regels bij de Belastingdienst of een adviseur.',
@@ -1620,7 +1620,7 @@ const T = {
     ovNeedRate: 'Enter the rate', ovNone: 'All countries are off. Turn on at least one.',
     arRateLbl: 'Rate: ARS per €1 (for Argentina)',
     arRateHint: 'Filled in with the BCRA average selling rate of 14-10-2026 (about ARS 1,780 per euro). Change it if you want another rate.',
-    ovNote: 'The Netherlands and Argentina are wealth taxes on your total assets per year. For the US it is the 15% withholding on distributions, which the fund already deducts; the US share per dividend fund is my estimate (SDIV 75%, JEPG 50%, JEPQ 85%, LGQD 55%). Accumulating funds show no amount, because their withholding is in the price. Argentine rules apply to residents of Argentina; this is the domestic scale on the chosen amounts, without assets held abroad.',
+    ovNote: 'Per year: wealth tax (NL and AR) on your total assets, plus the US withholding (US) that the fund already deducts. Accumulating funds show no US amount.',
     tabProg: 'Investment forecast', tabFunds: 'Funds and assumptions', tabWealth: 'Net worth forecast', tabPay: 'Payout forecast', tabTax: 'Tax', themeAuto: 'Auto', themeDark: 'Dark', themeLight: 'Light',
     taxTitle: 'Tax per country',
     taxIntro: 'Estimates based on the forecast settings. This is not tax advice; check current rules with your tax authority or an adviser.',
@@ -1855,7 +1855,7 @@ const T = {
     ovNeedRate: 'Indica el tipo de cambio', ovNone: 'Todos los países están desactivados. Activa al menos uno.',
     arRateLbl: 'Tipo de cambio: ARS por 1 €  (para Argentina)',
     arRateHint: 'Puesto con la cotización de venta promedio del BCRA del 14-10-2026 (unos ARS 1.780 por euro). Cámbialo si quieres otro tipo.',
-    ovNote: 'Países Bajos y Argentina son impuestos al patrimonio sobre tus activos totales cada año. En EE. UU. se trata de la retención del 15% sobre distribuciones, que el fondo ya descuenta; la parte estadounidense por fondo de dividendos es mi estimación (SDIV 75%, JEPG 50%, JEPQ 85%, LGQD 55%). Los fondos de acumulación no muestran importe, porque su retención está en el precio. Las normas argentinas se aplican a residentes en Argentina; esto es la escala nacional sobre los importes elegidos, sin bienes en el exterior.',
+    ovNote: 'Por año: impuesto al patrimonio (NL y AR) sobre tus activos totales, más la retención en EE. UU. que ya descuenta el fondo. Los acumulativos no muestran importe de EE. UU.',
     tabProg: 'Previsión de inversión', tabFunds: 'Fondos y supuestos', tabWealth: 'Previsión de patrimonio neto', tabPay: 'Previsión de pagos', tabTax: 'Impuestos', themeAuto: 'Auto', themeDark: 'Oscuro', themeLight: 'Claro',
     taxTitle: 'Impuestos por país',
     taxIntro: 'Estimaciones basadas en los ajustes de la previsión. No es asesoramiento fiscal; consulta las normas actuales con tu administración tributaria o con un asesor.',
