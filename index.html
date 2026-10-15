@@ -880,6 +880,7 @@
     <div class="basebox">
       <div class="lbl" data-i18n="baseTitle"></div>
       <div class="row"><span data-i18n="baseInv"></span><b id="baseAmt">–</b></div>
+      <div class="row"><span data-i18n="baseMonthly"></span><b id="baseMon">–</b></div>
       <div class="row"><span data-i18n="baseYears"></span><b id="baseYrs">–</b></div>
       <a href="#" id="baseGo" data-i18n="baseChange"></a>
     </div>
@@ -1328,7 +1329,7 @@ const T = {
     'gl.uit.t': 'Uitbetaald', 'gl.uit.d': 'Het geld dat je per uitkering ontvangt als je niet herinvesteert. Het verlaat het fonds en telt niet meer mee in het vermogen, maar het is niet verloren.',
     vibePre: 'Vibe coded met', vibePost: 'door Drallas', vibeTitle: 'Bekijk de README op GitHub', aboutRepo: 'Broncode op GitHub', na: 'n.v.t.', none: '–', helpLink: 'Help', mSuffix: ' mln',
     sortLbl: 'Sorteren:', sortFixed: 'Vaste volgorde', sortDesc: 'Hoogste bedrag eerst', sortAlpha: 'Alfabetisch',
-    baseTitle: 'Berekend over', baseInv: 'Belegd bedrag', baseYears: 'Looptijd', baseYrs: 'jaar', baseChange: 'Aanpassen op Prognose',
+    baseTitle: 'Berekend over', baseInv: 'Startvermogen', baseMonthly: 'Maandelijkse inleg', baseYears: 'Looptijd', baseYrs: 'jaar', baseChange: 'Aanpassen op Prognose',
     pickTitle: 'Landen vergelijken', grpMain: 'Basisvergelijking', grpOther: 'Meer landen', pickOf: n => `${n} van 4`, pickMax: 'Maximaal 4 landen tegelijk. Zet er eerst een uit.',
     hTotals: 'Totaal per land', hYears: 'Belasting per jaar', hNotes: 'Uitgangspunten per land', colBase: 'Belast over (gem. per jaar)',
     noteGeneric: 'Voor de extra landen is per jaar gerekend over de uitkeringen en de waardestijging van dat jaar. Het zijn indicaties, geen belastingadvies; controleer de actuele regels.',
@@ -1562,7 +1563,7 @@ const T = {
     'gl.uit.t': 'Paid out', 'gl.uit.d': 'The money you receive per distribution when you do not reinvest. It leaves the fund and no longer counts toward the value, but it is not lost.',
     vibePre: 'Vibe coded with', vibePost: 'by Drallas', vibeTitle: 'View the README on GitHub', aboutRepo: 'Source code on GitHub', na: 'n/a', none: '–', helpLink: 'Help', mSuffix: 'm',
     sortLbl: 'Sort:', sortFixed: 'Fixed order', sortDesc: 'Highest amount first', sortAlpha: 'Alphabetical',
-    baseTitle: 'Calculated on', baseInv: 'Invested amount', baseYears: 'Period', baseYrs: 'years', baseChange: 'Change on Forecast',
+    baseTitle: 'Calculated on', baseInv: 'Starting capital', baseMonthly: 'Monthly contribution', baseYears: 'Period', baseYrs: 'years', baseChange: 'Change on Forecast',
     pickTitle: 'Compare countries', grpMain: 'Core comparison', grpOther: 'More countries', pickOf: n => `${n} of 4`, pickMax: 'Maximum 4 countries at once. Turn one off first.',
     hTotals: 'Total per country', hYears: 'Tax per year', hNotes: 'Assumptions per country', colBase: 'Taxed on (avg per year)',
     noteGeneric: 'For the extra countries tax is calculated per year on that year\'s distributions and increase in value. These are indications, not tax advice; check the current rules.',
@@ -1796,7 +1797,7 @@ const T = {
     'gl.uit.t': 'Pagado', 'gl.uit.d': 'El dinero que recibes por cada distribución si no reinviertes. Sale del fondo y ya no cuenta en el valor, pero no se pierde.',
     vibePre: 'Vibe coded con', vibePost: 'por Drallas', vibeTitle: 'Ver el README en GitHub', aboutRepo: 'Código en GitHub', na: 'n/d', none: '–', helpLink: 'Ayuda', mSuffix: ' mill.',
     sortLbl: 'Ordenar:', sortFixed: 'Orden fijo', sortDesc: 'Mayor importe primero', sortAlpha: 'Alfabético',
-    baseTitle: 'Calculado sobre', baseInv: 'Importe invertido', baseYears: 'Plazo', baseYrs: 'años', baseChange: 'Cambiar en Previsión',
+    baseTitle: 'Calculado sobre', baseInv: 'Capital inicial', baseMonthly: 'Aportación mensual', baseYears: 'Plazo', baseYrs: 'años', baseChange: 'Cambiar en Previsión',
     pickTitle: 'Comparar países', grpMain: 'Comparación base', grpOther: 'Más países', pickOf: n => `${n} de 4`, pickMax: 'Máximo 4 países a la vez. Desactiva uno primero.',
     hTotals: 'Total por país', hYears: 'Impuesto por año', hNotes: 'Supuestos por país', colBase: 'Gravado sobre (media/año)',
     noteGeneric: 'En los países adicionales se calcula cada año sobre las distribuciones y la subida de valor de ese año. Son indicaciones, no asesoramiento fiscal; comprueba las normas vigentes.',
@@ -2422,6 +2423,7 @@ function renderOverview(){
   fillRegSel();
   if (!['ov','nl','us','ar'].includes(subTab)) renderGeneric(subTab);
   document.getElementById('baseAmt').textContent = EUR(amount);
+  document.getElementById('baseMon').textContent = EUR(monthlyAmt);
   document.getElementById('baseYrs').textContent = years + ' ' + tr('baseYrs');
   const nt = document.getElementById('ovNotes');
   const withNote = meta.filter(m => EXTRA.some(e => e.k === m.k));
