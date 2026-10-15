@@ -154,7 +154,7 @@ with sync_playwright() as p:
 
     # 16. Maandelijkse uitgaven
     pg, errs = new_page(b)
-    pg.evaluate("() => { manualAmount = 305000; amountNow = 305000; monthlyAmt = 500; spendMonthly = 0; recalc(); }")
+    pg.evaluate("() => { manualAmount = 305000; amountNow = 305000; monthlyAmt = 500; spendMonthly = 0; document.getElementById('reinvest').checked = false; recalc(); }")
     same = pg.evaluate("() => { const sc = scen[document.querySelector('input[name=scen]:checked').value]; const A = pairSim(150000, 150000, 10, false, sc, 3000, 3000, 0), B1 = basket('div', 150000, 10, false, sc, 3000), B2 = basket('acc', 150000, 10, false, sc, 3000); return Math.abs(A.d.vals[10] - B1.vals[10]) < 1e-6 && Math.abs(A.a.vals[10] - B2.vals[10]) < 1e-6 && Math.abs(A.d.cashArr[10] - B1.cashArr[10]) < 1e-6 && Math.abs(A.d.cost - B1.cost) < 1e-6; }")
     check("16a zonder uitgaven geeft pairSim hetzelfde als basket", same is True, same)
     base = pg.evaluate("() => lastProg.grand")
@@ -168,6 +168,10 @@ with sync_playwright() as p:
     pg.evaluate("document.querySelector('.tabs .tab[data-tab=\"tabWealth\"]').click()"); pg.wait_for_timeout(300)
     d = pg.evaluate("() => { const sum = a => a.reduce((x, y) => x + (y || 0), 0); return {w: lastWealth.tax[lastWealth.H], t: sum(lastTx.tx.nl), net: lastWealth.net[lastWealth.H], tot: lastProg.grand}; }")
     check("16e belasting in beide tabbladen gelijk met uitgaven", abs(d['w'] - d['t']) < 1, d)
+    pg.evaluate("() => { document.getElementById('reinvest').checked = true; spendMonthly = 250; recalc(); }")
+    ri = pg.evaluate("() => ({dis: document.getElementById('spend').disabled, rdis: document.getElementById('spendRange').disabled, eff: spendEff, uit: document.querySelectorAll('#wealthBody .calk')[3].innerText, warn: document.getElementById('spendWarn').innerText})")
+    check("16i met herinvesteren aan: onttrekkingen uitgegrijsd, niet meegerekend, geen uitkering", ri['dis'] and ri['rdis'] and ri['eff'] == 0 and ri['uit'].endswith('0') and 'herinvesteren' in ri['warn'].lower() or 'reinvest' in ri['warn'].lower() or 'reinversión' in ri['warn'].lower(), ri)
+    pg.evaluate("() => { document.getElementById('reinvest').checked = false; recalc(); }")
     cap = pg.evaluate("() => { spendMonthly = 20000; recalc(); return [spendCapNow, spendMonthly, !document.getElementById('spendWarn').hidden]; }")
     check("16f onttrekking boven het dividend wordt begrensd met waarschuwing", cap[0] > 0 and cap[1] == cap[0] and cap[2] is True, cap)
     ok = pg.evaluate("() => { spendMonthly = 100; recalc(); return document.getElementById('spendWarn').hidden; }")

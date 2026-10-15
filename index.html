@@ -340,6 +340,7 @@
   .calpanel .sub{margin:0 0 18px}
   .calkpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
   .calk{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+  .field.muted{opacity:.5}
   .calk small{display:block;font-size:12px;color:var(--muted);margin-top:4px}
   .calk span{display:block;font-size:12.5px;color:var(--muted)}
   .calk b{display:block;font-size:20px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
@@ -1568,7 +1569,7 @@ const T = {
     kRend: 'Bijdrage aan waardegroei (voor belasting)', retNote: 'Groei = eindwaarde (incl. uitkeringen) min ingelegd.', divRet: 'Dividend rendement', accRet: 'Acc rendement',
     kPerMaand: 'Dividend per maand bij start',
     kKosten: 'Kosten (TER) over de periode',
-    startValue: 'Startwaarde', grpSpend: 'Onttrekkingen per maand', spendTip: 'Wat je per maand opneemt, in euro’s van nu (zonder inflatie). Maximaal het dividend dat je bij start per maand ontvangt. Het wordt eerst betaald uit de uitkeringen; bij herbeleggen wordt het benodigde deel uit de fondsen gehaald.', spendMax: x => `max. ${x} (je dividend per maand)`, spendNone: 'Geen dividend in je mix, dus geen onttrekking mogelijk.', spendWarn: x => `Dat kan niet: je kunt maximaal het dividend opnemen dat je ontvangt (${x} per maand). Het bedrag is teruggezet.`, kSpent: 'Onttrekkingen', basedOn: 'Gebaseerd op je ', basedOnLink: 'startwaarden', afterSpend: 'Na onttrekkingen van {x} per maand.', depleted: n => `Let op: het vermogen is op na jaar ${n}.`, rSpent: 'Onttrekkingen',
+    startValue: 'Startwaarde', spendReinv: 'Niet mogelijk zolang uitkeringen herinvesteren aan staan. Zet dat uit om onttrekkingen te gebruiken.', grpSpend: 'Onttrekkingen per maand', spendTip: 'Wat je per maand opneemt, in euro’s van nu (zonder inflatie). Maximaal het dividend dat je bij start per maand ontvangt. Het wordt eerst betaald uit de uitkeringen; bij herbeleggen wordt het benodigde deel uit de fondsen gehaald.', spendMax: x => `max. ${x} (je dividend per maand)`, spendNone: 'Geen dividend in je mix, dus geen onttrekking mogelijk.', spendWarn: x => `Dat kan niet: je kunt maximaal het dividend opnemen dat je ontvangt (${x} per maand). Het bedrag is teruggezet.`, kSpent: 'Onttrekkingen', basedOn: 'Gebaseerd op je ', basedOnLink: 'startwaarden', afterSpend: 'Na onttrekkingen van {x} per maand.', depleted: n => `Let op: het vermogen is op na jaar ${n}.`, rSpent: 'Onttrekkingen',
     avgPerYear: (d,a) => `Gemiddeld ${d} per jaar (dividend) · ${a} (acc)`, investedSplit: 'Ingelegd: dividend {d}, acc {a}', goalOut: 'Doel buiten beeld:', wHint: 'Beweeg over de grafiek (of tik erop) voor de waarden per jaar.',
     coverFill: 'Vul een gewenst maandbedrag in',
     cover: (p, m) => `Dekt ${p}% van ${m} per maand`,
@@ -1804,7 +1805,7 @@ const T = {
     kRend: 'Contribution to value growth (before tax)', retNote: 'Growth = end value (incl. payouts) minus invested.', divRet: 'Dividend return', accRet: 'Acc return',
     kPerMaand: 'Dividend per month at start',
     kKosten: 'Costs (TER) over the period',
-    startValue: 'Starting value', grpSpend: 'Withdrawals per month', spendTip: 'What you withdraw per month, in today’s euros (no inflation). At most the dividend you receive per month at the start. It is paid from the payouts first; when reinvesting, the part needed is taken from the funds.', spendMax: x => `max. ${x} (your dividend per month)`, spendNone: 'No dividend in your mix, so no withdrawal is possible.', spendWarn: x => `That is not possible: you can withdraw at most the dividend you receive (${x} per month). The amount was reset.`, kSpent: 'Withdrawals', basedOn: 'Based on your ', basedOnLink: 'starting values', afterSpend: 'After withdrawing {x} per month.', depleted: n => `Note: wealth runs out after year ${n}.`, rSpent: 'Withdrawals',
+    startValue: 'Starting value', spendReinv: 'Not possible while reinvesting is on. Turn it off to use withdrawals.', grpSpend: 'Withdrawals per month', spendTip: 'What you withdraw per month, in today’s euros (no inflation). At most the dividend you receive per month at the start. It is paid from the payouts first; when reinvesting, the part needed is taken from the funds.', spendMax: x => `max. ${x} (your dividend per month)`, spendNone: 'No dividend in your mix, so no withdrawal is possible.', spendWarn: x => `That is not possible: you can withdraw at most the dividend you receive (${x} per month). The amount was reset.`, kSpent: 'Withdrawals', basedOn: 'Based on your ', basedOnLink: 'starting values', afterSpend: 'After withdrawing {x} per month.', depleted: n => `Note: wealth runs out after year ${n}.`, rSpent: 'Withdrawals',
     avgPerYear: (d,a) => `Average ${d} per year (dividend) · ${a} (acc)`, investedSplit: 'Invested: dividend {d}, acc {a}', goalOut: 'Goal off chart:', wHint: 'Hover over the chart (or tap it) for the values per year.',
     coverFill: 'Enter a desired monthly amount',
     cover: (p, m) => `Covers ${p}% of ${m} per month`,
@@ -2040,7 +2041,7 @@ const T = {
     kRend: 'Aportación al crecimiento (antes de impuestos)', retNote: 'Crecimiento = valor final (incl. pagos) menos invertido.', divRet: 'Rendimiento dividendo', accRet: 'Rendimiento acum.',
     kPerMaand: 'Dividendo al mes al inicio',
     kKosten: 'Costes (TER) del periodo',
-    startValue: 'Valor inicial', grpSpend: 'Retiradas al mes', spendTip: 'Lo que retiras al mes, en euros de hoy (sin inflación). Como máximo el dividendo que recibes al mes al inicio. Se paga primero con los pagos; al reinvertir, la parte necesaria sale de los fondos.', spendMax: x => `máx. ${x} (tu dividendo al mes)`, spendNone: 'No hay dividendo en tu mezcla, así que no es posible retirar.', spendWarn: x => `No es posible: puedes retirar como máximo el dividendo que recibes (${x} al mes). El importe se ha restablecido.`, kSpent: 'Retiradas', basedOn: 'Basado en tus ', basedOnLink: 'valores iniciales', afterSpend: 'Tras retirar {x} al mes.', depleted: n => `Atención: el patrimonio se agota tras el año ${n}.`, rSpent: 'Retiradas',
+    startValue: 'Valor inicial', spendReinv: 'No es posible mientras la reinversión esté activada. Desactívala para usar retiradas.', grpSpend: 'Retiradas al mes', spendTip: 'Lo que retiras al mes, en euros de hoy (sin inflación). Como máximo el dividendo que recibes al mes al inicio. Se paga primero con los pagos; al reinvertir, la parte necesaria sale de los fondos.', spendMax: x => `máx. ${x} (tu dividendo al mes)`, spendNone: 'No hay dividendo en tu mezcla, así que no es posible retirar.', spendWarn: x => `No es posible: puedes retirar como máximo el dividendo que recibes (${x} al mes). El importe se ha restablecido.`, kSpent: 'Retiradas', basedOn: 'Basado en tus ', basedOnLink: 'valores iniciales', afterSpend: 'Tras retirar {x} al mes.', depleted: n => `Atención: el patrimonio se agota tras el año ${n}.`, rSpent: 'Retiradas',
     avgPerYear: (d,a) => `Media ${d} al año (dividendo) · ${a} (acum.)`, investedSplit: 'Invertido: dividendo {d}, acc {a}', goalOut: 'Meta fuera del gráfico:', wHint: 'Pasa el cursor por el gráfico (o tócalo) para ver los valores por año.',
     coverFill: 'Indica un importe mensual deseado',
     cover: (p, m) => `Cubre el ${p}% de ${m} al mes`,
@@ -3143,9 +3144,12 @@ function recalc(){
   updateProfBtn();
   if (typeof synthCalc === 'function') synthCalc();
   renderMonthly();
-  spendCapNow = spendCap();
-  spendOver = spendMonthly > spendCapNow;
+  // Met herinvesteren aan zijn onttrekkingen niet mogelijk: het bedrag blijft bewaard, maar telt niet mee
+  const reinvNow = document.getElementById('reinvest').checked;
+  spendCapNow = reinvNow ? 0 : spendCap();
+  spendOver = !reinvNow && spendMonthly > spendCapNow;
   if (spendOver) spendMonthly = spendCapNow;
+  spendEff = reinvNow ? 0 : Math.min(spendMonthly, spendCapNow);
   renderSpend();
   syncGoal();
   persistFunds();
@@ -3190,7 +3194,7 @@ function recalc(){
   const yC = 12 * monthlyAmt, dC = yC * mix, aC = yC * (1 - mix);
   const dStart = amount * mix, aStart = amount * (1 - mix);
   const dIn = dStart + dC * years, aIn = aStart + aC * years, totIn = amount + yC * years;
-  const spendYr = 12 * spendMonthly;
+  const spendYr = 12 * spendEff;
   const ps = pairSim(dStart, aStart, years, reinvest, sc, dC, aC, spendYr);
   const d = ps.d, a = ps.a;
 
@@ -3225,7 +3229,7 @@ function recalc(){
       ...(reinvest ? [] : [{k:'tot', name:tr('kWaarde'), v:EUR(d.vals[years] + a.vals[years])}, {k:'div', name:tr('kUitb'), v:EUR(dCash)}]),
       {k:'tot', name:tr('kTotGen'), v:EUR(grand)},
       ...(spendYr > 0 ? [{k:'acc', name:tr('kSpent'), v:'− ' + EUR(totSp)}] : [])
-    ], `${tr('basedOn')}<a href="#" data-goto="tabInput">${tr('basedOnLink')}</a>.${spendYr > 0 ? ' ' + fillT('afterSpend', {x: EUR(spendMonthly)}) : ''}${depletedAt ? `<br><b class="warnline">${tr('depleted')(depletedAt)}</b>` : ''}`, undefined, '#2563eb', true),
+    ], `${tr('basedOn')}<a href="#" data-goto="tabInput">${tr('basedOnLink')}</a>.${spendYr > 0 ? ' ' + fillT('afterSpend', {x: EUR(spendEff)}) : ''}${depletedAt ? `<br><b class="warnline">${tr('depleted')(depletedAt)}</b>` : ''}`, undefined, '#2563eb', true),
     kpiCard(tr('kRend'), [
       {k:'div', name:tr('dividendShort'), v:growTxt(dTotal + dSp - dIn, dTotal + dSp - dIn + aTotal + aSp - aIn)},
       {k:'acc', name:tr('accShort'), v:growTxt(aTotal + aSp - aIn, dTotal + dSp - dIn + aTotal + aSp - aIn)},
@@ -3923,21 +3927,24 @@ function spendCap(){
   const sy = basket('div', 1, 1, false, sc).startYield;
   return Math.max(0, Math.floor(amountNow * (1 - spNow()) * mix * sy / 100 / 12));
 }
-let spendCapNow = 0, spendOver = false;
+let spendCapNow = 0, spendOver = false, spendEff = 0;
 function renderSpend(){
   const el = document.getElementById('spend');
+  const reinvNow = document.getElementById('reinvest').checked;
   if (document.activeElement !== el) el.value = fmtNum(toDisp(spendMonthly));
+  el.disabled = reinvNow;
+  el.closest('.field').classList.toggle('muted', reinvNow);
   const r = document.getElementById('spendRange');
-  r.max = spendCapNow;
-  r.disabled = spendCapNow <= 0;
+  r.max = Math.max(1, spendCapNow);
+  r.disabled = reinvNow || spendCapNow <= 0;
   r.value = Math.min(spendCapNow, Math.max(0, spendMonthly));
   r.style.setProperty('--p', (spendCapNow > 0 ? r.value / spendCapNow * 100 : 0) + '%');
   r.style.setProperty('--fill', 'var(--div)');
   document.getElementById('spMin').textContent = EUR(0);
   document.getElementById('spMax').textContent = spendCapNow > 0 ? tr('spendMax')(EUR(spendCapNow)) : tr('spendNone');
   const w = document.getElementById('spendWarn');
-  w.hidden = !spendOver;
-  w.textContent = spendOver ? (spendCapNow > 0 ? tr('spendWarn')(EUR(spendCapNow)) : tr('spendNone')) : '';
+  w.hidden = !(reinvNow || spendOver);
+  w.textContent = reinvNow ? tr('spendReinv') : (spendOver ? (spendCapNow > 0 ? tr('spendWarn')(EUR(spendCapNow)) : tr('spendNone')) : '');
 }
 document.getElementById('spend').addEventListener('input', () => { spendMonthly = readEur('spend'); recalc(); });
 document.getElementById('spend').addEventListener('blur', renderSpend);
@@ -4134,7 +4141,7 @@ function renderWealth(){
   const bx = (resid === 'nl' && isNL()) ? ' (box 3)' : '';
   const yC = 12 * monthlyAmt, dC = yC * mix, aC = yC * (1 - mix);
   const inv = amountNow * (1 - sp);   // belegd deel; het spaardeel groeit met de spaarrente
-  const spendYr = 12 * spendMonthly;
+  const spendYr = 12 * spendEff;
   const psim = pairSim(inv * mix, inv * (1 - mix), H, reinvest, sc, dC, aC, spendYr);
   const d = psim.d, a = psim.a;
   const fund = [], cash = [], sav = [], tax = [], net = [], spent = [];
@@ -4746,7 +4753,7 @@ function buildReport(){
   const kv = (a, b) => `<tr><th>${escH(a)}</th><td>${b}</td></tr>`;
   const inputs = [
     kv(R.start, EUR(amountNow)), kv(R.monthly, EUR(monthlyAmt)), kv(R.years, tr('years')(H)),
-    ...(spendMonthly > 0 ? [kv(R.spend, EUR(spendMonthly))] : []), kv(R.mix, `${Math.round(s.mix)}% / ${Math.round(100 - s.mix)}%`), kv(R.strat, escH(strategyLabel())),
+    ...(spendEff > 0 ? [kv(R.spend, EUR(spendEff))] : []), kv(R.mix, `${Math.round(s.mix)}% / ${Math.round(100 - s.mix)}%`), kv(R.strat, escH(strategyLabel())),
     kv(R.scen, escH(tr(SCEN_KEY[s.scen]))), kv(R.reinv, s.reinvest ? R.yes : R.no), kv(R.dom, escH(domTxt))
   ];
   if (Wd.sp > 0) inputs.push(kv(R.sav, `${(Wd.sp * 100).toLocaleString(loc(), {maximumFractionDigits: 2})}% · ${EUR(amountNow * Wd.sp)}`), kv(R.savRate, `${rateVal().toLocaleString(loc(), {maximumFractionDigits: 2})}%`));
