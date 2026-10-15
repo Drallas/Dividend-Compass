@@ -830,6 +830,9 @@ details.collapse > summary h2{margin:0}
 .duo .collapse-body .tbl-wrap{max-height:332px;overflow:auto}
 .duo .tbl thead th{position:sticky;top:0;background:var(--panel);z-index:1}
 @media (max-width:640px){ .taxcard .row{flex-direction:row;align-items:baseline} #kpis{grid-template-columns:minmax(0,1fr)} .duo .collapse-body .tbl-wrap{max-height:420px} }
+/* mobiel: tabs als keuzelijst, subtitel weg */
+.tabsel{display:none}
+@media (max-width:640px){ .tabs{display:none !important} .tabsel{display:block;padding:12px 16px 0} .tabsel select{width:100%;min-height:46px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);font:inherit;font-weight:600;padding:0 14px} .brandtag{display:none !important} }
 /* lijnen die samenvallen: blauw breder eronder, oranje erop */
 svg#chart .line.div{stroke-width:4.5}
 svg#chart .line.acc{stroke-width:2}
@@ -876,7 +879,8 @@ svg#chart .line.acc{stroke-width:2}
   <h1 class="sr-only" data-i18n="h1"></h1>
 </header>
 
-<div class="tabsnav" role="navigation" aria-label="Dividend Compass" style="display:contents"><div class="tabs" role="tablist">
+<div class="tabsnav" role="navigation" aria-label="Dividend Compass" style="display:contents"><div class="tabsel"><label class="sr" for="tabSel" data-i18n="tabSelLbl"></label><select id="tabSel"></select></div>
+<div class="tabs" role="tablist">
   <button type="button" class="tab" role="tab" aria-selected="true" data-tab="tabProg" data-i18n="tabProg"></button>
   <button type="button" class="tab" role="tab" aria-selected="false" data-tab="tabWealth" data-i18n="tabWealth"></button>
   <button type="button" class="tab" role="tab" aria-selected="false" data-tab="tabPay" data-i18n="tabPay"></button>
@@ -1667,7 +1671,7 @@ const T = {
     arRateLbl: 'Koers: ARS per €1 (voor Argentinië)',
     arRateHint: 'Ingevuld met de BCRA-gemiddelde verkoopkoers van 14-10-2026 (ca. ARS 1.780 per euro). Pas aan als je een andere koers wilt.',
     ovNote: 'Per jaar: vermogensbelasting (NL en AR) over je totale vermogen, plus de bronbelasting (VS) die het fonds al inhoudt. Accumulerende fondsen tonen geen VS-bedrag.',
-    tabProg: 'Investeringsprognose', tabFunds: 'Fondsen en aannames', tabWealth: 'Netto waardeprognose', tabPay: 'Uitkeringsprognose', tabTax: 'Belasting', themeAuto: 'Auto', themeDark: 'Donker', themeLight: 'Licht',
+    tabSelLbl: 'Tabblad', tabProg: 'Investeringsprognose', tabFunds: 'Fondsen en aannames', tabWealth: 'Netto waardeprognose', tabPay: 'Uitkeringsprognose', tabTax: 'Belasting', themeAuto: 'Auto', themeDark: 'Donker', themeLight: 'Licht',
     taxTitle: 'Belasting per land',
     taxIntro: 'Schattingen op basis van de instellingen van de prognose. Dit is geen belastingadvies; controleer de actuele regels bij de Belastingdienst of een adviseur.',
     nlTitle: 'Nederland: box 3 (vermogensbelasting)',
@@ -1903,7 +1907,7 @@ const T = {
     arRateLbl: 'Rate: ARS per €1 (for Argentina)',
     arRateHint: 'Filled in with the BCRA average selling rate of 14-10-2026 (about ARS 1,780 per euro). Change it if you want another rate.',
     ovNote: 'Per year: wealth tax (NL and AR) on your total assets, plus the US withholding (US) that the fund already deducts. Accumulating funds show no US amount.',
-    tabProg: 'Investment forecast', tabFunds: 'Funds and assumptions', tabWealth: 'Net worth forecast', tabPay: 'Payout forecast', tabTax: 'Tax', themeAuto: 'Auto', themeDark: 'Dark', themeLight: 'Light',
+    tabSelLbl: 'Tab', tabProg: 'Investment forecast', tabFunds: 'Funds and assumptions', tabWealth: 'Net worth forecast', tabPay: 'Payout forecast', tabTax: 'Tax', themeAuto: 'Auto', themeDark: 'Dark', themeLight: 'Light',
     taxTitle: 'Tax per country',
     taxIntro: 'Estimates based on the forecast settings. This is not tax advice; check current rules with your tax authority or an adviser.',
     nlTitle: 'Netherlands: Dutch wealth tax',
@@ -2139,7 +2143,7 @@ const T = {
     arRateLbl: 'Tipo de cambio: ARS por 1 €  (para Argentina)',
     arRateHint: 'Puesto con la cotización de venta promedio del BCRA del 14-10-2026 (unos ARS 1.780 por euro). Cámbialo si quieres otro tipo.',
     ovNote: 'Por año: impuesto al patrimonio (NL y AR) sobre tus activos totales, más la retención en EE. UU. que ya descuenta el fondo. Los acumulativos no muestran importe de EE. UU.',
-    tabProg: 'Previsión de inversión', tabFunds: 'Fondos y supuestos', tabWealth: 'Previsión de patrimonio neto', tabPay: 'Previsión de pagos', tabTax: 'Impuestos', themeAuto: 'Auto', themeDark: 'Oscuro', themeLight: 'Claro',
+    tabSelLbl: 'Pestaña', tabProg: 'Previsión de inversión', tabFunds: 'Fondos y supuestos', tabWealth: 'Previsión de patrimonio neto', tabPay: 'Previsión de pagos', tabTax: 'Impuestos', themeAuto: 'Auto', themeDark: 'Oscuro', themeLight: 'Claro',
     taxTitle: 'Impuestos por país',
     taxIntro: 'Estimaciones basadas en los ajustes de la previsión. No es asesoramiento fiscal; consulta las normas actuales con tu administración tributaria o con un asesor.',
     nlTitle: 'Países Bajos: impuesto neerlandés sobre el patrimonio',
@@ -3139,7 +3143,20 @@ function updateSaveLbl(){
   updateSavInt();
 }
 document.getElementById('savRate').addEventListener('input', () => { updateSavInt(); recalc(); });
+// Tabs op mobiel: keuzelijst die dezelfde tabs aanstuurt
+function syncTabSel(){
+  const sel = document.getElementById('tabSel'); if (!sel) return;
+  const btns = [...document.querySelectorAll('.tabs .tab')].filter(b => getComputedStyle(b).display !== 'none');
+  const active = btns.find(b => b.getAttribute('aria-selected') === 'true');
+  const sig = btns.map(b => b.dataset.tab + '|' + b.textContent).join(';');
+  if (sel.dataset.sig !== sig){
+    sel.innerHTML = btns.map(b => `<option value="${b.dataset.tab}">${b.textContent}</option>`).join('');
+    sel.dataset.sig = sig;
+  }
+  if (active) sel.value = active.dataset.tab;
+}
 function recalc(){
+  syncTabSel();
   updateSaveLbl();
   updateProfBtn();
   if (typeof synthCalc === 'function') synthCalc();
@@ -3448,6 +3465,7 @@ document.querySelectorAll('.tabs .tab').forEach(btn => btn.addEventListener('cli
   window.scrollTo({top:0});
   recalc();
 }));
+document.getElementById('tabSel').addEventListener('change', e => document.querySelector('.tabs .tab[data-tab="' + e.target.value + '"]').click());
 let resizeT = null;
 window.addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(recalc, 150); });
 
