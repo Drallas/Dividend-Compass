@@ -3863,6 +3863,13 @@ function updateChips(){
     i.parentNode.classList.toggle('on', i.checked); i.parentNode.classList.toggle('dis', i.disabled);
   });
   document.querySelectorAll('#ovChips [data-nm]').forEach(sp => { sp.textContent = shortName(ALL.find(c => c.k === sp.dataset.nm)); });
+  // Landenlijst altijd alfabetisch, in de taal van de pagina.
+  const lst = document.querySelector('#taxPick .cpick-list');
+  if (lst){
+    const opts = [...lst.querySelectorAll('label.cpick-opt')];
+    opts.sort((a, b) => a.querySelector('[data-nm]').textContent.localeCompare(b.querySelector('[data-nm]').textContent, loc()));
+    opts.forEach(o => lst.appendChild(o));
+  }
   document.getElementById('pickCount').textContent = tr('pickOf')(activeCount());
   const nSel = ALL.filter(c => c.k !== 'n28' && taxIsOn(c.k)).length;
   document.getElementById('taxPickSum').textContent = nSel === 0 ? tr('pickPlaceholder') : nSel === 1 ? tr('pickSel1') : fillT('pickSelN', {n: nSel});
