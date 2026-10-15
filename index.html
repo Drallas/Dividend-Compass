@@ -4054,11 +4054,25 @@ function setTaxDefaults(){
   const r = document.getElementById('resid').value;
   if (r && r !== 'none' && r in taxOn) taxOn[r] = true;
   if (r === 'n28') { taxOn.nl = true; taxOn.n28 = true; }
-  document.querySelector('.savebox').style.display = r === 'nl' ? '' : 'none';
-  document.querySelector('.taxaside').classList.toggle('no-box3', r !== 'nl');
+  applyBox3();
   updateChips();
 }
-document.getElementById('resid').addEventListener('change', () => { setTaxDefaults(); syncCmp(); recalc(); });
+// Box 3-schuif (deel op spaarrekening) alleen bij domicilie Nederland; anders verbergen en de balk in twee delen.
+function applyBox3(){
+  const r = document.getElementById('resid').value;
+  document.querySelector('.savebox').style.display = r === 'nl' ? '' : 'none';
+  document.querySelector('.taxaside').classList.toggle('no-box3', r !== 'nl');
+}
+// Domicilie onthouden in de browser; een reset wist dit niet.
+function saveResid(v){ try { localStorage.setItem('dk-resid', v); } catch (e) {} }
+function restoreResid(){
+  let v = null;
+  try { v = localStorage.getItem('dk-resid'); } catch (e) {}
+  if (v !== null && document.querySelector('#resid option[value="' + v + '"]')) document.getElementById('resid').value = v;
+  applyBox3();
+  syncCmp();
+}
+document.getElementById('resid').addEventListener('change', e => { saveResid(e.target.value); setTaxDefaults(); syncCmp(); recalc(); });
 /* ============ merk, menu's, scenario's, export, kosten ============ */
 const APP_VERSION = '0.2';
 const SKEY = 'dk-scenarios';
@@ -4092,7 +4106,7 @@ document.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click'
 document.getElementById('menuReset').addEventListener('click', () => {
   if (!confirm(tr('resetConfirm'))) return;
   try {
-    Object.keys(localStorage).forEach(k => { if (k.startsWith('dk-') && k !== 'dk-lang' && !k.includes('theme')) localStorage.removeItem(k); });
+    Object.keys(localStorage).forEach(k => { if (k.startsWith('dk-') && k !== 'dk-lang' && k !== 'dk-resid' && !k.includes('theme')) localStorage.removeItem(k); });
   } catch (e) {}
   location.reload();
 });
@@ -4263,6 +4277,7 @@ function saveLast(){ if (window.__dkBoot) return; try { localStorage.setItem(LAS
 fillResid();
 const SAVED_LAST = loadLast();
 if (SAVED_LAST) applyState(SAVED_LAST); else setTaxDefaults();
+restoreResid();
 restoreFundsMode(); // standaardstrategie: gebalanceerd
 window.__dkBoot = false;
 saveLast();
