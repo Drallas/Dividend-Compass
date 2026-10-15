@@ -1418,7 +1418,7 @@ const T = {
     scenIntro: 'Bewaar de huidige invoerwaarden, strategie en fondsaannames onder een naam. Alles blijft in deze browser; wis je browsergegevens, dan verdwijnen ze.',
     scenNamePh: 'Naam',
     scenDefault: 'Scenario',
-    scenSave: 'Bewaar huidige invoer', scenDup: 'Er bestaat al een profiel met deze naam. Kies een andere naam, of werk het bestaande profiel bij.', scenUpd: 'Bijwerken met huidige invoer', scenApplyLbl: 'Huidige instellingen toepassen op een bestaand profiel', scenApply: 'Toepassen', agoNow: 'zojuist', agoMin: n => `${n} min geleden`, agoHr: n => `${n} uur geleden`,
+    scenSave: 'Bewaar huidige invoer', scenDup: 'Er bestaat al een profiel met deze naam. Kies een andere naam, of werk het bestaande profiel bij.', scenUpd: 'Bijwerken met huidige invoer', scenApplyLbl: 'Huidige instellingen toepassen op een bestaand profiel', scenApply: 'Toepassen', scenRename: 'Hernoem', agoNow: 'zojuist', agoMin: n => `${n} min geleden`, agoHr: n => `${n} uur geleden`,
     scenLoad: 'Laad',
     scenDel: 'Verwijder',
     scenEmpty: 'Nog geen scenario\'s opgeslagen.',
@@ -1653,7 +1653,7 @@ const T = {
     scenIntro: 'Save the current inputs, strategy and fund assumptions under a name. Everything stays in this browser; clearing browser data removes them.',
     scenNamePh: 'Name',
     scenDefault: 'Scenario',
-    scenSave: 'Save current inputs', scenDup: 'A profile with this name already exists. Choose another name, or update the existing profile.', scenUpd: 'Update with current inputs', scenApplyLbl: 'Apply current settings to an existing profile', scenApply: 'Apply', agoNow: 'just now', agoMin: n => `${n} min ago`, agoHr: n => `${n} h ago`,
+    scenSave: 'Save current inputs', scenDup: 'A profile with this name already exists. Choose another name, or update the existing profile.', scenUpd: 'Update with current inputs', scenApplyLbl: 'Apply current settings to an existing profile', scenApply: 'Apply', scenRename: 'Rename', agoNow: 'just now', agoMin: n => `${n} min ago`, agoHr: n => `${n} h ago`,
     scenLoad: 'Load',
     scenDel: 'Delete',
     scenEmpty: 'No saved scenarios yet.',
@@ -1888,7 +1888,7 @@ const T = {
     scenIntro: 'Guarda las entradas, la estrategia y los supuestos de fondos con un nombre. Todo se queda en este navegador; si borras los datos del navegador, desaparecen.',
     scenNamePh: 'Nombre',
     scenDefault: 'Escenario',
-    scenSave: 'Guardar entradas actuales', scenDup: 'Ya existe un perfil con ese nombre. Elige otro nombre o actualiza el perfil existente.', scenUpd: 'Actualizar con las entradas actuales', scenApplyLbl: 'Aplicar los ajustes actuales a un perfil existente', scenApply: 'Aplicar', agoNow: 'justo ahora', agoMin: n => `hace ${n} min`, agoHr: n => `hace ${n} h`,
+    scenSave: 'Guardar entradas actuales', scenDup: 'Ya existe un perfil con ese nombre. Elige otro nombre o actualiza el perfil existente.', scenUpd: 'Actualizar con las entradas actuales', scenApplyLbl: 'Aplicar los ajustes actuales a un perfil existente', scenApply: 'Aplicar', scenRename: 'Renombrar', agoNow: 'justo ahora', agoMin: n => `hace ${n} min`, agoHr: n => `hace ${n} h`,
     scenLoad: 'Cargar',
     scenDel: 'Eliminar',
     scenEmpty: 'Aún no hay escenarios guardados.',
@@ -4238,7 +4238,7 @@ function renderScenarios(){
     const d = x.data;
     const meta = `${EUR(d.amount)} · ${tr('years')(d.years)} · ${tr(SCEN_KEY[d.scen])} · ${whenTxt(x)}`;
     return `<div class="scenrow"><div><b>${esc(x.name)}</b><span>${meta}</span></div>
-      <div class="scenbtns"><button type="button" class="rbtn" data-load="${i}">${tr('scenLoad')}</button><button type="button" class="rbtn" data-del="${i}">${tr('scenDel')}</button></div></div>`;
+      <div class="scenbtns"><button type="button" class="rbtn" data-load="${i}">${tr('scenLoad')}</button><button type="button" class="rbtn" data-ren="${i}">${tr('scenRename')}</button><button type="button" class="rbtn" data-del="${i}">${tr('scenDel')}</button></div></div>`;
   }).join('');
   list.querySelectorAll('[data-load]').forEach(b => b.addEventListener('click', () => {
     const s = loadScen()[+b.dataset.load];
@@ -4247,6 +4247,31 @@ function renderScenarios(){
   const sel = document.getElementById('scenApplySel');
   sel.innerHTML = order.map(i => `<option value="${i}">${esc(arr[i].name)}</option>`).join('');
   document.getElementById('scenApplyRow').hidden = !arr.length;
+  list.querySelectorAll('[data-ren]').forEach(b => b.addEventListener('click', () => {
+    const i = +b.dataset.ren;
+    const row = b.closest('.scenrow');
+    const title = row.querySelector('b');
+    title.innerHTML = `<input type="text" maxlength="40" class="scenren" value="${esc(arr[i].name)}" aria-label="${tr('scenRename')}">`;
+    const inp = title.querySelector('input');
+    inp.focus(); inp.select();
+    const done = () => {
+      const name = inp.value.trim();
+      if (!name){ renderScenarios(); return; }
+      const a = loadScen();
+      if (a.some((x, j) => j !== i && x.name.trim().toLowerCase() === name.toLowerCase())){
+        document.getElementById('scenMsg').textContent = tr('scenDup');
+        inp.focus(); return;
+      }
+      a[i].name = name;
+      document.getElementById('scenMsg').textContent = '';
+      if (storeScen(a)) renderScenarios();
+    };
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter'){ e.preventDefault(); done(); }
+      if (e.key === 'Escape'){ e.preventDefault(); renderScenarios(); }
+    });
+    inp.addEventListener('blur', () => done());
+  }));
   list.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => {
     const a = loadScen(); a.splice(+b.dataset.del, 1); storeScen(a); renderScenarios();
   }));
