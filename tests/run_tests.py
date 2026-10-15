@@ -123,6 +123,19 @@ with sync_playwright() as p:
     check("12c geen fouten", not errs, errs)
     pg.close()
 
+    # 13. NL 2028 in de netto waardegrafiek als "ook NL 2028 tonen" aan staat
+    pg, errs = new_page(b)
+    pg.evaluate("() => { manualAmount = 330000; amountNow = 330000; monthlyAmt = 250; pickResid('nl'); taxOn.nl = true; taxOn.n28 = false; updateChips(); recalc(); }")
+    pg.evaluate("document.querySelector('.tabs .tab[data-tab=\"tabWealth\"]').click()"); pg.wait_for_timeout(300)
+    off = pg.evaluate("document.querySelectorAll('#wealthBody svg.wchart path[style*=\"#c2410c\"]').length")
+    pg.evaluate("() => { taxOn.n28 = true; updateChips(); recalc(); }"); pg.wait_for_timeout(300)
+    on = pg.evaluate("document.querySelectorAll('#wealthBody svg.wchart path[style*=\"#c2410c\"]').length")
+    check("13a zonder NL 2028-optie geen extra lijn", off == 0, off)
+    check("13b met NL 2028-optie een extra lijn in de grafiek", on == 1, on)
+    check("13c legenda bevat NL 2028", "2028" in pg.inner_text("#wealthBody .wlegend"))
+    check("13d geen fouten", not errs, errs)
+    pg.close()
+
     # 1. Roundtrip: alle opgeslagen waarden komen terug
     pg, errs = new_page(b)
     set_domicile(pg, "nl")

@@ -457,6 +457,7 @@
   .wlegend i{display:inline-block;flex:none;width:30px;height:0;border-top:3px solid var(--div)}
   .wlegend i.dash{border-top:2px dashed var(--muted)}
   .wlegend i.sol2{border-top:3px solid #f59e0b}
+  .wlegend i.sol3{border-top:3px solid #c2410c}
   .wlegend i.goal{border-top:2px dotted #10b981}
   /* ---------- merk, menu's, dialogs, waarschuwing, print ---------- */
   .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;flex:1 1 100%}
@@ -4083,6 +4084,11 @@ function renderWealth(){
   const name2 = second ? (ALL.find(c => c.k === second) ? ALL.find(c => c.k === second).name() : (EXTRA.find(e => e.k === second) || {names:{}}).names[lang] || second) : '';
   const tax2 = second ? taxSeries(second) : null;
   const net2 = second ? fund.map((v, t) => v + cash[t] + sav[t] - tax2[t]) : null;
+  // NL 2028 ("ook NL 2028 tonen"): derde lijn naast het gekozen land en de vergelijking
+  const third = (taxOn.n28 && taxOn.nl && resid !== 'n28' && second !== 'n28') ? 'n28' : '';
+  const tax3 = third ? taxSeries('n28') : null;
+  const net3 = third ? fund.map((v, t) => v + cash[t] + sav[t] - tax3[t]) : null;
+  const name3 = third ? tr('ovN28') : '';
   // ingelegd: vast startbedrag, stijgt alleen met de maandelijkse inleg
   const inArr = []; for (let t = 0; t <= H; t++) inArr[t] = amountNow + yC * t;
   const inleg = inArr[H];
@@ -4125,7 +4131,7 @@ function renderWealth(){
   if (goalCap > 0) cards.push(`<div class="calk"><span>${W.kGoal}</span><b>${goalYr ? tr('years')(goalYr) : W.dNo}</b></div>`);
 
   const Wd = innerWidth < 640 ? 640 : 960, Ht = 320, pl = 64, pr = 14, pt = 14, pb = 30;
-  const max = (Math.max(...net, ...(net2 || []), ...inArr) * 1.05) || 1;
+  const max = (Math.max(...net, ...(net2 || []), ...(net3 || []), ...inArr) * 1.05) || 1;
   const goalIn = goalCap > 0 && goalCap <= max;
   const x = t => pl + (Wd - pl - pr) * (H ? t / H : 0);
   const y = v => pt + (Ht - pt - pb) * (1 - v / max);
@@ -4146,6 +4152,7 @@ function renderWealth(){
     ${goalIn ? `<line x1="${pl}" x2="${Wd - pr}" y1="${y(goalCap).toFixed(1)}" y2="${y(goalCap).toFixed(1)}" style="stroke:#10b981;stroke-width:1.5;stroke-dasharray:2 4"/>` : ''}
     ${goalCap > 0 && !goalIn ? `<text x="${Wd - pr}" y="${pt + 12}" text-anchor="end" style="fill:#10b981;font-size:11px">${tr("goalOut")} ${SHORT(goalCap)} ↑</text>` : ''}
     ${net2 ? `<path d="${path(net2)}" fill="none" style="stroke:#f59e0b;stroke-width:2.5;vector-effect:non-scaling-stroke"/>` : ''}
+    ${net3 ? `<path d="${path(net3)}" fill="none" style="stroke:#c2410c;stroke-width:2.5;vector-effect:non-scaling-stroke"/>` : ''}
     <line class="wcur" y1="${pt}" y2="${Ht - pb}" style="stroke:var(--muted);display:none"/>
   </svg>`;
 
@@ -4153,16 +4160,16 @@ function renderWealth(){
   let rows = '';
   for (let t = 1; t <= H; t++){
     if (t % step && t !== H) continue;
-    rows += `<tr><th scope="row">${W.year} ${t}</th><td data-l="${W.colFund}">${EUR(fund[t])}</td><td data-l="${W.colCash}">${EUR(cash[t])}</td>${sp > 0 ? `<td data-l="${W.colSav}">${EUR(sav[t])}</td>` : ''}<td data-l="${W.colTax}${bx}">${EUR(tax[t])}</td><td data-l="${W.colCost}">${EUR(costCum[t])}</td><td class="tot" data-l="${W.colNet}">${EUR(net[t])}</td>${net2 ? `<td class="tot2" data-l="${name2}">${EUR(net2[t])}</td>` : ''}</tr>`;
+    rows += `<tr><th scope="row">${W.year} ${t}</th><td data-l="${W.colFund}">${EUR(fund[t])}</td><td data-l="${W.colCash}">${EUR(cash[t])}</td>${sp > 0 ? `<td data-l="${W.colSav}">${EUR(sav[t])}</td>` : ''}<td data-l="${W.colTax}${bx}">${EUR(tax[t])}</td><td data-l="${W.colCost}">${EUR(costCum[t])}</td><td class="tot" data-l="${W.colNet}">${EUR(net[t])}</td>${net2 ? `<td class="tot2" data-l="${name2}">${EUR(net2[t])}</td>` : ''}${net3 ? `<td class="tot2" data-l="${name3}">${EUR(net3[t])}</td>` : ''}</tr>`;
   }
 
   el.innerHTML = `
     <div class="kpirow">${cards.slice(0, 4).join('')}</div>
     <div class="kpirow sm">${cards.slice(4).join('')}</div>
     <section class="panel">
-    <div class="wlegend"><span><i></i>${resid && resid !== 'none' ? name1 + ': ' + W.legN : W.legN}</span>${net2 ? `<span><i class="sol2"></i>${name2}: ${W.legN}</span>` : ''}<span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span></div>
+    <div class="wlegend"><span><i></i>${resid && resid !== 'none' ? name1 + ': ' + W.legN : W.legN}</span>${net2 ? `<span><i class="sol2"></i>${name2}: ${W.legN}</span>` : ''}${net3 ? `<span><i class="sol3"></i>${name3}: ${W.legN}</span>` : ''}<span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span></div>
     <div class="wwrap">${svg}<div class="wtip" hidden></div></div>
-    <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th>${sp > 0 ? `<th>${W.colSav}</th>` : ''}<th>${W.colTax}${bx}</th><th>${W.colCost}</th><th>${W.colNet}</th>${net2 ? `<th>${name2}</th>` : ''}</tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th>${sp > 0 ? `<th>${W.colSav}</th>` : ''}<th>${W.colTax}${bx}</th><th>${W.colCost}</th><th>${W.colNet}</th>${net2 ? `<th>${name2}</th>` : ''}${net3 ? `<th>${name3}</th>` : ''}</tr></thead><tbody>${rows}</tbody></table></div>
     <div class="calnotes"><div class="calnotes-hd">${tr('calNotesHd')}</div><p class="sub calnote"><b>${W.kInleg}:</b> ${W.inlNote}</p><p class="sub calnote">${W.costNote}</p>
     <p class="sub calnote">${resid === '' ? W.noDom : (resid === 'none' ? W.noTax : W.resNote)}</p></div>
     </section>`;
@@ -4181,6 +4188,7 @@ function renderWealth(){
     tip.innerHTML = `<b>${W.year} ${tt}</b>
       <div><i style="background:var(--div)"></i>${name1}: ${EUR(net[tt])}${net2 ? ` · ${W.colTax}: ${EUR(tax[tt])}` : ''}</div>
       ${net2 ? `<div><i style="background:#f59e0b"></i>${name2}: ${EUR(net2[tt])} · ${W.colTax}: ${EUR(tax2[tt])}</div>` : ''}
+      ${net3 ? `<div><i style="background:#c2410c"></i>${name3}: ${EUR(net3[tt])} · ${W.colTax}: ${EUR(tax3[tt])}</div>` : ''}
       <div><i class="dash"></i>${W.legI}: ${EUR(inArr[tt])}</div>
       <div>${W.colCash}: ${EUR(cash[tt])}</div>
       ${sp > 0 ? `<div>${W.colSav}: ${EUR(sav[tt])}</div>` : ''}
