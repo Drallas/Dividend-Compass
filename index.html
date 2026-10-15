@@ -662,7 +662,7 @@
           <label for="jaren" data-i18n="duration"></label>
           <span class="field-value" id="jarenLabel"></span>
         </div>
-        <input type="range" id="jaren" min="1" max="15" value="15" step="1" aria-label="Duration">
+        <input type="range" id="jaren" min="1" max="25" value="25" step="1" aria-label="Duration">
         <div class="range-ends"><span id="dur1"></span><span id="dur10"></span></div>
       </div>
   <div class="field">
@@ -1242,7 +1242,7 @@ const T = {
     tooHigh: (m, x) => `Niet haalbaar met deze mix: je hebt ${m} nodig, boven het maximum van ${x}. Startvermogen is teruggezet naar je eigen bedrag; verhoog het dividend-aandeel of verlaag het maandbedrag.`,
     naText: 'Niet haalbaar',
     years: n => n === 1 ? '1 jaar' : n + ' jaar',
-    dur1: '1 jaar', dur10: '15 jaar',
+    dur1: '1 jaar', dur10: '25 jaar',
     chartTitle: 'Vermogensverloop',
     chartSub: 'Dividend-mix: waarde plus uitkeringen. Acc-mix: waarde.',
     start: 'Start',
@@ -1476,7 +1476,7 @@ const T = {
     tooHigh: (m, x) => `Not feasible with this mix: you would need ${m}, above the ${x} maximum. Invested amount reset to your own amount; raise the dividend share or lower the monthly amount.`,
     naText: 'Not feasible',
     years: n => n === 1 ? '1 year' : n + ' years',
-    dur1: '1 year', dur10: '15 years',
+    dur1: '1 year', dur10: '25 years',
     chartTitle: 'Value over time',
     chartSub: 'Dividend mix: value plus distributions. Acc mix: value.',
     start: 'Start',
@@ -1710,7 +1710,7 @@ const T = {
     tooHigh: (m, x) => `No es viable con esta mezcla: necesitarías ${m}, por encima del máximo de ${x}. El capital invertido vuelve a tu propio importe; sube la parte de dividendos o baja el importe mensual.`,
     naText: 'No viable',
     years: n => n === 1 ? '1 año' : n + ' años',
-    dur1: '1 año', dur10: '15 años',
+    dur1: '1 año', dur10: '25 años',
     chartTitle: 'Evolución del valor',
     chartSub: 'Mezcla de dividendos: valor más distribuciones. Mezcla de acumulación: valor.',
     start: 'Inicio',
@@ -2713,7 +2713,7 @@ function recalc(){
   br.style.setProperty('--fill', 'var(--div)');
 
   document.getElementById('jarenLabel').textContent = tr('years')(years);
-  document.getElementById('jaren').style.setProperty('--p', ((years-1)/14*100) + '%');
+  document.getElementById('jaren').style.setProperty('--p', ((years-1)/24*100) + '%');
   document.getElementById('jaren').style.setProperty('--fill', 'var(--div)');
   document.getElementById('mix').style.setProperty('--p', (mix*100) + '%');
   document.getElementById('mix').style.setProperty('--fill', 'var(--div)');
