@@ -3829,8 +3829,8 @@ document.getElementById('menuHelp').addEventListener('click', () => {
   openHelp(null);
 });
 document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => document.getElementById(b.dataset.close).close()));
-['scenDlg','expDlg','aboutDlg'].forEach(id => {
-  const d = document.getElementById(id);
+// Klik buiten het venster sluit elk dialoogvenster.
+document.querySelectorAll('dialog').forEach(d => {
   d.addEventListener('click', e => { if (e.target === d) d.close(); });
 });
 document.getElementById('homeBtn').addEventListener('click', e => {
