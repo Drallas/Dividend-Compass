@@ -3820,11 +3820,11 @@ document.getElementById('savePct').addEventListener('input', e => {
   e.target.style.setProperty('--p', savePct + '%');
   recalc();
 });
-// Bedrag typen: het percentage volgt, afgerond op 0,25%.
+// Bedrag typen: het percentage volgt exact, zodat het bedrag na opslaan en laden gelijk blijft.
 document.getElementById('savAmt').addEventListener('input', e => {
   if (amountNow <= 0) return;
   const eur = Math.max(0, fromDisp(digits(e.target.value)));
-  const pct = Math.min(100, Math.round(eur / amountNow * 400) / 4);
+  const pct = Math.min(100, eur / amountNow * 100);
   savePct = pct;
   document.getElementById('savePct').value = pct;
   document.getElementById('savePct').style.setProperty('--p', pct + '%');
