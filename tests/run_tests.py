@@ -78,6 +78,21 @@ with sync_playwright() as p:
         return txt.length <= 2 && e.getClientRects().length > 0 && (!e.title || !(e.getAttribute('aria-label') || '').trim());
       }).map(e => e.id || e.className)""")
     check("9 icoonknoppen hebben tooltip en toegankelijke naam", not bad, bad)
+
+    # 10. Spaarrente telt mee: spaardeel groeit met de rente en staat in netto waarde en tabel
+    pg, errs = new_page(b)
+    pg.evaluate("() => { manualAmount = 100000; amountNow = 100000; pickResid('nl'); recalc(); }")
+    pg.evaluate("() => { const s=document.getElementById('savePct'); s.value=50; s.dispatchEvent(new Event('input')); const r=document.getElementById('savRate'); r.value='4'; r.dispatchEvent(new Event('input')); }")
+    pg.wait_for_timeout(300)
+    got = pg.evaluate("savAt(10)")
+    check("10a spaarbedrag groeit met samengestelde rente", abs(got - 50000 * 1.04 ** 10) < 0.01, got)
+    pg.evaluate("document.querySelector('.tabs .tab[data-tab=\"tabWealth\"]').click()"); pg.wait_for_timeout(300)
+    txt = pg.inner_text("#wealthBody")
+    import re
+    check("10b netto waarde toont spaargeld na 10 jaar", re.search(r"74[.,]012", txt) is not None)
+    pg.evaluate("() => { const r=document.getElementById('savRate'); r.value='0'; r.dispatchEvent(new Event('input')); }"); pg.wait_for_timeout(300)
+    check("10c bij 0% rente blijft het spaardeel gelijk", abs(pg.evaluate("savAt(10)") - 50000) < 0.01)
+    check("10d geen fouten", not errs, errs)
     pg.close()
 
     # 1. Roundtrip: alle opgeslagen waarden komen terug
@@ -103,9 +118,9 @@ with sync_playwright() as p:
     # 2. Domicilie blijft na herladen en na reset
     pg, errs = new_page(b)
     set_domicile(pg, "ve")
-    pg.reload(); pg.wait_for_timeout(400)
+    pg.reload(); pg.wait_for_timeout(900)
     check("2a domicilie na herladen", pg.eval_on_selector("#resid", "e => e.value") == "ve")
-    pg.evaluate("document.getElementById('menuReset').click()"); pg.wait_for_timeout(800)
+    pg.evaluate("document.getElementById('menuReset').click()"); pg.wait_for_timeout(1500)
     check("2b domicilie na reset gewist", pg.eval_on_selector("#resid", "e => e.value") == "")
     pg.close()
 
@@ -113,7 +128,7 @@ with sync_playwright() as p:
     pg, errs = new_page(b)
     set_domicile(pg, "ve")
     pg.evaluate("() => { taxOn.us = true; taxOn.fr = true; saveLast(); }")
-    pg.evaluate("document.getElementById('menuReset').click()"); pg.wait_for_timeout(800)
+    pg.evaluate("document.getElementById('menuReset').click()"); pg.wait_for_timeout(1500)
     picked = pg.evaluate("Object.keys(taxOn).filter(k => taxOn[k]).sort().join(',')")
     check("3 landen na reset gewist", picked == "", picked)
     pg.close()
