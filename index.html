@@ -545,12 +545,12 @@
     .tbl th,.tbl td{padding:8px 6px}
     .tbl th:first-child,.tbl td:first-child{min-width:104px}
     #taxKpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-#taxKpis .taxcardwrap{display:flex;flex-direction:column;gap:6px;min-width:0}
-#taxKpis .taxcardwrap .kpi{flex:1}
-#taxKpis .n28opt{display:flex;align-items:center;gap:6px;font-size:.9em;color:var(--muted);padding:0 4px;cursor:pointer}
-#taxKpis .n28opt input{margin:0;accent-color:var(--text)}
 .wzhint{margin:6px 0 0;font-size:.92em;color:var(--muted)}
 .wzhint a{color:var(--accent,#2563eb);font-weight:600}
+.taxmain{all:unset;display:block;width:100%;cursor:pointer;box-sizing:border-box}
+.taxcard.nlcard{cursor:default}
+.n28foot{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer}
+.n28foot input{margin:0;accent-color:var(--text)}
 .n28sec{display:flex;align-items:center;gap:8px;margin:0 0 14px;cursor:pointer}
 .n28sec input{margin:0;accent-color:var(--text)}
 .n28sec:has(input:disabled){opacity:.5;cursor:default}
@@ -1381,7 +1381,7 @@ const T = {
     pickTitle: 'Landen vergelijken', grpMain: 'Basisvergelijking', grpOther: 'Meer landen', pickOf: n => `${n} van 4`, pickMax: 'Maximaal 4 landen tegelijk. Zet er eerst een uit.',
     hTotals: 'Totaal per land', hYears: 'Belasting per jaar', hNotes: 'Uitgangspunten per land', colBase: 'Belast over (gem. per jaar)',
     noteGeneric: 'Voor de extra landen is per jaar gerekend over de uitkeringen en de waardestijging van dat jaar. Het zijn indicaties, geen belastingadvies; controleer de actuele regels.',
-    ovN28: 'NL nieuw stelsel (2028)', n28Add: 'ook NL 2028 tonen', wzHint: 'Liever stap voor stap? Met de startwizard zet je de belangrijkste invoer in één keer.', wzOpen: 'Start de startwizard', tax2028Note: 'Voorstel: vanaf 1-1-2028 wordt in box 3 alleen het werkelijke rendement belast, 36% boven een heffingsvrij bedrag van € 1.800. Nog onder voorbehoud van de Eerste Kamer. Hier gerekend alsof het vanaf het eerste jaar geldt, met de waardestijging als rendement. Verliezen worden niet verrekend.',
+    ovN28: 'NL nieuw stelsel (2028)', ovPctOf: 'Totale belasting is {p} van je startvermogen ({s})', n28Add: 'ook NL 2028 tonen', wzHint: 'Liever stap voor stap? Met de startwizard zet je de belangrijkste invoer in één keer.', wzOpen: 'Start de startwizard', tax2028Note: 'Voorstel: vanaf 1-1-2028 wordt in box 3 alleen het werkelijke rendement belast, 36% boven een heffingsvrij bedrag van € 1.800. Nog onder voorbehoud van de Eerste Kamer. Hier gerekend alsof het vanaf het eerste jaar geldt, met de waardestijging als rendement. Verliezen worden niet verrekend.',
     taxEyebrow: 'Belasting · schatting', taxH1: 'Belasting per land',
     taxLead: 'Hoeveel belasting je per jaar betaalt in de landen die je kiest (tot 4 tegelijk), op basis van je inleg, periode en mix. Schattingen, geen belastingadvies.',
     saveLbl: 'Deel op spaarrekening (box 3)', saveHint: 'Spaargeld telt in box 3 tegen het spaartarief (1,28%) in plaats van het forfaitair rendement (6%). Rente op je spaargeld zit niet in de prognose.',
@@ -1616,7 +1616,7 @@ const T = {
     pickTitle: 'Compare countries', grpMain: 'Core comparison', grpOther: 'More countries', pickOf: n => `${n} of 4`, pickMax: 'Maximum 4 countries at once. Turn one off first.',
     hTotals: 'Total per country', hYears: 'Tax per year', hNotes: 'Assumptions per country', colBase: 'Taxed on (avg per year)',
     noteGeneric: 'For the extra countries tax is calculated per year on that year\'s distributions and increase in value. These are indications, not tax advice; check the current rules.',
-    ovN28: 'NL new system (2028)', n28Add: 'also show NL 2028', wzHint: 'Prefer step by step? The start wizard sets the main inputs in one go.', wzOpen: 'Start the start wizard', tax2028Note: 'Proposal: from 1-1-2028 Dutch wealth taxes only the actual return, 36% above a tax-free amount of €1,800. Still subject to approval by the Senate. Calculated here as if it applies from year one, with the increase in value as return. Losses are not offset.',
+    ovN28: 'NL new system (2028)', ovPctOf: 'Total tax is {p} of your starting capital ({s})', n28Add: 'also show NL 2028', wzHint: 'Prefer step by step? The start wizard sets the main inputs in one go.', wzOpen: 'Start the start wizard', tax2028Note: 'Proposal: from 1-1-2028 Dutch wealth taxes only the actual return, 36% above a tax-free amount of €1,800. Still subject to approval by the Senate. Calculated here as if it applies from year one, with the increase in value as return. Losses are not offset.',
     taxEyebrow: 'Tax · estimate', taxH1: 'Tax per country',
     taxLead: 'How much tax you pay per year in the Netherlands, the US and Argentina, based on your investment, period and mix. Estimates, not tax advice.',
     saveLbl: 'Share in savings account (Dutch wealth tax)', saveHint: 'Savings count in Dutch wealth tax at the savings rate (1.28%) instead of the deemed return (6%). Interest on your savings is not in the forecast.',
@@ -1851,7 +1851,7 @@ const T = {
     pickTitle: 'Comparar países', grpMain: 'Comparación base', grpOther: 'Más países', pickOf: n => `${n} de 4`, pickMax: 'Máximo 4 países a la vez. Desactiva uno primero.',
     hTotals: 'Total por país', hYears: 'Impuesto por año', hNotes: 'Supuestos por país', colBase: 'Gravado sobre (media/año)',
     noteGeneric: 'En los países adicionales se calcula cada año sobre las distribuciones y la subida de valor de ese año. Son indicaciones, no asesoramiento fiscal; comprueba las normas vigentes.',
-    ovN28: 'Países Bajos nuevo sistema (2028)', n28Add: 'mostrar también P. Bajos 2028', wzHint: '¿Prefieres paso a paso? El asistente inicial configura los datos principales de una vez.', wzOpen: 'Abrir el asistente inicial', tax2028Note: 'Propuesta: desde el 1-1-2028 la caja 3 solo grava el rendimiento real, al 36% por encima de un mínimo exento de 1.800 €. Aún pendiente de aprobación por el Senado. Aquí se calcula como si aplicara desde el primer año, con la subida del valor como rendimiento. Las pérdidas no se compensan.',
+    ovN28: 'Países Bajos nuevo sistema (2028)', ovPctOf: 'El impuesto total es el {p} de tu capital inicial ({s})', n28Add: 'mostrar también P. Bajos 2028', wzHint: '¿Prefieres paso a paso? El asistente inicial configura los datos principales de una vez.', wzOpen: 'Abrir el asistente inicial', tax2028Note: 'Propuesta: desde el 1-1-2028 la caja 3 solo grava el rendimiento real, al 36% por encima de un mínimo exento de 1.800 €. Aún pendiente de aprobación por el Senado. Aquí se calcula como si aplicara desde el primer año, con la subida del valor como rendimiento. Las pérdidas no se compensan.',
     taxEyebrow: 'Impuestos · estimación', taxH1: 'Impuestos por país',
     taxLead: 'Cuánto impuesto pagas al año en Países Bajos, EE. UU. y Argentina, según tu inversión, periodo y mezcla. Estimaciones, no asesoramiento fiscal.',
     saveLbl: 'Parte en cuenta de ahorro (impuesto neerlandés sobre el patrimonio)', saveHint: 'El ahorro cuenta en impuesto neerlandés sobre el patrimonio al tipo de ahorro (1,28%) en lugar del rendimiento forfetario (6%). Los intereses de tu ahorro no están en la previsión.',
@@ -2498,21 +2498,23 @@ function renderTaxCards(list, totals, amount, years){
   document.getElementById('taxKpis').innerHTML = list.filter(m => m.k !== 'n28').map(m => {
     const tot = totals[m.k];
     const on = taxIsOn(m.k);
-    const open = `<button type="button" class="kpi taxcard${on ? '' : ' off'}" style="--c:${m.color}" data-k="${m.k}" aria-pressed="${on}">`;
-    let card;
-    if (tot === null) card = `${open}<div class="lbl">${m.name}</div><div class="big">${tr('ovNeedRate')}</div></button>`;
+    const isNL = m.k === 'nl';
+    const open = isNL
+      ? `<div class="kpi taxcard nlcard" style="--c:${m.color}"><button type="button" class="taxmain" data-k="${m.k}" aria-pressed="true">`
+      : `<button type="button" class="kpi taxcard${on ? '' : ' off'}" style="--c:${m.color}" data-k="${m.k}" aria-pressed="${on}">`;
+    const close = isNL ? '</button>' : '</button>';
+    let inner;
+    if (tot === null) inner = `<div class="lbl">${m.name}</div><div class="big">${tr('ovNeedRate')}</div>`;
     else {
       const pct = amount > 0 ? tot / amount * 100 : 0;
-      card = `${open}
-      <div class="lbl">${m.name}</div>
+      inner = `<div class="lbl">${m.name}</div>
       <div class="sub">${tr('ovTotal')}</div>
       <div class="big">${EUR(tot)}</div>
       <div class="row"><span>${tr('ovPerYear')}</span><b>${EUR(tot / years)}</b></div>
-      <div class="foot">${PCT(pct)} ${tr('ovPct').toLowerCase()}</div>
-    </button>`;
+      <div class="foot">${fillT('ovPctOf', {p: PCT(pct), s: EUR(amount)})}</div>`;
     }
-    if (m.k !== 'nl') return card;
-    return `<div class="taxcardwrap">${card}<label class="n28opt"><input type="checkbox" data-n28 ${taxOn.n28 ? 'checked' : ''}><span>${tr('n28Add')}</span><a class="info" href="#" data-tip="${tr('tax2028Note')}">?</a></label></div>`;
+    if (!isNL) return `${open}${inner}${close}`;
+    return `${open}${inner}${close}<label class="n28foot"><input type="checkbox" data-n28 ${taxOn.n28 ? 'checked' : ''}><span>${tr('n28Add')}</span><a class="info" href="#" data-tip="${tr('tax2028Note')}">?</a></label></div>`;
   }).join('');
 }
 
@@ -3626,7 +3628,7 @@ document.getElementById('taxKpis').addEventListener('change', e => {
   renderOverview();
 });
 document.getElementById('taxKpis').addEventListener('click', e => {
-  const b = e.target.closest('button.taxcard');
+  const b = e.target.closest('button.taxcard, button.taxmain');
   if (!b) return;
   const k = b.dataset.k;
   taxOn[k] = false;
