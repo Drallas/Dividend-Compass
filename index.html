@@ -3146,7 +3146,7 @@ function recalc(){
   renderMonthly();
   // Met herinvesteren aan zijn onttrekkingen niet mogelijk: het bedrag blijft bewaard, maar telt niet mee
   const reinvNow = document.getElementById('reinvest').checked;
-  spendCapNow = reinvNow ? 0 : spendCap();
+  spendCapNow = spendCap();
   spendOver = !reinvNow && spendMonthly > spendCapNow;
   if (spendOver) spendMonthly = spendCapNow;
   spendEff = reinvNow ? 0 : Math.min(spendMonthly, spendCapNow);
