@@ -300,7 +300,7 @@
   svg#taxChart{width:100%;height:auto;display:block;overflow:visible}
   svg#taxChart .grid{stroke:var(--line);stroke-width:1}
   svg#taxChart text.axis{fill:var(--muted);font-size:11px;font-variant-numeric:tabular-nums}
-  svg#taxChart .tline{fill:none;stroke-width:3.5;stroke-linejoin:round;stroke-linecap:round}
+  svg#taxChart .tline{fill:none;stroke-width:2.5;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
   svg#taxChart .hover{stroke:var(--muted);stroke-dasharray:3 3}
 
   /* ---------- notes ---------- */
@@ -3642,10 +3642,10 @@ function renderWealth(){
     grid += `<text x="${x(t).toFixed(1)}" y="${Ht - 8}" text-anchor="middle" style="fill:var(--muted);font-size:11px">${t}</text>`;
   }
   const svg = `<svg class="wchart" viewBox="0 0 ${Wd} ${Ht}" role="img" aria-label="${W.title}">${grid}
-    <path d="${path(inArr)}" fill="none" style="stroke:var(--muted);stroke-width:2;stroke-dasharray:4 4"/>
-    <path d="${path(net)}" fill="none" style="stroke:var(--div);stroke-width:3"/>
+    <path d="${path(inArr)}" fill="none" style="stroke:var(--muted);stroke-width:2;stroke-dasharray:4 4;vector-effect:non-scaling-stroke"/>
+    <path d="${path(net)}" fill="none" style="stroke:var(--div);stroke-width:2.5;vector-effect:non-scaling-stroke"/>
     ${goalCap > 0 ? `<line x1="${pl}" x2="${Wd - pr}" y1="${y(goalCap).toFixed(1)}" y2="${y(goalCap).toFixed(1)}" style="stroke:#10b981;stroke-width:1.5;stroke-dasharray:2 4"/>` : ''}
-    ${net2 ? `<path d="${path(net2)}" fill="none" style="stroke:#f59e0b;stroke-width:2.5"/>` : ''}
+    ${net2 ? `<path d="${path(net2)}" fill="none" style="stroke:#f59e0b;stroke-width:2.5;vector-effect:non-scaling-stroke"/>` : ''}
     <line class="wcur" y1="${pt}" y2="${Ht - pb}" style="stroke:var(--muted);display:none"/>
   </svg>`;
 
