@@ -639,7 +639,7 @@
   <div class="field">
         <div class="field-head"><label for="bedrag" data-i18n="invested"></label> <a class="info" href="#gl-belegd">?</a></div>
         <div class="euro"><span>€</span><input type="text" id="bedrag" value="250000" inputmode="numeric" autocomplete="off"></div>
-        <input type="range" id="bedragRange" min="1000" max="1000000" step="1000" value="250000" aria-labelledby="bedrag">
+        <input type="range" id="bedragRange" min="0" max="1000000" step="1000" value="250000" aria-labelledby="bedrag">
         <div class="range-ends"><span id="bedMin"></span><span id="bedMax"></span></div>
       </div>
   <div class="field">
@@ -832,6 +832,10 @@
       <details class="cpick" id="cmpPick"><summary><span id="cmpSum"></span></summary><div class="cpick-list" id="cmpList"></div></details></div>
     <label class="wslider" for="wealthYrs"><span id="wealthYrsLbl"></span></label>
     <input type="range" id="wealthYrs" min="1" max="40" step="1" value="15">
+    <div class="field goal-cap">
+      <div class="field-head"><label for="wealthGoal" data-i18n="goalCapLbl"></label></div>
+      <div class="euro"><span>€</span><input type="text" id="wealthGoal" value="" inputmode="numeric" autocomplete="off" data-i18n-ph="goalCapPh"></div>
+    </div>
     <div id="wealthBody"></div>
   </section>
   <section class="panel" aria-labelledby="resTitle">
@@ -1156,7 +1160,7 @@ const T = {
     h1: 'Dividend-fondsen vs accumulerende fondsen',
     lede: 'Stel je inleg, je gewenste maandinkomen en je mix in. De uitkomst is een rekenvoorbeeld op basis van historische cijfers en mijn eigen aannames, zie de tabel onderaan.',
     settings: 'Invoerwaarden',
-    invested: 'Belegd vermogen',
+    invested: 'Startvermogen',
     mix: 'Mix',
     mixTip: 'Verdeling tussen dividend-fondsen (uitkering) en accumulerende fondsen (groei zonder uitkering). Dit is de belangrijkste knop.',
     dividendShort: 'Dividend',
@@ -1390,7 +1394,7 @@ const T = {
     h1: 'Dividend funds vs accumulating funds',
     lede: 'Set your investment, your desired monthly income and your mix. The outcome is an illustration based on historical figures and my own assumptions, see the table below.',
     settings: 'Inputs',
-    invested: 'Amount invested',
+    invested: 'Starting capital',
     mix: 'Mix',
     mixTip: 'Split between dividend funds (pay out) and accumulating funds (growth, no payout). This is the most important control.',
     dividendShort: 'Dividend',
@@ -1624,7 +1628,7 @@ const T = {
     h1: 'Fondos de dividendos vs. fondos de acumulación',
     lede: 'Indica tu inversión, tu ingreso mensual deseado y tu mezcla. El resultado es un ejemplo basado en datos históricos y en mis propias suposiciones; mira la tabla de abajo.',
     settings: 'Valores de entrada',
-    invested: 'Capital invertido',
+    invested: 'Capital inicial',
     mix: 'Mezcla',
     mixTip: 'Reparto entre fondos de dividendos (pagan) y fondos de acumulación (crecimiento sin pago). Es el control más importante.',
     dividendShort: 'Dividendo',
@@ -1863,6 +1867,8 @@ const SYN_T = {
   "synthLink": "Inleg en looptijd komen uit de invoer bovenaan.",
   "synthSum": "Gewichten tellen op tot {s}%; de uitkomst wordt genormaliseerd naar 100%.",
   "synPayout": "uitkerend",
+  "goalCapLbl": "Doelbedrag netto vermogen",
+  "goalCapPh": "bijv. 500.000",
   "monthlyIn": "Maandelijkse inleg",
   "perMonthPlus": "+ {x} per maand",
   "pickSel1": "1 land geselecteerd",
@@ -1933,6 +1939,8 @@ const SYN_T = {
   "synthLink": "Investment and term come from the input at the top.",
   "synthSum": "Weights add up to {s}%; the outcome is normalised to 100%.",
   "synPayout": "distributing",
+  "goalCapLbl": "Target net wealth",
+  "goalCapPh": "e.g. 500,000",
   "monthlyIn": "Monthly contribution",
   "perMonthPlus": "+ {x} per month",
   "pickSel1": "1 country selected",
@@ -2010,6 +2018,8 @@ const SYN_T = {
   "synthLink": "La inversión y el plazo vienen de los datos de entrada de arriba.",
   "synthSum": "Los pesos suman {s}%; el resultado se normaliza a 100%.",
   "synPayout": "distribuyendo",
+  "goalCapLbl": "Objetivo de patrimonio neto",
+  "goalCapPh": "p. ej. 500.000",
   "monthlyIn": "Aportación mensual",
   "perMonthPlus": "+ {x} al mes",
   "pickSel1": "1 país seleccionado",
@@ -2680,8 +2690,8 @@ function recalc(){
   renderWealth();
 
   const br = document.getElementById('bedragRange');
-  br.value = Math.min(1000000, Math.max(1000, amount));
-  br.style.setProperty('--p', ((br.value - 1000) / 999000 * 100) + '%');
+  br.value = Math.min(1000000, Math.max(0, amount));
+  br.style.setProperty('--p', (br.value / 1000000 * 100) + '%');
   br.style.setProperty('--fill', 'var(--div)');
 
   document.getElementById('jarenLabel').textContent = tr('years')(years);
@@ -2806,7 +2816,7 @@ function applyStatic(){
   });
   document.getElementById('dur1').textContent = tr('dur1');
   document.getElementById('dur10').textContent = tr('dur10');
-  document.getElementById('bedMin').textContent = EUR(1000);
+  document.getElementById('bedMin').textContent = EUR(0);
   document.getElementById('bedMax').textContent = EUR(MAX_BEDRAG);
   document.getElementById('tgMin').textContent = EUR(0);
   document.getElementById('tgMax').textContent = EUR(10000);
@@ -3521,9 +3531,9 @@ renderBedrag();
 applyStatic();
 /* ============ vermogensprognose ============ */
 const WL = {
-  nl:{yrs:'Periode', title:'Netto waardeprognose', sub:'Hoe je vermogen zich ontwikkelt bij de invoerwaarden, strategie en scenario die je hebt gekozen. Netto is na de belastingschatting die je kiest.', kGross:'Bruto vermogen', kNet:'Netto vermogen', kPaid:'Uitgekeerd', kTax:'Belastingen, geschat', kDouble:'Verdubbeling netto', dNo:'Niet binnen de periode', legG:'Bruto vermogen', legN:'Netto vermogen', legI:'Ingelegd', year:'Jaar', colFund:'In fondsen', colCash:'Uitgekeerd', colTax:'Belastingen cumulatief', colNet:'Netto', colCost:'Kosten (TER)', kCost:'Betaald aan kosten (TER)', costNote:'Kosten zitten al in de waarde in fondsen en worden dus niet nog eens afgetrokken. Ze staan hier alleen om te laten zien wat je ze kosten.', noDom:'Kies hierboven je land van domicilie; tot die tijd zijn de belastingen 0.', resNote:'Schatting voor het gekozen land van domicilie. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.', noTax:'Geen belastingschatting gekozen, dus de belastingen zijn 0.', note:'De Box 3-schatting gebruikt het heffingsvrij vermogen en het forfaitaire rendement uit het tabblad Belasting. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.'},
-  en:{yrs:'Period', title:'Net worth forecast', sub:'How your wealth develops with the inputs, strategy and scenario you chose. Net is after the tax estimate you choose.', kGross:'Gross wealth', kNet:'Net wealth', kPaid:'Paid out', kTax:'Taxes, estimated', kDouble:'Net doubling time', dNo:'Not within the period', legG:'Gross wealth', legN:'Net wealth', legI:'Invested', year:'Year', colFund:'In funds', colCash:'Paid out', colTax:'Taxes cumulative', colNet:'Net', colCost:'Fund costs (TER)', kCost:'Paid in fund costs (TER)', costNote:'Costs are already included in the fund value and are not deducted again. They are shown to show what they cost you.', noDom:'Choose your country of residence above; until then taxes are 0.', resNote:'Estimate for the chosen country of residence. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.', noTax:'No tax estimate selected, so taxes are 0.', note:'The Dutch wealth tax estimate uses the tax-free allowance and the flat return from the Tax tab. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.'},
-  es:{yrs:'Periodo', title:'Previsión de patrimonio neto', sub:'Cómo evoluciona tu patrimonio con las entradas, la estrategia y el escenario que elegiste. El neto es después de la estimación de impuestos que elijas.', kGross:'Patrimonio bruto', kNet:'Patrimonio neto', kPaid:'Pagado', kTax:'Impuestos, estimados', kDouble:'Doblar el neto', dNo:'No dentro del periodo', legG:'Patrimonio bruto', legN:'Patrimonio neto', legI:'Invertido', year:'Año', colFund:'En fondos', colCash:'Pagado', colTax:'Impuestos acumulados', colNet:'Neto', colCost:'Costes (TER)', kCost:'Pagado en costes (TER)', costNote:'Los costes ya están incluidos en el valor de los fondos y no se restan otra vez. Se muestran para que veas lo que te cuestan.', noDom:'Elige arriba tu país de residencia; hasta entonces los impuestos son 0.', resNote:'Estimación para el país de residencia elegido. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.', noTax:'No hay estimación de impuestos elegida, así que los impuestos son 0.', note:'La estimación de impuesto neerlandés sobre el patrimonio usa el mínimo exento y el rendimiento forfait de la pestaña Impuestos. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.'}
+  nl:{yrs:'Periode', title:'Netto waardeprognose', sub:'Hoe je vermogen zich ontwikkelt bij de invoerwaarden, strategie en scenario die je hebt gekozen. Netto is na de belastingschatting die je kiest.', kGross:'Bruto vermogen', kNet:'Netto vermogen', kPaid:'Uitgekeerd', kTax:'Belastingen, geschat', kGoal:'Doel bereikt', kDouble:'Verdubbeling netto', dNo:'Niet binnen de periode', legG:'Bruto vermogen', legN:'Netto vermogen', legI:'Ingelegd', year:'Jaar', colFund:'In fondsen', colCash:'Uitgekeerd', colTax:'Belastingen cumulatief', colNet:'Netto', colCost:'Kosten (TER)', kCost:'Betaald aan kosten (TER)', costNote:'Kosten zitten al in de waarde in fondsen en worden dus niet nog eens afgetrokken. Ze staan hier alleen om te laten zien wat je ze kosten.', noDom:'Kies hierboven je land van domicilie; tot die tijd zijn de belastingen 0.', resNote:'Schatting voor het gekozen land van domicilie. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.', noTax:'Geen belastingschatting gekozen, dus de belastingen zijn 0.', note:'De Box 3-schatting gebruikt het heffingsvrij vermogen en het forfaitaire rendement uit het tabblad Belasting. Bronbelasting en belasting in andere landen zitten hier niet in. De belasting wordt van het eindbedrag afgetrokken en niet teruggerekend in het rendement, dus het netto bedrag is iets te hoog.'},
+  en:{yrs:'Period', title:'Net worth forecast', sub:'How your wealth develops with the inputs, strategy and scenario you chose. Net is after the tax estimate you choose.', kGross:'Gross wealth', kNet:'Net wealth', kPaid:'Paid out', kTax:'Taxes, estimated', kGoal:'Target reached', kDouble:'Net doubling time', dNo:'Not within the period', legG:'Gross wealth', legN:'Net wealth', legI:'Invested', year:'Year', colFund:'In funds', colCash:'Paid out', colTax:'Taxes cumulative', colNet:'Net', colCost:'Fund costs (TER)', kCost:'Paid in fund costs (TER)', costNote:'Costs are already included in the fund value and are not deducted again. They are shown to show what they cost you.', noDom:'Choose your country of residence above; until then taxes are 0.', resNote:'Estimate for the chosen country of residence. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.', noTax:'No tax estimate selected, so taxes are 0.', note:'The Dutch wealth tax estimate uses the tax-free allowance and the flat return from the Tax tab. Withholding tax and tax in other countries are not included. The tax is deducted from the final amount and not recalculated in the return, so the net amount is slightly too high.'},
+  es:{yrs:'Periodo', title:'Previsión de patrimonio neto', sub:'Cómo evoluciona tu patrimonio con las entradas, la estrategia y el escenario que elegiste. El neto es después de la estimación de impuestos que elijas.', kGross:'Patrimonio bruto', kNet:'Patrimonio neto', kPaid:'Pagado', kTax:'Impuestos, estimados', kGoal:'Objetivo alcanzado', kDouble:'Doblar el neto', dNo:'No dentro del periodo', legG:'Patrimonio bruto', legN:'Patrimonio neto', legI:'Invertido', year:'Año', colFund:'En fondos', colCash:'Pagado', colTax:'Impuestos acumulados', colNet:'Neto', colCost:'Costes (TER)', kCost:'Pagado en costes (TER)', costNote:'Los costes ya están incluidos en el valor de los fondos y no se restan otra vez. Se muestran para que veas lo que te cuestan.', noDom:'Elige arriba tu país de residencia; hasta entonces los impuestos son 0.', resNote:'Estimación para el país de residencia elegido. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.', noTax:'No hay estimación de impuestos elegida, así que los impuestos son 0.', note:'La estimación de impuesto neerlandés sobre el patrimonio usa el mínimo exento y el rendimiento forfait de la pestaña Impuestos. La retención en origen y los impuestos de otros países no están incluidos. El impuesto se resta del importe final y no se recalcula en el rendimiento, así que el neto es algo alto.'}
 };
 function renderWealth(){
   syncCmp();
@@ -3590,6 +3600,9 @@ function renderWealth(){
   let dbl = null;
   for (let t = 1; t <= H; t++){ if (net[t] >= 2 * inArr[t]){ dbl = t; break; } }
 
+  const goalCap = digits(document.getElementById('wealthGoal').value);
+  let goalYr = null;
+  if (goalCap > 0) for (let t = 1; t <= H; t++){ if (net[t] >= goalCap){ goalYr = t; break; } }
   const cards = [
     `<div class="calk"><span>${W.kGross}</span><b>${EUR(fund[H])}</b></div>`,
     `<div class="calk"><span>${W.kNet}</span><b>${EUR(net[H])}</b></div>`,
@@ -3598,9 +3611,10 @@ function renderWealth(){
     `<div class="calk"><span>${W.kTax}${bx}</span><b>${EUR(tax[H])}</b></div>`,
     `<div class="calk"><span>${W.kDouble}</span><b>${dbl ? tr('years')(dbl) : W.dNo}</b></div>`
   ];
+  if (goalCap > 0) cards.push(`<div class="calk"><span>${W.kGoal}</span><b>${goalYr ? tr('years')(goalYr) : W.dNo}</b></div>`);
 
   const Wd = 640, Ht = 280, pl = 64, pr = 14, pt = 14, pb = 30;
-  const max = (Math.max(...net, ...(net2 || []), ...inArr) * 1.05) || 1;
+  const max = (Math.max(...net, ...(net2 || []), ...inArr, goalCap) * 1.05) || 1;
   const x = t => pl + (Wd - pl - pr) * (H ? t / H : 0);
   const y = v => pt + (Ht - pt - pb) * (1 - v / max);
   const path = arr => arr.map((v, t) => `${t ? 'L' : 'M'}${x(t).toFixed(1)},${y(v).toFixed(1)}`).join('');
@@ -3617,6 +3631,7 @@ function renderWealth(){
   const svg = `<svg class="wchart" viewBox="0 0 ${Wd} ${Ht}" role="img" aria-label="${W.title}">${grid}
     <path d="${path(inArr)}" fill="none" style="stroke:var(--muted);stroke-width:2;stroke-dasharray:4 4"/>
     <path d="${path(net)}" fill="none" style="stroke:var(--div);stroke-width:3"/>
+    ${goalCap > 0 ? `<line x1="${pl}" x2="${Wd - pr}" y1="${y(goalCap).toFixed(1)}" y2="${y(goalCap).toFixed(1)}" style="stroke:#10b981;stroke-width:1.5;stroke-dasharray:2 4"/>` : ''}
     ${net2 ? `<path d="${path(net2)}" fill="none" style="stroke:#f59e0b;stroke-width:2.5;stroke-dasharray:6 4"/>` : ''}
     <line class="wcur" y1="${pt}" y2="${Ht - pb}" style="stroke:var(--muted);display:none"/>
   </svg>`;
@@ -3632,7 +3647,7 @@ function renderWealth(){
     <h2>${W.title}</h2>
     <p class="sub">${W.sub}</p>
     <div class="calkpis">${cards.join('')}</div>
-    <div class="wlegend"><span><i style="background:var(--div)"></i>${name1}</span><span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span>${net2 ? `<span><i class="dash2"></i>${name2}</span>` : ''}</div>
+    <div class="wlegend"><span><i style="background:var(--div)"></i>${name1}</span><span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span>${goalCap > 0 ? `<span><i style="background:#10b981"></i>${W.kGoal}: ${EUR(goalCap)}</span>` : ''}${net2 ? `<span><i class="dash2"></i>${name2}</span>` : ''}</div>
     <div class="wwrap">${svg}<div class="wtip" hidden></div></div>
     <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th><th>${W.colTax}${bx}</th><th>${W.colCost}</th><th>${W.colNet}</th>${net2 ? `<th>${name2}</th>` : ''}</tr></thead><tbody>${rows}</tbody></table></div>
     <div class="calnotes"><div class="calnotes-hd">${tr('calNotesHd')}</div><p class="sub calnote">${W.costNote}</p>
@@ -3666,6 +3681,7 @@ function renderWealth(){
 }
 
 document.getElementById('wealthYrs').addEventListener('input', renderWealth);
+document.getElementById('wealthGoal').addEventListener('input', () => { document.getElementById('wealthGoal').value = fmtNum(digits(document.getElementById('wealthGoal').value)) || ''; recalc(); });
 function setTaxDefaults(){
   Object.keys(taxOn).forEach(k => { taxOn[k] = false; });
   const r = document.getElementById('resid').value;
@@ -3729,6 +3745,7 @@ function captureState(){
     resid: document.getElementById('resid').value,
     cmp2: cmp2,
     monthly: monthlyAmt,
+    wgoal: digits(document.getElementById('wealthGoal').value),
     tax: Object.keys(taxOn).filter(k => taxOn[k]),
     goalOn: document.getElementById('goalOn').checked,
     target: digits(document.getElementById('target').value),
@@ -3738,6 +3755,7 @@ function captureState(){
 function applyState(s){
   manualAmount = s.amount;
   monthlyAmt = typeof s.monthly === 'number' ? s.monthly : 0;
+  document.getElementById('wealthGoal').value = s.wgoal > 0 ? fmtNum(s.wgoal) : '';
   document.getElementById('jaren').value = s.years;
   document.getElementById('mix').value = s.mix;
   const r = document.querySelector(`input[name=scen][value="${s.scen}"]`);
