@@ -837,12 +837,10 @@
       <details class="cpick" id="domPick"><summary><span id="domSum"></span></summary><div class="cpick-list" id="domList"></div></details></div>
     <div class="pfield"><span class="pfield-lbl" data-i18n="cmpLbl"></span>
       <details class="cpick" id="cmpPick"><summary><span id="cmpSum"></span></summary><div class="cpick-list" id="cmpList"></div></details></div>
-    <label class="wslider" for="wealthYrs"><span id="wealthYrsLbl"></span></label>
-    <input type="range" id="wealthYrs" min="1" max="40" step="1" value="15">
-    <div class="field goal-cap">
-      <div class="field-head"><label for="wealthGoal" data-i18n="goalCapLbl"></label></div>
-      <div class="euro"><span>€</span><input type="text" id="wealthGoal" value="" inputmode="numeric" autocomplete="off" data-i18n-ph="goalCapPh"></div>
-    </div>
+    <div class="pfield"><span class="pfield-lbl" id="wealthYrsLbl"></span>
+      <input type="range" id="wealthYrs" min="1" max="40" step="1" value="15" aria-labelledby="wealthYrsLbl"></div>
+    <div class="pfield"><label class="pfield-lbl" for="wealthGoal" data-i18n="goalCapLbl"></label>
+      <div class="euro"><span>€</span><input type="text" id="wealthGoal" value="" inputmode="numeric" autocomplete="off" data-i18n-ph="goalCapPh"></div></div>
     <div id="wealthBody"></div>
   </section>
   <section class="panel" aria-labelledby="resTitle">
