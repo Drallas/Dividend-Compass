@@ -2975,7 +2975,13 @@ function syncGoal(){
   const pay = document.querySelector('.tabs .tab[data-tab="tabPay"]');
   if (!on && pay && pay.getAttribute('aria-selected') === 'true') document.querySelector('.tabs .tab[data-tab="tabProg"]').click();
 }
+// Toont het percentage en het bijbehorende eurobedrag van het startvermogen dat op de spaarrekening staat.
+function updateSaveLbl(){
+  const el = document.getElementById('savePctLbl'); if (!el) return;
+  el.textContent = savePct + '%  ·  ' + EUR(amountNow * savePct / 100);
+}
 function recalc(){
+  updateSaveLbl();
   if (typeof synthCalc === 'function') synthCalc();
   renderMonthly();
   syncGoal();
@@ -3793,7 +3799,7 @@ tcs.addEventListener('pointerleave', () => {
 let savePct = 0;
 document.getElementById('savePct').addEventListener('input', e => {
   savePct = +e.target.value;
-  document.getElementById('savePctLbl').textContent = savePct + '%';
+  updateSaveLbl();
   e.target.style.setProperty('--p', savePct + '%');
   recalc();
 });
