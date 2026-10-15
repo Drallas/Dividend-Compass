@@ -647,8 +647,8 @@
       <h3 data-i18n="grpAmt"></h3>
   <div class="field">
         <div class="field-head"><label for="bedrag" data-i18n="invested"></label> <a class="info" href="#gl-startvermogen">?</a></div>
-        <div class="euro"><span>€</span><input type="text" id="bedrag" value="250000" inputmode="numeric" autocomplete="off"></div>
-        <input type="range" id="bedragRange" min="0" max="1000000" step="1000" value="250000" aria-labelledby="bedrag">
+        <div class="euro"><span>€</span><input type="text" id="bedrag" value="0" inputmode="numeric" autocomplete="off"></div>
+        <input type="range" id="bedragRange" min="0" max="1000000" step="1000" value="0" aria-labelledby="bedrag">
         <div class="range-ends"><span id="bedMin"></span><span id="bedMax"></span></div>
       </div>
   <div class="field">
@@ -662,12 +662,12 @@
           <label for="jaren" data-i18n="duration"></label>
           <span class="field-value" id="jarenLabel"></span>
         </div>
-        <input type="range" id="jaren" min="1" max="15" value="5" step="1" aria-label="Duration">
+        <input type="range" id="jaren" min="1" max="15" value="15" step="1" aria-label="Duration">
         <div class="range-ends"><span id="dur1"></span><span id="dur10"></span></div>
       </div>
   <div class="field">
         <div class="field-head"><label for="goalCap" data-i18n="goalCapLbl"></label></div>
-        <div class="euro"><span>€</span><input type="text" id="goalCap" value="" inputmode="numeric" autocomplete="off" data-i18n-ph="goalCapPh"></div>
+        <div class="euro"><span>€</span><input type="text" id="goalCap" value="1.000.000" inputmode="numeric" autocomplete="off" data-i18n-ph="goalCapPh"></div>
       </div>
     </section>
     <section class="grp">
@@ -691,9 +691,8 @@
         <div class="field-head">
           <label for="target"><span data-i18n="targetLabel"></span></label> <a class="tt info" href="#gl-maandbedrag" data-tip-i18n="targetTip">?</a>
         </div>
-        <label class="toggle" style="font-size:12.5px;margin-bottom:8px"><input type="checkbox" id="goalOn"><span data-i18n="goalOn"></span></label>
-        <div class="euro"><span>€</span><input type="text" id="target" value="500" inputmode="numeric" autocomplete="off"></div>
-        <input type="range" id="targetRange" min="0" max="10000" step="50" value="500" aria-label="Dividend per month">
+        <div class="euro"><span>€</span><input type="text" id="target" value="0" inputmode="numeric" autocomplete="off"></div>
+        <input type="range" id="targetRange" min="0" max="10000" step="50" value="0" aria-label="Dividend per month">
         <div class="range-ends"><span id="tgMin"></span><span id="tgMax"></span></div>
         <p class="hint" id="targetHint"></p>
       </div>
@@ -2139,9 +2138,9 @@ const scen = { laag:{dg:-3,dy:-1}, basis:{dg:0,dy:0}, hoog:{dg:3,dy:0.5} };
 const riskScore = {'Laag':1,'Middel':2,'Middel-hoog':2.5,'Hoog':3};
 const riskLabel = s => s < 1.75 ? 'Laag' : s < 2.5 ? 'Middel' : s < 2.9 ? 'Middel-hoog' : 'Hoog';
 const MAX_BEDRAG = 1000000;
-let manualAmount = 250000; // het bedrag dat jij zelf invult
+let manualAmount = 0; // het bedrag dat jij zelf invult
 let monthlyAmt = 0; // maandelijkse inleg (periodiek bijstorten)
-let amountNow = 250000, infeasible = false;
+let amountNow = 0, infeasible = false;
 
 /* ============ fund table ============ */
 function groupSum(group){ return funds.filter(x => x.group === group).reduce((t,x) => t + x.w, 0) || 1; }
@@ -2649,7 +2648,7 @@ function renderCalendar(){
   });
   const total = annual.reduce((s,a) => s + a, 0);
   const avg1 = annual[1] / 12;
-  const goalOn = document.getElementById('goalOn').checked;
+  const goalOn = dividendGoalOn();
   const goal = goalOn ? digits(document.getElementById('target').value) : 0;
 
   const cards = [
@@ -2685,7 +2684,7 @@ function renderCalendar(){
 function syncGoal(){
   const hasDiv = funds.some(f => f.group === 'div' && f.w > 0) && parseFloat(document.getElementById('mix').value) > 0;
   document.getElementById('reinvestWrap').style.display = hasDiv ? '' : 'none';
-  const on = document.getElementById('goalOn').checked;
+  const on = dividendGoalOn();
   document.body.classList.toggle('nogoal', !on);
   const pay = document.querySelector('.tabs .tab[data-tab="tabPay"]');
   if (!on && pay && pay.getAttribute('aria-selected') === 'true') document.querySelector('.tabs .tab[data-tab="tabProg"]').click();
@@ -2698,7 +2697,7 @@ function recalc(){
   const amount = amountNow;
   const years = parseInt(document.getElementById('jaren').value, 10);
   const mix = parseFloat(document.getElementById('mix').value) / 100;
-  const goalOn = document.getElementById('goalOn').checked;
+  const goalOn = dividendGoalOn();
   const targetMonth = goalOn ? digits(document.getElementById('target').value) : 0;
   const target = targetMonth * 12;
   const sc = scen[document.querySelector('input[name=scen]:checked').value];
@@ -2923,7 +2922,7 @@ function renderBedrag(){
 }
 // Belegd vermogen dat nodig is voor het gewenste maandbedrag; null = niet te berekenen (mix 0% of geen yield)
 function neededAmountNow(){
-  const targetMonth = document.getElementById('goalOn').checked ? digits(document.getElementById('target').value) : 0;
+  const targetMonth = dividendGoalOn() ? digits(document.getElementById('target').value) : 0;
   const sc = scen[document.querySelector('input[name=scen]:checked').value];
   const mix = parseFloat(document.getElementById('mix').value) / 100;
   return { targetMonth, need: neededAmount(targetMonth, mix, sc) };
@@ -3415,6 +3414,7 @@ document.getElementById('mix').addEventListener('dblclick', () => {
 });
 
 const tEl = document.getElementById('target'), tR = document.getElementById('targetRange');
+function dividendGoalOn(){ return digits(document.getElementById('target').value) > 0; }
 const paintTarget = () => {
   tR.style.setProperty('--p', (tR.value / 10000 * 100) + '%');
   tR.style.setProperty('--fill', 'var(--div)');
@@ -3428,13 +3428,7 @@ tR.addEventListener('input', () => {
   setField('target', digits(tR.value));
   paintTarget(); syncAmountFromTarget(); recalc();
 });
-document.getElementById('goalOn').addEventListener('change', () => {
-  const on = document.getElementById('goalOn').checked;
-  tEl.disabled = !on;
-  tR.disabled = !on;
-  syncAmountFromTarget();
-  recalc();
-});
+tEl.addEventListener('input', () => { syncAmountFromTarget(); recalc(); });
 
 let taxGeom = null;
 const tcs = document.getElementById('taxChart');
@@ -3770,7 +3764,6 @@ function captureState(){
     monthly: monthlyAmt,
     wgoal: digits(document.getElementById('goalCap').value),
     tax: Object.keys(taxOn).filter(k => taxOn[k]),
-    goalOn: document.getElementById('goalOn').checked,
     target: digits(document.getElementById('target').value),
     funds: funds.map(f => ({id: f.id, w: f.w, g: f.g, y: f.y, ter: f.ter}))
   };
@@ -3788,7 +3781,6 @@ function applyState(s){
   cmp2 = (typeof s.cmp2 === 'string' && document.querySelector('#resid option[value="' + s.cmp2 + '"]')) ? s.cmp2 : '';
   if (Array.isArray(s.tax)) { Object.keys(taxOn).forEach(k => { taxOn[k] = s.tax.includes(k) && taxAllowed(k); }); updateChips(); }
   else setTaxDefaults();
-  document.getElementById('goalOn').checked = s.goalOn;
   document.getElementById('target').value = fmtNum(s.target);
   s.funds.forEach(x => { const f = funds.find(q => q.id === x.id); if (f){ f.w = x.w; f.g = x.g; f.y = x.y; f.ter = x.ter; } });
   buildFundTable();
