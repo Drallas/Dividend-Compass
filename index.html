@@ -414,6 +414,7 @@
   .welcome-actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
   .disclaimer{font-size:12px;color:var(--muted);max-width:64ch;margin:10px auto 0;line-height:1.5}
   .controls .grp{border:1px solid var(--line);border-radius:12px;padding:12px 14px 4px;margin:0 0 12px}
+  .controls .grp .field + .field{border-top:1px solid var(--line);padding-top:12px;margin-top:4px}
   .controls .grp > h3{margin:0 0 10px;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
   html:not([lang="nl"]) .nlonly{display:none !important}
   .wchart{width:100%;height:auto;display:block;margin:6px 0 4px}
@@ -640,6 +641,12 @@
         <div class="euro"><span>€</span><input type="text" id="bedrag" value="250000" inputmode="numeric" autocomplete="off"></div>
         <input type="range" id="bedragRange" min="1000" max="1000000" step="1000" value="250000" aria-labelledby="bedrag">
         <div class="range-ends"><span id="bedMin"></span><span id="bedMax"></span></div>
+      </div>
+  <div class="field">
+        <div class="field-head"><label for="monthly" data-i18n="monthlyIn"></label></div>
+        <div class="euro"><span>€</span><input type="text" id="monthly" value="0" inputmode="numeric" autocomplete="off"></div>
+        <input type="range" id="monthlyRange" min="0" max="10000" step="50" value="0" aria-labelledby="monthly">
+        <div class="range-ends"><span id="monMin"></span><span id="monMax"></span></div>
       </div>
   <div class="field">
         <div class="field-head">
@@ -1856,6 +1863,10 @@ const SYN_T = {
   "synthLink": "Inleg en looptijd komen uit de invoer bovenaan.",
   "synthSum": "Gewichten tellen op tot {s}%; de uitkomst wordt genormaliseerd naar 100%.",
   "synPayout": "uitkerend",
+  "monthlyIn": "Maandelijkse inleg",
+  "perMonthPlus": "+ {x} per maand",
+  "pickSel1": "1 land geselecteerd",
+  "pickSelN": "{n} landen geselecteerd",
   "pickPlaceholder": "Kies landen",
   "pickLbl": "Landen om te vergelijken (max. 4)",
   "cmpNone": "Geen vergelijking",
@@ -1922,6 +1933,10 @@ const SYN_T = {
   "synthLink": "Investment and term come from the input at the top.",
   "synthSum": "Weights add up to {s}%; the outcome is normalised to 100%.",
   "synPayout": "distributing",
+  "monthlyIn": "Monthly contribution",
+  "perMonthPlus": "+ {x} per month",
+  "pickSel1": "1 country selected",
+  "pickSelN": "{n} countries selected",
   "pickPlaceholder": "Choose countries",
   "pickLbl": "Countries to compare (max. 4)",
   "cmpNone": "No comparison",
@@ -1995,6 +2010,10 @@ const SYN_T = {
   "synthLink": "La inversión y el plazo vienen de los datos de entrada de arriba.",
   "synthSum": "Los pesos suman {s}%; el resultado se normaliza a 100%.",
   "synPayout": "distribuyendo",
+  "monthlyIn": "Aportación mensual",
+  "perMonthPlus": "+ {x} al mes",
+  "pickSel1": "1 país seleccionado",
+  "pickSelN": "{n} países seleccionados",
   "pickPlaceholder": "Elige países",
   "pickLbl": "Países a comparar (máx. 4)",
   "cmpNone": "Sin comparación",
@@ -2096,6 +2115,7 @@ const riskScore = {'Laag':1,'Middel':2,'Middel-hoog':2.5,'Hoog':3};
 const riskLabel = s => s < 1.75 ? 'Laag' : s < 2.5 ? 'Middel' : s < 2.9 ? 'Middel-hoog' : 'Hoog';
 const MAX_BEDRAG = 1000000;
 let manualAmount = 250000; // het bedrag dat jij zelf invult
+let monthlyAmt = 0; // maandelijkse inleg (periodiek bijstorten)
 let amountNow = 250000, infeasible = false;
 
 /* ============ fund table ============ */
@@ -2160,15 +2180,17 @@ function buildFundTable(){
 }
 
 /* ============ model ============ */
-function simulate(f, amount, years, reinvest, sc){
+function simulate(f, amount, years, reinvest, sc, contrib = 0){
   const g = f.g + sc.dg;
   const y = f.y > 0 ? Math.max(0, f.y + sc.dy) : 0;
   let v = amount, cash = 0, cost = 0, income = 0;
   const vals = [v], cashArr = [0], incArr = [0];
   for (let t = 1; t <= years; t++){
-    const cashThisYear = v * y / 100;
-    cost += v * f.ter / 100;
-    v = v * (1 + (g - f.ter) / 100) + (reinvest ? cashThisYear : 0);
+    // inleg aan het begin van het jaar, groeit mee
+    const base = v + contrib;
+    const cashThisYear = base * y / 100;
+    cost += base * f.ter / 100;
+    v = base * (1 + (g - f.ter) / 100) + (reinvest ? cashThisYear : 0);
     if (!reinvest) cash += cashThisYear;
     // bruto dividendinkomst, ook als het herbelegd wordt: die is belastbaar
     income += cashThisYear;
@@ -2176,14 +2198,14 @@ function simulate(f, amount, years, reinvest, sc){
   }
   return {vals, cashArr, incArr, cost, startYield: y};
 }
-function basket(group, amount, years, reinvest, sc){
+function basket(group, amount, years, reinvest, sc, contrib = 0){
   const members = funds.filter(f => f.group === group);
   const sumW = members.reduce((s,f) => s + f.w, 0) || 1;
   const vals = new Array(years+1).fill(0), cashArr = new Array(years+1).fill(0), incArr = new Array(years+1).fill(0);
   let cost = 0, startYield = 0, riskSum = 0;
   members.forEach(f => {
     const share = f.w / sumW;
-    const r = simulate(f, amount * share, years, reinvest, sc);
+    const r = simulate(f, amount * share, years, reinvest, sc, contrib * share);
     r.vals.forEach((v,i) => vals[i] += v);
     r.cashArr.forEach((c,i) => cashArr[i] += c);
     r.incArr.forEach((c,i) => incArr[i] += c);
@@ -2192,6 +2214,16 @@ function basket(group, amount, years, reinvest, sc){
     riskSum += share * riskScore[f.risk];
   });
   return {vals, cashArr, incArr, cost, startYield, risk: riskLabel(riskSum)};
+}
+// Jaarlijks rendement (%) waarmee startbedrag s en jaarlijkse inleg c (aan begin van elk jaar) in n jaar tot fv groeien
+function annualRate(s, c, n, fv){
+  if (n <= 0 || s + c * n <= 0) return 0;
+  if (fv <= 0) return -100;
+  if (c === 0) return (Math.pow(fv / s, 1 / n) - 1) * 100;
+  const F = r => { let sum = 0, p = 1; for (let j = 1; j <= n; j++){ p *= 1 + r; sum += p; } return s * Math.pow(1 + r, n) + c * sum - fv; };
+  let lo = -0.99, hi = 1;
+  for (let i = 0; i < 100; i++){ const m = (lo + hi) / 2; if (F(m) > 0) hi = m; else lo = m; }
+  return (lo + hi) / 2 * 100;
 }
 // Belegd vermogen dat nodig is voor het gewenste maandbedrag; null = niet te berekenen
 function neededAmount(targetMonth, mix, sc){
@@ -2302,10 +2334,11 @@ function renderTax(d, a, years, dStart, sc, amount){
   const bs = {nl:[], us:[], ar:[], n28:[]}, ex = {}, exb = {};
   EXTRA.forEach(e => { ex[e.k] = []; exb[e.k] = []; });
   const usGross = new Array(years).fill(0);
+  const dCy = amount > 0 ? 12 * monthlyAmt * dStart / amount : 0;
   const divFunds = funds.filter(f => f.group === 'div');
   const divSum = divFunds.reduce((s,f) => s + f.w, 0) || 1;
   divFunds.forEach(f => {
-    const r = simulate(f, dStart * f.w / divSum, years, false, sc);
+    const r = simulate(f, dStart * f.w / divSum, years, false, sc, dCy * f.w / divSum);
     for (let t = 0; t < years; t++) usGross[t] += (r.cashArr[t+1] - r.cashArr[t]) * US_SHARE[f.id] * WITHHOLD;
   });
   for (let t = 0; t < years; t++){
@@ -2314,7 +2347,7 @@ function renderTax(d, a, years, dStart, sc, amount){
     const tax = box3Year(fund, cash, savePct / 100);
     nl.push(tax);
     // voorstel box 3 vanaf 2028: 36% over het werkelijke rendement boven € 1.800 (verliezen niet verrekend)
-    const gain28 = (d.vals[t + 1] + a.vals[t + 1] + d.cashArr[t + 1]) - (fund + cash);
+    const gain28 = (d.vals[t + 1] + a.vals[t + 1] + d.cashArr[t + 1]) - (fund + cash) - 12 * monthlyAmt;
     n28.push(0.36 * Math.max(0, gain28 - 1800));
     bs.nl.push(Math.max(0, fund + cash - BOX3.hv));
     bs.n28.push(Math.max(0, gain28 - 1800));
@@ -2575,11 +2608,12 @@ function renderCalendar(){
   const years = parseInt(document.getElementById('jaren').value, 10);
   const sc = scen[document.querySelector('input[name=scen]:checked').value];
   const divAmt = amountNow * groupMixOf('div');
+  const divC = 12 * monthlyAmt * groupMixOf('div');
   const divs = funds.filter(f => f.group === 'div');
   const sumW = divs.reduce((s,f) => s + f.w, 0) || 1;
   const annual = new Array(years + 1).fill(0);
   const perFund = divs.map(f => {
-    const r = simulate(f, divAmt * f.w / sumW, years, false, sc);
+    const r = simulate(f, divAmt * f.w / sumW, years, false, sc, divC * f.w / sumW);
     const ann = new Array(years + 1).fill(0);
     for (let t = 1; t <= years; t++){ ann[t] = r.cashArr[t] - r.cashArr[t-1]; annual[t] += ann[t]; }
     return {name: f.name, ann};
@@ -2629,6 +2663,7 @@ function syncGoal(){
 }
 function recalc(){
   if (typeof synthCalc === 'function') synthCalc();
+  renderMonthly();
   syncGoal();
   persistFunds();
   const amount = amountNow;
@@ -2665,20 +2700,22 @@ function recalc(){
   document.getElementById('mixBarAcc').style.width = ((1-mix)*100) + '%';
   document.getElementById('reinvestHint').textContent = reinvest ? tr('reinvestOn') : tr('reinvestOff');
 
+  const yC = 12 * monthlyAmt, dC = yC * mix, aC = yC * (1 - mix);
   const dStart = amount * mix, aStart = amount * (1 - mix);
-  const d = basket('div', dStart, years, reinvest, sc);
-  const a = basket('acc', aStart, years, false, sc);
+  const dIn = dStart + dC * years, aIn = aStart + aC * years, totIn = amount + yC * years;
+  const d = basket('div', dStart, years, reinvest, sc, dC);
+  const a = basket('acc', aStart, years, false, sc, aC);
 
   const dCash = d.cashArr[years];
   const dTotal = d.vals[years] + dCash;
   const aTotal = a.vals[years];
   const grand = dTotal + aTotal;
-  const dRet = dStart > 0 ? (dTotal - dStart) / dStart * 100 : 0;
-  const aRet = aStart > 0 ? (aTotal - aStart) / aStart * 100 : 0;
-  const totRet = amount > 0 ? (grand - amount) / amount * 100 : 0;
-  const dPa = dStart > 0 ? (Math.pow(dTotal / dStart, 1/years) - 1) * 100 : 0;
-  const aPa = aStart > 0 ? (Math.pow(aTotal / aStart, 1/years) - 1) * 100 : 0;
-  const totPa = amount > 0 ? (Math.pow(grand / amount, 1/years) - 1) * 100 : 0;
+  const dRet = dIn > 0 ? (dTotal - dIn) / dIn * 100 : 0;
+  const aRet = aIn > 0 ? (aTotal - aIn) / aIn * 100 : 0;
+  const totRet = totIn > 0 ? (grand - totIn) / totIn * 100 : 0;
+  const dPa = annualRate(dStart, dC, years, dTotal);
+  const aPa = annualRate(aStart, aC, years, aTotal);
+  const totPa = annualRate(amount, yC, years, grand);
 
   const incomeYear = dStart * d.startYield / 100;
   const incomeMonth = incomeYear / 12;
@@ -2699,7 +2736,7 @@ function recalc(){
       {k:'acc', name:tr('accShort'), v:EUR(a.vals[years])},
       ...(reinvest ? [] : [{k:'tot', name:tr('kWaarde'), v:EUR(d.vals[years] + a.vals[years])}, {k:'div', name:tr('kUitb'), v:EUR(dCash)}]),
       {k:'tot', name:tr('kTotGen'), v:EUR(grand)}
-    ], `${tr('startValue')}: ${EUR(amount)}<br>${tr('totNote')}`, undefined, '#2563eb', true),
+    ], `${tr('startValue')}: ${EUR(amount)}${monthlyAmt > 0 ? ' ' + fillT('perMonthPlus', {x: EUR(monthlyAmt)}) : ''}<br>${tr('totNote')}`, undefined, '#2563eb', true),
     kpiCard(tr('kRend'), [
       {k:'div', name:tr('dividendShort'), v:PCT(dRet)},
       {k:'acc', name:tr('accShort'), v:PCT(aRet)}
@@ -2721,7 +2758,7 @@ function recalc(){
     [reinvest ? tr('rCashReinv') : tr('rCash'), reinvest ? tr('none') : EUR(dCash), 'n.v.t.', cashAll],
     [tr('rPaidMonth'), reinvest ? tr('none') : EUR(dCash / (years * 12)), 'n.v.t.', reinvest ? tr('none') : EUR(dCash / (years * 12))],
     [tr('rTotal'), EUR(dTotal), EUR(aTotal), EUR(grand)],
-    [tr('rGain'), EUR(dTotal - dStart), EUR(aTotal - aStart), EUR(grand - amount)],
+    [tr('rGain'), EUR(dTotal - dIn), EUR(aTotal - aIn), EUR(grand - totIn)],
     [tr('rReturn'), PCT(dRet), PCT(aRet), PCT(totRet)],
     [tr('rAvg'), PCT(dPa), PCT(aPa), PCT(totPa)],
     [tr('rCost'), EUR(d.cost), EUR(a.cost), EUR(d.cost + a.cost)],
@@ -2737,7 +2774,7 @@ function recalc(){
   let yr = '';
   for (let t = 0; t <= years; t++){
     const totT = d.vals[t] + d.cashArr[t] + a.vals[t];
-    const cagr = t > 0 && amount > 0 ? PCT((Math.pow(totT / amount, 1 / t) - 1) * 100) : tr('none');
+    const cagr = t > 0 && amount > 0 ? PCT(annualRate(amount, yC, t, totT)) : tr('none');
     yr += `<tr><td>${t}</td><td class="num">${EUR(d.vals[t])}</td><td class="num">${EUR(d.cashArr[t])}</td><td class="num">${EUR(a.vals[t])}</td><td class="num"><b>${EUR(totT)}</b></td><td class="num">${cagr}</td></tr>`;
   }
   document.getElementById('yearly').innerHTML = yr;
@@ -3321,6 +3358,25 @@ document.getElementById('bedragRange').addEventListener('input', e => {
   renderBedrag();
   recalc();
 });
+function renderMonthly(){
+  const el = document.getElementById('monthly');
+  if (document.activeElement !== el) el.value = fmtNum(monthlyAmt);
+  const r = document.getElementById('monthlyRange');
+  r.value = Math.min(10000, Math.max(0, monthlyAmt));
+  r.style.setProperty('--p', (r.value / 10000 * 100) + '%');
+  r.style.setProperty('--fill', 'var(--div)');
+  document.getElementById('monMin').textContent = EUR(0);
+  document.getElementById('monMax').textContent = EUR(10000);
+}
+document.getElementById('monthly').addEventListener('input', () => {
+  monthlyAmt = digits(document.getElementById('monthly').value);
+  recalc();
+});
+document.getElementById('monthly').addEventListener('blur', renderMonthly);
+document.getElementById('monthlyRange').addEventListener('input', e => {
+  monthlyAmt = digits(e.target.value);
+  recalc();
+});
 document.getElementById('jaren').addEventListener('input', recalc);
 document.getElementById('reinvest').addEventListener('change', recalc);
 document.querySelectorAll('input[name=scen]').forEach(r => r.addEventListener('change', () => { syncAmountFromTarget(); recalc(); }));
@@ -3425,8 +3481,8 @@ function updateChips(){
   });
   document.querySelectorAll('#ovChips [data-nm]').forEach(sp => { sp.textContent = shortName(ALL.find(c => c.k === sp.dataset.nm)); });
   document.getElementById('pickCount').textContent = tr('pickOf')(activeCount());
-  const picked = ALL.filter(c => taxIsOn(c.k)).map(c => shortName(c));
-  document.getElementById('taxPickSum').textContent = picked.length ? picked.join(' + ') : tr('pickPlaceholder');
+  const nSel = ALL.filter(c => taxIsOn(c.k)).length;
+  document.getElementById('taxPickSum').textContent = nSel === 0 ? tr('pickPlaceholder') : nSel === 1 ? tr('pickSel1') : fillT('pickSelN', {n: nSel});
   document.getElementById('pickMax').hidden = !full;
 }
 buildChips();
@@ -3482,18 +3538,19 @@ function renderWealth(){
   const sp = savePct / 100;
   const resid = document.getElementById('resid').value;
   const bx = (resid === 'nl' && isNL()) ? ' (box 3)' : '';
-  const d = basket('div', amountNow * mix, H, reinvest, sc);
-  const a = basket('acc', amountNow * (1 - mix), H, reinvest, sc);
+  const yC = 12 * monthlyAmt, dC = yC * mix, aC = yC * (1 - mix);
+  const d = basket('div', amountNow * mix, H, reinvest, sc, dC);
+  const a = basket('acc', amountNow * (1 - mix), H, reinvest, sc, aC);
   const fund = [], cash = [], tax = [], net = [];
   for (let t = 0; t <= H; t++){ fund[t] = d.vals[t] + a.vals[t]; cash[t] = d.cashArr[t] + a.cashArr[t]; }
-  const dPay = basket('div', amountNow * mix, H, false, sc), aPay = basket('acc', amountNow * (1 - mix), H, false, sc);
+  const dPay = basket('div', amountNow * mix, H, false, sc, dC), aPay = basket('acc', amountNow * (1 - mix), H, false, sc, aC);
   const paid = [];
   for (let t = 0; t <= H; t++) paid[t] = dPay.cashArr[t] + aPay.cashArr[t];
   const taxSeries = rs => {
     const out = [0]; let cumTax = 0;
     for (let t = 1; t <= H; t++){
       const divT = Math.max(0, paid[t] - paid[t-1]);
-      const gain = (fund[t] + cash[t]) - (fund[t-1] + cash[t-1]);
+      const gain = (fund[t] + cash[t]) - (fund[t-1] + cash[t-1]) - yC;
       const cgT = Math.max(0, gain - divT);
       let yt = 0;
       if (rs === 'nl') yt = box3Year(fund[t], cash[t], sp);
@@ -3507,26 +3564,31 @@ function renderWealth(){
   tax.push(...taxSeries(resid));
   for (let t = 0; t <= H; t++) net[t] = fund[t] + cash[t] - tax[t];
   const second = (cmp2 && cmp2 !== resid && cmp2 !== 'none') ? cmp2 : '';
+  const name1 = (resid && resid !== 'none') ? (ALL.find(c => c.k === resid) ? ALL.find(c => c.k === resid).name() : ((EXTRA.find(e => e.k === resid) || {names:{}}).names[lang] || resid)) : W.legN;
   const name2 = second ? (ALL.find(c => c.k === second) ? ALL.find(c => c.k === second).name() : (EXTRA.find(e => e.k === second) || {names:{}}).names[lang] || second) : '';
   const tax2 = second ? taxSeries(second) : null;
   const net2 = second ? fund.map((v, t) => v + cash[t] - tax2[t]) : null;
-  const inleg = amountNow;
+  // ingelegd: vast startbedrag, stijgt alleen met de maandelijkse inleg
+  const inArr = []; for (let t = 0; t <= H; t++) inArr[t] = amountNow + yC * t;
+  const inleg = inArr[H];
   const costYr = new Array(H + 1).fill(0);
   funds.forEach(f => {
     const share = (f.group === 'div' ? amountNow * mix : amountNow * (1 - mix)) * f.w / groupSum(f.group);
     const g = f.g + sc.dg;
     const y = f.y > 0 ? Math.max(0, f.y + sc.dy) : 0;
+    const cf = (f.group === 'div' ? yC * mix : yC * (1 - mix)) * f.w / groupSum(f.group);
     let v = share;
     for (let t = 1; t <= H; t++){
-      costYr[t] += v * f.ter / 100;
-      v = v * (1 + (g - f.ter) / 100) + (reinvest ? v * y / 100 : 0);
+      const base = v + cf;
+      costYr[t] += base * f.ter / 100;
+      v = base * (1 + (g - f.ter) / 100) + (reinvest ? base * y / 100 : 0);
     }
   });
   const costCum = [];
   let cc = 0;
   for (let t = 0; t <= H; t++){ cc += costYr[t]; costCum[t] = cc; }
   let dbl = null;
-  for (let t = 1; t <= H; t++){ if (net[t] >= 2 * inleg){ dbl = t; break; } }
+  for (let t = 1; t <= H; t++){ if (net[t] >= 2 * inArr[t]){ dbl = t; break; } }
 
   const cards = [
     `<div class="calk"><span>${W.kGross}</span><b>${EUR(fund[H])}</b></div>`,
@@ -3538,7 +3600,7 @@ function renderWealth(){
   ];
 
   const Wd = 640, Ht = 280, pl = 64, pr = 14, pt = 14, pb = 30;
-  const max = (Math.max(...fund, ...net, ...(net2 || []), inleg) * 1.05) || 1;
+  const max = (Math.max(...net, ...(net2 || []), ...inArr) * 1.05) || 1;
   const x = t => pl + (Wd - pl - pr) * (H ? t / H : 0);
   const y = v => pt + (Ht - pt - pb) * (1 - v / max);
   const path = arr => arr.map((v, t) => `${t ? 'L' : 'M'}${x(t).toFixed(1)},${y(v).toFixed(1)}`).join('');
@@ -3553,8 +3615,7 @@ function renderWealth(){
     grid += `<text x="${x(t).toFixed(1)}" y="${Ht - 8}" text-anchor="middle" style="fill:var(--muted);font-size:11px">${t}</text>`;
   }
   const svg = `<svg class="wchart" viewBox="0 0 ${Wd} ${Ht}" role="img" aria-label="${W.title}">${grid}
-    <line x1="${pl}" x2="${Wd - pr}" y1="${y(inleg).toFixed(1)}" y2="${y(inleg).toFixed(1)}" style="stroke:var(--muted);stroke-dasharray:4 4"/>
-    <path d="${path(fund)}" fill="none" style="stroke:var(--acc);stroke-width:2"/>
+    <path d="${path(inArr)}" fill="none" style="stroke:var(--muted);stroke-width:2;stroke-dasharray:4 4"/>
     <path d="${path(net)}" fill="none" style="stroke:var(--div);stroke-width:3"/>
     ${net2 ? `<path d="${path(net2)}" fill="none" style="stroke:#f59e0b;stroke-width:2.5;stroke-dasharray:6 4"/>` : ''}
     <line class="wcur" y1="${pt}" y2="${Ht - pb}" style="stroke:var(--muted);display:none"/>
@@ -3571,7 +3632,7 @@ function renderWealth(){
     <h2>${W.title}</h2>
     <p class="sub">${W.sub}</p>
     <div class="calkpis">${cards.join('')}</div>
-    <div class="wlegend"><span><i style="background:var(--div)"></i>${W.legN}</span><span><i style="background:var(--acc)"></i>${W.legG}</span><span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span>${net2 ? `<span><i class="dash2"></i>${name2}</span>` : ''}</div>
+    <div class="wlegend"><span><i style="background:var(--div)"></i>${name1}</span><span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span>${net2 ? `<span><i class="dash2"></i>${name2}</span>` : ''}</div>
     <div class="wwrap">${svg}<div class="wtip" hidden></div></div>
     <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th><th>${W.colTax}${bx}</th><th>${W.colCost}</th><th>${W.colNet}</th>${net2 ? `<th>${name2}</th>` : ''}</tr></thead><tbody>${rows}</tbody></table></div>
     <div class="calnotes"><div class="calnotes-hd">${tr('calNotesHd')}</div><p class="sub calnote">${W.costNote}</p>
@@ -3589,9 +3650,9 @@ function renderWealth(){
     cur.setAttribute('x2', xp);
     cur.style.display = '';
     tip.innerHTML = `<b>${W.year} ${tt}</b>
-      <div><i style="background:var(--div)"></i>${W.legN}: ${EUR(net[tt])}</div>
-      <div><i style="background:var(--acc)"></i>${W.legG}: ${EUR(fund[tt])}</div>
-      <div><i class="dash"></i>${W.legI}: ${EUR(inleg)}</div>
+      <div><i style="background:var(--div)"></i>${name1}: ${EUR(net[tt])}</div>
+      ${net2 ? `<div><i class="dash2"></i>${name2}: ${EUR(net2[tt])}</div>` : ''}
+      <div><i class="dash"></i>${W.legI}: ${EUR(inArr[tt])}</div>
       <div>${W.colCash}: ${EUR(cash[tt])}</div>
       <div>${W.colTax}${bx}: ${EUR(tax[tt])}</div>
       <div>${W.colCost}: ${EUR(costCum[tt])}</div>`;
@@ -3667,6 +3728,7 @@ function captureState(){
     reinvest: document.getElementById('reinvest').checked,
     resid: document.getElementById('resid').value,
     cmp2: cmp2,
+    monthly: monthlyAmt,
     tax: Object.keys(taxOn).filter(k => taxOn[k]),
     goalOn: document.getElementById('goalOn').checked,
     target: digits(document.getElementById('target').value),
@@ -3675,6 +3737,7 @@ function captureState(){
 }
 function applyState(s){
   manualAmount = s.amount;
+  monthlyAmt = typeof s.monthly === 'number' ? s.monthly : 0;
   document.getElementById('jaren').value = s.years;
   document.getElementById('mix').value = s.mix;
   const r = document.querySelector(`input[name=scen][value="${s.scen}"]`);
