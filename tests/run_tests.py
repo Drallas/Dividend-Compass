@@ -110,6 +110,19 @@ with sync_playwright() as p:
     check("11e geen fouten", not errs, errs)
     pg.close()
 
+    # 12. Strategieen: risico en rendement lopen op van defensief naar agressief
+    pg, errs = new_page(b)
+    pg.evaluate("() => { manualAmount = 330000; amountNow = 330000; recalc(); }")
+    pg.evaluate("document.querySelector('.tabs .tab[data-tab=\"tabInput\"]').click()"); pg.wait_for_timeout(300)
+    vals = {}
+    for st in ["defensief", "gebalanceerd", "agressief"]:
+        pg.evaluate("id => document.querySelector('[data-strat=\"' + id + '\"]').click()", st); pg.wait_for_timeout(300)
+        vals[st] = pg.evaluate("() => [weighted(SYNTH_STATE.w, 'v'), weighted(SYNTH_STATE.w, 't')]")
+    check("12a risico: defensief < gebalanceerd < agressief", vals["defensief"][0] < vals["gebalanceerd"][0] < vals["agressief"][0], vals)
+    check("12b rendement: defensief < gebalanceerd < agressief", vals["defensief"][1] < vals["gebalanceerd"][1] < vals["agressief"][1], vals)
+    check("12c geen fouten", not errs, errs)
+    pg.close()
+
     # 1. Roundtrip: alle opgeslagen waarden komen terug
     pg, errs = new_page(b)
     set_domicile(pg, "nl")
