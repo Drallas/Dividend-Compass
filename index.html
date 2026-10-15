@@ -4131,7 +4131,7 @@ function onDomicileChange(){
 }
 document.getElementById('resid').addEventListener('change', e => { saveResid(e.target.value); onDomicileChange(); syncCmp(); recalc(); });
 /* ============ merk, menu's, scenario's, export, kosten ============ */
-const APP_VERSION = '0.6';
+const APP_VERSION = '0.8';
 const SKEY = 'dk-scenarios';
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pad2 = n => String(n).padStart(2, '0');
