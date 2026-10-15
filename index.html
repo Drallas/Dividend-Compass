@@ -2675,7 +2675,7 @@ const TAXSORT_KEY = 'dk-taxsort';
 let taxSort = (() => { try { const v = localStorage.getItem(TAXSORT_KEY); return ['desc','alpha','fixed'].includes(v) ? v : 'desc'; } catch (e) { return 'desc'; } })();
 function renderTaxCards(list, totals, gain, years){
   // Elke kaart is een div (geen button) zodat de voetnoot van Nederland er gewoon in kan staan.
-  document.getElementById('taxKpis').innerHTML = list.filter(m => m.k !== 'n28').map(m => {
+  document.getElementById('taxKpis').innerHTML = list.filter(m => m.k !== 'n28' || taxOn.n28).map(m => {
     const tot = totals[m.k];
     const on = taxIsOn(m.k);
     let inner;
