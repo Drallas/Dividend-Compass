@@ -46,7 +46,7 @@ with sync_playwright() as p:
     pg.reload(); pg.wait_for_timeout(400)
     check("2a domicilie na herladen", pg.eval_on_selector("#resid", "e => e.value") == "ve")
     pg.evaluate("document.getElementById('menuReset').click()"); pg.wait_for_timeout(800)
-    check("2b domicilie na reset", pg.eval_on_selector("#resid", "e => e.value") == "ve")
+    check("2b domicilie na reset gewist", pg.eval_on_selector("#resid", "e => e.value") == "")
     pg.close()
 
     # 3. Landen blijven na reset
@@ -55,7 +55,7 @@ with sync_playwright() as p:
     pg.evaluate("() => { taxOn.us = true; taxOn.fr = true; saveLast(); }")
     pg.evaluate("document.getElementById('menuReset').click()"); pg.wait_for_timeout(800)
     picked = pg.evaluate("Object.keys(taxOn).filter(k => taxOn[k]).sort().join(',')")
-    check("3 landen na reset behouden", "fr" in picked and "us" in picked and "ve" in picked, picked)
+    check("3 landen na reset gewist", picked == "", picked)
     pg.close()
 
     # 4. Profielen blijven na reset
@@ -64,6 +64,10 @@ with sync_playwright() as p:
     pg.evaluate("document.getElementById('menuReset').click()"); pg.wait_for_timeout(800)
     kept = pg.evaluate("localStorage.getItem('dk-scenarios')")
     check("4 profielen na reset behouden", kept is not None and "Test" in kept)
+    # 4b. Alle andere invoer is gewist
+    st = pg.evaluate("() => { try { return JSON.parse(localStorage.getItem('dk-last-v2')) || {}; } catch (e) { return {}; } }")
+    clean = st.get("resid", "") == "" and len(st.get("tax", [])) == 0 and st.get("amount", 0) == 0
+    check("4b na reset staat alleen de standaardwaarde opgeslagen", clean, st)
     pg.close()
 
     # 5. Box 3 verborgen bij niet-Nederland

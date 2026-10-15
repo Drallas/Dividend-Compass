@@ -1483,7 +1483,7 @@ const T = {
     kPerMaand: 'Dividend per maand bij start',
     kKosten: 'Kosten (TER) over de periode',
     startValue: 'Startwaarde',
-    avgPerYear: (d,a) => `Gemiddeld ${d} per jaar (dividend) · ${a} (acc)`,
+    avgPerYear: (d,a) => `Gemiddeld ${d} per jaar (dividend) · ${a} (acc)`, investedSplit: 'Ingelegd: dividend {d}, acc {a}', goalOut: 'Doel buiten beeld:',
     coverFill: 'Vul een gewenst maandbedrag in',
     cover: (p, m) => `Dekt ${p}% van ${m} per maand`,
     approxMonth: 'Ca. per maand',
@@ -1718,7 +1718,7 @@ const T = {
     kPerMaand: 'Dividend per month at start',
     kKosten: 'Costs (TER) over the period',
     startValue: 'Starting value',
-    avgPerYear: (d,a) => `Average ${d} per year (dividend) · ${a} (acc)`,
+    avgPerYear: (d,a) => `Average ${d} per year (dividend) · ${a} (acc)`, investedSplit: 'Invested: dividend {d}, acc {a}', goalOut: 'Goal off chart:',
     coverFill: 'Enter a desired monthly amount',
     cover: (p, m) => `Covers ${p}% of ${m} per month`,
     approxMonth: 'Approx. per month',
@@ -1953,7 +1953,7 @@ const T = {
     kPerMaand: 'Dividendo al mes al inicio',
     kKosten: 'Costes (TER) del periodo',
     startValue: 'Valor inicial',
-    avgPerYear: (d,a) => `Media ${d} al año (dividendo) · ${a} (acum.)`,
+    avgPerYear: (d,a) => `Media ${d} al año (dividendo) · ${a} (acum.)`, investedSplit: 'Invertido: dividendo {d}, acc {a}', goalOut: 'Meta fuera del gráfico:',
     coverFill: 'Indica un importe mensual deseado',
     cover: (p, m) => `Cubre el ${p}% de ${m} al mes`,
     approxMonth: 'Aprox. al mes',
@@ -3077,7 +3077,7 @@ function recalc(){
     kpiCard(tr('kRend'), [
       {k:'div', name:tr('dividendShort'), v:PCT(dRet)},
       {k:'acc', name:tr('accShort'), v:PCT(aRet)}
-    ], tr('avgPerYear')(PCT(dPa), PCT(aPa)), undefined, '#10b981'),
+    ], tr('avgPerYear')(PCT(dPa), PCT(aPa)) + '<br>' + fillT('investedSplit', {d: EUR(dIn), a: EUR(aIn)}), undefined, '#10b981'),
     kpiCard(tr('kPerMaand'), [
       {k:'div', name: tr('approxMonth'), v:EUR(incomeMonth)},
       ...(reinvest ? [] : [{k:'div', name: tr('paidTotal'), v:EUR(dCash)}])
@@ -4026,7 +4026,8 @@ function renderWealth(){
   if (goalCap > 0) cards.push(`<div class="calk"><span>${W.kGoal}</span><b>${goalYr ? tr('years')(goalYr) : W.dNo}</b></div>`);
 
   const Wd = innerWidth < 640 ? 640 : 960, Ht = 320, pl = 64, pr = 14, pt = 14, pb = 30;
-  const max = (Math.max(...net, ...(net2 || []), ...inArr, goalCap) * 1.05) || 1;
+  const max = (Math.max(...net, ...(net2 || []), ...inArr) * 1.05) || 1;
+  const goalIn = goalCap > 0 && goalCap <= max;
   const x = t => pl + (Wd - pl - pr) * (H ? t / H : 0);
   const y = v => pt + (Ht - pt - pb) * (1 - v / max);
   const path = arr => arr.map((v, t) => `${t ? 'L' : 'M'}${x(t).toFixed(1)},${y(v).toFixed(1)}`).join('');
@@ -4043,7 +4044,8 @@ function renderWealth(){
   const svg = `<svg class="wchart" viewBox="0 0 ${Wd} ${Ht}" role="img" aria-label="${W.title}">${grid}
     <path d="${path(inArr)}" fill="none" style="stroke:var(--muted);stroke-width:2;stroke-dasharray:4 4;vector-effect:non-scaling-stroke"/>
     <path d="${path(net)}" fill="none" style="stroke:var(--div);stroke-width:2.5;vector-effect:non-scaling-stroke"/>
-    ${goalCap > 0 ? `<line x1="${pl}" x2="${Wd - pr}" y1="${y(goalCap).toFixed(1)}" y2="${y(goalCap).toFixed(1)}" style="stroke:#10b981;stroke-width:1.5;stroke-dasharray:2 4"/>` : ''}
+    ${goalIn ? `<line x1="${pl}" x2="${Wd - pr}" y1="${y(goalCap).toFixed(1)}" y2="${y(goalCap).toFixed(1)}" style="stroke:#10b981;stroke-width:1.5;stroke-dasharray:2 4"/>` : ''}
+    ${goalCap > 0 && !goalIn ? `<text x="${Wd - pr}" y="${pt + 12}" text-anchor="end" style="fill:#10b981;font-size:11px">${tr("goalOut")} ${SHORT(goalCap)} ↑</text>` : ''}
     ${net2 ? `<path d="${path(net2)}" fill="none" style="stroke:#f59e0b;stroke-width:2.5;vector-effect:non-scaling-stroke"/>` : ''}
     <line class="wcur" y1="${pt}" y2="${Ht - pb}" style="stroke:var(--muted);display:none"/>
   </svg>`;
@@ -4160,7 +4162,7 @@ document.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click'
 document.getElementById('menuReset').addEventListener('click', () => {
   if (!confirm(tr('resetConfirm'))) return;
   try {
-    Object.keys(localStorage).forEach(k => { if (k.startsWith('dk-') && !['dk-lang', 'dk-resid', 'dk-countries', 'dk-scenarios'].includes(k) && !k.includes('theme')) localStorage.removeItem(k); });
+    Object.keys(localStorage).forEach(k => { if ((k.startsWith('dk-') || k === 'arRate') && !['dk-lang', 'dk-scenarios'].includes(k) && !k.includes('theme')) localStorage.removeItem(k); });
   } catch (e) {}
   location.reload();
 });
