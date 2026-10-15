@@ -352,10 +352,16 @@
   .cmpbar{flex-wrap:wrap}
   .dash2{display:inline-block;width:14px;border-top:2.5px dashed #f59e0b;vertical-align:middle}
   .calgrid td.tot2{color:#b45309}
+  .calnotes{border-top:1px solid var(--line);margin-top:18px;padding-top:10px}
+  .calnotes-hd{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .calnotes .calnote{margin-top:8px;font-size:12.5px;line-height:1.5}
+  .cpick-tax{min-width:0;width:100%;margin:6px 0 10px}
+  .cpick-tax .cpick-list{min-width:0;left:0;right:0}
+  .cpick-tax .pickgrid{grid-template-columns:1fr 1fr}
   @media (max-width:600px){
     .calgrid table,.calgrid tbody,.calgrid tr,.calgrid th,.calgrid td{display:block;width:100%}
     .calgrid thead{display:none}
-    .calgrid tbody tr{border-top:1px solid var(--line);padding:8px 0}
+    .calgrid tbody tr{border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:10px}
     .calgrid th[scope=row]{text-align:left;font-weight:700;font-size:14px;padding:6px 0 2px;border:0;white-space:normal}
     .calgrid td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0;text-align:right;white-space:normal}
     .calgrid td::before{content:attr(data-l);color:var(--muted);text-align:left}
@@ -847,6 +853,8 @@
 
   <aside class="panel taxaside" aria-label="Instellingen">
     <h2 data-i18n="settings"></h2>
+    <div class="ovtoggles" id="ovChips" role="group" aria-label="Landen"></div>
+    <p class="muted" id="pickMax" data-i18n="pickMax" hidden></p>
     <div class="basebox">
       <div class="lbl" data-i18n="baseTitle"></div>
       <div class="row"><span data-i18n="baseInv"></span><b id="baseAmt">–</b></div>
@@ -859,8 +867,6 @@
     </div>
     <div class="field">
       <div class="field-head"><span data-i18n="pickTitle"></span></div>
-      <div class="ovtoggles" id="ovChips" role="group" aria-label="Landen"></div>
-      <p class="muted" id="pickMax" data-i18n="pickMax" hidden></p>
     </div>
   </aside>
   <div class="stack">
@@ -1846,6 +1852,7 @@ const SYN_T = {
   "synthLink": "Inleg en looptijd komen uit de invoer bovenaan.",
   "synthSum": "Gewichten tellen op tot {s}%; de uitkomst wordt genormaliseerd naar 100%.",
   "synPayout": "uitkerend",
+  "calNotesHd": "Toelichting",
   "wcmpMax": "Kies één of twee landen om te vergelijken.",
   "synNet": "Na kosten (TER)",
   "synRet": "Rendement per jaar",
@@ -1907,6 +1914,7 @@ const SYN_T = {
   "synthLink": "Investment and term come from the input at the top.",
   "synthSum": "Weights add up to {s}%; the outcome is normalised to 100%.",
   "synPayout": "distributing",
+  "calNotesHd": "Notes",
   "wcmpMax": "Pick one or two countries to compare.",
   "synNet": "After costs (TER)",
   "synRet": "Return per year",
@@ -1968,6 +1976,7 @@ const SYN_T = {
   "synthLink": "La inversión y el plazo vienen de los datos de entrada de arriba.",
   "synthSum": "Los pesos suman {s}%; el resultado se normaliza a 100%.",
   "synPayout": "distribuyendo",
+  "calNotesHd": "Notas",
   "wcmpMax": "Elige uno o dos países para comparar.",
   "synNet": "Después de costes (TER)",
   "synRet": "Rendimiento por año",
@@ -3365,7 +3374,7 @@ function buildChips(){
   const box = document.getElementById('ovChips');
   const chip = c => `<label class="ovchip" style="--c:${c.color}"><input type="checkbox" data-k="${c.k}"><i class="dot"></i><span data-nm="${c.k}"></span>${c.k === 'n28' ? '<a class="info" href="#gl-tax2028">?</a>' : ''}</label>`;
   const main = ALL.filter(c => !EXTRA.some(e => e.k === c.k)), more = ALL.filter(c => EXTRA.some(e => e.k === c.k));
-  box.innerHTML = `<div class="pickhead"><span></span><span id="pickCount"></span></div><div class="pickgrid">${ALL.map(chip).join('')}</div>`;
+  box.innerHTML = `<details class="cpick cpick-tax" id="taxPick"><summary id="taxPickSum"></summary><div class="cpick-list"><div class="pickhead"><span></span><span id="pickCount"></span></div><div class="pickgrid">${ALL.map(chip).join('')}</div></div></details>`;
   box.addEventListener('change', e => {
     const k = e.target.dataset.k;
     if (!k) return;
@@ -3384,6 +3393,8 @@ function updateChips(){
   });
   document.querySelectorAll('#ovChips [data-nm]').forEach(sp => { sp.textContent = shortName(ALL.find(c => c.k === sp.dataset.nm)); });
   document.getElementById('pickCount').textContent = tr('pickOf')(activeCount());
+  const picked = ALL.filter(c => taxIsOn(c.k)).map(c => shortName(c));
+  document.getElementById('taxPickSum').textContent = picked.length ? picked.join(' + ') : tr('pickOf')(0);
   document.getElementById('pickMax').hidden = !full;
 }
 buildChips();
@@ -3531,8 +3542,8 @@ function renderWealth(){
     <div class="wlegend"><span><i style="background:var(--div)"></i>${W.legN}</span><span><i style="background:var(--acc)"></i>${W.legG}</span><span><i class="dash"></i>${W.legI}: ${EUR(inleg)}</span>${net2 ? `<span><i class="dash2"></i>${name2}</span>` : ''}</div>
     <div class="wwrap">${svg}<div class="wtip" hidden></div></div>
     <div class="calgrid"><table><thead><tr><th>${W.year}</th><th>${W.colFund}</th><th>${W.colCash}</th><th>${W.colTax}${bx}</th><th>${W.colCost}</th><th>${W.colNet}</th>${net2 ? `<th>${name2}</th>` : ''}</tr></thead><tbody>${rows}</tbody></table></div>
-    <p class="sub calnote">${W.costNote}</p>
-    <p class="sub calnote">${resid === '' ? W.noDom : (resid === 'none' ? W.noTax : W.resNote)}</p>`;
+    <div class="calnotes"><div class="calnotes-hd">${tr('calNotesHd')}</div><p class="sub calnote">${W.costNote}</p>
+    <p class="sub calnote">${resid === '' ? W.noDom : (resid === 'none' ? W.noTax : W.resNote)}</p></div>`;
   const svgEl = el.querySelector('svg.wchart');
   const tip = el.querySelector('.wtip');
   const cur = svgEl.querySelector('.wcur');
