@@ -702,6 +702,13 @@ details.collapse > summary h2{margin:0}
 #synthKpi .skpi .big{font-size:20px}
 /* prognose */
 .strat-line{margin:0;padding:12px 16px;border-radius:var(--radius);background:var(--panel);border:1px solid var(--line);font-size:13.5px}
+.inputwrap .phead{justify-content:flex-end;margin:0}
+.duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
+.duo .tbl{font-size:12.5px}
+.duo .tbl th,.duo .tbl td{padding:8px 6px}
+.duo .tbl th{white-space:normal;vertical-align:bottom;line-height:1.3}
+.duo .tbl-wrap{margin:0}
+@media (max-width:1000px){ .duo{grid-template-columns:minmax(0,1fr)} }
 /* mobiel */
 @media (max-width:820px){
   :root{--gut:16px}
@@ -758,10 +765,10 @@ details.collapse > summary h2{margin:0}
 
 
   <div class="stack">
-    <header class="phead"><div><h2 data-i18n="tabProg"></h2><p data-i18n="phProg"></p></div></header>
     <p class="strat-line" id="stratLine" aria-live="polite"></p>
     <section class="kpis" id="kpis" aria-live="polite"></section>
 
+    <div class="duo">
     <section class="panel" aria-labelledby="chartTitle">
       <div class="chart-head">
         <div>
@@ -780,7 +787,7 @@ details.collapse > summary h2{margin:0}
     </section>
 
     <section class="panel" aria-labelledby="yrTitle">
-      <details class="collapse">
+      <details class="collapse" open>
       <summary><h2 id="yrTitle" data-i18n="yearlySummary"></h2></summary>
       <div class="collapse-body">
       <p class="sub" data-i18n="yearlySub"></p>
@@ -795,16 +802,13 @@ details.collapse > summary h2{margin:0}
       </div>
       </details>
     </section>
-
-
-
-
+    </div>
   </div>
 </main>
 
 <main class="inputwrap" id="tabInput" hidden>
   <aside class="panel controls" aria-label="Settings">
-    <header class="phead inhead"><div><h2 data-i18n="inputTitle"></h2><p data-i18n="inputSub"></p></div>
+    <header class="phead inhead">
       <div class="phact"><span data-i18n="wzHint"></span><a href="#" class="btn" data-openwiz data-i18n="wzOpen"></a></div></header>
     <div class="incol">
     <section class="grp">
@@ -903,7 +907,6 @@ details.collapse > summary h2{margin:0}
 </main>
 
 <main class="fundswrap" id="tabFunds" hidden>
-  <header class="phead"><div><h2 data-i18n="tabFunds"></h2><p data-i18n="phFunds"></p></div></header>
   <div class="warnbar terWarn" hidden></div>
     <div class="fview" role="group" aria-label="Weergave">
       <button type="button" class="rbtn" data-fview="synth" aria-pressed="true" data-i18n="fviewSynth"></button>
@@ -983,7 +986,6 @@ details.collapse > summary h2{margin:0}
     </main>
 
 <main class="fundswrap" id="tabWealth" hidden>
-  <header class="phead"><div><h2 data-i18n="tabWealth"></h2><p data-i18n="phWealth"></p></div></header>
   <section class="toolbar">
     <div class="pfield"><span class="pfield-lbl" data-i18n="residLbl"></span>
       <details class="cpick" id="domPick"><summary><span id="domSum"></span></summary><div class="cpick-list" id="domList"></div></details></div>
@@ -1020,7 +1022,6 @@ details.collapse > summary h2{margin:0}
 </main>
 
 <main class="taxwrap" id="tabTax" hidden>
-  <header class="phead"><div><h2 data-i18n="tabTax"></h2><p data-i18n="phTax"></p></div></header>
   <aside class="toolbar taxaside" aria-label="Instellingen">
     <div class="pfield"><span class="pfield-lbl" data-i18n="pickLbl"></span><div id="ovChips" role="group"></div></div>
     <p class="muted" id="pickMax" data-i18n="pickMax" hidden></p>
