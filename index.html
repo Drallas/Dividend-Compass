@@ -703,22 +703,27 @@ details.collapse > summary h2{margin:0}
 /* prognose */
 .strat-line{margin:0;padding:12px 16px;border-radius:var(--radius);background:var(--panel);border:1px solid var(--line);font-size:13.5px}
 .inputwrap .phead{justify-content:flex-end;margin:0}
-/* belasting: instellingen links in een kaart, landen rechts */
-.taxtop{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px;align-items:start}
-.panel.taxaside{display:grid;gap:18px;padding:20px;align-content:start}
-.panel.taxaside > h2{margin:0}
-.taxaside .pfield{display:grid;gap:6px;padding:0;margin:0;border:0}
-.taxaside .savebox{display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:4px 6px;margin:0;max-width:none}
-.taxaside .savebox label{font-size:12.5px;font-weight:600;color:var(--muted)}
-.taxaside .savebox strong{font-size:12.5px}
-.taxaside .savebox input{grid-column:1/-1;margin:10px 0 4px;width:100%}
-.taxaside .basebox{order:3;display:grid;gap:6px;margin:0;padding:14px 0 0;border:0;border-top:1px solid var(--line);border-radius:0;font-size:13px}
-.taxaside .basebox .lbl{font-size:12.5px;font-weight:600;color:var(--muted);margin:0}
-.taxaside .basebox .row{display:flex;justify-content:space-between;padding:0}
-.taxaside .basebox a{margin-top:4px;font-size:13px;font-weight:600}
+/* belasting: kaarten bovenaan, instellingen als dunne balk eronder in drie delen */
+.panel.taxaside{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(0,1fr);align-items:center;gap:8px 28px;padding:12px 20px}
+.panel.taxaside > h2{display:none}
+.taxaside .pfield{display:flex;align-items:center;gap:10px;margin:0;padding:0 16px 0 0;border:0;min-width:0}
+.taxaside .pfield-lbl{white-space:nowrap;font-size:12.5px;font-weight:600;color:var(--muted)}
+.taxaside .pfield > div{min-width:0;flex:1 1 auto}
+.taxaside .pfield #ovChips{min-width:0}
+.taxaside .cpick{min-width:200px}
+.taxaside .cpick summary{height:34px;font-size:13px}
+.taxaside .savebox{display:flex;align-items:center;gap:10px;margin:0;max-width:none;min-width:0;flex-wrap:nowrap}
+.taxaside .savebox label{font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+.taxaside .savebox strong{font-size:12.5px;white-space:nowrap}
+.taxaside .savebox input{flex:1 1 auto;min-width:120px;margin:0;width:auto}
+.taxaside .basebox{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:0;padding:0;border:0;font-size:12.5px;color:var(--muted);min-width:0}
+.taxaside .basebox .lbl{display:none}
+.taxaside .basebox .row{display:inline-flex;gap:6px;padding:0;white-space:nowrap}
+.taxaside .basebox .row b{color:var(--text);font-weight:600}
+.taxaside .basebox a{margin-left:auto;font-size:12.5px;font-weight:600;white-space:nowrap}
 .perland{display:grid;gap:12px;min-width:0;align-content:start}
 .perland .sechead{margin:0;min-height:36px}
-@media (max-width:900px){ .taxtop{grid-template-columns:minmax(0,1fr)} }
+@media (max-width:900px){ .panel.taxaside{grid-template-columns:minmax(0,1fr);gap:12px} .taxaside .basebox a{margin-left:0} .taxaside .savebox{flex-wrap:wrap} .taxaside .savebox input{flex:1 1 100%;width:100%;min-width:0} .taxaside .cpick{min-width:0;width:100%} .taxaside .pfield{flex-wrap:wrap} }
 .duo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}
 .duo .tbl{font-size:12.5px}
 .duo .tbl th,.duo .tbl td{padding:8px 6px}
@@ -879,6 +884,8 @@ svg#chart .line.acc{stroke-width:2}
   <div class="field">
         <div class="field-head"><label for="goalCap" data-i18n="goalCapLbl"></label></div>
         <div class="euro"><span>€</span><input type="text" id="goalCap" value="1.000.000" inputmode="numeric" autocomplete="off" data-i18n-ph="goalCapPh"></div>
+        <input type="range" id="goalRange" min="0" max="2000000" step="5000" value="1000000" aria-label="Doelbedrag">
+        <div class="range-ends"><span>€ 0</span><span>€ 2.000.000</span></div>
       </div>
     </section>
     </div>
@@ -1060,7 +1067,16 @@ svg#chart .line.acc{stroke-width:2}
 
 <main class="taxwrap" id="tabTax" hidden>
 
-  <div class="taxtop">
+  <div class="stack">
+  <div class="perland">
+  <div class="sechead"><h3 data-i18n="hPerCountry"></h3>
+  <div class="sortbar">
+    <button type="button" class="rbtn" data-sort="desc" aria-pressed="true" data-i18n="sortDesc"></button>
+    <button type="button" class="rbtn" data-sort="alpha" aria-pressed="false" data-i18n="sortAlpha"></button>
+    <button type="button" class="rbtn" data-sort="fixed" aria-pressed="false" data-i18n="sortFixed"></button>
+  </div></div>
+  <section class="kpis" id="taxKpis" aria-live="polite"></section>
+  </div>
   <aside class="panel taxaside" aria-label="Instellingen">
     <h2 data-i18n="taxBarTitle"></h2>
     <div class="pfield"><span class="pfield-lbl" data-i18n="pickLbl"></span><div id="ovChips" role="group"></div></div>
@@ -1077,15 +1093,6 @@ svg#chart .line.acc{stroke-width:2}
       <input type="range" id="savePct" min="0" max="100" step="5" value="0" style="--p:0%" aria-labelledby="savePctLbl">
     </div>
   </aside>
-  <div class="perland">
-  <div class="sechead"><h3 data-i18n="hPerCountry"></h3>
-  <div class="sortbar">
-    <button type="button" class="rbtn" data-sort="desc" aria-pressed="true" data-i18n="sortDesc"></button>
-    <button type="button" class="rbtn" data-sort="alpha" aria-pressed="false" data-i18n="sortAlpha"></button>
-    <button type="button" class="rbtn" data-sort="fixed" aria-pressed="false" data-i18n="sortFixed"></button>
-  </div></div>
-  <section class="kpis" id="taxKpis" aria-live="polite"></section>
-  </div>
   </div>
   <div class="stack">
   <section class="panel taxblock">
@@ -2976,6 +2983,10 @@ function recalc(){
   saveLast();
   renderWealth();
 
+  const gr = document.getElementById('goalRange');
+  gr.value = Math.min(2000000, Math.max(0, readEur('goalCap')));
+  gr.style.setProperty('--p', (gr.value / 2000000 * 100) + '%');
+  gr.style.setProperty('--fill', 'var(--div)');
   const br = document.getElementById('bedragRange');
   br.value = Math.min(1000000, Math.max(0, amount));
   br.style.setProperty('--p', (br.value / 1000000 * 100) + '%');
@@ -4026,6 +4037,7 @@ function renderWealth(){
   svgEl.addEventListener('pointerleave', () => { tip.hidden = true; cur.style.display = 'none'; });
 }
 
+document.getElementById('goalRange').addEventListener('input', e => { setEurField('goalCap', +e.target.value); recalc(); });
 document.getElementById('goalCap').addEventListener('input', () => { document.getElementById('goalCap').value = fmtNum(digits(document.getElementById('goalCap').value)) || ''; recalc(); });
 function setTaxDefaults(){
   Object.keys(taxOn).forEach(k => { taxOn[k] = false; });
