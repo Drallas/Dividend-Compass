@@ -545,7 +545,9 @@
     .tbl th,.tbl td{padding:8px 6px}
     .tbl th:first-child,.tbl td:first-child{min-width:104px}
     #taxKpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .wzhint{margin:6px 0 0;font-size:.92em;color:var(--muted)}
+.wzline{margin:12px 16px 4px;font-size:.9em}
 .wzhint a{color:var(--accent,#2563eb);font-weight:600}
 .taxmain{all:unset;display:block;width:100%;cursor:pointer;box-sizing:border-box}
 .taxcard.nlcard{cursor:default}
@@ -639,12 +641,7 @@
       <button type="button" class="iconbtn" data-open="setDlg" aria-label="Menu"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
     </div>
   </div>
-  <div class="hero-text">
-    <p class="eyebrow" data-i18n="eyebrow"></p>
-    <h1 data-i18n="h1"></h1>
-    <p class="lede" data-i18n="lede"></p>
-    <p class="wzhint"><span data-i18n="wzHint"></span> <a href="#" data-openwiz data-i18n="wzOpen"></a></p>
-  </div>
+  <h1 class="sr-only" data-i18n="h1"></h1>
 </header>
 
 <nav class="tabs" role="tablist">
@@ -654,6 +651,7 @@
   <button type="button" class="tab" role="tab" aria-selected="false" data-tab="tabTax" data-i18n="tabTax"></button>
   <button type="button" class="tab" role="tab" aria-selected="false" data-tab="tabFunds" data-i18n="tabFunds"></button>
 </nav>
+<p class="wzhint wzline"><span data-i18n="wzHint"></span> <a href="#" data-openwiz data-i18n="wzOpen"></a></p>
 
 <main class="layout" id="tabProg">
   <div class="warnbar terWarn" hidden></div>
