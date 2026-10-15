@@ -467,6 +467,10 @@
   .brandtag{font-size:12px;color:var(--muted);line-height:1.3}
   .iconbtn{appearance:none;font:inherit;width:36px;height:34px;display:inline-grid;place-items:center;padding:0;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text);cursor:pointer;box-shadow:var(--shadow)}
   .iconbtn:hover{color:var(--div)}
+  .profbtn{position:relative;font-weight:700;font-size:14px}
+  .profbtn[hidden]{display:none}
+  .profdot{position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--div);box-shadow:0 0 0 2px var(--panel)}
+  .profdot[hidden]{display:none}
   .curbtn,.curbtn:hover,.curbtn:focus,.curbtn:active,.curbtn[aria-pressed="true"]{color:var(--text)}
   .curbtn:disabled{cursor:default}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -824,6 +828,7 @@ svg#chart .line.acc{stroke-width:2}
       <button type="button" class="iconbtn curbtn" id="curBtn" aria-label="Valuta" disabled><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><text id="curGlyph" x="12" y="17.6" text-anchor="middle" font-size="16" font-weight="700" fill="currentColor" stroke="none" font-family="inherit">€</text></svg></button>
       <span id="langCur" hidden></span>
       <button type="button" class="iconbtn" data-open="setDlg" aria-label="Menu"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+      <button type="button" class="iconbtn profbtn" id="profBtn" data-open="scenDlg" hidden><span class="proflet" id="profLet"></span><i class="profdot" id="profDot" hidden></i></button>
     </div>
   </div>
   <h1 class="sr-only" data-i18n="h1"></h1>
@@ -1444,7 +1449,7 @@ const T = {
     scenIntro: 'Bewaar de huidige invoerwaarden, strategie en fondsaannames onder een naam. Alles blijft in deze browser; wis je browsergegevens, dan verdwijnen ze.',
     scenNamePh: 'Naam',
     scenDefault: 'Scenario',
-    scenSave: 'Bewaar huidige invoer', scenDup: 'Er bestaat al een profiel met deze naam. Kies een andere naam, of werk het bestaande profiel bij.', scenUpd: 'Bijwerken met huidige invoer', scenApplyLbl: 'Huidige instellingen toepassen op een bestaand profiel', scenApply: 'Toepassen', saveRateLbl: 'Rente spaargeld per jaar', saveRateYr: 'Rente per jaar op spaargeld', saveRateNote: 'Voorbeeld, nog niet in de totalen verwerkt.', scenActive: 'Actief', scenChanged: 'gewijzigd', scenPrompt: n => `Je hebt wijzigingen in "${n}" die nog niet zijn opgeslagen. Wat doen we ermee?`, scenPSaveBtn: n => `Opslaan in "${n}"`, scenPDiscard: 'Niet opslaan', scenPCancel: 'Annuleren', scenRename: 'Hernoem', agoNow: 'zojuist', agoMin: n => `${n} min geleden`, agoHr: n => `${n} uur geleden`,
+    scenSave: 'Bewaar huidige invoer', scenDup: 'Er bestaat al een profiel met deze naam. Kies een andere naam, of werk het bestaande profiel bij.', scenUpd: 'Bijwerken met huidige invoer', scenApplyLbl: 'Huidige instellingen toepassen op een bestaand profiel', scenApply: 'Toepassen', saveRateLbl: 'Rente spaargeld per jaar', saveRateYr: 'Rente per jaar op spaargeld', saveRateNote: 'Voorbeeld, nog niet in de totalen verwerkt.', scenActive: 'Actief', scenChanged: 'gewijzigd', scenProfile: 'Profiel', scenPrompt: n => `Je hebt wijzigingen in "${n}" die nog niet zijn opgeslagen. Wat doen we ermee?`, scenPSaveBtn: n => `Opslaan in "${n}"`, scenPDiscard: 'Niet opslaan', scenPCancel: 'Annuleren', scenRename: 'Hernoem', agoNow: 'zojuist', agoMin: n => `${n} min geleden`, agoHr: n => `${n} uur geleden`,
     scenLoad: 'Laad',
     scenDel: 'Verwijder',
     scenEmpty: 'Nog geen scenario\'s opgeslagen.',
@@ -1680,7 +1685,7 @@ const T = {
     scenIntro: 'Save the current inputs, strategy and fund assumptions under a name. Everything stays in this browser; clearing browser data removes them.',
     scenNamePh: 'Name',
     scenDefault: 'Scenario',
-    scenSave: 'Save current inputs', scenDup: 'A profile with this name already exists. Choose another name, or update the existing profile.', scenUpd: 'Update with current inputs', scenApplyLbl: 'Apply current settings to an existing profile', scenApply: 'Apply', saveRateLbl: 'Interest on savings per year', saveRateYr: 'Interest per year on savings', saveRateNote: 'Example only, not yet in the totals.', scenActive: 'Active', scenChanged: 'changed', scenPrompt: n => `You have unsaved changes in "${n}". What should we do with them?`, scenPSaveBtn: n => `Save to "${n}"`, scenPDiscard: 'Discard', scenPCancel: 'Cancel', scenRename: 'Rename', agoNow: 'just now', agoMin: n => `${n} min ago`, agoHr: n => `${n} h ago`,
+    scenSave: 'Save current inputs', scenDup: 'A profile with this name already exists. Choose another name, or update the existing profile.', scenUpd: 'Update with current inputs', scenApplyLbl: 'Apply current settings to an existing profile', scenApply: 'Apply', saveRateLbl: 'Interest on savings per year', saveRateYr: 'Interest per year on savings', saveRateNote: 'Example only, not yet in the totals.', scenActive: 'Active', scenChanged: 'changed', scenProfile: 'Profile', scenPrompt: n => `You have unsaved changes in "${n}". What should we do with them?`, scenPSaveBtn: n => `Save to "${n}"`, scenPDiscard: 'Discard', scenPCancel: 'Cancel', scenRename: 'Rename', agoNow: 'just now', agoMin: n => `${n} min ago`, agoHr: n => `${n} h ago`,
     scenLoad: 'Load',
     scenDel: 'Delete',
     scenEmpty: 'No saved scenarios yet.',
@@ -1916,7 +1921,7 @@ const T = {
     scenIntro: 'Guarda las entradas, la estrategia y los supuestos de fondos con un nombre. Todo se queda en este navegador; si borras los datos del navegador, desaparecen.',
     scenNamePh: 'Nombre',
     scenDefault: 'Escenario',
-    scenSave: 'Guardar entradas actuales', scenDup: 'Ya existe un perfil con ese nombre. Elige otro nombre o actualiza el perfil existente.', scenUpd: 'Actualizar con las entradas actuales', scenApplyLbl: 'Aplicar los ajustes actuales a un perfil existente', scenApply: 'Aplicar', saveRateLbl: 'Interés del ahorro por año', saveRateYr: 'Interés anual del ahorro', saveRateNote: 'Solo ejemplo, aún no incluido en los totales.', scenActive: 'Activo', scenChanged: 'modificado', scenPrompt: n => `Tienes cambios sin guardar en "${n}". ¿Qué hacemos con ellos?`, scenPSaveBtn: n => `Guardar en "${n}"`, scenPDiscard: 'No guardar', scenPCancel: 'Cancelar', scenRename: 'Renombrar', agoNow: 'justo ahora', agoMin: n => `hace ${n} min`, agoHr: n => `hace ${n} h`,
+    scenSave: 'Guardar entradas actuales', scenDup: 'Ya existe un perfil con ese nombre. Elige otro nombre o actualiza el perfil existente.', scenUpd: 'Actualizar con las entradas actuales', scenApplyLbl: 'Aplicar los ajustes actuales a un perfil existente', scenApply: 'Aplicar', saveRateLbl: 'Interés del ahorro por año', saveRateYr: 'Interés anual del ahorro', saveRateNote: 'Solo ejemplo, aún no incluido en los totales.', scenActive: 'Activo', scenChanged: 'modificado', scenProfile: 'Perfil', scenPrompt: n => `Tienes cambios sin guardar en "${n}". ¿Qué hacemos con ellos?`, scenPSaveBtn: n => `Guardar en "${n}"`, scenPDiscard: 'No guardar', scenPCancel: 'Cancelar', scenRename: 'Renombrar', agoNow: 'justo ahora', agoMin: n => `hace ${n} min`, agoHr: n => `hace ${n} h`,
     scenLoad: 'Cargar',
     scenDel: 'Eliminar',
     scenEmpty: 'Aún no hay escenarios guardados.',
@@ -3042,6 +3047,7 @@ function updateSaveLbl(){
 document.getElementById('savRate').addEventListener('input', () => { updateSavInt(); saveLast(); });
 function recalc(){
   updateSaveLbl();
+  updateProfBtn();
   if (typeof synthCalc === 'function') synthCalc();
   renderMonthly();
   syncGoal();
@@ -4247,7 +4253,20 @@ document.getElementById('scenPCancel').addEventListener('click', hidePrompt);
 document.getElementById('scenDlg').addEventListener('close', hidePrompt);
 // Actief profiel = naam van het profiel waarmee je laatst hebt geladen, opgeslagen of bijgewerkt.
 function getActiveName(){ try { return localStorage.getItem('dk-active-scen') || ''; } catch (e) { return ''; } }
-function setActiveName(n){ try { if (n) localStorage.setItem('dk-active-scen', n); else localStorage.removeItem('dk-active-scen'); } catch (e) {} }
+function setActiveName(n){ try { if (n) localStorage.setItem('dk-active-scen', n); else localStorage.removeItem('dk-active-scen'); } catch (e) {} updateProfBtn(); }
+// Knop naast het tandwiel: eerste letter van het actieve profiel, stip bij wijzigingen.
+function updateProfBtn(){
+  const btn = document.getElementById('profBtn'); if (!btn) return;
+  const name = getActiveName();
+  const x = name ? loadScen().find(p => p.name === name) : null;
+  if (!x){ btn.hidden = true; return; }
+  const changed = !sameAsProfile(x.data);
+  btn.hidden = false;
+  document.getElementById('profLet').textContent = x.name.trim().charAt(0).toUpperCase();
+  document.getElementById('profDot').hidden = !changed;
+  const label = `${tr('scenProfile')}: ${x.name}` + (changed ? ` · ${tr('scenChanged')}` : '');
+  btn.title = label; btn.setAttribute('aria-label', label);
+}
 function sameAsProfile(d){ const cur = captureState(); return Object.keys(d).every(k => JSON.stringify(d[k]) === JSON.stringify(cur[k])); }
 
 function storeScen(arr){ try { localStorage.setItem(SKEY, JSON.stringify(arr)); return true; } catch (e) { return false; } }
@@ -4314,6 +4333,7 @@ function renderScenarios(){
     return `<div class="scenrow${isActive ? ' active' : ''}"><div><b>${esc(x.name)}</b>${isActive ? `<em class="scenactive">${tr('scenActive')}${changed ? ' · ' + tr('scenChanged') : ''}</em>` : ''}<span>${meta}</span></div>
       <div class="scenbtns"><button type="button" class="rbtn" data-load="${i}">${tr('scenLoad')}</button><button type="button" class="rbtn" data-ren="${i}">${tr('scenRename')}</button><button type="button" class="rbtn" data-del="${i}">${tr('scenDel')}</button></div></div>`;
   }).join('');
+  updateProfBtn();
   list.querySelectorAll('[data-load]').forEach(b => b.addEventListener('click', () => {
     const i = +b.dataset.load;
     const ci = changedIdx();
