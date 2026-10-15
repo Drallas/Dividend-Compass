@@ -1414,7 +1414,7 @@ const T = {
     scenIntro: 'Bewaar de huidige invoerwaarden, strategie en fondsaannames onder een naam. Alles blijft in deze browser; wis je browsergegevens, dan verdwijnen ze.',
     scenNamePh: 'Naam',
     scenDefault: 'Scenario',
-    scenSave: 'Bewaar huidige invoer', scenDup: 'Er bestaat al een profiel met deze naam. Kies een andere naam, of werk het bestaande profiel bij.', scenUpd: 'Bijwerken met huidige invoer', scenApplyLbl: 'Huidige instellingen toepassen op een bestaand profiel', scenApply: 'Toepassen', scenUpdated: 'Profiel bijgewerkt.',
+    scenSave: 'Bewaar huidige invoer', scenDup: 'Er bestaat al een profiel met deze naam. Kies een andere naam, of werk het bestaande profiel bij.', scenUpd: 'Bijwerken met huidige invoer', scenApplyLbl: 'Huidige instellingen toepassen op een bestaand profiel', scenApply: 'Toepassen', agoNow: 'zojuist', agoMin: n => `${n} min geleden`, agoHr: n => `${n} uur geleden`,
     scenLoad: 'Laad',
     scenDel: 'Verwijder',
     scenEmpty: 'Nog geen scenario\'s opgeslagen.',
@@ -1649,7 +1649,7 @@ const T = {
     scenIntro: 'Save the current inputs, strategy and fund assumptions under a name. Everything stays in this browser; clearing browser data removes them.',
     scenNamePh: 'Name',
     scenDefault: 'Scenario',
-    scenSave: 'Save current inputs', scenDup: 'A profile with this name already exists. Choose another name, or update the existing profile.', scenUpd: 'Update with current inputs', scenApplyLbl: 'Apply current settings to an existing profile', scenApply: 'Apply', scenUpdated: 'Profile updated.',
+    scenSave: 'Save current inputs', scenDup: 'A profile with this name already exists. Choose another name, or update the existing profile.', scenUpd: 'Update with current inputs', scenApplyLbl: 'Apply current settings to an existing profile', scenApply: 'Apply', agoNow: 'just now', agoMin: n => `${n} min ago`, agoHr: n => `${n} h ago`,
     scenLoad: 'Load',
     scenDel: 'Delete',
     scenEmpty: 'No saved scenarios yet.',
@@ -1884,7 +1884,7 @@ const T = {
     scenIntro: 'Guarda las entradas, la estrategia y los supuestos de fondos con un nombre. Todo se queda en este navegador; si borras los datos del navegador, desaparecen.',
     scenNamePh: 'Nombre',
     scenDefault: 'Escenario',
-    scenSave: 'Guardar entradas actuales', scenDup: 'Ya existe un perfil con ese nombre. Elige otro nombre o actualiza el perfil existente.', scenUpd: 'Actualizar con las entradas actuales', scenApplyLbl: 'Aplicar los ajustes actuales a un perfil existente', scenApply: 'Aplicar', scenUpdated: 'Perfil actualizado.',
+    scenSave: 'Guardar entradas actuales', scenDup: 'Ya existe un perfil con ese nombre. Elige otro nombre o actualiza el perfil existente.', scenUpd: 'Actualizar con las entradas actuales', scenApplyLbl: 'Aplicar los ajustes actuales a un perfil existente', scenApply: 'Aplicar', agoNow: 'justo ahora', agoMin: n => `hace ${n} min`, agoHr: n => `hace ${n} h`,
     scenLoad: 'Cargar',
     scenDel: 'Eliminar',
     scenEmpty: 'Aún no hay escenarios guardados.',
@@ -4195,7 +4195,7 @@ function renderScenarios(){
   if (!arr.length){ list.innerHTML = `<p class="sub">${tr('scenEmpty')}</p>`; return; }
   list.innerHTML = arr.map((x, i) => {
     const d = x.data;
-    const meta = `${x.date} · ${EUR(d.amount)} · ${tr('years')(d.years)} · ${tr(SCEN_KEY[d.scen])}`;
+    const meta = `${whenTxt(x)} · ${EUR(d.amount)} · ${tr('years')(d.years)} · ${tr(SCEN_KEY[d.scen])}`;
     return `<div class="scenrow"><div><b>${esc(x.name)}</b><span>${meta}</span></div>
       <div class="scenbtns"><button type="button" class="rbtn" data-load="${i}">${tr('scenLoad')}</button><button type="button" class="rbtn" data-del="${i}">${tr('scenDel')}</button></div></div>`;
   }).join('');
@@ -4227,18 +4227,28 @@ document.getElementById('scenSave').addEventListener('click', () => {
   }
   const d = new Date();
   const date = `${pad2(d.getDate())}-${pad2(d.getMonth() + 1)}-${d.getFullYear()}`;
-  arr.push({name, date, data: captureState()});
+  arr.push({name, date, ts: Date.now(), data: captureState()});
   if (!storeScen(arr)){ msg.textContent = tr('scenFail'); return; }
   input.value = '';
   renderScenarios();
 });
 
+// Laatste wijziging: minuten, uren, en daarna de datum.
+function whenTxt(x){
+  if (!x.ts) return x.date;
+  const m = Math.floor((Date.now() - x.ts) / 60000);
+  if (m < 1) return tr('agoNow');
+  if (m < 60) return tr('agoMin')(m);
+  const h = Math.floor(m / 60);
+  return h < 24 ? tr('agoHr')(h) : x.date;
+}
 function stampNow(){ const d = new Date(); return `${pad2(d.getDate())}-${pad2(d.getMonth() + 1)}-${d.getFullYear()}`; }
 // Bestaand profiel overschrijven met de huidige instellingen.
 function overwriteScen(i){
   const a = loadScen();
   if (!a[i]) return false;
   a[i].date = stampNow();
+  a[i].ts = Date.now();
   a[i].data = captureState();
   return storeScen(a);
 }
@@ -4247,7 +4257,7 @@ document.getElementById('scenUpdNow').addEventListener('click', e => {
   if (!overwriteScen(i)) return;
   document.getElementById('scenUpdRow').hidden = true;
   document.getElementById('scenName').value = '';
-  document.getElementById('scenMsg').textContent = tr('scenUpdated');
+  document.getElementById('scenMsg').textContent = '';
   renderScenarios();
 });
 document.getElementById('scenName').addEventListener('input', () => {
@@ -4256,7 +4266,7 @@ document.getElementById('scenName').addEventListener('input', () => {
 });
 document.getElementById('scenApplyBtn').addEventListener('click', () => {
   const i = +document.getElementById('scenApplySel').value;
-  if (overwriteScen(i)){ document.getElementById('scenMsg').textContent = tr('scenUpdated'); renderScenarios(); }
+  if (overwriteScen(i)){ document.getElementById('scenMsg').textContent = ''; document.getElementById('scenUpdRow').hidden = true; renderScenarios(); }
 });
 
 /* ---- export ---- */
