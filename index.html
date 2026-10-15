@@ -694,7 +694,6 @@
         <div class="euro"><span>€</span><input type="text" id="target" value="0" inputmode="numeric" autocomplete="off"></div>
         <input type="range" id="targetRange" min="0" max="10000" step="50" value="0" aria-label="Dividend per month">
         <div class="range-ends"><span id="tgMin"></span><span id="tgMax"></span></div>
-        <p class="hint" id="targetHint"></p>
       </div>
   <div id="reinvestWrap">
     <div class="field">
@@ -2751,10 +2750,6 @@ function recalc(){
   const cover = targetMonth > 0 ? Math.min(100, incomeMonth / targetMonth * 100) : 0;
 
   const need = neededAmount(targetMonth, mix, sc);
-  document.getElementById('targetHint').textContent = targetMonth <= 0 ? ''
-    : need === null ? tr('noMix')
-    : need > MAX_BEDRAG ? tr('tooHigh')(EUR(need), EUR(MAX_BEDRAG))
-    : tr('targetHintFill')(EUR(benodigd));
   const coverTxt = targetMonth > 0 ? tr('cover')(Math.round(cover), EUR(targetMonth)) : (goalOn ? tr('coverFill') : tr('noGoal'));
 
   const rl = k => T[lang].riskName[k] || k;
