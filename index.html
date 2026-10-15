@@ -426,6 +426,13 @@
   .io-row .hint{margin:0}
   .strat-line{margin:18px 0 12px;font-size:13.5px;color:var(--muted)}
   .residhint{margin:8px 0 0;font-size:12px;line-height:1.45}
+  .wz-input{width:100%;height:46px;padding:0 14px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:16px;background:var(--panel);color:var(--text);box-sizing:border-box;margin-top:10px}
+  .wz-seg{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .wz-seg .rbtn[aria-pressed="true"]{border-color:var(--text);box-shadow:inset 0 0 0 1px var(--text);font-weight:700}
+  .wz-lbl{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+  .wz-nav{display:flex;justify-content:space-between;gap:8px;margin-top:20px;flex-wrap:wrap}
+  .wz-right{display:flex;gap:8px}
+  .wz-primary{font-weight:700}
   .residhint a{color:var(--div);font-weight:600;text-decoration:none}
   .residhint a:hover{text-decoration:underline}
   .strat-line a{color:var(--div);font-weight:600;text-decoration:none;margin-left:6px;white-space:nowrap}
@@ -1115,6 +1122,7 @@
   <div class="menugrp">
     <div class="menuhd" data-i18n="grpInfo"></div>
     <div class="menulist">
+      <button type="button" class="rbtn menubtn" id="menuWizard" data-i18n="menuWizard"></button>
       <button type="button" class="rbtn menubtn" data-open="guideDlg" data-i18n="guideBtn"></button>
       <button type="button" class="rbtn menubtn" id="menuHelp" data-i18n="helpLink"></button>
       <button type="button" class="rbtn menubtn" data-open="aboutDlg" data-i18n="aboutBtn"></button>
@@ -1150,6 +1158,17 @@
   </div>
 </div>
 
+<dialog id="startDlg" class="helpdlg smalldlg" aria-labelledby="startTitle"><div class="helpbody">
+  <button type="button" class="helpx" id="startX" aria-label="×">×</button>
+  <p class="verline" id="startStep"></p>
+  <h2 id="startTitle"></h2>
+  <p class="sub" id="startSub"></p>
+  <div id="startBody"></div>
+  <div class="wz-nav">
+    <button type="button" class="rbtn" id="startBack"></button>
+    <span class="wz-right"><button type="button" class="rbtn" id="startSkip"></button> <button type="button" class="rbtn wz-primary" id="startNext"></button></span>
+  </div>
+</div></dialog>
 <dialog id="welcomeDlg" class="helpdlg smalldlg" aria-labelledby="welcomeTitle"><div class="helpbody">
   <button type="button" class="helpx" data-close="welcomeDlg" aria-label="×">×</button>
   <h2 id="welcomeTitle" data-i18n="welcomeTitle"></h2>
@@ -1217,7 +1236,7 @@ const T = {
     exportPdf: 'Als PDF (afdrukken)',
     exportCsv: 'Als CSV',
     setTitle: 'Menu',
-    grpData: 'Gegevens', grpSet: 'Instellingen', grpInfo: 'Info', menuLang: 'Taal', menuTheme: 'Thema', menuCur: 'Valuta', menuReset: 'Alle invoer wissen', resetConfirm: 'Alle ingevulde waarden en eigen instellingen wissen? De app start daarna opnieuw.',
+    grpData: 'Gegevens', grpSet: 'Instellingen', grpInfo: 'Info', menuLang: 'Taal', menuTheme: 'Thema', menuCur: 'Valuta', menuReset: 'Alle invoer wissen', menuWizard: 'Startwizard', resetConfirm: 'Alle ingevulde waarden en eigen instellingen wissen? De app start daarna opnieuw.',
     setTheme: 'Thema',
     setLang: 'Taal',
     aboutBtn: 'Over Dividend Compass',
@@ -1452,7 +1471,7 @@ const T = {
     exportPdf: 'As PDF (print)',
     exportCsv: 'As CSV',
     setTitle: 'Menu',
-    grpData: 'Data', grpSet: 'Settings', grpInfo: 'Info', menuLang: 'Language', menuTheme: 'Theme', menuCur: 'Currency', menuReset: 'Clear all input', resetConfirm: 'Clear all entered values and own settings? The app will restart.',
+    grpData: 'Data', grpSet: 'Settings', grpInfo: 'Info', menuLang: 'Language', menuTheme: 'Theme', menuCur: 'Currency', menuReset: 'Clear all input', menuWizard: 'Getting started', resetConfirm: 'Clear all entered values and own settings? The app will restart.',
     setTheme: 'Theme',
     setLang: 'Language',
     aboutBtn: 'About Dividend Compass',
@@ -1687,7 +1706,7 @@ const T = {
     exportPdf: 'Como PDF (imprimir)',
     exportCsv: 'Como CSV',
     setTitle: 'Menú',
-    grpData: 'Datos', grpSet: 'Ajustes', grpInfo: 'Info', menuLang: 'Idioma', menuTheme: 'Tema', menuCur: 'Moneda', menuReset: 'Borrar todos los datos', resetConfirm: '¿Borrar todos los valores introducidos y los ajustes propios? La app se reiniciará.',
+    grpData: 'Datos', grpSet: 'Ajustes', grpInfo: 'Info', menuLang: 'Idioma', menuTheme: 'Tema', menuCur: 'Moneda', menuReset: 'Borrar todos los datos', menuWizard: 'Inicio guiado', resetConfirm: '¿Borrar todos los valores introducidos y los ajustes propios? La app se reiniciará.',
     setTheme: 'Tema',
     setLang: 'Idioma',
     aboutBtn: 'Sobre Dividend Compass',
@@ -4030,7 +4049,6 @@ window.__dkBoot = false;
 saveLast();
 function welcomeSeen(){ try { return !!localStorage.getItem('dk-welcome'); } catch (e) { return true; } }
 document.getElementById('welcomeDlg').addEventListener('close', () => { try { localStorage.setItem('dk-welcome', '1'); } catch (e) {} });
-if (!welcomeSeen()) openDlg('welcomeDlg');
 
 (function(){
   const label = () => {
@@ -4048,6 +4066,110 @@ if (!welcomeSeen()) openDlg('welcomeDlg');
     .observe(document.body, {childList: true, subtree: true});
   label();
 })();
+
+/* ============ startwizard: eenmalig de belangrijkste invoer doorlopen ============ */
+const WZ = {
+  nl: {of:'Stap {n} van 6', back:'Terug', skip:'Overslaan', next:'Volgende', done:'Klaar', inCur:c=>'Bedrag in '+c, reinv:'Herinvesteren', pay:'Uitbetalen',
+    steps:[
+      {title:'Waar woon je?', sub:'Je land bepaalt welke belasting we schatten. Dit is een schatting, geen belastingadvies.'},
+      {title:'In welke valuta wil je rekenen?', sub:'Intern rekenen we altijd in euro; dollar is alleen de weergave.'},
+      {title:'Hoeveel stop je erin?', sub:'Je startvermogen. Een maandelijkse inleg kun je later instellen.'},
+      {title:'Welk netto vermogen wil je halen?', sub:'Het doel in de netto waardeprognose. Vul 0 in als je geen doel wilt.'},
+      {title:'Wil je een vast bedrag per maand uit dividend?', sub:'Vul het gewenste bedrag per maand in. Vul 0 in als je dat niet wilt.'},
+      {title:'Wat doen we met de uitkeringen?', sub:'Herinvesteren laat ze meegroeien in het fonds. Uitbetalen zet ze apart op.'}]},
+  en: {of:'Step {n} of 6', back:'Back', skip:'Skip', next:'Next', done:'Done', inCur:c=>'Amount in '+c, reinv:'Reinvest', pay:'Pay out',
+    steps:[
+      {title:'Where do you live?', sub:'Your country determines which tax we estimate. This is an estimate, not tax advice.'},
+      {title:'Which currency do you want to use?', sub:'We always calculate in euro internally; dollar is only the display.'},
+      {title:'How much do you start with?', sub:'Your starting capital. You can set a monthly contribution later.'},
+      {title:'What net wealth do you want to reach?', sub:'The goal in the net worth forecast. Enter 0 if you have no goal.'},
+      {title:'Do you want a fixed amount per month from dividends?', sub:'Enter the amount you want per month. Enter 0 if you do not.'},
+      {title:'What do we do with the distributions?', sub:'Reinvesting lets them grow inside the fund. Paying out sets them aside.'}]},
+  es: {of:'Paso {n} de 6', back:'Atrás', skip:'Omitir', next:'Siguiente', done:'Listo', inCur:c=>'Importe en '+c, reinv:'Reinvertir', pay:'Pagar',
+    steps:[
+      {title:'¿Dónde vives?', sub:'Tu país determina qué impuesto estimamos. Es una estimación, no asesoramiento fiscal.'},
+      {title:'¿En qué moneda quieres calcular?', sub:'Internamente siempre calculamos en euros; el dólar es solo la visualización.'},
+      {title:'¿Con cuánto empiezas?', sub:'Tu capital inicial. Más adelante puedes fijar una aportación mensual.'},
+      {title:'¿Qué patrimonio neto quieres alcanzar?', sub:'La meta en la previsión de valor neto. Introduce 0 si no tienes meta.'},
+      {title:'¿Quieres una cantidad fija al mes de dividendos?', sub:'Introduce la cantidad mensual deseada. Introduce 0 si no la quieres.'},
+      {title:'¿Qué hacemos con las distribuciones?', sub:'Reinvertir hace que crezcan dentro del fondo. Pagar las aparta.'}]}
+};
+let wzStep = 0, wzReinv = true;
+function wzText(){ return WZ[lang] || WZ.en; }
+function openStart(){
+  wzStep = 0;
+  wzReinv = document.getElementById('reinvest').checked;
+  wzRender();
+  const d = document.getElementById('startDlg');
+  if (!d.open) d.showModal();
+}
+function wzBody(i, t){
+  if (i === 0){
+    const r = document.getElementById('resid');
+    return '<select id="wzRes" class="wz-input">' + [...r.options].map(o => '<option value="' + o.value + '"' + (o.value === r.value ? ' selected' : '') + '>' + o.textContent + '</option>').join('') + '</select>';
+  }
+  if (i === 1){
+    const usd = fxRate > 0;
+    return '<div class="wz-seg"><button type="button" class="rbtn" data-wzc="EUR" aria-pressed="' + (curCode === 'EUR') + '">€ euro</button>' +
+           '<button type="button" class="rbtn" data-wzc="USD" aria-pressed="' + (curCode === 'USD') + '"' + (usd ? '' : ' disabled') + '>$ dollar</button></div>';
+  }
+  if (i === 5){
+    return '<div class="wz-seg"><button type="button" class="rbtn" data-wzr="1" aria-pressed="' + wzReinv + '">' + t.reinv + '</button>' +
+           '<button type="button" class="rbtn" data-wzr="0" aria-pressed="' + (!wzReinv) + '">' + t.pay + '</button></div>';
+  }
+  const cur = i === 2 ? manualAmount : i === 3 ? readEur('goalCap') : readEur('target');
+  const v = toDisp(cur);
+  return '<label class="wz-lbl">' + t.inCur(curSym()) + '<input type="text" inputmode="numeric" id="wzNum" class="wz-input" value="' + (v > 0 ? fmtNum(v) : '') + '"></label>';
+}
+function wzRender(){
+  const t = wzText(), S = t.steps[wzStep];
+  document.getElementById('startStep').textContent = t.of.replace('{n}', wzStep + 1);
+  document.getElementById('startTitle').textContent = S.title;
+  document.getElementById('startSub').textContent = S.sub;
+  document.getElementById('startBody').innerHTML = wzBody(wzStep, t);
+  document.getElementById('startBack').hidden = wzStep === 0;
+  document.getElementById('startBack').textContent = t.back;
+  document.getElementById('startSkip').textContent = t.skip;
+  document.getElementById('startNext').textContent = wzStep === 5 ? t.done : t.next;
+}
+function wzApply(i){
+  if (i === 0){
+    const s = document.getElementById('wzRes');
+    if (s) pickResid(s.value);
+  } else if (i >= 2 && i <= 4){
+    const inp = document.getElementById('wzNum');
+    const eur = inp ? Math.round(fromDisp(digits(inp.value))) : 0;
+    const id = ['bedrag', 'goalCap', 'target'][i - 2];
+    setEurField(id, eur);
+    document.getElementById(id).dispatchEvent(new Event('input'));
+  } else if (i === 5){
+    const r = document.getElementById('reinvest');
+    if (r.checked !== wzReinv){ r.checked = wzReinv; r.dispatchEvent(new Event('change')); }
+  }
+}
+document.getElementById('startBody').addEventListener('click', e => {
+  const c = e.target.closest('[data-wzc]');
+  if (c && !c.disabled){ setCur(c.dataset.wzc); wzRender(); return; }
+  const r = e.target.closest('[data-wzr]');
+  if (r){ wzReinv = r.dataset.wzr === '1'; wzRender(); }
+});
+document.getElementById('startNext').addEventListener('click', () => {
+  if (wzStep < 5){ wzApply(wzStep); wzStep++; wzRender(); }
+  else { wzApply(5); document.getElementById('startDlg').close(); }
+});
+document.getElementById('startSkip').addEventListener('click', () => {
+  if (wzStep < 5){ wzStep++; wzRender(); }
+  else document.getElementById('startDlg').close();
+});
+document.getElementById('startBack').addEventListener('click', () => { if (wzStep > 0){ wzStep--; wzRender(); } });
+document.getElementById('startX').addEventListener('click', () => document.getElementById('startDlg').close());
+document.getElementById('startDlg').addEventListener('close', () => { try { localStorage.setItem('dk-start', '1'); } catch (e) {} });
+document.getElementById('menuWizard').addEventListener('click', () => {
+  document.getElementById('setDlg').hidePopover();
+  openStart();
+});
+function startSeen(){ try { return !!localStorage.getItem('dk-start'); } catch (e) { return true; } }
+if (!startSeen()) openStart();
 </script>
 </body>
 </html>
