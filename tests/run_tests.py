@@ -43,6 +43,7 @@ with sync_playwright() as p:
     pg.fill("#scenName", "Hoog"); pg.evaluate("() => { manualAmount = 500000; amountNow = 500000; recalc(); }")
     pg.click("#scenSave"); pg.wait_for_timeout(200)
     check("1d na opslaan is het laatste profiel actief", pg.locator(".scenrow.active", has_text="Hoog").count() == 1)
+    check("1d2 bijwerken-keuzelijst staat op het actieve profiel", pg.evaluate("document.getElementById('scenApplySel').selectedOptions[0].textContent") == "Hoog")
     pg.locator(".scenrow", has_text="Basis").locator("[data-load]").click(); pg.wait_for_timeout(300)
     pg.evaluate("() => { renderScenarios(); document.getElementById('scenDlg').showModal(); }"); pg.wait_for_timeout(200)
     check("1e na laden is Basis actief", pg.locator(".scenrow.active", has_text="Basis").count() == 1)

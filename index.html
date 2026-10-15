@@ -4411,6 +4411,7 @@ function renderScenarios(){
   const sel = document.getElementById('scenApplySel');
   sel.innerHTML = order.map(i => `<option value="${i}">${esc(arr[i].name)}</option>`).join('');
   document.getElementById('scenApplyRow').hidden = !arr.length;
+  { const ai = arr.findIndex(x => x.name === getActiveName()); if (ai >= 0) sel.value = String(ai); }  // actief profiel vooraf geselecteerd
   list.querySelectorAll('[data-ren]').forEach(b => b.addEventListener('click', () => {
     const i = +b.dataset.ren;
     const row = b.closest('.scenrow');
