@@ -423,6 +423,9 @@
   .io-file{cursor:pointer}
   .io-row .hint{margin:0}
   .strat-line{margin:18px 0 12px;font-size:13.5px;color:var(--muted)}
+  .residhint{margin:8px 0 0;font-size:12px;line-height:1.45}
+  .residhint a{color:var(--div);font-weight:600;text-decoration:none}
+  .residhint a:hover{text-decoration:underline}
   .strat-line a{color:var(--div);font-weight:600;text-decoration:none;margin-left:6px;white-space:nowrap}
   .strat-line a:hover{text-decoration:underline}
   .welcome-actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
@@ -639,7 +642,8 @@
   <aside class="panel controls" aria-label="Settings">
     <h2 data-i18n="settings"></h2>
     <div class="pfield pfield-top"><span class="pfield-lbl" id="residLblMain"><span data-i18n="residLbl"></span> <a class="tt info" href="#gl-taxnl" data-tip-i18n="residTip">?</a></span>
-      <details class="cpick" id="mainPick"><summary><span id="mainSum"></span></summary><div class="cpick-list" id="mainList"></div></details></div>
+      <details class="cpick" id="mainPick"><summary><span id="mainSum"></span></summary><div class="cpick-list" id="mainList"></div></details>
+      <p class="hint residhint"><span data-i18n="residHintTxt"></span> <a href="#" id="residGo" data-i18n="residGo"></a></p></div>
     <select id="resid" hidden aria-hidden="true"></select>
     <section class="grp">
       <h3 data-i18n="grpStrat"></h3>
@@ -1941,6 +1945,8 @@ const SYN_T = {
   "skNoteOwn": "Je eigen mix is actief; de berekening gebruikt die mix, niet de synthese.",
   "stratLineSyn": "Gekozen strategie: {s} · {m}% uitkerend · synthetische aannames · {a} over {n} jaar",
   "stratEdit": "aanpassen",
+  "residHintTxt": "Belasting van dit land zit niet in de cijfers hier. Het effect zie je in de Netto waardeprognose.",
+  "residGo": "Naar netto waarde",
   "mixFromStrat": "Bepaald door de gekozen strategie.",
   "stratLineOwn": "Eigen mix actief · {a} over {n} jaar",
   "stratNone": "eigen verdeling",
@@ -2025,6 +2031,8 @@ const SYN_T = {
   "skNoteOwn": "Your own mix is active; the calculation uses that mix, not the synthesis.",
   "stratLineSyn": "Chosen strategy: {s} · {m}% distributing · synthetic assumptions · {a} over {n} years",
   "stratEdit": "change",
+  "residHintTxt": "Tax for this country is not in the figures here. You see its effect in the Net value forecast.",
+  "residGo": "See net value",
   "mixFromStrat": "Set by the chosen strategy.",
   "stratLineOwn": "Own mix active · {a} over {n} years",
   "stratNone": "own split",
@@ -2109,6 +2117,8 @@ const SYN_T = {
   "skNoteOwn": "Tu cartera propia está activa; el cálculo usa esa cartera, no la síntesis.",
   "stratLineSyn": "Estrategia elegida: {s} · {m}% distribuyendo · supuestos sintéticos · {a} en {n} años",
   "stratEdit": "cambiar",
+  "residHintTxt": "Los impuestos de este país no están en las cifras de aquí. Su efecto se ve en la Previsión de valor neto.",
+  "residGo": "Ver valor neto",
   "mixFromStrat": "Lo define la estrategia elegida.",
   "stratLineOwn": "Cartera propia activa · {a} en {n} años",
   "stratNone": "reparto propio",
@@ -3845,6 +3855,7 @@ document.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click'
   if (b.dataset.open === 'scenDlg') renderScenarios();
   if (FLYS.includes(b.dataset.open)) flyOpen(b.dataset.open, b); else openDlg(b.dataset.open);
 }));
+document.getElementById('residGo').addEventListener('click', e => { e.preventDefault(); document.querySelector('[data-tab="tabWealth"]').click(); });
 document.getElementById('menuCur').addEventListener('click', () => {
   document.getElementById('setDlg').hidePopover();
   document.getElementById('curBtn').click();
