@@ -1,11 +1,11 @@
 {
-  "updated": "2026-10-15",
+  "updated": "2026-10-16",
   "base": "EUR",
   "rates": {
-    "USD": 1.1208
+    "USD": 1.1253
   },
   "avg12m": {
-    "USD": 1.1598
+    "USD": 1.1596
   },
   "bron": "ECB-referentiekoersen (ECB-XML); 12m-gemiddelde via Frankfurter. Wordt dagelijks bijgewerkt door GitHub Actions"
 }
